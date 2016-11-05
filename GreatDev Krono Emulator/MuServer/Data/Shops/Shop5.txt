@@ -1,0 +1,25 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Project Author : (c) Shatter							//
+// Project Info	  : Free Release 4 Ragezone MU Online Community			//
+// Last Edit Date : 30 / 12 / 2010                                              //
+//////////////////////////////////////////////////////////////////////////////////
+
+// Potion Girl
+
+14 0 0 50 0 0 0 0 // Apple
+14 1 0 30 0 0 0 0 // Small Healing Potion
+14 2 0 20 0 0 0 0 // Medium Healing Potion
+14 3 0 10 0 0 0 0 // Large Healing Potion
+14 4 0 30 0 0 0 0 // Small Mana Potion
+14 5 0 20 0 0 0 0 // Medium Mana Potion
+14 6 0 10 0 0 0 0 // Large Mana Potion
+14 8 0 10 0 0 0 0 // Antidote
+14 9 0 0 0 0 0 0 // Alcohol
+4 7 4 255 0 0 1 0 // Bolts +4
+4 15 4 255 0 0 1 0 // Arrows +4
+4 7 5 255 0 0 2 0 // Bolts +5
+4 15 5 255 0 0 2 0 // Arrows +5
+14 9 1 0 0 0 0 0 // Olive of Love
+14 20 0 0 0 0 0 0 // Remedy of Love
+13 29 0 0 0 0 0 0 // Armor of Guardman
+end

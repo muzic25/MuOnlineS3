@@ -1,0 +1,10 @@
+// Firecracker & Heart of Love
+
+12 15 0 0 0 0 // Jewel of Chaos
+14 14 0 0 0 0 // Jewel of Soul
+14 13 0 0 0 0 // Jewel of Bless
+14 16 0 0 0 0 // Jewel of Life
+13 2 0 0 0 0 // Horn of Uniria
+13 1 0 0 0 0 // Imp
+13 0 0 0 0 0 // Angel
+end

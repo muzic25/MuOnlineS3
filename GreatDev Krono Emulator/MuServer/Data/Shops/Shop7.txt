@@ -1,0 +1,39 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Project Author : (c) Shatter							//
+// Project Info	  : Free Release 4 Ragezone MU Online Community			//
+// Last Edit Date : 30 / 12 / 2010                                              //
+//////////////////////////////////////////////////////////////////////////////////
+
+// Isabella The Wizard
+
+14 0 0 50 0 0 0 0 // Apple
+14 1 0 30 0 0 0 0 // Small Healing Potion
+14 2 0 20 0 0 0 0 // Medium Healing Potion
+14 3 0 10 0 0 0 0 // Large Healing Potion
+14 4 0 30 0 0 0 0 // Small Mana Potion
+14 5 0 20 0 0 0 0 // Medium Mana Potion
+14 6 0 10 0 0 0 0 // Large Mana Potion
+14 8 0 10 0 0 0 0 // Antidote
+4 7 0 255 0 0 0 0 // Bolts +0
+4 15 0 255 0 0 0 0 // Arrows +0
+4 7 3 255 0 0 0 0 // Bolts +3
+4 15 3 255 0 0 0 0 // Arrows +3
+4 7 4 255 0 0 1 0 // Bolts +4
+4 15 4 255 0 0 1 0 // Arrows +4
+4 7 5 255 0 0 2 0 // Bolts +5
+4 15 5 255 0 0 2 0 // Arrows +5
+15 1 0 0 0 0 0 0 // Meteorite Scroll
+15 0 0 0 0 0 0 0 // Poison Scroll
+15 2 0 0 0 0 0 0 // Lightning Scroll
+15 4 0 0 0 0 0 0 // Flame Scroll
+15 5 0 0 0 0 0 0 // Teleport Scroll
+15 6 0 0 0 0 0 0 // Ice Scroll
+15 7 0 0 0 0 0 0 // Twister Scroll
+15 8 0 0 0 0 0 0 // Evil Spirits Scroll
+7 7 0 0 0 1 1 0 // Sphinx Helm
+8 7 0 0 0 1 1 0 // Sphinx Armor
+9 7 0 0 0 1 1 0 // Sphinx Pants
+10 7 0 0 0 1 1 0 // Sphinx Gloves
+11 7 0 0 0 1 1 0 // Sphinx Boots
+5 4 0 0 0 1 1 0 // Gorgon Staff
+end

@@ -1,0 +1,23 @@
+// Box of Kundun +1
+
+0 0 0 0 1 0 // Excellent Kris
+0 1 0 0 1 0 // Excellent Short Sword
+0 2 0 0 1 0 // Excellent Rapier
+1 0 0 0 1 0 // Excellent Small Axe
+1 0 0 1 0 // Excellent Hand Axe
+2 0 0 0 1 0 // Excellent Mace
+3 0 0 0 1 0 // Excellent Light Spear
+3 1 0 0 1 0 // Excellent Spear
+4 1 0 0 1 0 // Excellent Bow
+4 9 0 0 1 0 // Excellent Golded Crossbow
+5 0 0 0 1 0 // Excellent Skull Staff
+7 5 0 0 1 0 // Excellent Leather Helm
+8 5 0 0 1 0 // Excellent Leather Armor
+10 5 0 0 1 0 // Excellent Leather Gloves
+9 5 0 0 1 0 // Excellent Leather Pants
+11 5 0 0 1 0 // Excellent Leather Boots
+7 10 0 0 1 0 // Excellent Vine Helm
+8 10 0 0 1 0 // Excellent Vine Armor
+9 10 0 0 1 0 // Excellent Vine Pants
+10 10 0 0 1 0 // Excellent Vine Gloves
+11 10 0 0 1 0 // Excellent Vine Boots

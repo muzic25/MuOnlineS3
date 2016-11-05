@@ -1,0 +1,20 @@
+//------------------------------------------------------//
+//		  Infinity Arrow Options	        //
+//------------------------------------------------------//
+[SkillInfo]
+InfinityArrowSkillTime 			= 600
+InfinityArrowUseLevel 			= 220
+InfinityArraowMPConsumptionPlus0 	= 5
+InfinityArraowMPConsumptionPlus1 	= 7
+InfinityArraowMPConsumptionPlus2 	= 10
+
+//------------------------------------------------------//
+//		   Fire Scream Options		        //
+//------------------------------------------------------//
+FireScreamSkill				= 1
+FireScreamExplosionAttackDistance 	= 2
+FireScreamExplosionDamage 		= 3000
+FireScreamExplosionRate			= 3000
+FireScreamMaxAttackCountSameSerial 	= 3
+FireScreamSerialInitCount 		= 100
+CheckFireScreamSerial 			= 1

@@ -1,0 +1,33 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Project Author : (c) Shatter							//
+// Project Info	  : Free Release 4 Ragezone MU Online Community			//
+// Last Edit Date : 30 / 12 / 2010                                              //
+//////////////////////////////////////////////////////////////////////////////////
+
+// Hanzo The Blacksmith
+
+0 1 0 0 0 0 0 0 // Kris
+0 2 0 0 0 0 0 0 // Rapier
+0 4 0 0 0 0 0 0 // Sword Of Assassin
+0 4 0 0 1 0 0 0 // Sword Of Assassin
+7 0 0 0 0 0 0 0 // Bronze Helm
+8 0 0 0 0 0 0 0 // Bronze Armor
+9 0 0 0 0 0 0 0 // Bronze Pants
+10 0 0 0 0 0 0 0 // Bronze Gloves
+11 0 0 0 0 0 0 0 // Bronze Boots
+10 6 0 0 0 0 0 0 // Scale Gloves
+11 6 0 0 0 0 0 0 // Scale Boots
+13 29 0 0 0 0 0 0 // Armor of Guardman
+1 1 0 0 0 0 0 0 // Hand Axe
+2 0 0 0 0 0 0 0 // Mace
+2 1 0 0 0 0 0 0 // Morning Star
+2 1 0 0 1 0 0 0 // Morning Star
+1 2 0 0 0 0 0 0 // Double Axe
+1 2 0 0 1 0 0 0 // Double Axe
+0 0 0 0 0 0 0 0 // Short Sword
+3 5 0 0 0 0 0 0 // Double Poleaxe
+6 0 0 0 0 0 0 0 // Small Shield
+6 4 0 0 0 0 0 0 // Buckler
+6 1 0 0 0 0 0 0 // Horn Shield
+12 7 0 0 0 0 0 0 // Twisting Splash
+end

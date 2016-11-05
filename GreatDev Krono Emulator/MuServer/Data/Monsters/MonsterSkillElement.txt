@@ -1,0 +1,49 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Project Author : (c) Shatter							//
+// Project Info	  : Free Release 4 Ragezone MU Online Community			//
+// Last Edit Date : 30 / 12 / 2010                                              //
+//////////////////////////////////////////////////////////////////////////////////
+
+//----------------------------------------------------------------------------------------------------------------------//
+//    Index		  Name			       Type    Rate     Sec  IDType   IDValue  Magic  Class   Level	//
+//----------------------------------------------------------------------------------------------------------------------//
+0
+	1	"Monster Skill Element"			0	50	3	-1	-1	-1	0	0
+	3	"Monster Skill Element"			3	50	10	2	50	-1	0	0
+	4	"Monster Skill Element"			4	50	10	2	50	-1	0	0
+	5	"Monster Skill Element"			5	90	10	12	50	-1	0	0
+	6	"Monster Skill Element"			6	90	10	12	50	-1	0	0
+	7	"Monster Skill Element"			9	50	10	-1	-1	-1	0	0
+	8	"Monster Skill Element"			2	30	10	112	10	-1	0	0
+	9	"Monster Skill Element"			1	90	10	12	50	-1	0	0
+	11	"Monster Skill Element"			7	90	10	12	7	-1	0	0
+	12	"Monster Skill Element"			2	90	10	101	5	-1	0	0
+	13	"Monster Skill Element"			2	90	10	11	50	-1	0	0
+	14	"Monster Skill Element"			2	90	10	12	100	-1	0	0
+	16	"Monster Skill Element"			8	90	10	0	-1	-1	0	0
+	17	"Monster Skill Element"			14	50	10	0	-1	27	0	0
+	22	"Monster Skill Element"			16	90	10	0	-1	28	0	0
+	23	"Monster Skill Element"			16	90	10	0	-1	28	0	0
+	24	"Monster Skill Element"			20	100	10	-1	-1	-1	0	0
+	25	"Monster Skill Element"			20	100	10	-1	-1	-1	0	0
+	26	"Monster Skill Element"			20	100	10	-1	-1	-1	0	0
+	27	"Monster Skill Element"			19	100	10	-1	10	800	0	0
+	28	"Monster Skill Element"			18	100	10	-1	-1	-1	0	0
+	29	"Monster Skill Element"			19	50	10	-1	5	-1	0	0
+	30	"Monster Skill Element"			20	100	10	-1	-1	-1	0	0
+	31	"Monster Skill Element"			20	100	10	-1	-1	-1	0	0
+	32	"Monster Skill Element"			20	100	10	13	38	-1	0	0
+	33	"Monster Skill Element"			9	100	10	-1	3	-1	0	0
+	34	"Monster Skill Element"			17	100	3	-1	-1	-1	0	0
+	35	"Monster Skill Element"			20	100	10	-1	-1	-1	0	0
+	36	"Monster Skill Element"			9	50	10	-1	3	100	0	0
+	37	"Monster Skill Element"			7	20	10	2	10	-1	0	0
+	38	"Monster Skill Element"			20	100	10	-1	-1	-1	0	0
+	39	"Monster Skill Element"			9	100	10	-1	-1	-1	0	0
+	40	"Monster Skill Element"			20	100	10	-1	-1	-1	0	0
+	41	"Monster Skill Element"			20	100	10	-1	-1	-1	0	0
+	42	"Monster Skill Element"			0	10	3	-1	-1	-1	0	0
+	43	"Monster Skill Element"			0	20	2	-1	-1	-1	0	0
+	44	"Monster Skill Element"			9	100	0	0	2	-1	0	0
+	45	"Monster Skill Element"			20	100	10	-1	-1	-1	0	0
+end

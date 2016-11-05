@@ -1,0 +1,172 @@
+//--------------------------------------------//
+//     Index   Type	-	-	-     //
+//--------------------------------------------//
+0
+	2	21	0	0	0 // Rapier
+	14	11	0	0	0 // Lighting Sword
+end
+
+//--------------------------------------------//
+//     Index   Type	-	-	-     //
+//--------------------------------------------//
+1
+end
+
+//--------------------------------------------//
+//     Index   Type	-	-	-     //
+//--------------------------------------------//
+2
+	1	1	0	0	0 // Morning Star
+end
+
+//--------------------------------------------//
+//     Index   Type	-	-	-     //
+//--------------------------------------------//
+3
+end
+
+//--------------------------------------------//
+//     Index   Type	-	-	-     //
+//--------------------------------------------//
+4
+	9	23	0	0	0 // Golden Crossbow
+	5	29	0	0	0 // Silver Bow
+end
+
+//--------------------------------------------//
+//     Index   Type	-	-	-     //
+//--------------------------------------------//
+5
+	0	13	0	0	0 // Skull Staff
+end
+
+//--------------------------------------------//
+//     Index   Type	-	-	-     //
+//--------------------------------------------//
+6
+	6	17	0	0	0 // Skull Shield
+	9	5	0	0	0 // Plate Shield
+end
+
+//--------------------------------------------//
+//     Index   Type	-	-	-     //
+//--------------------------------------------//
+7
+	1	11	0	0	0 // Dragon Helm
+	2	13	0	0	0 // Pad Helm
+	3	19	0	0	0 // Legendary Helm
+	5	1	0	0	0 // Leather Helm
+	6	5	0	0	0 // Scale Helm
+	7	17	0	0	0 // Sphinx Helm
+	10	21	0	0	0 // Vine Helm
+	11	23	0	0	0 // Silk Helm
+	12	25	0	0	0 // Wind Helm
+	14	0	0	0	0 // Guardian Helm
+	26	33	0	0	0 // Adamantine Helm
+	40	35	36	0	0 // Red Wing Helm
+end
+
+//--------------------------------------------//
+//     Index   Type	-	-	-     //
+//--------------------------------------------//
+8
+	0	3	0	0	0 // Bronze Armor
+	1	0	12	0	0 // Dragon Armor
+	2	13	0	0	0 // Pad Armor
+	3	19	20	0	0 // Legendary Armor
+	4	15	0	0	0 // Bone Armor
+	5	1	0	0	0 // Leather Armor
+	6	5	0	0	0 // Scale Armor
+	7	17	0	0	0 // Sphinx Armor
+	8	7	0	0	0 // Brass Armor
+	9	9	0	0	0 // Plate Armor
+	11	23	0	0	0 // Silk Armor
+	12	25	0	0	0 // Wind Armor
+	13	27	0	0	0 // Spirit Armor
+	14	29	30	0	0 // Guardian Armor
+	15	31	32	0	0 // Storm Crow Armor
+	26	33	0	0	0 // Adamantine Armor
+	40	0	36	0	0 // Red Wing Armor
+end
+
+//--------------------------------------------//
+//     Index   Type	-	-	-     //
+//--------------------------------------------//
+9
+	0	3	0	0	0 // Bronze Pants
+	1	0	12	0	0 // Dragon Pants
+	2	13	0	0	0 // Pad Pants
+	3	0	20	0	0 // Legendary Pants
+	4	15	0	0	0 // Bone Pants
+	5	1	0	0	0 // Leather Pants
+	6	5	0	0	0 // Scale Pants
+	7	17	0	0	0 // Sphinx Pants
+	8	7	0	0	0 // Brass Pants
+	10	21	0	0	0 // Vine Pants
+	11	23	0	0	0 // Silk Pants
+	12	25	0	0	0 // Wind Pants
+	13	27	0	0	0 // Spirit Pants
+	14	0	30	0	0 // Guardian Pants
+	15	31	32	0	0 // Storm Crow Pants
+	26	33	34	0	0 // Adamantine Pants
+	40	35	0	0	0 // Red Wing Pants
+end
+
+//--------------------------------------------//
+//     Index   Type	-	-	-     //
+//--------------------------------------------//
+10
+	1	11	0	0	0 // Dragon Gloves
+	2	13	0	0	0 // Pad Gloves
+	3	19	0	0	0 // Legendary Gloves
+	5	1	0	0	0 // Leather Gloves
+	7	17	0	0	0 // Sphinx Gloves
+	8	7	0	0	0 // Brass Gloves
+	9	9	0	0	0 // Plate Gloves
+	10	21	0	0	0 // Vine Gloves
+	11	23	0	0	0 // Silk Gloves
+	12	25	0	0	0 // Wind Gloves
+	13	27	0	0	0 // Spirit Gloves
+	14	29	0	0	0 // Guardian Gloves
+	15	0	32	0	0 // Storm Crow Gloves
+	26	0	34	0	0 // Adamantine Gloves
+	40	35	36	0	0 // Red Wing Gloves
+end
+
+//--------------------------------------------//
+//     Index   Type	-	-	-     //
+//--------------------------------------------//
+11
+	0	3	0	0	0 // Bronze Boots
+	1	11	0	0	0 // Dragon Boots
+	3	0	20	0	0 // Legendary Boots
+	4	15	0	0	0 // Bone Boots
+	5	1	0	0	0 // Leather Boots
+	7	17	0	0	0 // Sphinx Boots
+	8	7	0	0	0 // Brass Boots
+	9	9	0	0	0 // Plate Boots
+	10	21	0	0	0 // Vine Boots
+	12	25	0	0	0 // Wind Boots
+	14	29	30	0	0 // Guardian Boots
+	15	31	0	0	0 // Storm Crow Boots
+	26	0	34	0	0 // Adamantine Boots
+	40	0	36	0	0 // Red Wing Boots
+end
+
+//--------------------------------------------//
+//     Index   Type	-	-	-     //
+//--------------------------------------------//
+13
+	8	1	0	0	0 // Ring of Ice
+	9	9	33	0	0 // Ring of Poison
+	12	5	0	0	0 // Pendant of Lightning
+	13	7	0	0	0 // Pendant of Fire
+	21	19	32	0	0 // Ring of Fire
+	22	21	12	0	0 // Ring of Earth
+	23	9	0	0	0 // Ring of Wind
+	24	13	35	0	0 // Ring of Magic
+	25	13	34	0	0 // Pendant of Ice
+	26	15	0	0	0 // Pendant of Wind
+	27	31	0	0	0 // Pendant of Water
+	28	29	0	0	0 // Pendant of Ability
+end

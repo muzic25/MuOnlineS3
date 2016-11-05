@@ -1,0 +1,32 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Project Author : (c) Shatter							//
+// Project Info	  : Free Release 4 Ragezone MU Online Community			//
+// Last Edit Date : 30 / 12 / 2010                                              //
+//////////////////////////////////////////////////////////////////////////////////
+
+// Zienna The Arms Dealer
+
+7 9 0 0 0 1 0 0 // Plate Helm
+7 12 0 0 0 1 0 0 // Wind Helm
+6 5 0 0 1 0 2 0 // Dragon Slayer Shield
+6 7 0 0 0 1 1 0 // Spike Shield
+8 9 0 0 0 1 0 0 // Plate Armor
+8 12 0 0 0 1 0 0 // Wind Armor
+6 3 0 0 0 1 0 0 // Elven Shield
+6 11 0 0 0 1 0 0 // Serpent Shield
+9 9 0 0 0 1 0 0 // Plate Pants
+9 12 0 0 0 1 0 0 // Wind Pants
+3 7 0 0 1 1 1 0 // Berdysh
+3 0 0 0 1 0 0 0 // Light Spear
+10 9 0 0 0 1 0 0 // Plate Gloves
+10 12 0 0 0 1 0 0 // Wind Gloves
+11 9 0 0 0 1 0 0 // Plate Boots
+11 12 0 0 0 1 0 0 // Wind Boots
+0 11 0 0 1 0 0 0 // Legendary Sword
+0 13 0 0 1 0 0 0 // Double Blade
+0 14 0 0 0 0 1 0 // Lightning Sword
+3 4 0 0 1 0 0 0 // Serpent Spear
+4 4 0 0 1 0 0 0 // Tiger Bow
+4 5 0 0 1 1 1 0 // Silver Bow
+4 11 0 0 1 0 0 0 // Light Crossbow
+end

@@ -1,0 +1,41 @@
+// Box of Kundun +3
+
+7 6 0 0 1 0 // Excellent Scale Helm
+8 6 0 0 1 0 // Excellent Scale Armor
+9 6 0 0 1 0 // Excellent Scale Pants
+10 6 0 0 1 0 // Excellent Scale Gloves
+11 6 0 0 1 0 // Excellent Scale Boots
+7 8 0 0 1 0 // Excellent Brass Helm
+8 8 0 0 1 0 // Excellent Brass Armor
+9 8 0 0 1 0 // Excellent Brass Pants
+10 8 0 0 1 0 // Excellent Brass Gloves
+11 8 0 0 1 0 // Excellent Brass Boots
+7 12 0 0 1 0 // Excellent Wind Helm
+8 12 0 0 1 0 // Excellent Wind Armor
+9 12 0 0 1 0 // Excellent Wind Pants
+10 12 0 0 1 0 // Excellent Wind Gloves
+11 12 0 0 1 0 // Excellent Wind Boots
+7 4 0 0 1 0 // Excellent Bone Helm
+8 4 0 0 1 0 // Excellent Bone Armor
+9 4 0 0 1 0 // Excellent Bone Pants
+10 4 0 0 1 0 // Excellent Bone Gloves
+11 4 0 0 1 0 // Excellent Bone Boots
+2 8 0 0 1 0 // Excellent Battle Scepter
+1 4 0 0 1 0 // Excellent Elven Axe
+1 5 0 0 1 0 // Excellent Battle Axe
+1 6 0 0 1 0 // Excellent Nikea Axe
+0 6 0 0 1 0 // Excellent Gladius
+0 7 0 0 1 0 // Excellent Falchion
+0 8 0 0 1 0 // Excellent Serpent Sword
+0 9 0 0 1 0 // Excellent Sword of Salamander
+5 3 0 0 1 0 // Excellent Lighting Staff
+5 4 0 0 1 0 // Excellent Gorgon Staff
+4 3 0 0 1 0 // Excellent Battle Bow
+4 12 0 0 1 0 // Excellent Serpent Crossbow
+3 4 0 0 1 0 // Excellent Serpent Spear
+3 5 0 0 1 0 // Excellent Double Poleaxe
+3 6 0 0 1 0 // Excellent Halberd
+13 8 0 0 1 0 // Excellent Ring of Ice
+13 9 0 0 1 0 // Excellent Ring of Poison
+13 12 0 0 1 0 // Excellent Pendant of Lighting
+13 13 0 0 1 0 // Excellent Pendant of Fire

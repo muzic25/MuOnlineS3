@@ -1,0 +1,71 @@
+// Nightmare
+
+//--------------------------------------//
+// Map Drop                             //
+//--------------------------------------//
+0
+//  MapNumber  Drop   MinLvl   MaxLvl
+	0	0	0	1000	// Lorencia
+	1	0	0	1000	// Dungeon
+	2	0	0	1000	// Devias
+	3	0	0	1000	// Noria
+	4	0	0	1000	// LostTower
+	5	0	0	1000	// Exile
+	6	0	0	1000	// Arena
+	7	0	0	1000	// Atlans
+	8	0	0	1000	// Tarkan
+	9	0	0	1000	// DevilSquare
+	10	0	0	1000	// Icarus
+end
+
+//--------------------------------------//
+// Drop Options                         //
+//--------------------------------------//
+1
+//	 Name		ZenAmount     Index    Type    Lvl   DropRate  Drop  ExcDrop
+       "Nightmare"	1000000	        0       0	0	0	50	 1
+end
+
+//--------------------------------------//
+// Item Drops                           //
+//--------------------------------------//
+2
+//	Type	Index	MinLvl	MaxLvl	Skill	Luck	Opt	Exc
+
+	5	12	0	4	1	1	1	0 // Grand Viper Staff
+	5	13	0	4	1	1	1	0 // Platina Wing Staff
+	0	22	0	4	1	1	1	0 // Bone Blade
+	0	24	0	4	1	1	1	0 // Daybreak
+	4	21	0	4	1	1	1	0 // Sylph Wind Bow
+	4	22	0	4	1	1	1	0 // Albatross Bow
+	0	23	0	4	1	1	1	0 // Explosion Blade
+	0	25	0	4	1	1	1	0 // Sword Dancer
+	2	13	0	4	1	1	1	0 // Divine Scepter of Archangel
+	2	14	0	4	1	1	1	0 // Solay Scepter
+	2	15	0	4	1	1	1	0 // Shining Scepter
+	0	18	0	4	1	1	1	0 // Thunder Blade
+	7	34	0	4	1	1	1	1 // Excellent Excellent Ashcrow Helm
+	8	34	0	4	1	1	1	1 // Excellent Ashcrow Armor
+	9	34	0	4	1	1	1	1 // Excellent Ashcrow Pants
+	10	34	0	4	1	1	1	1 // Excellent Ashcrow Gloves
+	11	34	0	4	1	1	1	1 // Excellent Ashcrow Boots
+	7	35	0	4	1	1	1	1 // Excellent Eclipse Helm
+	8	35	0	4	1	1	1	1 // Excellent Eclipse Armor
+	9	35	0	4	1	1	1	1 // Excellent Eclipse Pants
+	10	35	0	4	1	1	1	1 // Excellent Eclipse Gloves
+	11	35	0	4	1	1	1	1 // Excellent Eclipse Boots
+	7	36	0	4	1	1	1	1 // Excellent Iris Helm
+	8	36	0	4	1	1	1	1 // Excellent Iris Armor
+	9	36	0	4	1	1	1	1 // Excellent Iris Pants
+	10	36	0	4	1	1	1	1 // Excellent Iris Gloves
+	11	36	0	4	1	1	1	1 // Excellent Iris Boots
+	8	37	0	4	1	1	1	1 // Excellent Valiant Armor
+	9	37	0	4	1	1	1	1 // Excellent Valiant Pants
+	10	37	0	4	1	1	1	1 // Excellent Valiant Gloves
+	11	37	0	4	1	1	1	1 // Excellent Valiant Boots
+	7	38	0	4	1	1	1	1 // Excellent Glorious Helm
+	8	38	0	4	1	1	1	1 // Excellent Glorious Armor
+	9	38	0	4	1	1	1	1 // Excellent Glorious Pants
+	10	38	0	4	1	1	1	1 // Excellent Glorious Gloves
+	11	38	0	4	1	1	1	1 // Excellent Glorious Boots
+end

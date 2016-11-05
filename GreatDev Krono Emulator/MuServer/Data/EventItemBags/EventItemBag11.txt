@@ -1,0 +1,26 @@
+// Box of Kundun +4
+
+13 8 0 0 1 0 // Excellent Ring of Ice
+13 9 0 0 1 0 // Excellent Ring of Poison
+13 12 0 0 1 0 // Excellent Pendant of Lighting
+13 13 0 0 1 0 // Excellent Pendant of Fire
+7 9 0 0 1 0 // Excellent Plate Helm
+8 9 0 0 1 0 // Excellent Plate Armor
+9 9 0 0 1 0 // Excellent Plate Pants
+10 9 0 0 1 0 // Excellent Plate Gloves
+11 9 0 0 1 0 // Excellent Plate Boots
+7 13 0 0 1 0 // Excellent Spirit Helm
+8 13 0 0 1 0 // Excellent Spirit Armor
+9 13 0 0 1 0 // Excellent Spirit Pants
+10 13 0 0 1 0 // Excellent Spirit Gloves
+11 13 0 0 1 0 // Excellent Spirit Boots
+3 4 0 0 1 0 // Excellent Serpent Spear
+0 14 0 0 1 0 // Excellent Lightning Sword
+4 5 0 0 1 0 // Excellent Silver Bow
+5 4 0 0 1 0 // Excellent Gorgon Staff
+2 8 0 0 1 0 // Excellent Battle Scepter
+7 25 0 0 1 0 // Excellent Light Plate Helm
+8 25 0 0 1 0 // Excellent Light Plate Armor
+9 25 0 0 1 0 // Excellent Light Plate Pants
+10 25 0 0 1 0 // Excellent Light Plate Gloves
+11 25 0 0 1 0 // Excellent Light Plate Boots

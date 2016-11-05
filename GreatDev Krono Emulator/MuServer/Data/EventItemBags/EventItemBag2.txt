@@ -1,0 +1,44 @@
+// Skeleton King
+
+0 0 6 0 0 1 // Kris
+0 2 6 0 0 2 // Rapier
+0 4 6 0 0 3 // Sword of Assassin
+0 3 6 0 0 1 // Katana
+1 1 6 0 0 2 // Hand Axe
+1 2 6 0 0 3 // Double Axe
+2 0 6 0 0 1 // Mace
+2 1 6 0 0 2 // Morning Star
+3 2 6 0 0 3 // Dragon Lance
+4 8 6 0 0 1 // Crossbow
+4 1 6 0 0 2 // Bow
+4 9 6 0 0 3 // Golden Crossbow
+5 0 6 0 0 1 // Skull Staff
+6 4 6 0 0 2 // Buckler
+6 1 6 0 0 3 // Horn Shield
+6 2 6 0 0 1 // Kite Shield
+7 5 6 0 0 2 // Leather Helm
+7 2 6 0 0 3 // Pad Helm
+7 10 6 0 0 1 // Vine Helm
+8 5 6 0 0 2 // Leather Armor
+8 2 6 0 0 3 // Pad Armor
+8 10 6 0 0 3 // Vine Armor
+9 5 6 0 0 2 // Leather Pants
+9 2 6 0 0 1 // Pad Pants
+9 10 6 0 0 3 // Vine Pants
+10 5 6 0 0 2 // Leather Gloves
+10 2 6 0 0 1 // Pad Gloves
+10 10 6 0 0 1 // Vine Gloves
+11 5 6 0 0 2 // Leather Boots
+11 2 6 0 0 3 // Pad Boots
+11 10 6 0 0 3 // Vine Boots
+13 0 0 0 0 0 // Guardian Angel
+13 1 0 0 0 0 // Imp
+13 2 0 0 0 0 // Horn of Uniria
+13 8 0 0 0 2 // Ring of Ice
+13 9 0 0 0 2 // Ring of Poison
+13 12 0 0 0 2 // Pendant of Lighting
+13 13 0 0 0 2 // Pendant of Fire
+14 13 0 0 0 0 // Jewel of Bless
+14 14 0 0 0 0 // Jewel of Soul
+12 15 0 0 0 0 // Jewel of Chaos
+end

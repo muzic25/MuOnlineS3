@@ -1,0 +1,640 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName />
+    <SccLocalPath />
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\Temp\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\MuServer\GameServer</OutDir>
+    <IntDir>.\Debug\Temp\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Release\GameServer.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Release\GameServer.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release\GameServer.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <MinimalRebuild>true</MinimalRebuild>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Debug\GameServer.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Debug\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <AssemblerOutput>All</AssemblerOutput>
+      <BrowseInformation>true</BrowseInformation>
+      <ShowIncludes>true</ShowIncludes>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Debug\GameServer.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\GameServer.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>GameServer</MapFileName>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AcceptIp.cpp" />
+    <ClCompile Include="AttackEvent.cpp" />
+    <ClCompile Include="BattleGround.cpp" />
+    <ClCompile Include="BattleSoccer.cpp" />
+    <ClCompile Include="BattleSoccerManager.cpp" />
+    <ClCompile Include="BloodCastle.cpp" />
+    <ClCompile Include="CallStackTrace.cpp" />
+    <ClCompile Include="CannonTower.cpp" />
+    <ClCompile Include="CashItemPeriodSystem.cpp" />
+    <ClCompile Include="CashLotterySystem.cpp" />
+    <ClCompile Include="CashShop.cpp" />
+    <ClCompile Include="CastleCrown.cpp" />
+    <ClCompile Include="CastleCrownSwitch.cpp" />
+    <ClCompile Include="CastleDeepEvent.cpp" />
+    <ClCompile Include="CastleSiege.cpp" />
+    <ClCompile Include="CastleSiegeSync.cpp" />
+    <ClCompile Include="ChaosBox.cpp" />
+    <ClCompile Include="ChaosCastle.cpp" />
+    <ClCompile Include="ChaosCastleSetItemDrop.cpp" />
+    <ClCompile Include="ChatProtocol.cpp" />
+    <ClCompile Include="ChinaHackUserKick.cpp" />
+    <ClCompile Include="classdef.cpp" />
+    <ClCompile Include="CLoginCount.cpp" />
+    <ClCompile Include="ClosePlayer.cpp" />
+    <ClCompile Include="ComboAttack.cpp" />
+    <ClCompile Include="ConMember.cpp" />
+    <ClCompile Include="Crywolf.cpp" />
+    <ClCompile Include="CrywolfAltar.cpp" />
+    <ClCompile Include="CrywolfDarkElf.cpp" />
+    <ClCompile Include="CrywolfMonster.cpp" />
+    <ClCompile Include="CrywolfStateTimeInfo.cpp" />
+    <ClCompile Include="CrywolfStatue.cpp" />
+    <ClCompile Include="CrywolfSync.cpp" />
+    <ClCompile Include="CrywolfTanker.cpp" />
+    <ClCompile Include="CrywolfUtil.cpp" />
+    <ClCompile Include="CWhatsUpDummyServer.cpp" />
+    <ClCompile Include="DarkSpirit.cpp" />
+    <ClCompile Include="DbSave.cpp" />
+    <ClCompile Include="DBSockMng.cpp" />
+    <ClCompile Include="DevilSquare.cpp" />
+    <ClCompile Include="DevilSquareGround.cpp" />
+    <ClCompile Include="DirPath.cpp" />
+    <ClCompile Include="DragonEvent.cpp" />
+    <ClCompile Include="DSProtocol.cpp" />
+    <ClCompile Include="EDSProtocol.cpp" />
+    <ClCompile Include="EledoradoEvent.cpp" />
+    <ClCompile Include="Event.cpp" />
+    <ClCompile Include="EventManagement.cpp" />
+    <ClCompile Include="GameEvent.cpp" />
+    <ClCompile Include="GameMain.cpp" />
+    <ClCompile Include="GameServer.cpp" />
+    <ClCompile Include="GameServerAuth.cpp" />
+    <ClCompile Include="Gate.cpp" />
+    <ClCompile Include="giocp.cpp" />
+    <ClCompile Include="GMMng.cpp" />
+    <ClCompile Include="GmSystem.cpp" />
+    <ClCompile Include="gObjMonster.cpp" />
+    <ClCompile Include="Guardian.cpp" />
+    <ClCompile Include="GuardianStatue.cpp" />
+    <ClCompile Include="GuildClass.cpp" />
+    <ClCompile Include="IllusionTemple.cpp" />
+    <ClCompile Include="IpCache.cpp" />
+    <ClCompile Include="ItemAddOption.cpp" />
+    <ClCompile Include="ItemBag.cpp" />
+    <ClCompile Include="ItemBagEx.cpp" />
+    <ClCompile Include="ItemSystemFor380.cpp" />
+    <ClCompile Include="JewelMixSystem.cpp" />
+    <ClCompile Include="JewelOfHarmonySystem.cpp" />
+    <ClCompile Include="KalimaGate.cpp" />
+    <ClCompile Include="Kanturu.cpp" />
+    <ClCompile Include="KanturuBattleOfMaya.cpp" />
+    <ClCompile Include="KanturuBattleOfNightmare.cpp" />
+    <ClCompile Include="KanturuBattleStanby.cpp" />
+    <ClCompile Include="KanturuBattleUserMng.cpp" />
+    <ClCompile Include="KanturuEntranceNPC.cpp" />
+    <ClCompile Include="KanturuMaya.cpp" />
+    <ClCompile Include="KanturuMonsterMng.cpp" />
+    <ClCompile Include="KanturuNightmare.cpp" />
+    <ClCompile Include="KanturuStateInfo.cpp" />
+    <ClCompile Include="KanturuTowerOfRefinement.cpp" />
+    <ClCompile Include="KanturuUtil.cpp" />
+    <ClCompile Include="LargeRand.cpp" />
+    <ClCompile Include="LifeStone.cpp" />
+    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="LogProc.cpp" />
+    <ClCompile Include="LogToFile.cpp" />
+    <ClCompile Include="MagicDamage.cpp" />
+    <ClCompile Include="MagicInf.cpp" />
+    <ClCompile Include="MapClass.cpp" />
+    <ClCompile Include="MapItem.cpp" />
+    <ClCompile Include="MapServerManager.cpp" />
+    <ClCompile Include="Mercenary.cpp" />
+    <ClCompile Include="MonsterAttr.cpp" />
+    <ClCompile Include="MonsterHerd.cpp" />
+    <ClCompile Include="MonsterItemMng.cpp" />
+    <ClCompile Include="MonsterSetBase.cpp" />
+    <ClCompile Include="MoveCheck.cpp" />
+    <ClCompile Include="MoveCommand.cpp" />
+    <ClCompile Include="MultiAttackHackCheck.cpp" />
+    <ClCompile Include="MultiCheckSum.cpp" />
+    <ClCompile Include="MuMsg.cpp" />
+    <ClCompile Include="MyWinsockBase.cpp" />
+    <ClCompile Include="NpcTalk.cpp" />
+    <ClCompile Include="NSerialCheck.cpp" />
+    <ClCompile Include="ObjAttack.cpp" />
+    <ClCompile Include="ObjBaseAttack.cpp" />
+    <ClCompile Include="ObjCalCharacter.cpp" />
+    <ClCompile Include="ObjUseSkill.cpp" />
+    <ClCompile Include="PacketCheckSum.cpp" />
+    <ClCompile Include="PartyClass.cpp" />
+    <ClCompile Include="protocol.cpp" />
+    <ClCompile Include="QuestInfo.cpp" />
+    <ClCompile Include="QuestUtil.cpp" />
+    <ClCompile Include="RingAttackEvent.cpp" />
+    <ClCompile Include="SendHackLog.cpp" />
+    <ClCompile Include="SetItemMacro.cpp" />
+    <ClCompile Include="SetItemOption.cpp" />
+    <ClCompile Include="Shop.cpp" />
+    <ClCompile Include="SimpleModulus.cpp" />
+    <ClCompile Include="SkillAdditionInfo.cpp" />
+    <ClCompile Include="SkillDelay.cpp" />
+    <ClCompile Include="SkillHitBox.cpp" />
+    <ClCompile Include="SProtocol.cpp" />
+    <ClCompile Include="StatMng.cpp" />
+    <ClCompile Include="StdAfx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="TDurMagicKeyChecker.cpp" />
+    <ClCompile Include="TMonsterAI.cpp" />
+    <ClCompile Include="TMonsterAIAgro.cpp" />
+    <ClCompile Include="TMonsterAIAutomata.cpp" />
+    <ClCompile Include="TMonsterAIElement.cpp" />
+    <ClCompile Include="TMonsterAIGroup.cpp" />
+    <ClCompile Include="TMonsterAIGroupMember.cpp" />
+    <ClCompile Include="TMonsterAIMovePath.cpp" />
+    <ClCompile Include="TMonsterAIRule.cpp" />
+    <ClCompile Include="TMonsterAIRuleInfo.cpp" />
+    <ClCompile Include="TMonsterAIUnit.cpp" />
+    <ClCompile Include="TMonsterAIUtil.cpp" />
+    <ClCompile Include="TMonsterSkillElement.cpp" />
+    <ClCompile Include="TMonsterSkillElementInfo.cpp" />
+    <ClCompile Include="TMonsterSkillManager.cpp" />
+    <ClCompile Include="TMonsterSkillUnit.cpp" />
+    <ClCompile Include="TNotice.cpp" />
+    <ClCompile Include="TRandomPoolMgr.cpp" />
+    <ClCompile Include="TServerAlertManager.cpp" />
+    <ClCompile Include="TServerInfoDisplayer.cpp" />
+    <ClCompile Include="TStatistics.cpp" />
+    <ClCompile Include="TSync.cpp" />
+    <ClCompile Include="TUnion.cpp" />
+    <ClCompile Include="TUnionInfo.cpp" />
+    <ClCompile Include="user.cpp" />
+    <ClCompile Include="ViewportGuild.cpp" />
+    <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="WhisperCash.cpp" />
+    <ClCompile Include="winutil.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/Zc:auto %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="wsGameServer.cpp" />
+    <ClCompile Include="wsJoinServerCli.cpp" />
+    <ClCompile Include="wsShopServerCli.cpp" />
+    <ClCompile Include="WzMemScript.cpp" />
+    <ClCompile Include="WzMultiCastSock.cpp" />
+    <ClCompile Include="WzQueue.cpp" />
+    <ClCompile Include="WZScriptEncode.cpp" />
+    <ClCompile Include="WzUdp.cpp" />
+    <ClCompile Include="zzzitem.cpp" />
+    <ClCompile Include="zzzmathlib.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameServer.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AcceptIp.h" />
+    <ClInclude Include="AttackEvent.h" />
+    <ClInclude Include="BattleGround.h" />
+    <ClInclude Include="BattleSoccer.h" />
+    <ClInclude Include="BattleSoccerManager.h" />
+    <ClInclude Include="BloodCastle.h" />
+    <ClInclude Include="CallStackTrace.h" />
+    <ClInclude Include="CannonTower.h" />
+    <ClInclude Include="CashItemPeriodSystem.h" />
+    <ClInclude Include="CashLotterySystem.h" />
+    <ClInclude Include="CashShop.h" />
+    <ClInclude Include="CastleCrown.h" />
+    <ClInclude Include="CastleCrownSwitch.h" />
+    <ClInclude Include="CastleDeepEvent.h" />
+    <ClInclude Include="CastleSiege.h" />
+    <ClInclude Include="CastleSiegeSync.h" />
+    <ClInclude Include="ChaosBox.h" />
+    <ClInclude Include="ChaosCastle.h" />
+    <ClInclude Include="ChaosCastleSetItemDrop.h" />
+    <ClInclude Include="ChatProtocol.h" />
+    <ClInclude Include="ChinaHackUserKick.h" />
+    <ClInclude Include="classdef.h" />
+    <ClInclude Include="CLoginCount.h" />
+    <ClInclude Include="ClosePlayer.h" />
+    <ClInclude Include="ComboAttack.h" />
+    <ClInclude Include="ConMember.h" />
+    <ClInclude Include="Crywolf.h" />
+    <ClInclude Include="CrywolfAltar.h" />
+    <ClInclude Include="CrywolfDarkElf.h" />
+    <ClInclude Include="CrywolfMonster.h" />
+    <ClInclude Include="CrywolfObjInfo.h" />
+    <ClInclude Include="CrywolfStateTimeInfo.h" />
+    <ClInclude Include="CrywolfStatue.h" />
+    <ClInclude Include="CrywolfSync.h" />
+    <ClInclude Include="CrywolfTanker.h" />
+    <ClInclude Include="CrywolfUtil.h" />
+    <ClInclude Include="CWhatsUpDummyServer.h" />
+    <ClInclude Include="DarkSpirit.h" />
+    <ClInclude Include="DbSave.h" />
+    <ClInclude Include="DBSockMng.h" />
+    <ClInclude Include="DevilSquare.h" />
+    <ClInclude Include="DevilSquareGround.h" />
+    <ClInclude Include="dirpath.h" />
+    <ClInclude Include="DragonEvent.h" />
+    <ClInclude Include="DSProtocol.h" />
+    <ClInclude Include="EDSProtocol.h" />
+    <ClInclude Include="EledoradoEvent.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="EventManagement.h" />
+    <ClInclude Include="GameEvent.h" />
+    <ClInclude Include="GameMain.h" />
+    <ClInclude Include="GameServer.h" />
+    <ClInclude Include="GameServerAuth.h" />
+    <ClInclude Include="Gate.h" />
+    <ClInclude Include="giocp.h" />
+    <ClInclude Include="GMMng.h" />
+    <ClInclude Include="GmSystem.h" />
+    <ClInclude Include="gObjMonster.h" />
+    <ClInclude Include="Guardian.h" />
+    <ClInclude Include="GuardianStatue.h" />
+    <ClInclude Include="GuildClass.h" />
+    <ClInclude Include="IllusionTemple.h" />
+    <ClInclude Include="IpCache.h" />
+    <ClInclude Include="ItemAddOption.h" />
+    <ClInclude Include="ItemBag.h" />
+    <ClInclude Include="ItemBagEx.h" />
+    <ClInclude Include="ItemSystemFor380.h" />
+    <ClInclude Include="JewelMixSystem.h" />
+    <ClInclude Include="JewelOfHarmonySystem.h" />
+    <ClInclude Include="KalimaGate.h" />
+    <ClInclude Include="Kanturu.h" />
+    <ClInclude Include="KanturuBattleOfMaya.h" />
+    <ClInclude Include="KanturuBattleOfNightmare.h" />
+    <ClInclude Include="KanturuBattleStanby.h" />
+    <ClInclude Include="KanturuBattleUser.h" />
+    <ClInclude Include="KanturuBattleUserMng.h" />
+    <ClInclude Include="KanturuEntranceNPC.h" />
+    <ClInclude Include="KanturuMaya.h" />
+    <ClInclude Include="KanturuMonsterMng.h" />
+    <ClInclude Include="KanturuNightmare.h" />
+    <ClInclude Include="KanturuObjInfo.h" />
+    <ClInclude Include="KanturuStateInfo.h" />
+    <ClInclude Include="KanturuTowerOfRefinement.h" />
+    <ClInclude Include="KanturuUtil.h" />
+    <ClInclude Include="LargeRand.h" />
+    <ClInclude Include="LifeStone.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="logproc.h" />
+    <ClInclude Include="LogToFile.h" />
+    <ClInclude Include="MagicDamage.h" />
+    <ClInclude Include="MagicInf.h" />
+    <ClInclude Include="MapClass.h" />
+    <ClInclude Include="MapItem.h" />
+    <ClInclude Include="MapServerManager.h" />
+    <ClInclude Include="Mercenary.h" />
+    <ClInclude Include="MonsterAttr.h" />
+    <ClInclude Include="MonsterHerd.h" />
+    <ClInclude Include="MonsterItemMng.h" />
+    <ClInclude Include="MonsterSetBase.h" />
+    <ClInclude Include="MoveCheck.h" />
+    <ClInclude Include="MoveCommand.h" />
+    <ClInclude Include="MultiAttackHackCheck.h" />
+    <ClInclude Include="MultiCheckSum.h" />
+    <ClInclude Include="MuMsg.h" />
+    <ClInclude Include="MyWinsockBase.h" />
+    <ClInclude Include="NpcTalk.h" />
+    <ClInclude Include="NSerialCheck.h" />
+    <ClInclude Include="ObjAttack.h" />
+    <ClInclude Include="ObjBaseAttack.h" />
+    <ClInclude Include="ObjCalCharacter.h" />
+    <ClInclude Include="ObjUseSkill.h" />
+    <ClInclude Include="PacketCheckSum.h" />
+    <ClInclude Include="PartyClass.h" />
+    <ClInclude Include="PCSProtocol.h" />
+    <ClInclude Include="prodef.h" />
+    <ClInclude Include="protocol.h" />
+    <ClInclude Include="QuestInfo.h" />
+    <ClInclude Include="QuestUtil.h" />
+    <ClInclude Include="ReadScript.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="RingAttackEvent.h" />
+    <ClInclude Include="SendHackLog.h" />
+    <ClInclude Include="SetItemMacro.h" />
+    <ClInclude Include="SetItemOption.h" />
+    <ClInclude Include="Shop.h" />
+    <ClInclude Include="SimpleModulus.h" />
+    <ClInclude Include="SkillAdditionInfo.h" />
+    <ClInclude Include="SkillDelay.h" />
+    <ClInclude Include="SkillHitBox.h" />
+    <ClInclude Include="spe.h" />
+    <ClInclude Include="SProtocol.h" />
+    <ClInclude Include="StatMng.h" />
+    <ClInclude Include="TDurMagicKeyChecker.h" />
+    <ClInclude Include="TMonsterAI.h" />
+    <ClInclude Include="TMonsterAIAgro.h" />
+    <ClInclude Include="TMonsterAIAutomata.h" />
+    <ClInclude Include="TMonsterAIElement.h" />
+    <ClInclude Include="TMonsterAIGroup.h" />
+    <ClInclude Include="TMonsterAIGroupMember.h" />
+    <ClInclude Include="TMonsterAIMovePath.h" />
+    <ClInclude Include="TMonsterAIRule.h" />
+    <ClInclude Include="TMonsterAIRuleInfo.h" />
+    <ClInclude Include="TMonsterAIState.h" />
+    <ClInclude Include="TMonsterAIUnit.h" />
+    <ClInclude Include="TMonsterAIUtil.h" />
+    <ClInclude Include="TMonsterSkillElement.h" />
+    <ClInclude Include="TMonsterSkillElementInfo.h" />
+    <ClInclude Include="TMonsterSkillInfo.h" />
+    <ClInclude Include="TMonsterSkillManager.h" />
+    <ClInclude Include="TMonsterSkillUnit.h" />
+    <ClInclude Include="TNotice.h" />
+    <ClInclude Include="TRandomPoolMgr.h" />
+    <ClInclude Include="TServerAlertManager.h" />
+    <ClInclude Include="TServerInfoDisplayer.h" />
+    <ClInclude Include="TSkillElement.h" />
+    <ClInclude Include="TStatistics.h" />
+    <ClInclude Include="TSync.h" />
+    <ClInclude Include="TUnion.h" />
+    <ClInclude Include="TUnionInfo.h" />
+    <ClInclude Include="user.h" />
+    <ClInclude Include="ViewportGuild.h" />
+    <ClInclude Include="Weapon.h" />
+    <ClInclude Include="WhisperCash.h" />
+    <ClInclude Include="winutil.h" />
+    <ClInclude Include="wsGameServer.h" />
+    <ClInclude Include="wsJoinServerCli.h" />
+    <ClInclude Include="wsShopServerCli.h" />
+    <ClInclude Include="WzMemScript.h" />
+    <ClInclude Include="WzMultiCastSock.h" />
+    <ClInclude Include="WzQueue.h" />
+    <ClInclude Include="WZScriptEncode.h" />
+    <ClInclude Include="WzUdp.h" />
+    <ClInclude Include="zzzitem.h" />
+    <ClInclude Include="zzzmathlib.h" />
+    <ClInclude Include="zzzpath.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="GameServer.ico" />
+    <CustomBuild Include="small.ico" />
+    <CustomBuild Include="ChangeLog.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="SimpleModulus.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bitmap.bmp" />
+    <None Include="BUGS.txt" />
+    <None Include="MuServer\Data\CashShopList.txt" />
+    <None Include="MuServer\Data\ChaosCardProbability.txt" />
+    <None Include="MuServer\Data\ChaosMix.ini" />
+    <None Include="MuServer\Data\CommonServer.cfg" />
+    <None Include="MuServer\Data\ConnectMember.txt" />
+    <None Include="MuServer\Data\Encryption\CheckSum.dat" />
+    <None Include="MuServer\Data\Encryption\Dec1.dat" />
+    <None Include="MuServer\Data\Encryption\Enc2.dat" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag10.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag11.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag12.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag13.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag14.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag15.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag17.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag18.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag19.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag2.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag20.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag21.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag22.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag23.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag24.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag25.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag26.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag27.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag28.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag29.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag3.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag30.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag31.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag32.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag33.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag34.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag35.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag36.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag37.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag38.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag4.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag5.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag6.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag7.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag8.txt" />
+    <None Include="MuServer\Data\EventItemBags\EventItemBag9.txt" />
+    <None Include="MuServer\Data\Events\BloodCastle.dat" />
+    <None Include="MuServer\Data\Events\CastleDeepEvent.dat" />
+    <None Include="MuServer\Data\Events\ChaosCastle.dat" />
+    <None Include="MuServer\Data\Events\Crywolf.dat" />
+    <None Include="MuServer\Data\Events\DevilSquare.dat" />
+    <None Include="MuServer\Data\Events\EventManagement.dat" />
+    <None Include="MuServer\Data\Events\Kanturu.dat" />
+    <None Include="MuServer\Data\Events\MuCastleData.dat" />
+    <None Include="MuServer\Data\Events\RingAttackEvent.dat" />
+    <None Include="MuServer\Data\IpList.dat" />
+    <None Include="MuServer\Data\Items\Item.txt" />
+    <None Include="MuServer\Data\Items\ItemAddOption.txt" />
+    <None Include="MuServer\Data\Items\ItemSetOption.txt" />
+    <None Include="MuServer\Data\Items\ItemSetType.txt" />
+    <None Include="MuServer\Data\Items\JewelOfHarmonyOption.txt" />
+    <None Include="MuServer\Data\Items\JewelOfHarmonySmelt.txt" />
+    <None Include="MuServer\Data\MapServerInfo.dat" />
+    <None Include="MuServer\Data\Messages.ini" />
+    <None Include="MuServer\Data\Monsters\KanturuMonsterSetBase.txt" />
+    <None Include="MuServer\Data\Monsters\Monster.txt" />
+    <None Include="MuServer\Data\Monsters\MonsterAIElement.txt" />
+    <None Include="MuServer\Data\Monsters\MonsterAIGroup.txt" />
+    <None Include="MuServer\Data\Monsters\MonsterAIRule.txt" />
+    <None Include="MuServer\Data\Monsters\MonsterAIUnit.txt" />
+    <None Include="MuServer\Data\Monsters\MonsterAutomata.txt" />
+    <None Include="MuServer\Data\Monsters\MonsterSetBase.txt" />
+    <None Include="MuServer\Data\Monsters\MonsterSetBaseCS.txt" />
+    <None Include="MuServer\Data\Monsters\MonsterSkill.txt" />
+    <None Include="MuServer\Data\Monsters\MonsterSkillElement.txt" />
+    <None Include="MuServer\Data\Monsters\MonsterSkillUnit.txt" />
+    <None Include="MuServer\Data\Move\Gate.txt" />
+    <None Include="MuServer\Data\Move\MoveLevel.txt" />
+    <None Include="MuServer\Data\Move\MovePath_35.dat" />
+    <None Include="MuServer\Data\Move\MoveReq.txt" />
+    <None Include="MuServer\Data\Quests\Quest.txt" />
+    <None Include="MuServer\Data\Shops\Shop0.txt" />
+    <None Include="MuServer\Data\Shops\Shop1.txt" />
+    <None Include="MuServer\Data\Shops\Shop10.txt" />
+    <None Include="MuServer\Data\Shops\Shop11.txt" />
+    <None Include="MuServer\Data\Shops\Shop12.txt" />
+    <None Include="MuServer\Data\Shops\Shop13.txt" />
+    <None Include="MuServer\Data\Shops\Shop2.txt" />
+    <None Include="MuServer\Data\Shops\Shop3.txt" />
+    <None Include="MuServer\Data\Shops\Shop4.txt" />
+    <None Include="MuServer\Data\Shops\Shop5.txt" />
+    <None Include="MuServer\Data\Shops\Shop6.txt" />
+    <None Include="MuServer\Data\Shops\Shop7.txt" />
+    <None Include="MuServer\Data\Shops\Shop8.txt" />
+    <None Include="MuServer\Data\Shops\Shop9.txt" />
+    <None Include="MuServer\Data\Skills\Skill.txt" />
+    <None Include="MuServer\Data\Skills\SkillAdditionInfo.dat" />
+    <None Include="MuServer\Data\Skills\SkillElect.hit" />
+    <None Include="MuServer\Data\Skills\SkillSpear.hit" />
+    <None Include="MuServer\Data\Terrains\Terrain.att" />
+    <None Include="MuServer\Data\Terrains\Terrain1.att" />
+    <None Include="MuServer\Data\Terrains\Terrain10.att" />
+    <None Include="MuServer\Data\Terrains\Terrain11.att" />
+    <None Include="MuServer\Data\Terrains\Terrain12.att" />
+    <None Include="MuServer\Data\Terrains\Terrain19.att" />
+    <None Include="MuServer\Data\Terrains\Terrain2.att" />
+    <None Include="MuServer\Data\Terrains\Terrain25.att" />
+    <None Include="MuServer\Data\Terrains\Terrain3.att" />
+    <None Include="MuServer\Data\Terrains\Terrain31.att" />
+    <None Include="MuServer\Data\Terrains\Terrain32.att" />
+    <None Include="MuServer\Data\Terrains\Terrain33.att" />
+    <None Include="MuServer\Data\Terrains\Terrain34.att" />
+    <None Include="MuServer\Data\Terrains\Terrain35.att" />
+    <None Include="MuServer\Data\Terrains\Terrain35_Occupied.att" />
+    <None Include="MuServer\Data\Terrains\Terrain35_Peace.att" />
+    <None Include="MuServer\Data\Terrains\Terrain35_War.att" />
+    <None Include="MuServer\Data\Terrains\Terrain36.att" />
+    <None Include="MuServer\Data\Terrains\Terrain37.att" />
+    <None Include="MuServer\Data\Terrains\Terrain38.att" />
+    <None Include="MuServer\Data\Terrains\Terrain39.att" />
+    <None Include="MuServer\Data\Terrains\Terrain4.att" />
+    <None Include="MuServer\Data\Terrains\Terrain40.att" />
+    <None Include="MuServer\Data\Terrains\Terrain40_Close.att" />
+    <None Include="MuServer\Data\Terrains\Terrain40_Open.att" />
+    <None Include="MuServer\Data\Terrains\Terrain41.att" />
+    <None Include="MuServer\Data\Terrains\Terrain42.att" />
+    <None Include="MuServer\Data\Terrains\Terrain43.att" />
+    <None Include="MuServer\Data\Terrains\Terrain46.att" />
+    <None Include="MuServer\Data\Terrains\Terrain5.att" />
+    <None Include="MuServer\Data\Terrains\Terrain6.att" />
+    <None Include="MuServer\Data\Terrains\Terrain7.att" />
+    <None Include="MuServer\Data\Terrains\Terrain8.att" />
+    <None Include="MuServer\Data\Terrains\Terrain9.att" />
+    <None Include="MuServer\GameServer\GameServer.ini" />
+    <None Include="TODO.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

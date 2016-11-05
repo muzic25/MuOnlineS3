@@ -1,0 +1,66 @@
+//--------------------------------------------------------------------------------------------------//
+// Time Settings                                                                                    //
+// Event Start (Min)      	Event Duration (Min)   			- (Min) 		    //
+//--------------------------------------------------------------------------------------------------//
+0
+	3			       30				25
+end
+
+//--------------------------------------------------------------------------------------------------//
+// Message Settings                                                                                 //
+// Move Radius      		  Minimum Radius   		  Maximum Radius 		    //
+//--------------------------------------------------------------------------------------------------//
+1
+	15				3				6
+end
+
+//--------------------------------------------------------------------------------------------------//
+// Monster Settings                                                                                 //
+// Monster Number      Regen   	     Aggressive 		  				    //
+//--------------------------------------------------------------------------------------------------//
+2
+	135		0		1	// White Wizard
+	136		0		0	// Ogre Warrior of Doom
+	136		0		0	// Ogre Warrior of Doom
+	136		0		0	// Ogre Warrior of Doom
+	136		0		0	// Ogre Warrior of Doom
+	136		0		0	// Ogre Warrior of Doom
+	136		0		0	// Ogre Warrior of Doom
+	136		0		0	// Ogre Warrior of Doom
+	136		0		0	// Ogre Warrior of Doom
+	136		0		0	// Ogre Warrior of Doom
+	136		0		0	// Ogre Warrior of Doom
+	136		0		0	// Ogre Warrior of Doom
+	136		0		0	// Ogre Warrior of Doom
+	136		0		0	// Ogre Warrior of Doom
+	136		0		0	// Ogre Warrior of Doom
+	136		0		0	// Ogre Warrior of Doom
+	137		0		1	// Ogre Archer of Doom
+	137		0		1	// Ogre Archer of Doom
+	137		0		1	// Ogre Archer of Doom
+	137		0		1	// Ogre Archer of Doom
+	137		0		1	// Ogre Archer of Doom
+	137		0		1	// Ogre Archer of Doom
+	137		0		1	// Ogre Archer of Doom
+	137		0		1	// Ogre Archer of Doom
+	137		0		1	// Ogre Archer of Doom
+	137		0		1	// Ogre Archer of Doom
+	137		0		1	// Ogre Archer of Doom
+	137		0		1	// Ogre Archer of Doom
+	137		0		1	// Ogre Archer of Doom
+	137		0		1	// Ogre Archer of Doom
+	137		0		1	// Ogre Archer of Doom
+end
+
+//--------------------------------------------------------------------------------------------------//
+// Event Schedules                                                                                  //
+// Hours (24 Format)   Minutes (59 Format) 						            //
+//--------------------------------------------------------------------------------------------------//
+3
+	00	00
+	04	00
+	08	00
+	12	00
+	16	00
+	20	00
+end

@@ -1,0 +1,31 @@
+#ChangeLog:
+
+1. CSetItemOption::LoadOptionInfo / Fixed memory leak
+2. GameServer.rc replaced with original (1.00.18)
+3. OBJ Size Increased 15000/13500
+4. Strength, Dexterity, Vitality, Energy FIXED
+5. ServerInfo.dat in GameServer's folder FIXED
+6. Changed path of Shops, Terrains, EventItemBags
+7. GS Tittle FIXED
+8. CGCheckMainRecv Function Fixed (Main -> Server Works)
+9. CloseWindow serverport stack overflow error FIXED
+10. LogAddTimeDateFunc write to file error FIXED
+11. Changed path of Events configs
+12. [Season3.1] Firework Shop ADDED
+13. EXE support for Shops Added
+14. [Season3.1] New maps ADDED
+15. [Core] Protocol Fully Fixed
+16. Data folder re-organazed
+17. Start from exe (GameServer.ini)
+18. Deleted protocol configs (Lang\Kor etc)
+19. Deleted WebZen Billing System (Checks, Protocol, e.t.c)
+20. Fixed error with exception and critical section.
+21. WzAG.dll exported to GameServer
+22. WzAG code optimized
+23. [Season3.1]3rd Class fully ADDED
+24. [Season3.1]3rd Wings and Mix fully ADDED
+25. [Season3.1]Golder Fenrir, Visual Bug FIXED
+26. [Season3.1]3rd Quest ADDED (Need Test)
+27. [Season3.2]Summoner ADDED (Commented till S3EP2 Develop)
+28. Destroy GIOCP FIXED
+29. [Core] GS_CS now in GS

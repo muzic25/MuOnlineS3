@@ -1,0 +1,13 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Project Author : (c) Shatter							//
+// Project Info	  : Free Release 4 Ragezone MU Online Community			//
+// Last Edit Date : 30 / 12 / 2010                                              //
+//////////////////////////////////////////////////////////////////////////////////
+
+// Liam The Barmaid
+
+14 10 0 0 0 0 0 0 // Town Portal Scroll
+14 9 0 0 0 0 0 0 // Alcohol
+14 9 1 0 0 0 0 0 // Olive of Love
+14 20 0 0 0 0 0 0 // Remedy of Love
+end

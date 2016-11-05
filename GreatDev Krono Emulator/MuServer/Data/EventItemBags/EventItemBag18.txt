@@ -1,0 +1,93 @@
+// Erohim
+
+//--------------------------------------//
+// Map Drop                             //
+//--------------------------------------//
+0
+//  MapNumber  Drop   MinLvl   MaxLvl
+	0	0	0	1000	// Lorencia
+	1	0	0	1000	// Dungeon
+	2	0	0	1000	// Devias
+	3	0	0	1000	// Noria
+	4	0	0	1000	// LostTower
+	5	0	0	1000	// Exile
+	6	0	0	1000	// Arena
+	7	0	0	1000	// Atlans
+	8	0	0	1000	// Tarkan
+	9	0	0	1000	// DevilSquare
+	10	0	0	1000	// Icarus
+end
+
+//--------------------------------------//
+// Drop Options                         //
+//--------------------------------------//
+1
+//	 Name		ZenAmount     Index    Type    Lvl   DropRate  Drop  ExcDrop
+        "Erohim"	 1000000	0       0	0	0	100	1
+end
+
+//--------------------------------------//
+// Item Drops                           //
+//--------------------------------------//
+2
+//	Type	Index	MinLvl	MaxLvl	Skill	Luck	Opt	Exc
+
+	0	17	0	4	1	1	0	0 // Dark Breaker
+	0	18	0	4	1	1	0	0 // Thunder Blade
+	0	22	0	4	1	1	0	0 // Bone Blade
+	0	31	0	4	1	1	0	0 // Rune Blade
+	0	20	0	1	1	1	0	0 // Knight Blade
+	6	14	0	1	1	1	0	1 // Excellent Legendary Shield
+	0	21	0	1	1	1	0	0 // Dark Reign Blade
+	2   	12   	0   	1   	1   	1  	0   	0 // Great Lord Scepter
+	4	19	0	4	1	1	0	0 // Great Reign Crossbow
+	4	20	0	1	1	1	0	0 // Arrow Viper Bow
+	5	9	0	4	1	1	0	0 // Dragon Soul Staff
+	5	11	0	1	1	1	0	0 // Staff of Kundun
+	0	16	0	0	1	1	0	1 // Excellent Sword of Destruction
+	2	10	0	0	1	1	0	1 // Excellent Great Scepter
+	3	10	0	0	1	1	0	1 // Excellent Dragon Spear
+	4	16	0	0	1	1	0	1 // Excellent Saint Crossbow
+	4	17	0	0	1	1	0	1 // Excellent Celestial Bow
+	5	6	0	5	1	1	0	1 // Excellent Staff of Resurrection
+	5	9	0	5	1	1	0	1 // Excellent Dragon Soul Staff
+	7	21	0	3	0	1	0	0 // Great Dragon Helm
+	7	22	0	3	0	1	0	0 // Dark Soul Helm
+	7	28	0	3	0	1	0	0 // Dark Master Helm
+	8	16	0	4	0	1	0	1 // Excellent Black Dragon Armor
+	8	18	0	4	0	1	0	1 // Excellent Grand Soul Armor
+	8	19	0	4	0	1	0	1 // Excellent Divine Armor
+	9	21	0	3	0	1	0	0 // Great Dragon Pants
+	9	22	0	3	0	1	0	0 // Dark Soul Pants
+	9	23	0	3	0	1	0	0 // Hurricane Pants
+	9	24	0	3	0	1	0	0 // Red Spirit Pants
+	9	28	0	3	0	1	0	0 // Dark Master Pants
+	11	16	0	4	0	1	0	1 // Excellent Black Dragon Boots
+	11	18	0	4	0	1	0	1 // Excellent Grand Soul Boots
+	11	19	0	4	0	1	0	1 // Excellent Divine Boots
+	10	21	0	3	0	1	0	0 // Great Dragon Gloves
+	10	23	0	3	0	1	0	0 // Hurricane Gloves
+	11	22	0	3	0	1	0	0 // Dark Soul Boots
+	11	23	0	3	0	1	0	0 // Hurricane Boots
+	9	34	0	4	0	1	0	1 // Excellent Ashcrow Pants
+	9	35	0	4	0	1	0	1 // Excellent Eclipse Pants
+	9	36	0	4	0	1	0	1 // Excellent Iris Pants
+	9	37	0	4	0	1	0	1 // Excellent Valiant Pants
+	9	38	0	4	0	1	0	1 // Excellent Glorious Pants
+	11	28	0	3	0	1	0	0 // Dark Master Boots
+	8	17	0	4	0	1	0	0 // Dark Phoenix Armor
+	7	17	0	3	0	1	0	1 // Excellent Dark Phoenix Helm
+	8	17	0	3	0	1	0	1 // Excellent Dark Phoenix Armor
+	9	17	0	3	0	1	0	1 // Excellent Dark Phoenix Pants
+	10	17	0	3	0	1	0	1 // Excellent Dark Phoenix Gloves
+	11	17	0	3	0	1	0	1 // Excellent Dark Phoenix Boots
+	8	34	0	4	0	1	0	1 // Excellent Ashcrow Armor
+	8	35	0	4	0	1	0	1 // Excellent Eclipse Armor
+	8	36	0	4	0	1	0	1 // Excellent Iris Armor
+	8	37	0	4	0	1	0	1 // Excellent Valiant Armor
+	8	38	0	4	0	1	0	1 // Excellent Glorious Armor
+	8	20	0	3	0	1	0	1 // Excellent Thunder Hawk Armor
+	9	20	0	3	0	1	0	1 // Excellent Thunder Hawk Pants
+	10	20	0	3	0	1	0	1 // Excellent Thunder Hawk Gloves
+	11	20	0	3	0	1	0	1 // Excellent Thunder Hawk Boots
+end

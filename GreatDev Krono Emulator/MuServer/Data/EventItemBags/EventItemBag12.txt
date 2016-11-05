@@ -1,0 +1,35 @@
+// Box of Kundun +5
+
+13 8 0 0 1 0 // Excellent Ring of Ice
+13 9 0 0 1 0 // Excellent Ring of Poison
+13 12 0 0 1 0 // Excellent Pendant of Lighting
+13 13 0 0 1 0 // Excellent Pendant of Fire
+7 1 0 0 1 0 // Excellent Dragon Helm
+8 1 0 0 1 0 // Excellent Dragon Armor
+9 1 0 0 1 0 // Excellent Dragon Pants
+10 1 0 0 1 0 // Excellent Dragon Gloves
+11 1 0 0 1 0 // Excellent Dragon Boots
+7 14 0 0 1 0 // Excellent Guardian Helm
+8 14 0 0 1 0 // Excellent Guardian Armor
+9 14 0 0 1 0 // Excellent Guardian Pants
+10 14 0 0 1 0 // Excellent Guardian Gloves
+11 14 0 0 1 0 // Excellent Guardian Boots
+7 3 0 0 1 0 // Excellent Legendary Helm
+8 3 0 0 1 0 // Excellent Legendary Armor
+9 3 0 0 1 0 // Excellent Legendary Pants
+10 3 0 0 1 0 // Excellent Legendary Gloves
+11 3 0 0 1 0 // Excellent Legendary Boots
+5 5 0 0 1 0 // Excellent Legendary Staff
+4 14 0 0 1 0 // Excellent Aquagold Crossbow
+4 13 0 0 1 0 // Excellent Bluewing Crossbow
+5 6 0 0 1 0 // Excellent Staff of Resurrection
+2 9 0 0 1 0 // Excellent Master Scepter
+2 4 0 0 1 0 // Excellent Crystal Morning Star
+2 5 0 0 1 0 // Excellent Crystal Sword
+3 9 0 0 1 0 // Excellent Bill of Balrog
+7 26 0 0 1 0 // Excellent Adamantine Mask
+8 26 0 0 1 0 // Excellent Adamantine Armor
+9 26 0 0 1 0 // Excellent Adamantine Pants
+10 26 0 0 1 0 // Excellent Adamantine Gloves
+11 26 0 0 1 0 // Excellent Adamantine Boots
+0 16 0 0 1 0 // Excellent Sword of Destruction

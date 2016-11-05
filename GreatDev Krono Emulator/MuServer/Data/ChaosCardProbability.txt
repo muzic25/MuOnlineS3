@@ -1,0 +1,375 @@
+//==================================================================================================================
+//Project: MMTeam - Season II English
+//Version: GameServer 2.00.05
+//Information: Choas Card Master (Chaos Card Probability)
+//Translated by Wingsofhell(MMT Owner)
+//==================================================================================================================	
+
+
+//==================================================================================================================
+//Probability of Items from Sections 3-18 
+//																																																																													
+//     Type 		DropProb  	SkillProb 	LuckProb 	OptionProb   ExcellenceProb
+//==================================================================================================================																																																																													
+0																																																																																																																																																			
+	3		160000		1000000		350000		1000000		600000																																																																							
+	4		100000		1000000		500000		1000000		1000000																																																																							
+	5		30000		1000000		500000		1000000		1000000																																																																							
+	6		160000		0		350000		1000000		600000																																																																							
+	7		100000		0		500000		1000000		1000000																																																																							
+	8		120000		0		0		1000000		0																																																																							
+	9		100000		0		0		0		0																																																																							
+	10		157000		0		0		0		0																																																																							
+	11		52150		0		0		0		0																																																																							
+	12		16600		0		0		0		0																																																																							
+	13		2000		0		0		0		0																																																																							
+	14		70		0		0		0		0																																																																							
+	15		180		0		0		0		0																																																																							
+	16		300		0		0		0		0																																																																							
+	17		300		0		0		0		0																																																																							
+	18		1400		0		0		0		0																																																																							
+end
+
+//==================================================================================================================																																																																													
+//     Type   	Value  //Not Recommended to Touch these values 
+//==================================================================================================================																																																																													
+1																																																																																																																																																							
+//	0	500000																																																																											
+//	1	300000																																																																											
+//	2	150000																																																																											
+//	3	50000																																																																											
+//	4	0																																																																						
+end
+
+//==================================================================================================================																																																																													
+//     Type   	Value //Not Recommended to Touch these values
+//==================================================================================================================																																																																												
+2																																																																																																																																								
+//	0	250000																																																																											
+//	1	150000																																																																											
+//	2	150000																																																																											
+//	3	150000																																																																											
+//	4	150000																																																																											
+//	5	150000																																																																											
+end
+																																																																													
+//==================================================================================================================																																																																													
+//     Type   Index  MinLevel MaxLevel Skill   Luck  Option   ExcellenceOption
+//==================================================================================================================																																																																					
+3																																																																											
+	0	0	0	0	0	1	1	2	//Kris																																																																			
+	0	16	0	0	1	1	1	2	//Sword of Destruction																																																																			
+	0	17	0	0	1	1	1	2	//Dark Breaker																																																																			
+	0	18	0	0	1	1	1	2	//Thunder Blade																																																																		
+	0	31	0	0	1	1	1	2	//Rune Blade																																																																		
+	2	10	0	0	1	1	1	2	//Great Scepter																																																																		
+	2	11	0	0	1	1	1	2	//Lord Scepter																																																																		
+	4	16	0	0	1	1	1	2	//Saint Crossbow																																																																			
+	4	17	0	0	1	1	1	2	//Celestial Bow																																																																		
+	4	19	0	0	1	1	1	2	//Great Reign Crossbow																																																																		
+	5	7	0	0	0	1	1	2	//Chaos Lighting Staff																																																																		
+	5	8	0	0	0	1	1	2	//Staff of Destruction																																																																			
+	5	9	0	0	0	1	1	2	//Dragon Soul Staff																																																																	
+	4	6	0	0	1	1	1	2	//Chaos Nature Bow																																																																		
+	2	6	0	0	1	1	1	2	//Chaos Dragon Axe																																																																			
+																																																																											
+	0	16	5	7	1	1	1	0	//Sword of Destruction																																																																			
+	0	17	5	7	1	1	1	0	//Dark Breaker																																																																			
+	0	18	5	7	1	1	1	0	//Thunder Blade																																																																		
+	0	31	5	7	1	1	1	0	//Rune Blade																																																																				
+	2	10	5	7	1	1	1	0	//Great Scepter																																																																				
+	2	11	5	7	1	1	1	0	//Lord Scepter																																																																			
+	4	16	5	7	1	1	1	0	//Saint Crossbow																																																																		
+	4	17	5	7	1	1	1	0	//Celestial Bow																																																																				
+	4	19	5	7	1	1	1	0	//Great Reign Crossbow																																																																				
+	5	7	5	7	0	1	1	0	//Chaos Lighting Staff																																																																		
+	5	8	5	7	0	1	1	0	//Staff of Destruction																																																																			
+	5	9	5	7	0	1	1	0	//Dragon Soul Staff																																																																		
+	4	6	5	7	1	1	1	0	//Chaos Nature Bow																																																																			
+	2	6	5	7	1	1	1	0	//Chaos Dragon Axe																																																																			
+end																																																			
+//==================================================================================================================																																																																													
+//     Type   Index  MinLevel MaxLevel Skill   Luck  Option   ExcellenceOption
+//==================================================================================================================
+4																																																																											
+	0	2	0	0	0	1	1	2	//Rapier																																																																			
+	0	3	0	0	1	1	1	2	//Katana																																																																		
+	1	3	0	0	1	1	1	2	//Tomahawk																																																																		
+	2	2	0	0	0	1	1	2	//Flail																																																																			
+	2	4	0	0	1	1	1	2	//Crystal Morning Star																																																																			
+	2	5	0	0	1	1	1	2	//Crystal Sword																																																																			
+	2	7	0	0	1	1	1	2	//Elemental Mace																																																																			
+	2	8	0	0	1	1	1	2	//Battle Scepter																																																																		
+	2	9	0	0	1	1	1	2	//Master Scepter																																																																			
+	3	9	0	0	1	1	1	2	//Bill of Balrog																																																																		
+	4	0	0	0	1	1	1	2	//Short Bow																																																																		
+	4	11	0	0	1	1	1	2	//Light Crossbow																																																																		
+	4	13	0	0	1	1	1	2	//Bluewing Crossbow																																																																			
+	4	14	0	0	1	1	1	2	//Aquagold Crossbow																																																																		
+	5	6	0	0	0	1	1	2	//Staff of Resurrection																																																																		
+end																																																																													
+//==================================================================================================================																																																																													
+//     Type   Index  MinLevel MaxLevel Skill   Luck  Option   ExcellenceOption
+//==================================================================================================================
+5																																																																												
+	6	0	0	0	0	1	1	2	//Small Shield																																																																			
+	6	1	0	0	0	1	1	2	//Horn Shield																																																																			
+	6	2	0	0	1	1	1	2	//Kite Shield																																																																		
+	6	3	0	0	1	1	1	2	//Elven Shield																																																																			
+	6	4	0	0	1	1	1	2	//Buckler																																																																		
+	6	5	0	0	0	1	1	2	//Dragon Slayer Shield																																																																		
+	6	6	0	0	1	1	1	2	//Skull Shield																																																																		
+	6	7	0	0	1	1	1	2	//Spiked Shield																																																																		
+	6	8	0	0	1	1	1	2	//Tower Shield																																																																	
+	6	9	0	0	1	1	1	2	//Plate Shield																																																																		
+	6	10	0	0	1	1	1	2	//Large Round Shield																																																																	
+	6	11	0	0	1	1	1	2	//Serpent Shield																																																																		
+	6	12	0	0	1	1	1	2	//Bronze Shield																																																																
+	6	13	0	0	1	1	1	2	//Dragon Shield																																																																			
+	6	14	0	0	0	1	1	2	//Legendary Shield																																																																		
+	6	15	0	0	0	1	1	2	//Grand Soul Shield																																																																		
+	6	16	0	0	1	1	1	2	//Elemental Shield																																																																	
+end																																																																													
+//==================================================================================================================
+//     Type   Index  MinLevel MaxLevel Skill   Luck  Option   ExcellenceOption
+//==================================================================================================================																																																																					
+6																																																																												
+	8	15	0	0	0	1	1	2	//Storm Crow Armor																																																																			
+	9	15	0	0	0	1	1	2	//Storm Crow Pants																																																																			
+	10	15	0	0	0	1	1	2	//Storm Crow Gloves																																																																			
+	11	15	0	0	0	1	1	2	//Storm Crow Boots
+	7	16	0	0	0	1	1	2	//Black Dragon Helm
+	8	16	0	0	0	1	1	2	//Black Dragon Armor
+	9	16	0	0	0	1	1	2	//Black Dragon Pants
+	10	16	0	0	0	1	1	2	//Black Dragon Gloves
+	11	16	0	0	0	1	1	2	//Black Dragon Boots
+	7	17	0	0	0	1	1	2	//Dark Phoenix Helm
+	8	17	0	0	0	1	1	2	//Dark Phoenix Armor
+	9	17	0	0	0	1	1	2	//Dark Phoenix Pants
+	10	17	0	0	0	1	1	2	//Dark Phoenix Gloves
+	11	17	0	0	0	1	1	2	//Dark Phoenix Boots
+	7	18	0	0	0	1	1	2	//Grand Soul Helm
+	8	18	0	0	0	1	1	2	//Grand Soul Armor
+	9	18	0	0	0	1	1	2	//Grand Soul Pants
+	10	18	0	0	0	1	1	2	//Grand Soul Gloves
+	11	18	0	0	0	1	1	2	//Grand Soul Boots
+	7	19	0	0	0	1	1	2	//Divine Helm
+	8	19	0	0	0	1	1	2	//Divine Armor
+	9	19	0	0	0	1	1	2	//Divine Pants
+	10	19	0	0	0	1	1	2	//Divine Gloves
+	11	19	0	0	0	1	1	2	//Divine Boots
+	8	20	0	0	0	1	1	2	//Thunder Hawk Armor
+	9	20	0	0	0	1	1	2	//Thunder Hawk Pants
+	10	20	0	0	0	1	1	2	//Thunder Hawk Gloves
+	11	20	0	0	0	1	1	2	//Thunder Hawk Boots
+	7	27	0	0	0	1	1	2	//Dark Steel Mask
+	8	27	0	0	0	1	1	2	//Dark Steel Armor
+	9	27	0	0	0	1	1	2	//Dark Steel Pants
+	10	27	0	0	0	1	1	2	//Dark Steel Gloves
+	11	27	0	0	0	1	1	2	//Dark Steel Boots
+	7	28	0	0	0	1	1	2	//Dark Master Mask
+	8	28	0	0	0	1	1	2	//Dark Master Armor
+	9	28	0	0	0	1	1	2	//Dark Master Pants
+	10	28	0	0	0	1	1	2	//Dark Master Gloves
+	11	28	0	0	0	1	1	2	//Dark Master Boots
+	7	34	0	0	0	1	1	2	//Ashcrow Helm
+	8	34	0	0	0	1	1	2	//Ashcrow Armor
+	9	34	0	0	0	1	1	2	//Ashcrow Pants
+	10	34	0	0	0	1	1	2	//Ashcrow Gloves
+	11	34	0	0	0	1	1	2	//Ashcrow Boots
+	7	35	0	0	0	1	1	2	//Eclipse Helm
+	8	35	0	0	0	1	1	2	//Eclipse Armor
+	9	35	0	0	0	1	1	2	//Eclipse Pants
+	10	35	0	0	0	1	1	2	//Eclipse Gloves
+	11	35	0	0	0	1	1	2	//Eclipse Boots
+	7	36	0	0	0	1	1	2	//Iris Helm
+	8	36	0	0	0	1	1	2	//Iris Armor
+	9	36	0	0	0	1	1	2	//Iris Pants
+	10	36	0	0	0	1	1	2	//Iris Gloves
+	11	36	0	0	0	1	1	2	//Iris Boots
+	8	37	0	0	0	1	1	2	//Valiant Armor
+	9	37	0	0	0	1	1	2	//Valiant Pants
+	10	37	0	0	0	1	1	2	//Valiant Gloves
+	11	37	0	0	0	1	1	2	//Valiant Boots
+	7	38	0	0	0	1	1	2	//Glorious Mask
+	8	38	0	0	0	1	1	2	//Glorious Armor
+	9	38	0	0	0	1	1	2	//Glorious Pants
+	10	38	0	0	0	1	1	2	//Glorious Gloves
+	11	38	0	0	0	1	1	2	//Glorious Boots
+	7	21	0	0	0	1	1	2	//Great Dragon Helm
+	8	21	0	0	0	1	1	2	//Great Dragon Armor
+	9	21	0	0	0	1	1	2	//Great Dragon Pants
+	10	21	0	0	0	1	1	2	//Great Dragon Gloves
+	11	21	0	0	0	1	1	2	//Great Dragon Boots
+	7	22	0	0	0	1	1	2	//Dark Soul Helm																																																																			
+	8	22	0	0	0	1	1	2	//Dark Soul Armor																																																																		
+	9	22	0	0	0	1	1	2	//Dark Soul Pants																																																																			
+	10	22	0	0	0	1	1	2	//Dark Soul Gloves																																																																		
+	11	22	0	0	0	1	1	2	//Dark Soul Boots																																																																		
+	8	23	0	0	0	1	1	2	//Hurricane Armor																																																																			
+	9	23	0	0	0	1	1	2	//Hurricane Pants																																																																			
+	10	23	0	0	0	1	1	2	//Hurricane Gloves																																																																			
+	11	23	0	0	0	1	1	2	//Hurricane Boots																																																																		
+	7	24	0	0	0	1	1	2	//Red Spirit Helm																																																																		
+	8	24	0	0	0	1	1	2	//Red Spirit Armor																																																																		
+	9	24	0	0	0	1	1	2	//Red Spirit Pants																																																																		
+	10	24	0	0	0	1	1	2	//Red Spirit Gloves																																																																			
+	11	24	0	0	0	1	1	2	//Red Spirit Boots																																																																			
+																																																																												
+	7	28	5	7	0	1	1	0	//Dark Master Mask																																																																		
+	8	28	5	7	0	1	1	0	//Dark Master Armor																																																																		
+	9	28	5	7	0	1	1	0	//Dark Master Pants																																																																			
+	10	28	5	7	0	1	1	0	//Dark Master Gloves																																																																			
+	11	28	5	7	0	1	1	0	//Dark Master Boots																																																																			
+	7	21	5	7	0	1	1	0	//Great Dragon Helm																																																																		
+	8	21	5	7	0	1	1	0	//Great Dragon Armor																																																																		
+	9	21	5	7	0	1	1	0	//Great Dragon Pants																																																																			
+	10	21	5	7	0	1	1	0	//Great Dragon Gloves																																																																			
+	11	21	5	7	0	1	1	0	//Great Dragon Boots																																																																		
+	7	22	5	7	0	1	1	0	//Dark Soul Helm																																																																			
+	8	22	5	7	0	1	1	0	//Dark Soul Armor																																																																		
+	9	22	5	7	0	1	1	0	//Dark Soul Pants																																																																		
+	10	22	5	7	0	1	1	0	//Dark Soul Gloves																																																																		
+	11	22	5	7	0	1	1	0	//Dark Soul Boots																																																																			
+	8	23	5	7	0	1	1	0	//Hurricane Armor																																																																			
+	9	23	5	7	0	1	1	0	//Hurricane Pants																																																																			
+	10	23	5	7	0	1	1	0	//Hurricane Gloves																																																																			
+	11	23	5	7	0	1	1	0	//Hurricane Boots																																																																		
+	7	24	5	7	0	1	1	0	//Red Spirit Helm																																																																			
+	8	24	5	7	0	1	1	0	//Red Spirit Armor																																																																	
+	9	24	5	7	0	1	1	0	//Red Spirit Pants																																																																			
+	10	24	5	7	0	1	1	0	//Red Spirit Gloves																																																																			
+	11	24	5	7	0	1	1	0	//Red Spirit Boots																																																																			
+end
+//==================================================================================================================
+//     Type   Index  MinLevel MaxLevel Skill   Luck  Option   ExcellenceOption
+//==================================================================================================================																																																																												
+7																																																																												
+	7	10	0	0	0	1	1	2	//Vine Helm																																																																		
+	8	10	0	0	0	1	1	2	//Vine Armor																																																																		
+	9	10	0	0	0	1	1	2	//Vine Pants																																																																			
+	10	10	0	0	0	1	1	2	//Vine Gloves																																																																			
+	11	10	0	0	0	1	1	2	//Vine Boots																																																																		
+	7	11	0	0	0	1	1	2	//Silk Helm																																																																			
+	8	11	0	0	0	1	1	2	//Silk Armor																																																																			
+	9	11	0	0	0	1	1	2	//Silk Pants
+	10	11	0	0	0	1	1	2	//Silk Gloves
+	11	11	0	0	0	1	1	2	//Silk Boots
+	7	12	0	0	0	1	1	2	//Wind Helm
+	8	12	0	0	0	1	1	2	//Wind Armor
+	9	12	0	0	0	1	1	2	//Wind Pants
+	10	12	0	0	0	1	1	2	//Wind Gloves
+	11	12	0	0	0	1	1	2	//Wind Boots
+	7	13	0	0	0	1	1	2	//Spirit Helm
+	8	13	0	0	0	1	1	2	//Spirit Armor
+	9	13	0	0	0	1	1	2	//Spirit Pants
+	10	13	0	0	0	1	1	2	//Spirit Gloves
+	11	13	0	0	0	1	1	2	//Spirit Boots
+	7	14	0	0	0	1	1	2	//Guardian Helm
+	8	14	0	0	0	1	1	2	//Guardian Armor
+	9	14	0	0	0	1	1	2	//Guardian Pants
+	10	14	0	0	0	1	1	2	//Guardian Gloves
+	11	14	0	0	0	1	1	2	//Guardian Boots
+	7	25	0	0	0	1	1	2	//Light Plate Mask
+	8	25	0	0	0	1	1	2	//Light Plate Armor
+	9	25	0	0	0	1	1	2	//Light Plate Pants
+	10	25	0	0	0	1	1	2	//Light Plate Gloves
+	11	25	0	0	0	1	1	2	//Light Plate Boots
+	7	26	0	0	0	1	1	2	//Adamantine Mask
+	8	26	0	0	0	1	1	2	//Adamantine Armor
+	9	26	0	0	0	1	1	2	//Adamantine Pants
+	10	26	0	0	0	1	1	2	//Adamantine Gloves
+	11	26	0	0	0	1	1	2	//Adamantine Boots
+end
+//==================================================================================================================
+//     Type   Index  MinLevel MaxLevel Skill   Luck  Option   ExcellenceOption
+//==================================================================================================================	
+8									
+	13	8	0	0	0	0	1	2	//Ring of Ice
+	13	9	0	0	0	0	1	2	//Ring of Poison
+	13	21	0	0	0	0	1	2	//Ring of Fire
+	13	22	0	0	0	0	1	2	//Ring of Earth
+	13	23	0	0	0	0	1	2	//Ring of Wind
+	13	24	0	0	0	0	1	2	//Ring of Magic
+	13	12	0	0	0	0	1	2	//Pendant of Lighting
+	13	13	0	0	0	0	1	2	//Pendant of Fire
+	13	25	0	0	0	0	1	2	//Pendant of Ice
+	13	26	0	0	0	0	1	2	//Pendant of Wind
+	13	27	0	0	0	0	1	2	//Pendant of Water
+	13	28	0	0	0	0	1	2	//Pendant of Ability
+end
+//==================================================================================================================
+//     Type   Index  MinLevel MaxLevel Skill   Luck  Option   ExcellenceOption
+//==================================================================================================================		
+9									
+	14	13	0	0	0	0	0	0	//Jewel of Bless
+	14	16	0	0	0	0	0	0	//Jewel of Life
+	14	42	0	0	0	0	0	0	//Jewel of Harmony
+end
+//==================================================================================================================
+//     Type   Index  MinLevel MaxLevel Skill   Luck  Option   ExcellenceOption
+//==================================================================================================================										
+10									
+	12	15	0	0	0	0	0	0	//Jewel of Chaos
+	14	14	0	0	0	0	0	0	//Jewel of Soul
+	14	22	0	0	0	0	0	0	//Jewel of Creation
+	14	41	0	0	0	0	0	0	//Gemstone
+	14	43	0	0	0	0	0	0	//Lower refining stone
+	14	44	0	0	0	0	0	0	//Higher refining stone
+end
+//==================================================================================================================
+//     Type   Index  MinLevel MaxLevel Skill   Luck  Option   ExcellenceOption
+//==================================================================================================================
+11								
+	12	30	0	0	0	0	0	0	//bundle of Jewel of Bless
+	12	31	0	0	0	0	0	0	//budle of Jewel of Soul
+end
+//==================================================================================================================
+//     Type   Index  MinLevel MaxLevel Skill   Luck  Option   ExcellenceOption
+//==================================================================================================================		
+12									
+	13	0	0	0	0	0	0	0	//Guardian Angel
+	13	1	0	0	0	0	0	0	//Imp
+	13	2	0	0	0	0	0	0	//Horn of Uniria
+	13	3	0	0	0	0	0	0	//Horn of Dinorant
+	13	18	1	6	0	0	0	0	//Invisibility Cloak
+	14	19	0	0	0	0	0	0	//Devil's Invitation
+end
+//==================================================================================================================
+//     Type   Index  MinLevel MaxLevel Skill   Luck  Option   ExcellenceOption
+//==================================================================================================================										
+13									
+	13	4	0	0	0	0	0	0	//Dark Horse
+	13	5	0	0	0	0	0	0	//Dark Raven
+	13	37	0	0	0	0	0	0	//Horn of Fenrir
+end
+//==================================================================================================================
+//     Type   Index  MinLevel MaxLevel Skill   Luck  Option   ExcellenceOption
+//==================================================================================================================										
+14									
+	14	58	0	0	0	0	0	0	//Rare Item Ticket1
+end
+//==================================================================================================================
+//     Type   Index  MinLevel MaxLevel Skill   Luck  Option   ExcellenceOption
+//==================================================================================================================										
+15									
+	14	59	0	0	0	0	0	0	//Rare Item Ticket2
+end
+//==================================================================================================================
+//     Type   Index  MinLevel MaxLevel Skill   Luck  Option   ExcellenceOption
+//==================================================================================================================
+16									
+	14	60	0	0	0	0	0	0	//Rare Item Ticket3
+end
+//==================================================================================================================
+//     Type   Index  MinLevel MaxLevel Skill   Luck  Option   ExcellenceOption
+//==================================================================================================================										
+17									
+	14	61	0	0	0	0	0	0	//Rare Item Ticket4
+end
+//==================================================================================================================
+//     Type   Index  MinLevel MaxLevel Skill   Luck  Option   ExcellenceOption
+//==================================================================================================================										
+18									
+	14	62	0	0	0	0	0	0	//Rare Item Ticket5
+end

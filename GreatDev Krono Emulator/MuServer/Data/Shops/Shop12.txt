@@ -1,0 +1,34 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Project Author : (c) Shatter							//
+// Project Info	  : Free Release 4 Ragezone MU Online Community			//
+// Last Edit Date : 30 / 12 / 2010                                              //
+//////////////////////////////////////////////////////////////////////////////////
+
+// Thompson Kennel
+
+14 0 0 50 0 0 0 0 // Apple
+14 1 0 30 0 0 0 0 // Small Healing Potion
+14 2 0 20 0 0 0 0 // Medium Healing Potion
+14 3 0 10 0 0 0 0 // Large Healing Potion
+14 4 0 30 0 0 0 0 // Small Mana Potion
+14 5 0 20 0 0 0 0 // Medium Mana Potion
+14 6 0 10 0 0 0 0 // Large Mana Potion
+14 8 0 10 0 0 0 0 // Antidote
+4 7 4 255 0 0 1 0 // Bolts +4
+4 15 4 255 0 0 1 0 // Arrows +4
+4 7 5 255 0 0 2 0 // Bolts +5
+4 15 5 255 0 0 2 0 // Arrows +5
+8 8 0 0 0 0 0 0 // Brass Armor
+10 13 0 0 0 0 0 0 // Spirit Gloves
+7 13 0 0 0 0 0 0 // Spirit Helm
+11 13 0 0 0 0 0 0 // Spirit Boots
+0 11 0 0 0 0 0 0 // Legendary Sword
+0 13 0 0 0 0 0 0 // Double Blade
+2 3 0 0 0 0 0 0 // Great Warhammer
+2 3 0 0 1 0 0 0 // Great Warhammer
+0 10 0 0 0 0 0 0 // Light Saber
+0 10 0 0 1 0 0 0 // Light Saber
+3 0 0 0 0 0 0 0 // Light Spear
+3 0 0 0 1 0 0 0 // Light Spear
+4 4 0 0 0 0 0 0 // Tiger Bow
+end

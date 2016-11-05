@@ -1,0 +1,52 @@
+// Heart of Dark Lord
+
+6 0 7 0 0 0 // Small Shield +7
+6 4 7 0 0 0 // Buckler +7
+0 0 7 0 0 0 // Kris +7
+0 1 7 0 0 0 // Short Sword +7
+0 2 7 0 0 0 // Rapier +7
+0 3 7 0 0 0 // Katana +7
+0 4 7 0 0 0 // Sword of Assassin +7
+1 0 7 0 0 0 // Small Axe +7
+1 1 7 0 0 0 // Hand Axe +7
+1 2 7 0 0 0 // Double Axe +7
+2 0 7 0 0 0 // Mace +7
+2 1 7 0 0 0 // Morning Star +7
+2 2 7 0 0 0 // Flail +7
+4 0 7 0 0 0 // Short Bow +7
+4 8 7 0 0 0 // Crossbow +7
+4 1 7 0 0 0 // Bow +7
+4 9 7 0 0 0 // Golden Crossbow +7
+5 0 7 0 0 0 // Skull Staff +7
+5 1 7 0 0 0 // Angelic Staff +7
+7 5 7 0 0 0 // Leather Helm +7
+7 0 7 0 0 0 // Bronze Helm +7
+7 2 7 0 0 0 // Pad Helm +7
+7 10 7 0 0 0 // Vine Helm +7
+8 5 7 0 0 0 // Leather Armor +7
+8 0 7 0 0 0 // Bronze Armor +7
+8 2 7 0 0 0 // Pad Armor +7
+8 10 7 0 0 0 // Vine Armor +7
+9 5 7 0 0 0 // Leather Pants +7
+9 0 7 0 0 0 // Bronze Pants +7
+9 2 7 0 0 0 // Pad Pants +7
+9 10 7 0 0 0 // Vine Pants +7
+10 5 7 0 0 0 // Leather Gloves +7
+10 0 7 0 0 0 // Bronze Gloves +7
+10 2 7 0 0 0 // Pad Gloves +7
+10 10 7 0 0 0 // Vine Gloves +7
+11 5 7 0 0 0 // Leather Boots +7
+11 0 7 0 0 0 // Bronze Boots +7
+11 2 7 0 0 0 // Pad Boots +7
+11 10 7 0 0 0 // Vine Boots +7
+13 8 0 0 0 4 // Ring of Ice
+13 9 0 0 0 4 // Ring of Poison
+13 21 0 0 0 4 // Ring of Fire
+13 22 0 0 0 4 // Ring of Earth
+13 23 0 0 0 4 // Ring of Wind
+13 24 0 0 0 4 // Ring of Magic
+13 25 0 0 0 4 // Pedant of Ice
+13 26 0 0 0 4 // Pendant of Wind
+13 27 0 0 0 4 // Pendant of Water
+13 28 0 0 0 4 // Pendant of Ability
+end

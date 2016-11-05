@@ -1,0 +1,116 @@
+// Kundun
+
+//--------------------------------------//
+// Map Drop                             //
+//--------------------------------------//
+0
+//  MapNumber  Drop   MinLvl   MaxLvl
+	0	0	0	1000	// Lorencia
+	1	0	0	1000	// Dungeon
+	2	0	0	1000	// Devias
+	3	0	0	1000	// Noria
+	4	0	0	1000	// LostTower
+	5	0	0	1000	// Exile
+	6	0	0	1000	// Arena
+	7	0	0	1000	// Atlans
+	8	0	0	1000	// Tarkan
+	9	0	0	1000	// DevilSquare
+	10	0	0	1000	// Icarus
+end
+
+//--------------------------------------//
+// Drop Options                         //
+//--------------------------------------//
+1
+//	 Name		ZenAmount     Index    Type    Lvl   DropRate  Drop  ExcDrop
+        "Kundun"	1000000		0       0	0	0	100	1
+end
+
+//--------------------------------------//
+// Item Drops                           //
+//--------------------------------------//
+2
+//	Type	Index	MinLvl	MaxLvl	Skill	Luck	Opt	Exc
+
+	0	17	0	4	1	1	0	1 // Excellent Dark Breaker
+	0	31	0	4	1	1	0	1 // Excellent Rune Blade
+	0	21	0	4	1	1	0	0 // Dark Reign Blade
+	0	22	0	4	1	1	0	0 // Bone Blade
+	0	23	0	4	1	1	0	0 // Explosion Blade
+	0	24	0	4	1	1	0	0 // Daybreak
+	0	25	0	4	1	1	0	0 // Sword Dancer
+	2	14	0	4	1	1	0	0 // Solay Scepter
+	2	15	0	4	1	1	0	0 // Shining Scepter
+	4	19	0	4	1	1	0	1 // Excellent Great Reign Crossbow
+	4	21	0	4	1	1	0	0 // Sylph Wind Bow
+	4	22	0	4	1	1	0	0 // Albatross Bow
+	5	9	0	4	1	1	0	1 // Excellent Dragon Soul Staff
+	5	12	0	4	1	1	0	0 // Grand Viper Staff
+	5	13	0	4	1	1	0	0 // Platina Wing Staff
+	0	16	0	0	1	1	0	1 // Excellent Sword of Destruction
+	2	10	0	0	1	1	0	1 // Excellent Great Scepter
+	3	10	0	0	1	1	0	1 // Excellent Dragon Spear
+	4	16	0	0	1	1	0	1 // Excellent Saint Crossbow
+	4	17	0	0	1	1	0	1 // Excellent Celestial Bow
+	5	8	0	0	1	1	0	1 // Excellent Staff of Destruction
+	7	29	0	4	0	1	0	0 // Dragon Knight Helm
+	7	30	0	4	0	1	0	0 // Venom Mist Helm
+	7	31	0	4	0	1	0	0 // Sylphid Ray Helm
+	7	33	0	4	0	1	0	0 // Sunlight Helm
+	7	34	0	4	0	1	0	1 // Excellent Ashcrow Helm
+	7	35	0	4	0	1	0	1 // Excellent Eclipse Helm
+	7	36	0	4	0	1	0	1 // Excellent Iris Helm
+	7	38	0	4	0	1	0	1 // Excellent Glorious Helm
+	7	16	0	4	0	1	0	1 // Excellent Black Dragon Helm
+	7	18	0	4	0	1	0	1 // Excellent Grand Soul Helm
+	7	19	0	4	0	1	0	1 // Excellent Divine Helm
+	8	29	0	4	0	1	0	0 // Dragon Knight Armor
+	8	30	0	4	0	1	0	0 // Venom Mist Armor
+	8	31	0	4	0	1	0	0 // Sylphid Ray Armor
+	8	32	0	4	0	1	0	0 // Volcano Armor
+	8	33	0	4	0	1	0	0 // Sunlight Armor
+	8	34	0	4	0	1	0	0 // Ashcrow Armor
+	8	35	0	4	0	1	0	0 // Eclipse Armor
+	8	36	0	4	0	1	0	0 // Iris Armor
+	8	37	0	4	0	1	0	0 // Valiant Armor
+	8	38	0	4	0	1	0	0 // Glorious Armor
+	8	16	0	4	0	1	0	0 // Black Dragon Armor
+	8	18	0	4	0	1	0	0 // Grand Soul Armor
+	8	19	0	4	0	1	0	0 // Divine Armor
+	9	29	0	4	0	1	0	0 // Dragon Knight Pants
+	9	30	0	4	0	1	0	0 // Venom Mist Pants
+	9	31	0	4	0	1	0	0 // Sylphid Ray Pants
+	9	32	0	4	0	1	0	0 // Volcano Pants
+	9	33	0	4	0	1	0	0 // Sunlight Pants
+	9	34	0	4	0	1	0	0 // Ashcrow Pants
+	9	35	0	4	0	1	0	0 // Eclipse Pants
+	9	36	0	4	0	1	0	0 // Iris Pants
+	9	37	0	4	0	1	0	0 // Valiant Pants
+	9	38	0	4	0	1	0	0 // Glorious Pants
+	9	16	0	4	0	1	0	1 // Excellent Black Dragon Pants
+	9	18	0	4	0	1	0	1 // Excellent Grand Soul Pants
+	9	19	0	4	0	1	0	1 // Excellent Divine Pants
+	10	29	0	4	0	1	0	0 // Dragon Knight 
+	10	30	0	4	0	1	0	0 // Venom Mist Gloves
+	10	31	0	4	0	1	0	0 // Sylphid Ray Gloves
+	10	32	0	4	0	1	0	0 // Volcano Gloves
+	10	33	0	4	0	1	0	0 // Sunlight Gloves
+	10	34	0	4	0	1	0	1 // Excellent Ashcrow Gloves
+	10	35	0	4	0	1	0	1 // Excellent Eclipse Gloves
+	10	36	0	4	0	1	0	1 // Excellent Iris Gloves
+	10	37	0	4	0	1	0	1 // Excellent Valiant Gloves
+	10	38	0	4	0	1	0	1 // Excellent Glorious Gloves
+	10	16	0	4	0	1	0	1 // Excellent Black Dragon Gloves
+	10	18	0	4	0	1	0	1 // Excellent Grand Soul Gloves
+	10	19	0	4	0	1	0	1 // Excellent Divine Gloves
+	11	29	0	4	0	1	0	0 // Dragon Knight Boots
+	11	30	0	4	0	1	0	0 // Venom Mist Boots
+	11	31	0	4	0	1	0	0 // Sylphid Ray Boots
+	11	32	0	4	0	1	0	0 // Volcano Boots
+	11	33	0	4	0	1	0	0 // Sunlight Boots
+	11	34	0	4	0	1	0	1 // Excellent Ashcrow Boots
+	11	35	0	4	0	1	0	1 // Excellent Eclipse Boots
+	11	36	0	4	0	1	0	1 // Excellent Iris Boots
+	11	37	0	4	0	1	0	1 // Excellent Valiant Boots
+	11	38	0	4	0	1	0	1 // Excellent Glorious Boots
+end

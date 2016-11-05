@@ -1,0 +1,38 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Project Author : (c) Shatter							//
+// Project Info	  : Free Release 4 Ragezone MU Online Community			//
+// Last Edit Date : 30 / 12 / 2010                                              //
+//////////////////////////////////////////////////////////////////////////////////
+
+// Martin The Rogue Trader
+
+14 0 0 50 0 0 0 0 //  Apple
+14 1 0 30 0 0 0 0 //  Small Healing Potion
+14 2 0 20 0 0 0 0 //  Medium Healing Potion
+14 3 0 10 0 0 0 0 //  Large Healing Potion
+14 4 0 30 0 0 0 0 //  Small Mana Potion
+14 5 0 20 0 0 0 0 //  Medium Mana Potion
+14 6 0 10 0 0 0 0 //  Large Mana Potion
+14 8 0 10 0 0 0 0 //  Antidote
+7 4 0 0 0 0 0 0 //  Bone Helm
+9 4 0 0 0 0 0 0 //  Bone Pants
+7 6 0 0 0 0 0 0 //  Scale Helm
+8 6 0 0 0 0 0 0 //  Scale Armor
+9 6 0 0 0 0 0 0 //  Scale Pants
+10 8 0 0 0 0 0 0 //  Brass Gloves
+11 8 0 0 0 0 0 0 //  Brass Boots
+6 2 0 0 0 0 0 0 //  Kite Shield
+6 6 0 0 0 0 0 0 //  Skull Shield
+3 2 0 0 0 0 0 0 //  Dragon Lance
+0 3 0 0 0 0 0 0 //  Katana
+1 3 0 0 0 0 0 0 //  Tomahawk
+3 6 0 0 0 0 0 0 //  Helberd
+2 2 0 0 0 0 0 0 //  Flail
+0 6 0 0 0 0 0 0 //  Gladius
+0 6 0 0 1 0 0 0 //  Gladius
+4 10 0 0 0 0 0 0 //  Arquebus
+4 10 0 0 1 0 0 0 //  Arquebus
+3 1 0 0 0 0 0 0 //  Spear
+0 7 0 0 0 0 0 0 //  Falchion
+0 7 0 0 1 0 0 0 //  Falchion
+end

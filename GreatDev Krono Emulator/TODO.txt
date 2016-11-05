@@ -1,0 +1,10 @@
+Krono Core: 
+1. Вернуть CheckSum
+2. Добавить поддержку Anc + Exe, Anc + Har
+3. Добавить поддержку +28 Life поддержку
+4. Исправить 0x00000 Memory Error
+5. Исправить Potion Bug 
+6. Исправить LotteryItemMix (Chaos Card Dupe)
+6. Исправить gObjCheckSerial0ItemList (Serial 0 Error) 
+7. Исправить CObjBaseAttack::PkCheck (PK Bug)
+8. Добавить поддержку Potiont +255

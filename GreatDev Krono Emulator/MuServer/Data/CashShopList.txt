@@ -1,0 +1,16 @@
+//==================================================================================================================
+//Project: MMTeam - Season II English
+//Version: GameServer 2.00.05
+//Information: CashShopList Item List Load
+//==================================================================================================================
+//     Index  ItemID    Level  	   Skill    Luck      Add       Exc      X      Y       Scale  
+1
+	13    	43	 0	   0	    0	      0		0	 0	0	50     // Seal of Ascension
+	13    	44	 0	   0	    0	      0		0	 0	0	50     // Seal of Wealth
+	13    	45	 0	   0	    0	      0		0	 0	0	50     // Seal of Sustenance
+	13    	46	 0	   0	    0	      0		0	 0	0	50     // Devil Square Ticket
+	13    	47	 0	   0	    0	      0		0	 0	0	50     // Blood Castle Ticket
+	13    	48	 0	   0	    0	      0		0	 0	0	50     // Kalima Ticket
+	14    	53	 0	   0	    0	      0		0	 0	0	50     // Talisman of Luck
+	14    	54	 0	   0	    0	      0		0	 0	0	50     // Chaos Card
+end	

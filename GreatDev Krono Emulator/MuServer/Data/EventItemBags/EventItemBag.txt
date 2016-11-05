@@ -1,0 +1,8 @@
+// Box of Heaven & Box of Luck
+
+12 15 0 0 0 0 // Jewel of Chaos
+14 14 0 0 0 0 // Jewel of Soul
+14 13 0 0 0 0 // Jewel of Bless
+13 0 0 0 0 0 // Guardian Angel
+13 1 0 0 0 0 // Imp
+end

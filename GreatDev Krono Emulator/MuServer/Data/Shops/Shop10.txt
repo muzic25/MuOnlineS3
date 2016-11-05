@@ -1,0 +1,31 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Project Author : (c) Shatter							//
+// Project Info	  : Free Release 4 Ragezone MU Online Community			//
+// Last Edit Date : 30 / 12 / 2010                                              //
+//////////////////////////////////////////////////////////////////////////////////
+
+// Elf Lala
+
+14 0 0 50 0 0 0 0 //Apple
+14 1 0 30 0 0 0 0 //Small Healing Potion
+14 2 0 20 0 0 0 0 //Medium Healing Potion
+14 3 0 10 0 0 0 0 //Large Healing Potion
+14 4 0 30 0 0 0 0 //Small Mana Potion
+14 5 0 20 0 0 0 0 //Medium Mana Potion
+14 6 0 10 0 0 0 0 //Large Mana Potion
+14 8 0 10 0 0 0 0 //Antidote
+12 8 0 255 0 0 0 0 //Healing Orb
+12 9 0 255 0 0 0 0 //Greater Defense Orb
+12 10 0 255 0 0 0 0 //Greater Damage Orb
+7 10 0 0 0 0 1 0 //Vine Helm
+7 11 0 0 0 1 1 0 //Silk Helm
+8 10 0 0 0 0 1 0 //Vine Armor
+8 11 0 0 0 1 1 0 //Silk Armor
+9 10 0 0 0 0 1 0 //Vine Pants
+9 11 0 0 0 1 1 0 //Silk Pants
+10 10 0 0 0 0 1 0 //Vine Gloves
+10 11 0 0 0 1 1 0 //Silk Gloves
+11 10 0 0 0 0 1 0 //Vine Boots
+11 11 0 0 0 1 1 0 //Silk Boots
+12 11 0 255 0 0 0 0 //Goblin Summon Orb
+end

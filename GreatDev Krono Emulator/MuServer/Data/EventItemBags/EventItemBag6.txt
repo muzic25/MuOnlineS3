@@ -1,0 +1,38 @@
+// Golden Medal
+
+0 15 6 1 1 1 // Giant Sword +6
+0 12 6 1 1 1 // Heliacal Sword +6
+1 8 6 1 1 1 // Crescent Axe +6
+3 8 6 1 1 1 // Great Scythe +6
+4 4 6 1 1 1 // Tiger Bow +6
+4 12 6 1 1 1 // Serpent Crossbow +6
+5 4 6 1 1 1 // Gorgon Staff +6
+6 8 6 1 1 1 // Tower Shield +6
+6 11 6 1 1 1 // Serpent Shield +6
+7 9 6 1 1 1 // Plate Helm +6
+8 9 6 1 1 1 // Plate Armor +6
+9 9 6 1 1 1 // Plate Pants +6
+10 9 6 1 1 1 // Plate Gloves +6
+11 9 6 1 1 1 // Plate Boots +6
+7 7 6 1 1 1 // Sphinx Helm +6
+8 7 6 1 1 1 // Sphinx Armor +6
+9 7 6 1 1 1 // Sphinx Pants +6
+10 7 6 1 1 1 // Sphinx Gloves +6
+11 7 6 1 1 1 // Sphinx Boots +6
+7 12 6 1 1 1 // Wind Helm +6
+8 12 6 1 1 1 // Wind Armor +6
+9 12 6 1 1 1 // Wind Pants +6
+10 12 6 1 1 1 // Wind Gloves +6
+11 12 6 1 1 1 // Wind Boots +6
+7 13 6 1 1 1 // Spirit Helm +6
+8 13 6 1 1 1 // Spirit Armor +6
+9 13 6 1 1 1 // Spirit Pants +6
+10 13 6 1 1 1 // Spirit Gloves +6
+11 13 6 1 1 1 // Spirit Boots +6
+13 0 0 0 0 0 // Guardian Angel
+13 1 0 0 0 0 // Imp
+13 2 0 0 0 0 // Horn of Uniria
+14 13 0 0 0 0 // Jewel of Bless
+14 14 0 0 0 0 // Jewel of Soul
+12 15 0 0 0 0 // Jewel of Chaos
+end

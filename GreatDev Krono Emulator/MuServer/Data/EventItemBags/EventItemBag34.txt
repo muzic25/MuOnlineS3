@@ -1,0 +1,46 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Project Author : (c) Shatter							//
+// Project Info	  : Free Release 4 Ragezone MU Online Community			//
+// Last Edit Date : 30 / 12 / 2010                                              //
+//////////////////////////////////////////////////////////////////////////////////
+
+// Halloween Pumpkin
+
+//--------------------------------------//
+// Map Drop                             //
+//--------------------------------------//
+0
+//  MapNumber  Drop   MinLvl   MaxLvl
+	0	0	0	1000	// Lorencia
+	1	0	0	1000	// Dungeon
+	2	0	0	1000	// Devias
+	3	0	0	1000	// Noria
+	4	0	0	1000	// LostTower
+	5	0	0	1000	// Exile
+	6	0	0	1000	// Arena
+	7	0	0	1000	// Atlans
+	8	0	0	1000	// Tarkan
+	9	0	0	1000	// DevilSquare
+	10	0	0	1000	// Icarus
+end
+
+//--------------------------------------//
+// Drop Options                         //
+//--------------------------------------//
+1
+//	 Name		ZenAmount     Index    Type    Lvl   DropRate  Drop  ExcDrop
+       "Pumpkin"	1000000	        0       0	0	0	100	 1
+end
+
+//--------------------------------------//
+// Item Drops                           //
+//--------------------------------------//
+2
+//  ItemType  Index  MinLvl   MaxLvl  Skill    Luck   Option  Excellent
+
+	14	46	0	0	0	0	0	0 // Jack O'Lantern Bless Scroll
+	14	47	0	0	0	0	0	0 // Jack O'Lantern Wrath Scroll
+	14	48	0	0	0	0	0	0 // Jack O'Lantern Scream Scroll
+	14	49	0	0	0	0	0	0 // Jack O'Lantern Food Scroll
+	14	50	0	0	0	0	0	0 // Jack O'Lantern Drink Scroll
+end

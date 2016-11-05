@@ -1,0 +1,83 @@
+// Lord Mix
+
+//--------------------------------------//
+// Map Drop                             //
+//--------------------------------------//
+0
+//  MapNumber  Drop   MinLvl   MaxLvl
+	0	0	0	1000	// Lorencia
+	1	0	0	1000	// Dungeon
+	2	0	0	1000	// Devias
+	3	0	0	1000	// Noria
+	4	0	0	1000	// LostTower
+	5	0	0	1000	// Exile
+	6	0	0	1000	// Arena
+	7	0	0	1000	// Atlans
+	8	0	0	1000	// Tarkan
+	9	0	0	1000	// DevilSquare
+	10	0	0	1000	// Icarus
+end
+
+//--------------------------------------//
+// Drop Options                         //
+//--------------------------------------//
+1
+//	 Name		ZenAmount     Index    Type    Lvl   DropRate  Drop  ExcDrop
+        "LordMix"	 1000000	0       0	0	0	100	1
+end
+
+//--------------------------------------//
+// Item Drops                           //
+//--------------------------------------//
+2
+//	Type	Index	MinLvl	MaxLvl	Skill	Luck	Opt	Exc
+
+	0	20	0	5	1	1	0	1 // Excellent Knight Blade
+	0	21	0	5	1	1	0	1 // Excellent Dark Reign Blade
+	0	31	0	5	1	1	0	1 // Excellent Rune Blade
+	0	16	0	5	1	1	0	1 // Excellent Sword of Destruction
+	2	12	0	5	1	1	0	1 // Excellent Great Lord Scepter
+	2	15	0	0	1	1	0	1 // Excellent Shining Scepter
+	3	10	0	5	1	1	0	1 // Excellent Dragon Spear
+	4	20	0	4	1	1	0	1 // Excellent Arrow Viper Bow
+	4	22	0	3	1	1	0	1 // Excellent Albatross Bow
+	4	19	0	5	1	1	0	1 // Excellent Great Reign Crossbow
+	5	8	0	5	1	1	0	1 // Excellent Staff of Destruction
+	5	13	0	5	1	1	0	1 // Excellent Platina Wing Staff
+	5	11	0	5	1	1	0	1 // Excellent Staff of Kundun
+	6	16	0	3	1	1	0	1 // Excellent Elemental Shield
+	6	15	0	3	1	1	0	1 // Excellent Grand Soul Shield
+	0	20	0	5	1	1	0	0 // Knight Blade
+	0	21	0	5	1	1	0	0 // Dark Reign Blade
+	0	23	0	5	1	1	0	0 // Explosion Blade
+	4	20	0	5	1	1	0	0 // Arrow Viper Bow
+	7	21	0	4	0	1	0	1 // Excellent Great Dragon Helm
+	8	21	0	4	0	1	0	1 // Excellent Great Dragon Armor
+	9	21	0	4	0	1	0	1 // Excellent Great Dragon Pants
+	10	21	0	4	0	1	0	1 // Excellent Great Dragon Gloves
+	11	21	0	4	0	1	0	1 // Excellent Great Dragon Boots
+	7	24	0	4	0	1	0	1 // Excellent Red Spirit Helm
+	8	24	0	4	0	1	0	1 // Excellent Red Spirit Armor
+	9	24	0	4	0	1	0	1 // Excellent Red Spirit Pants
+	10	24	0	4	0	1	0	1 // Excellent Red Spirit Gloves
+	11	24	0	4	0	1	0	1 // Excellent Red Spirit Boots
+	7	22	0	4	0	1	0	1 // Excellent Dark Soul Helm
+	8	22	0	4	0	1	0	1 // Excellent Dark Soul Armor
+	9	22	0	4	0	1	0	1 // Excellent Dark Soul Pants
+	10	22	0	4	0	1	0	1 // Excellent Dark Soul Gloves
+	11	22	0	4	0	1	0	1 // Excellent Dark Soul Boots
+	7	28	0	4	0	1	0	1 // Excellent Dark Master Helm
+	8	28	0	4	0	1	0	1 // Excellent Dark Master Armor
+	9	28	0	4	0	1	0	1 // Excellent Dark Master Pants
+	10	28	0	4	0	1	0	1 // Excellent Dark Master Gloves
+	11	28	0	4	0	1	0	1 // Excellent Dark Master Boots
+	8	23	0	4	0	1	0	1 // Excellent Hurricane Armor
+	9	23	0	4	0	1	0	1 // Excellent Hurricane Pants
+	10	23	0	4	0	1	0	1 // Excellent Hurricane Gloves
+	11	23	0	4	0	1	0	1 // Excellent Hurricane Boots
+	8	21	0	5	0	1	0	0 // Great Dragon Armor
+	8	24	0	5	0	1	0	0 // Red Spirit Armor
+	8	22	0	5	0	1	0	0 // Dark Soul Armor
+	8	28	0	5	0	1	0	0 // Dark Master Armor
+	8	23	0	5	0	1	0	0 // Hurricane Armor
+end

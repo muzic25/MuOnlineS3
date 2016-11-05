@@ -1,0 +1,64 @@
+// Dark Elf
+
+//--------------------------------------//
+// Map Drop                             //
+//--------------------------------------//
+0
+//  MapNumber  Drop   MinLvl   MaxLvl
+	0	0	0	1000	// Lorencia
+	1	0	0	1000	// Dungeon
+	2	0	0	1000	// Devias
+	3	0	0	1000	// Noria
+	4	0	0	1000	// LostTower
+	5	0	0	1000	// Exile
+	6	0	0	1000	// Arena
+	7	0	0	1000	// Atlans
+	8	0	0	1000	// Tarkan
+	9	0	0	1000	// DevilSquare
+	10	0	0	1000	// Icarus
+end
+
+//--------------------------------------//
+// Drop Options                         //
+//--------------------------------------//
+1
+//	 Name		ZenAmount     Index    Type    Lvl   DropRate  Drop  ExcDrop
+        "DarkElf"	 1000000	0       0	0	0	100	1
+end
+
+//--------------------------------------//
+// Item Drops                           //
+//--------------------------------------//
+2
+//	Type	Index	MinLvl	MaxLvl	Skill	Luck	Opt	Exc
+
+	5	12	0	3	1	1	1	0 // Grand Viper Staff
+	0	22	0	3	1	1	1	0 // Bone Blade
+	4	21	0	3	1	1	1	0 // Sylph Wind Bow
+	0	23	0	3	1	1	1	0 // Explosion Blade
+	2	14	0	3	1	1	1	0 // Solay Scepter
+	7	29	0	3	1	1	1	0 // Dragon Knight Helm
+	8	29	0	3	1	1	1	0 // Dragon Knight Armor
+	9	29	0	3	1	1	1	0 // Dragon Knight Pants
+	10	29	0	3	1	1	1	0 // Dragon Knight Gloves
+	11	29	0	3	1	1	1	0 // Dragon Knight Boots
+	7	30	0	3	1	1	1	0 // Venom Mist Helm
+	8	30	0	3	1	1	1	0 // Venom Mist Armor
+	9	30	0	3	1	1	1	0 // Venom Mist Pants
+	10	30	0	3	1	1	1	0 // Venom Mist Gloves
+	11	30	0	3	1	1	1	0 // Venom Mist Boots
+	7	31	0	3	1	1	1	0 // Sylphid Ray Helm
+	8	31	0	3	1	1	1	0 // Sylphid Ray Armor
+	9	31	0	3	1	1	1	0 // Sylphid Ray Pants
+	10	31	0	3	1	1	1	0 // Sylphid Ray Gloves
+	11	31	0	3	1	1	1	0 // Sylphid Ray Boots
+	8	32	0	3	1	1	1	0 // Volcano Armor
+	9	32	0	3	1	1	1	0 // Volcano Pants
+	10	32	0	3	1	1	1	0 // Volcano Gloves
+	11	32	0	3	1	1	1	0 // Volcano Boots
+	7	33	0	3	1	1	1	0 // Sunlight Helm
+	8	33	0	3	1	1	1	0 // Sunlight Armor
+	9	33	0	3	1	1	1	0 // Sunlight Pants
+	10	33	0	3	1	1	1	0 // Sunlight Gloves
+	11	33	0	3	1	1	1	0 // Sunlight Boots
+end

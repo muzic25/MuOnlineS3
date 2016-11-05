@@ -1,0 +1,67 @@
+// Starter Rings
+
+0 3 6 1 1 1 // Katana +6
+0 5 6 1 1 1 // Blade +6
+0 9 6 1 1 1 // Sword of Salamander +6
+0 10 6 1 1 1 // Light Saber +6
+0 13 6 1 1 1 // Double Blade +6
+3 8 6 1 1 1 // Great Scythe +6
+4 4 6 1 1 1 // Tiger Bow +6
+4 9 6 1 1 1 // Golden Crossbow +6
+4 11 6 1 1 1 // Light Crossbow +6
+4 5 6 1 1 1 // Silver Bow +6
+4 12 6 1 1 1 // Serpent Crossbow +6
+5 0 6 1 1 1 // Skull Staff +6
+5 2 6 1 1 1 // Serpent Staff +6
+5 3 6 1 1 1 // Thunder Staff +6
+5 4 6 1 1 1 // Gorgon Staff +6
+7 0 6 1 1 1 // Bronze Helm +6
+7 2 6 1 1 1 // Pad Helm +6
+7 4 6 1 1 1 // Bone Helm +6
+7 5 6 1 1 1 // Leather Helm +6
+7 6 6 1 1 1 // Scale Helm +6
+7 7 6 1 1 1 // Sphinx Helm +6
+7 8 6 1 1 1 // Brass Helm +6
+7 10 6 1 1 1 // Vine Helm +6
+7 11 6 1 1 1 // Silk Helm +6
+7 12 6 1 1 1 // Wind Helm +6
+8 0 6 1 1 1 // Bronze Armor +6
+8 2 6 1 1 1 // Pad Armor +6
+8 4 6 1 1 1 // Bone Armor +6
+8 5 6 1 1 1 // Leather Armor +6
+8 6 6 1 1 1 // Scale Armor +6
+8 7 6 1 1 1 // Sphinx Armor +6
+8 8 6 1 1 1 // Brass Armor +6
+8 10 6 1 1 1 // Vine Armor +6
+8 11 6 1 1 1 // Silk Armor +6
+8 12 6 1 1 1 // Wind Armor +6
+9 0 6 1 1 1 // Bronze Pants +6
+9 2 6 1 1 1 // Pad Pants +6
+9 4 6 1 1 1 // Bone Pants +6
+9 5 6 1 1 1 // Leather Pants +6
+9 6 6 1 1 1 // Scale Pants +6
+9 7 6 1 1 1 // Sphinx Pants +6
+9 8 6 1 1 1 // Brass Pants +6
+9 10 6 1 1 1 // Vine Pants +6
+9 11 6 1 1 1 // Silk Pants +6
+9 12 6 1 1 1 // Wind Pants +6
+10 0 6 1 1 1 // Bronze Gloves +6
+10 2 6 1 1 1 // Pad Gloves +6
+10 4 6 1 1 1 // Bone Gloves +6
+10 5 6 1 1 1 // Leather Gloves +6
+10 6 6 1 1 1 // Scale Gloves +6
+10 7 6 1 1 1 // Sphinx Gloves +6
+10 8 6 1 1 1 // Brass Gloves +6
+10 10 6 1 1 1 // Vine Gloves +6
+10 11 6 1 1 1 // Silk Gloves +6
+10 12 6 1 1 1 // Wind Gloves +6
+11 0 6 1 1 1 // Bronze Boots +6
+11 2 6 1 1 1 // Pad Boots +6
+11 4 6 1 1 1 // Bone Boots +6
+11 5 6 1 1 1 // Leather Boots +6
+11 6 6 1 1 1 // Scale Boots +6
+11 7 6 1 1 1 // Sphinx Boots +6
+11 8 6 1 1 1 // Brass Boots +6
+11 10 6 1 1 1 // Vine Boots +6
+11 11 6 1 1 1 // Silk Boots +6
+11 12 6 1 1 1 // Wind Boots +6

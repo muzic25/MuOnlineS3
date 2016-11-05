@@ -1,0 +1,50 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Project Author : (c) Shatter							//
+// Project Info	  : Free Release 4 Ragezone MU Online Community			//
+// Last Edit Date : 30 / 12 / 2010                                              //
+//////////////////////////////////////////////////////////////////////////////////
+
+// Green Chaos Box
+
+//--------------------------------------//
+// Map Drop                             //
+//--------------------------------------//
+0
+//  MapNumber  Drop   MinLvl   MaxLvl
+	0	0	0	1000	// Lorencia
+	1	0	0	1000	// Dungeon
+	2	0	0	1000	// Devias
+	3	0	0	1000	// Noria
+	4	0	0	1000	// LostTower
+	5	0	0	1000	// Exile
+	6	0	0	1000	// Arena
+	7	0	0	1000	// Atlans
+	8	0	0	1000	// Tarkan
+	9	0	0	1000	// DevilSquare
+	10	0	0	1000	// Icarus
+end
+
+//--------------------------------------//
+// Drop Options                         //
+//--------------------------------------//
+1
+//	 Name         Index    Type    Lvl   DropRate  Drop  ExcDrop
+     "GreenChaos"	0	0	0	0	50	1
+end
+
+//--------------------------------------//
+// Item Drops                           //
+//--------------------------------------//
+2
+//  ItemType  Index  MinLvl   MaxLvl  Skill    Luck   Option  Excellent
+
+	14 	19 	6 	0 	0 	0 	0	0 // Devil's Invitation +6
+	14 	19 	5 	0 	0 	0 	0	0 // Devil's Invitation +5
+	13 	18 	7 	0 	0 	0 	0	0 // Cloak of Invisibility +7
+	14 	29 	6 	0 	0 	0 	0	0 // Symbol of Kundun +6
+	14 	29 	7 	0 	0 	0 	0	0 // Symbol of Kundun +7
+	13 	0 	0 	0 	0 	0	0	0 // Angel
+	13 	1 	0 	0 	0 	0	0	0 // Imp
+	14 	13 	0 	0 	0 	0	0	0 // Jewel of Bless
+	14 	14 	0 	0 	0 	0	0	0 // Jewel of Soul
+end
