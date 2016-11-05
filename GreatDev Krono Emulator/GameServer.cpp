@@ -37,96 +37,10 @@ BOOL CALLBACK CsLogDlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lPara
 //#pragma pack(2)
 //#pragma pack(show)  // C4810
 
-#if (GS_PROTECTED == 1)
-DWORD GetFunctionRVA(void* FuncName)
-{
-      void *_tempFuncName=FuncName;
-      char *ptempFuncName=PCHAR(_tempFuncName);
-      DWORD _jmpdwRVA,dwRVA;
-      CopyMemory(&_jmpdwRVA,ptempFuncName+1,4);
-      dwRVA=DWORD(ptempFuncName)+_jmpdwRVA+5;
-      return(dwRVA);
-}
-
-DWORD GetFunctionSize(void* FuncName)
-{
-      /*DWORD dwRVA=GetFunctionRVA(FuncName);
-      char* pFuncBody=PCHAR(dwRVA);
-      UCHAR _temp;
-      bool notEnd=TRUE;
-      char *DepackerCodeEnd=new TCHAR[10];
-      DWORD l=0;
-      do
-      {
-            CopyMemory(&_temp,pFuncBody+l,1);
-            if(_temp==0xC3)
-            {
-                  CopyMemory(DepackerCodeEnd,pFuncBody+l+0x01,10);
-                  DepackerCodeEnd[9]=0x00;
-                  if(strcmp(DepackerCodeEnd,"ETGXZKATZ")==0)
-                  {
-                        notEnd=FALSE;
-                  }
-            }
-            l++;
-      }while(notEnd);
-      return(l);*/
-	DWORD dwConstant = 0x3456933F;
-	DWORD dwOtherConstant = 0x5C39FD51;
-	dwConstant--;
-	dwOtherConstant--;
-	dwConstant = dwConstant + dwOtherConstant + 2;
-
-	DWORD dwSize = 0;
-	DWORD dwRVA = (DWORD)FuncName;
-
-	while ( *(DWORD *)(dwRVA+dwSize) != dwConstant )
-	{
-		dwSize++;
-	}
-
-	return dwSize;
-}
-
-
-#define KEY_LEN	20
-static unsigned char Key[KEY_LEN] = { 0xAF, 0x23, 0x4F, 0x7D,0x98, 0x0D,0x3D, 0xCC,0xE1, 0xB6,
-								 0x15, 0xDE, 0x8A, 0x67,0x1E, 0x4C,0x24, 0xFA,0x32, 0xF4 };
-
-BOOL UnProtectProtocolCore()
-{
-	DWORD dwOldProtect;
-	DWORD dwSize = GetFunctionSize(ProtocolCore);
-	
-	if ( VirtualProtect(ProtocolCore, dwSize, PAGE_EXECUTE_READWRITE, &dwOldProtect) == FALSE )
-	{
-		return FALSE;
-	}
-
-	LPBYTE Temp = (LPBYTE)(ProtocolCore);
-
-	for ( DWORD dwCount = 0 ; dwCount < dwSize ; dwCount++)
-	{
-		Temp[ dwCount ] ^= Key [ dwCount % KEY_LEN ];
-	}
-
-	return TRUE;
-}
-#endif
-
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	MSG msg;
 	HACCEL hAccelTable;
-
-/*	HANDLE hMutex=CreateMutex(NULL, FALSE, "WZ_MU_GS_MUTEX");
-	if (GetLastError()==ERROR_ALREADY_EXISTS) 
-	{
-		CloseHandle(hMutex);
-		MessageBox(NULL, "Webzen Mu Game Server is already Running.","Error", MB_OK|MB_ICONHAND|MB_APPLMODAL);
-		return 0;
-	}*/
-
 	// Check if the original language == KOREA
 	if (gLanguage == 0) 
 	{

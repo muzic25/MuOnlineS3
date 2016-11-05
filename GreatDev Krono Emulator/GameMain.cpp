@@ -546,10 +546,6 @@ void GameMainInit(HWND hWnd)
 	gGameServerAuth.SetInfo(gLanguage, gPartition,0, szGameServerVersion, szServerName, gServerType, GameServerAuthCallBackFunc);
 	gGameServerAuth.GetKey(&szAuthKey[0], 0, 5);
 
-#if (GS_PROTECTED == 1)
-	UnProtectProtocolCore();
-#endif
-
 #endif
 
 	DragonEvent = new CDragonEvent;
@@ -858,62 +854,6 @@ void GraphPaint(HWND hWnd)
 	DeleteObject( (HGDIOBJ)colBrush[3]);
 	DeleteObject( (HGDIOBJ)val[0]);
 }
-
-/*
-void PaintGraph(HWND hWnd, int argC)
-{
-	int i;
-	HDC hdc;
-
-	int lc118 = 0;
-	int lc11C = 0;
-	int lc120 = 0;
-	int lc124 = 0;
-	int lc128 = 0;
-
-	if ( argC < 0 || argC > 3999 )
-	{
-		return;
-	}
-
-	hdc = GetDC(hWnd);
-
-	for ( i = 0 ; i < 4000 ; i++ )
-	{
-		if ( gObj[i]. xx != 0 && gObj[i].xxx != 0 && gObj[i].xx == gCurMap && gObj[i].xxx == 1)
-		{
-			lc124++;
-		}		
-
-		if ( gObj[i].xxx == 1 && gObj[i]. != 0 )
-		{
-			lc128++;
-		}
-		else if ( gObj[i] != 0 )
-		{
-			lc118++;
-		}
-	}
-
-	if ( gLogTypePaint == 1 )
-	{
-		lc13C = 100;
-		lc140 = 50;
-		lc144 = 1;
-		lc148 = 1;
-		lc14C = 3;
-		HBRUSH colBrush[5];
-		int bkMode;
-
-		colBrush[0] = CreateSolidBrush(0xFF);
-		colBrush[1] = CreateSolidBrush(0x808080);
-		colBrush[2] = CreateSolidBrush(0xFFFF00);
-		colBrush[3] = CreateSolidBrush(0xFF0000);
-		colBrush[4] = CreateSolidBrush(0xFF00);
-		bkMode = SetBkMode(hdc, 1);
-
-		hdc = GetDC(hWnd);
-*/
 
 void GameMonsterAllAdd()
 {

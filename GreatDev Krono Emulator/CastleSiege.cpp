@@ -3592,9 +3592,9 @@ void CCastleSiege::Run()
 		{
 			SYSTEMTIME tmLeftDate = this->GetCastleLeftSiegeDate();
 
-			LogAddC(4, "LEFT : SEC(%d), SIEGE-DAY(%04d-%02d-%02d %02d:%02d:%02d)",
+			/*LogAddC(4, "LEFT : SEC(%d), SIEGE-DAY(%04d-%02d-%02d %02d:%02d:%02d)",
 				iLeftSiegeDate, tmLeftDate.wYear, tmLeftDate.wMonth, tmLeftDate.wDay,
-				tmLeftDate.wHour, tmLeftDate.wMinute, tmLeftDate.wSecond);
+				tmLeftDate.wHour, tmLeftDate.wMinute, tmLeftDate.wSecond);		*/
 		}
 		else
 		{
@@ -3732,7 +3732,7 @@ void CCastleSiege::ProcState_IDLE_1()
 	{
 		this->m_iCS_REMAIN_MSEC -= iTICK_MSEC;
 		this->m_iCS_TICK_COUNT = GetTickCount();
-		LogAddC(3, "RUN ProcState_IDLE_1()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
+		//LogAddC(3, "RUN ProcState_IDLE_1()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
 	}
 
 	if( this->m_iCS_REMAIN_MSEC <= 0 )
@@ -3756,7 +3756,7 @@ void CCastleSiege::ProcState_REGSIEGE()
 			this->SendAllUserAnyMsg(lMsg.Get(MSGGET(6,78)), 1);
 			this->m_dwEVENT_MSG_TICK_COUNT = GetTickCount();
 		}
-		LogAddC(3, "RUN ProcState_REGSIEGE()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
+		//LogAddC(3, "RUN ProcState_REGSIEGE()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
 	}
 
 	if( this->m_iCS_REMAIN_MSEC <= 0 )
@@ -3774,7 +3774,7 @@ void CCastleSiege::ProcState_IDLE_2()
 	{
 		this->m_iCS_REMAIN_MSEC -= iTICK_MSEC;
 		this->m_iCS_TICK_COUNT = GetTickCount();
-		LogAddC(3, "RUN ProcState_IDLE_2()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
+		//LogAddC(3, "RUN ProcState_IDLE_2()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
 	}
 
 	if( this->m_iCS_REMAIN_MSEC <= 0 )
@@ -3799,7 +3799,7 @@ void CCastleSiege::ProcState_REGMARK()
 			this->SendAllUserAnyMsg(lMsg.Get(MSGGET(6,79)), 1);
 			this->m_dwEVENT_MSG_TICK_COUNT = GetTickCount();
 		}
-		LogAddC(3, "RUN ProcState_REGMARK()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
+		//LogAddC(3, "RUN ProcState_REGMARK()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
 	}
 
 	if( this->m_iCS_REMAIN_MSEC <= 0 )
@@ -3825,7 +3825,7 @@ void CCastleSiege::ProcState_IDLE_3()
 			this->m_dwEVENT_MSG_TICK_COUNT = GetTickCount();
 		}
 
-		LogAddC(3, "RUN ProcState_IDLE_3()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
+		//LogAddC(3, "RUN ProcState_IDLE_3()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
 	}
 
 	if( this->m_iCS_REMAIN_MSEC <= 0 )
@@ -3849,7 +3849,7 @@ void CCastleSiege::ProcState_NOTIFY()
 			this->SendAllUserAnyMsg(lMsg.Get(MSGGET(6,81)), 1);
 			this->m_dwEVENT_MSG_TICK_COUNT = GetTickCount();
 		}
-		LogAddC(3, "RUN ProcState_NOTIFY()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
+		//LogAddC(3, "RUN ProcState_NOTIFY()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
 	}
 
 	if( this->m_iCS_REMAIN_MSEC <= 0 )
@@ -3884,7 +3884,7 @@ void CCastleSiege::ProcState_READYSIEGE()
 				this->m_dwCS_STARTTIME_TICK_COUNT = GetTickCount();
 			}
 		}
-		LogAddC(3, "RUN ProcState_READYSIEGE()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
+		//LogAddC(3, "RUN ProcState_READYSIEGE()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
 	}
 
 	if( this->m_iCS_REMAIN_MSEC <= 0 )
@@ -3953,7 +3953,7 @@ void CCastleSiege::ProcState_STARTSIEGE()
 		}
 
 
-		LogAddC(3, "RUN ProcState_STARTSIEGE()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
+		//LogAddC(3, "RUN ProcState_STARTSIEGE()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
 	}
 	
 	if( this->m_iCS_REMAIN_MSEC <= 0 )
@@ -3991,7 +3991,7 @@ void CCastleSiege::ProcState_ENDSIEGE()
 		this->m_iCS_REMAIN_MSEC -= iTICK_MSEC;
 		this->m_iCS_TICK_COUNT = GetTickCount();
 
-		LogAddC(3, "RUN ProcState_ENDSIEGE()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
+	//	LogAddC(3, "RUN ProcState_ENDSIEGE()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
 	}
 
 	if( this->m_iCS_REMAIN_MSEC <= 0 )
@@ -4011,7 +4011,7 @@ void CCastleSiege::ProcState_ENDCYCLE()
 		this->m_iCS_REMAIN_MSEC -= iTICK_MSEC;
 		this->m_iCS_TICK_COUNT = GetTickCount();
 
-		LogAddC(3, "RUN ProcState_ENDCYCLE()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
+	//	LogAddC(3, "RUN ProcState_ENDCYCLE()\tLEFT-MSEC:%d", this->m_iCS_REMAIN_MSEC);
 	}
 
 	if( this->m_iCS_REMAIN_MSEC <= 0 )

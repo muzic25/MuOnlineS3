@@ -172,7 +172,7 @@ void CEventManagement::Run()
 			(*(it)).m_bEventStarted = false;
 		}
 
-		LogAddTD("○●[Event Management] 날짜 변경됨. %02d %02d %02d", this->m_wToday_Year, this->m_wToday_Month, this->m_wToday_Day);	// Deathway Need Translation
+		LogAddTD("○●[Event Management] Date changed. %02d %02d %02d", this->m_wToday_Year, this->m_wToday_Month, this->m_wToday_Day);	// Deathway Need Translation
 
 		this->m_wToday_Year = sysTime.wYear;
 		this->m_wToday_Month = sysTime.wMonth;
@@ -183,7 +183,7 @@ void CEventManagement::Run()
 	{
 		if ( sysTime.wHour == (*(it)).m_iHour && sysTime.wMinute == (*(it)).m_iMinute && (*(it)).m_bEventStarted == false )
 		{
-			LogAddTD("○●[Event Management] 이벤트시작함. (%d) %02d %02d (state=%d)",
+			LogAddTD("○●[Event Management] Event started. (%d) %02d %02d (state=%d)",
 				(*(it)).m_eEventKind , (*(it)).m_iHour, sysTime.wMinute , (*(it)).m_bEventStarted);	// #error Deathway Need Translation
 
 			(*(it)).m_bEventStarted = true;

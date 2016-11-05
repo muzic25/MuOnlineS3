@@ -25,7 +25,7 @@
 
 // GameServer Version
 //--------------------------
-#define GAMESERVER_VERSION "1.xx.xx"
+#define GAMESERVER_VERSION "1.00.00"
 
 // Protocol Trace
 //--------------------------
@@ -94,8 +94,5 @@ extern char szWindowClass[64];
 
 BOOL AllServerStart(void); // Start all Servers
 
-#if (GS_PROTECTED==1)
-BOOL UnProtectProtocolCore();
-#endif
 
 #endif

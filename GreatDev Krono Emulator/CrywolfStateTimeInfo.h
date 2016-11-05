@@ -46,7 +46,7 @@ public:
 
 	BOOL CheckContinuanceTime()
 	{
-		if ( (GetTickCount() - this->m_dwAppliedTickCount ) > this->m_iContinuanceTime )
+		if ((GetTickCount() - this->m_dwAppliedTickCount) > this->m_iContinuanceTime)
 		{
 			return FALSE;
 		}
@@ -64,105 +64,51 @@ public:
 		int iDayOfWeek = tCurrentTime.GetDayOfWeek();
 		int iHour = tCurrentTime.GetHour();
 		int iMinute = tCurrentTime.GetMinute();
+
 		int iCrywolfState = -1;
 
 		CTimeSpan tTimeRange(0, 0, this->m_iContinuanceTime, 0);
 
-		if ( this->m_iMonth != -1 )
+		if (m_iMonth != -1 && m_iMonth != iMonth)
 		{
-			if ( this->m_iMonth != iMonth )
-			{
-				CTime tConditionTime(iYear, this->m_iMonth, 0, 0, 0, 0, -1) ;
+			CTime tCheckTime(iYear, m_iMonth, 0, 0, 0, 0, -1);
 
-				if ( tCurrentTime < tConditionTime  ||
-					 tCurrentTime > tConditionTime+tTimeRange )
-				{
-					return FALSE;
-				}
+			if (tCurrentTime < tCheckTime || tCurrentTime >(tCheckTime + tTimeRange))
+			{
+				return FALSE;
 			}
 		}
 
-		if ( this->m_iDay != -1 )
+		if (m_iDay != -1 && m_iDay != iDay)
 		{
-			if ( this->m_iDay != iDay )
-			{
-				if ( this->m_iMonth != -1 )
-				{
-					if ( this->m_iMonth != iMonth )
-					{
-						CTime tConditionTime(iYear, this->m_iMonth, this->m_iDay, 0, 0, 0, -1) ;
+			CTime tCheckTime(iYear, (m_iMonth == -1 ? iMonth : m_iMonth), m_iDay, 0, 0, 0, -1);
 
-						if ( tCurrentTime < tConditionTime  ||
-							 tCurrentTime > tConditionTime+tTimeRange )
-						{
-							return FALSE;
-						}
-					}
-				}
+			if (tCurrentTime < tCheckTime || tCurrentTime >(tCheckTime + tTimeRange))
+			{
+				return FALSE;
 			}
 		}
 
-		if ( this->m_iDayOfWeek != -1 )
-		{
-			if ( this->m_iDayOfWeek != iDayOfWeek )
-			{
-				if ( this->m_iHour != -1 )
-				{
-					if ( this->m_iHour != iHour )
-					{
-						if ( this->m_iDay != -1 )
-						{
-							if ( this->m_iDay != iDay )
-							{
-								if ( this->m_iMonth != -1 )
-								{
-									if ( this->m_iMonth != iMonth )
-									{
-										CTime tConditionTime(iYear, this->m_iMonth, this->m_iDay, this->m_iHour, 0, 0, -1) ;
+		if (m_iDayOfWeek != -1 && m_iDayOfWeek != iDayOfWeek)
+			return FALSE;
 
-										if ( tCurrentTime < tConditionTime  ||
-											 tCurrentTime > tConditionTime+tTimeRange )
-										{
-											return FALSE;
-										}
-									}
-								}
-							}
-						}
-					}
-				}
+		if (m_iHour != -1 && m_iHour != iHour)
+		{
+			CTime tCheckTime(iYear, (m_iMonth == -1 ? iMonth : m_iMonth), (m_iDay == -1 ? iDay : m_iDay), m_iHour, 0, 0, -1);
+
+			if (tCurrentTime < tCheckTime || tCurrentTime >(tCheckTime + tTimeRange))
+			{
+				return FALSE;
 			}
 		}
 
-		if ( this->m_iMinute != -1 )
+		if (m_iMinute != -1 && m_iMinute != iMinute)
 		{
-			if ( this->m_iMinute != iMinute )
-			{
-				if ( this->m_iHour != -1 )
-				{
-					if ( this->m_iHour != iHour )
-					{
-						if ( this->m_iDay != -1 )
-						{
-							if ( this->m_iDay != iDay )
-							{
-								if ( this->m_iMonth != -1 )
-								{
-									if ( this->m_iMonth != iMonth )
-									{
-										CTime tConditionTime(iYear, this->m_iMonth, this->m_iDay, this->m_iHour, this->m_iMinute, 0, -1) ;
+			CTime tCheckTime(iYear, (m_iMonth == -1 ? iMonth : m_iMonth), (m_iDay == -1 ? iDay : m_iDay), (m_iHour == -1 ? iHour : m_iHour), m_iMinute, 0, -1);
 
-										if ( tCurrentTime < tConditionTime  ||
-											 tCurrentTime > tConditionTime+tTimeRange )
-										{
-											return FALSE;
-										}
-									}
-								}
-							}
-						}
-					}
-				}
+			if (tCurrentTime < tCheckTime || tCurrentTime >(tCheckTime + tTimeRange))
+			{
+				return FALSE;
 			}
 		}
 
@@ -171,12 +117,14 @@ public:
 
 	int GetLeftTime()
 	{
-		if ( this->CheckContinuanceTime() )
+		if (this->CheckContinuanceTime())
 		{
 			int iLeftTime = this->m_iContinuanceTime - (GetTickCount() - this->m_dwAppliedTickCount);
 
-			if ( iLeftTime < 0 )
+			if (iLeftTime < 0)
+			{
 				iLeftTime = 0;
+			}
 
 			return iLeftTime;
 		}

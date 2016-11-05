@@ -86,7 +86,7 @@ void cGmSystem::LoadGMSystem()
 
 	rewind(fp);
 	fclose(fp);	
-	Log.LogOutPut(true, Log.c_Blue, Log.t_NULL,"[GMSystem] Load sucsessfully. Total GMs: %d",GMCount);
+	//Log.LogOutPut(true, Log.c_Blue, Log.t_NULL,"[GMSystem] Load sucsessfully. Total GMs: %d",GMCount);
 }
 
 													   

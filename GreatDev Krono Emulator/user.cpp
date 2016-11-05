@@ -2846,7 +2846,7 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 	if ( bAllItemExist == false )
 	{
 		PMSG_NOTICE pNotice;
-		TNotice::MakeNoticeMsgEx((TNotice *)&pNotice, 1, "없는 아이템 발견 !!!");	// Deathway need Translation
+		TNotice::MakeNoticeMsgEx((TNotice *)&pNotice, 1, "Wrong items int the inventory!!!");	// Deathway need Translation
 		DataSend(lpObj->m_Index, (UCHAR *)&pNotice, pNotice.h.size);
 	}
 

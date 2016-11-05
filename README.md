@@ -6,7 +6,7 @@ Status: Fully Bugs (Only login)
 -Login: OK
 -Playable: No
 -Events:
-CryWolf: Bugged
+CryWolf: OK
 CastleSiege: Bugged
 DevilSquare: OK
 Blood Castle: Gate Bugged (Using first floor localation)
@@ -19,7 +19,7 @@ Chaos Castle: OK
 -ChaosMachine: Bugged
 -Maps: missing
 -GameServer Interface: Bugged
-
+-Other bugs
 
 Requiments: 
 MSSQL 2012 

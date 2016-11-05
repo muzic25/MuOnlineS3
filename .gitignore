@@ -27,3 +27,18 @@
 *.exe
 *.out
 *.app
+
+# Database
+*.sdf
+*.opensdf
+*.manifest
+*.pdb
+*.lastbuildstate
+
+
+# fcktlog
+*.tlog
+
+#folders
+ipch/
+
