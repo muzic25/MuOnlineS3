@@ -1,25 +1,30 @@
-# MuOnlineS3
-RMST GameServer Krono Emulator Season 3
+# RMST GameServer Krono Emulator Season 3 
 
-Status: Fully Bugs (Only login)
+Status: Fully Bugs With some events    
+  
+-Login: OK  
+-Playable: No  
+-Events:  
+CryWolf: Continius Event -> Fixed  
+CastleSiege: Bugged  
+DevilSquare: OK  
+Blood Castle: Gate Bugged (Using first floor localation) -> Fixed  
+Kantru: OK  
+Golden Invasion: OK  
+White Wizard:  
+Illusion temple: Unknown  
+Chaos Castle: OK  
+-ItemsBags: Some missing and missconfigured  
+-ChaosMachine: Bugged  
+-Maps: missing  
+-GameServer Interface: Logger bugged  
+-Other bugs  
 
--Login: OK
--Playable: No
--Events:
-CryWolf: OK
-CastleSiege: Bugged
-DevilSquare: OK
-Blood Castle: Gate Bugged (Using first floor localation)
-Kantru: OK
-Golden Invasion: OK
-White Wizard:
-Illusion temple: Unknown
-Chaos Castle: OK
--ItemsBags: Some missing and missconfigured
--ChaosMachine: Bugged
--Maps: missing
--GameServer Interface: Bugged
--Other bugs
+Requiments:   
+MSSQL 2012  
+Visual Studio 2010 With Sp1 or VS2012 + VS2010SP1 
 
-Requiments: 
-MSSQL 2012 
+Credits:  
+Deathway  
+RMST Team   
+ 

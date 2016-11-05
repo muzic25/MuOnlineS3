@@ -1,8 +1,203 @@
-﻿Build started 2016.11.05. 16:10:00.
-     1>Project "D:\Git\Season3\MuOnlineS3\GreatDev Krono Emulator\GameServer.vcxproj" on node 2 (Build target(s)).
+﻿Build started 2016.11.05. 21:23:25.
+     1>Project "D:\Git\Season3\MuOnlineS3\GreatDev Krono Emulator\GameServer.vcxproj" on node 2 (Rebuild target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Ob1 /Oy- /D WIN32 /D NDEBUG /D _WINDOWS /D _VC80_UPGRADE=0x0600 /D _MBCS /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp".\Release\GameServer.pch" /Fo".\Release\\" /Fd".\Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt CastleSiege.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Ob1 /Oy- /D WIN32 /D NDEBUG /D _WINDOWS /D _VC80_UPGRADE=0x0600 /D _MBCS /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp".\Release\GameServer.pch" /Fo".\Release\\" /Fd".\Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt StdAfx.cpp
+         StdAfx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Ob1 /Oy- /D WIN32 /D NDEBUG /D _WINDOWS /D _VC80_UPGRADE=0x0600 /D _MBCS /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp".\Release\GameServer.pch" /Fo".\Release\\" /Fd".\Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt AcceptIp.cpp AttackEvent.cpp BattleGround.cpp BattleSoccer.cpp BattleSoccerManager.cpp BloodCastle.cpp CallStackTrace.cpp CannonTower.cpp CashItemPeriodSystem.cpp CashLotterySystem.cpp CashShop.cpp CastleCrown.cpp CastleCrownSwitch.cpp CastleDeepEvent.cpp CastleSiege.cpp CastleSiegeSync.cpp ChaosBox.cpp ChaosCastle.cpp ChaosCastleSetItemDrop.cpp ChinaHackUserKick.cpp classdef.cpp CLoginCount.cpp ClosePlayer.cpp ComboAttack.cpp ConMember.cpp Crywolf.cpp CrywolfAltar.cpp CrywolfDarkElf.cpp CrywolfMonster.cpp CrywolfStateTimeInfo.cpp CrywolfStatue.cpp CrywolfSync.cpp CrywolfTanker.cpp CrywolfUtil.cpp CWhatsUpDummyServer.cpp DarkSpirit.cpp DbSave.cpp DBSockMng.cpp DevilSquare.cpp DevilSquareGround.cpp DirPath.cpp DragonEvent.cpp DSProtocol.cpp EDSProtocol.cpp EledoradoEvent.cpp Event.cpp EventManagement.cpp GameEvent.cpp GameMain.cpp GameServer.cpp GameServerAuth.cpp Gate.cpp giocp.cpp GMMng.cpp GmSystem.cpp gObjMonster.cpp Guardian.cpp GuardianStatue.cpp GuildClass.cpp IllusionTemple.cpp IpCache.cpp ItemAddOption.cpp ItemBag.cpp ItemBagEx.cpp ItemSystemFor380.cpp JewelMixSystem.cpp JewelOfHarmonySystem.cpp KalimaGate.cpp Kanturu.cpp KanturuBattleOfMaya.cpp KanturuBattleOfNightmare.cpp KanturuBattleStanby.cpp KanturuBattleUserMng.cpp KanturuEntranceNPC.cpp KanturuMaya.cpp KanturuMonsterMng.cpp KanturuNightmare.cpp KanturuStateInfo.cpp KanturuTowerOfRefinement.cpp KanturuUtil.cpp LargeRand.cpp LifeStone.cpp Logger.cpp LogProc.cpp LogToFile.cpp MagicDamage.cpp MagicInf.cpp MapClass.cpp MapItem.cpp MapServerManager.cpp Mercenary.cpp MonsterAttr.cpp MonsterHerd.cpp MonsterItemMng.cpp MonsterSetBase.cpp MoveCheck.cpp MoveCommand.cpp MultiAttackHackCheck.cpp MultiCheckSum.cpp MuMsg.cpp MyWinsockBase.cpp NpcTalk.cpp NSerialCheck.cpp ObjAttack.cpp ObjBaseAttack.cpp ObjCalCharacter.cpp ObjUseSkill.cpp PacketCheckSum.cpp PartyClass.cpp protocol.cpp QuestInfo.cpp QuestUtil.cpp RingAttackEvent.cpp SendHackLog.cpp SetItemMacro.cpp SetItemOption.cpp Shop.cpp SimpleModulus.cpp SkillAdditionInfo.cpp SkillDelay.cpp SkillHitBox.cpp SProtocol.cpp StatMng.cpp TDurMagicKeyChecker.cpp TMonsterAI.cpp TMonsterAIAgro.cpp TMonsterAIAutomata.cpp TMonsterAIElement.cpp TMonsterAIGroup.cpp TMonsterAIGroupMember.cpp TMonsterAIMovePath.cpp TMonsterAIRule.cpp TMonsterAIRuleInfo.cpp TMonsterAIUnit.cpp TMonsterAIUtil.cpp TMonsterSkillElement.cpp TMonsterSkillElementInfo.cpp TMonsterSkillManager.cpp TMonsterSkillUnit.cpp TNotice.cpp TRandomPoolMgr.cpp TServerAlertManager.cpp TServerInfoDisplayer.cpp TStatistics.cpp TSync.cpp TUnion.cpp TUnionInfo.cpp user.cpp ViewportGuild.cpp Weapon.cpp WhisperCash.cpp winutil.cpp wsGameServer.cpp wsJoinServerCli.cpp wsShopServerCli.cpp WzMemScript.cpp WzMultiCastSock.cpp WzQueue.cpp WZScriptEncode.cpp WzUdp.cpp zzzitem.cpp zzzmathlib.cpp
+         AcceptIp.cpp
+         AttackEvent.cpp
+         BattleGround.cpp
+         BattleSoccer.cpp
+         BattleSoccerManager.cpp
+         BloodCastle.cpp
+         CallStackTrace.cpp
+     1>CallStackTrace.cpp(226): warning C4532: 'return' : jump out of __finally block has undefined behavior during termination handling
+         CannonTower.cpp
+         CashItemPeriodSystem.cpp
+         CashLotterySystem.cpp
+         CashShop.cpp
+         CastleCrown.cpp
+         CastleCrownSwitch.cpp
+         CastleDeepEvent.cpp
          CastleSiege.cpp
+         CastleSiegeSync.cpp
+         ChaosBox.cpp
+         #TODO Fix Enum Chaos_Type_Msg
+         ChaosCastle.cpp
+         ChaosCastleSetItemDrop.cpp
+         ChinaHackUserKick.cpp
+         Generating Code...
+         Compiling...
+         classdef.cpp
+         CLoginCount.cpp
+         ClosePlayer.cpp
+         ComboAttack.cpp
+         ConMember.cpp
+         Crywolf.cpp
+         CrywolfAltar.cpp
+         CrywolfDarkElf.cpp
+         CrywolfMonster.cpp
+         CrywolfStateTimeInfo.cpp
+         CrywolfStatue.cpp
+         CrywolfSync.cpp
+         CrywolfTanker.cpp
+         CrywolfUtil.cpp
+         CWhatsUpDummyServer.cpp
+         DarkSpirit.cpp
+         DbSave.cpp
+         DBSockMng.cpp
+         DevilSquare.cpp
+         DevilSquareGround.cpp
+         Generating Code...
+         Compiling...
+         DirPath.cpp
+         DragonEvent.cpp
+         DSProtocol.cpp
+         EDSProtocol.cpp
+         EledoradoEvent.cpp
+         Event.cpp
+         EventManagement.cpp
+         GameEvent.cpp
+         GameMain.cpp
+         GameServer.cpp
+         GameServerAuth.cpp
+         Gate.cpp
+         giocp.cpp
+         GMMng.cpp
+         GmSystem.cpp
+         gObjMonster.cpp
+         Delete this unuseful Code with ADDON gObjMonsterAttack
+         Apply this to create SkyLandShielkds -> gObjSkylandBossSheildAttack 
+         gObjMonsterDieRewardItems Can be activate with the gObjMonsterItemDropLoadScript
+         Guardian.cpp
+         GuardianStatue.cpp
+         GuildClass.cpp
+         IllusionTemple.cpp
+         Generating Code...
+     1>d:\git\season3\muonlines3\greatdev krono emulator\gobjmonster.cpp(20): warning C4748: /GS can not protect parameters and local variables from local buffer overrun because optimizations are disabled in function
+         Compiling...
+         IpCache.cpp
+         ItemAddOption.cpp
+         ItemBag.cpp
+         ItemBagEx.cpp
+         ItemSystemFor380.cpp
+         Recode all Load380ItemOptionInfo
+         JewelMixSystem.cpp
+         JewelOfHarmonySystem.cpp
+         Here must be somthing to put the Name [CJewelOfHarmonySystem::LoadScriptOfSmelt]
+         Add Here code to make an Artificial JOH Item
+         Add the LAcking Effects CJewelOfHarmonySystem::_CalcItemEffectValue
+         KalimaGate.cpp
+         Kanturu.cpp
+         KanturuBattleOfMaya.cpp
+         KanturuBattleOfNightmare.cpp
+         KanturuBattleStanby.cpp
+         KanturuBattleUserMng.cpp
+         KanturuEntranceNPC.cpp
+         KanturuMaya.cpp
+         KanturuMonsterMng.cpp
+         KanturuNightmare.cpp
+         KanturuStateInfo.cpp
+         KanturuTowerOfRefinement.cpp
+         KanturuUtil.cpp
+         Generating Code...
+         Compiling...
+         LargeRand.cpp
+         LifeStone.cpp
+         Logger.cpp
+         LogProc.cpp
+         LogToFile.cpp
+         MagicDamage.cpp
+         MagicInf.cpp
+         MapClass.cpp
+         MapItem.cpp
+         MapServerManager.cpp
+         Mercenary.cpp
+         MonsterAttr.cpp
+         MonsterHerd.cpp
+         MonsterItemMng.cpp
+         MonsterSetBase.cpp
+         MoveCheck.cpp
+         MoveCommand.cpp
+         MultiAttackHackCheck.cpp
+         MultiCheckSum.cpp
+         MuMsg.cpp
+         Generating Code...
+         Compiling...
+         MyWinsockBase.cpp
+         NpcTalk.cpp
+         NSerialCheck.cpp
+         ObjAttack.cpp
+         ObjBaseAttack.cpp
+         ObjCalCharacter.cpp
+         ObjUseSkill.cpp
+         PacketCheckSum.cpp
+         PartyClass.cpp
+         protocol.cpp
+         QuestInfo.cpp
+         QuestUtil.cpp
+         RingAttackEvent.cpp
+         SendHackLog.cpp
+         SetItemMacro.cpp
+         SetItemOption.cpp
+         Shop.cpp
+         SimpleModulus.cpp
+         SkillAdditionInfo.cpp
+         SkillDelay.cpp
+         Generating Code...
+         Compiling...
+         SkillHitBox.cpp
+         SProtocol.cpp
+         StatMng.cpp
+         TDurMagicKeyChecker.cpp
+         TMonsterAI.cpp
+         TMonsterAIAgro.cpp
+         TMonsterAIAutomata.cpp
+         TMonsterAIElement.cpp
+         TMonsterAIGroup.cpp
+         TMonsterAIGroupMember.cpp
+         TMonsterAIMovePath.cpp
+         TMonsterAIRule.cpp
+         TMonsterAIRuleInfo.cpp
+         TMonsterAIUnit.cpp
+         TMonsterAIUtil.cpp
+         TMonsterSkillElement.cpp
+         TMonsterSkillElementInfo.cpp
+         TMonsterSkillManager.cpp
+         TMonsterSkillUnit.cpp
+         TNotice.cpp
+         Generating Code...
+         Compiling...
+         TRandomPoolMgr.cpp
+         TServerAlertManager.cpp
+         TServerInfoDisplayer.cpp
+         TStatistics.cpp
+         TSync.cpp
+         TUnion.cpp
+         TUnionInfo.cpp
+         user.cpp
+     1>user.cpp(14357): warning C4482: nonstandard extension used: enum 'CDarkSpirit::ePetItem_Mode' used in qualified name
+     1>user.cpp(16764): warning C4482: nonstandard extension used: enum 'CDarkSpirit::ePetItem_Mode' used in qualified name
+         ViewportGuild.cpp
+         Weapon.cpp
+         WhisperCash.cpp
+         winutil.cpp
+         wsGameServer.cpp
+         wsJoinServerCli.cpp
+         wsShopServerCli.cpp
+         WzMemScript.cpp
+         WzMultiCastSock.cpp
+         WzQueue.cpp
+         WZScriptEncode.cpp
+         WzUdp.cpp
+     1>WzUdp.cpp(221): warning C4646: function declared with __declspec(noreturn) has non-void return type
+         Generating Code...
+         Compiling...
+         zzzitem.cpp
+         zzzmathlib.cpp
+         Generating Code...
+       ResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /D NDEBUG /D _VC80_UPGRADE=0x0600 /l"0x0409" /nologo /fo".\Release\Temp\GameServer.res" GameServer.rc 
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:".\Release\GameServer.exe" /INCREMENTAL:NO /NOLOGO odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:".\Release\Temp\GameServer.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /PDB:"D:\Git\Season3\MuOnlineS3\GreatDev Krono Emulator\Release\GameServer.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\Release\GameServer.lib" /MACHINE:X86 .\Release\Temp\GameServer.res
          .\Release\AcceptIp.obj
@@ -24,7 +219,6 @@
          .\Release\ChaosBox.obj
          .\Release\ChaosCastle.obj
          .\Release\ChaosCastleSetItemDrop.obj
-         .\Release\ChatProtocol.obj
          .\Release\ChinaHackUserKick.obj
          .\Release\classdef.obj
          .\Release\CLoginCount.obj
@@ -173,8 +367,8 @@
          GameServer.vcxproj -> D:\Git\Season3\MuOnlineS3\GreatDev Krono Emulator\.\Release\GameServer.exe
        Manifest:
          C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:".\Release\GameServer.exe;#1" /manifest .\Release\Temp\GameServer.exe.intermediate.manifest
-     1>Done Building Project "D:\Git\Season3\MuOnlineS3\GreatDev Krono Emulator\GameServer.vcxproj" (Build target(s)).
+     1>Done Building Project "D:\Git\Season3\MuOnlineS3\GreatDev Krono Emulator\GameServer.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:29.96
+Time Elapsed 00:00:36.65

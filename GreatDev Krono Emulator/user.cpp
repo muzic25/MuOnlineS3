@@ -1,4 +1,4 @@
-// ------------------------------
+ï»¿// ------------------------------
 // Decompiled by Deathway
 // Date : 2007-05-09
 // ------------------------------
@@ -449,13 +449,13 @@ void gObjSkillUseProcTime500(LPOBJ lpObj)
 
 					if ( gObjIsConnected(lpObj) == FALSE )
 					{
-						LogAdd("¡Ú[CHECK_LOG_INFINITY] gObjIsConnected() error %s %d", __FILE__, __LINE__);
+						LogAdd("Ë‡Ãš[CHECK_LOG_INFINITY] gObjIsConnected() error %s %d", __FILE__, __LINE__);
 						break;
 					}
 
 					if ( count > 100 )
 					{
-						LogAdd("¡Ú[CHECK_LOG_INFINITY] ( _count > 100 ) error %s %d", __FILE__, __LINE__);
+						LogAdd("Ë‡Ãš[CHECK_LOG_INFINITY] ( _count > 100 ) error %s %d", __FILE__, __LINE__);
 						break;
 					}
 
@@ -1008,6 +1008,7 @@ void gObjCloseSet(int aIndex, int Flag)
 		if ( (GetTickCount() - lpObj->MySelfDefenseTime )< 30000)
 		{
 			GCServerMsgStringSend(lMsg.Get(MSGGET(4, 109)), lpObj->m_Index, 1);
+			GCCloseMsgSend(aIndex, -1); //Season 2.5 add-on
 			return;
 		}
 
@@ -1458,6 +1459,8 @@ void gObjCharZeroSet(int aIndex)
 		lpObj->MonsterKillInfo[i].MonIndex = -1;
 		lpObj->MonsterKillInfo[i].KillCount = -1;
 	}
+
+
 	::gObjClearViewport(&gObj[aIndex]);
 }
 
@@ -2225,6 +2228,12 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 	lpObj->m_iChaosCastleBlowTime = 0;
 	lpObj->m_cKillUserCount = 0;
 	lpObj->m_cKillMonsterCount = 0;
+
+	if ((lpMsg->CtlCode & 32) != 32 && lpObj->MapNumber == MAP_INDEX_GM_SUMMONZONE) //Season 2.5 add-on
+	{
+		lpObj->MapNumber = MAP_INDEX_DEVIAS;
+		MapC[lpObj->MapNumber].GetMapPos(lpObj->MapNumber, lpObj->X, lpObj->Y);
+	}
 
 	if ( lpObj->MapNumber == MAP_INDEX_CASTLESIEGE &&
 		 g_CastleSiege.GetCastleState() == CASTLESIEGE_STATE_STARTSIEGE )
@@ -3274,15 +3283,14 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 		lpObj->m_State = 1;
 	} 
 
-	if ( MonsterClass >= 204 && MonsterClass <= 259
-		|| MonsterClass >= 368 && MonsterClass <= 370
+	if ((MonsterClass >= 204 && MonsterClass <= 259)
+		|| (MonsterClass >= 368 && MonsterClass <= 385)
+#if(!GS_CASTLE)
 		|| MonsterClass == 367
-		|| MonsterClass == 375 || MonsterClass == 406 || MonsterClass == 407 || MonsterClass == 408 || MonsterClass == 465 
-		|| MonsterClass == 467 || MonsterClass == 468 || MonsterClass == 469 || MonsterClass == 470 ||
-		MonsterClass == 471 || MonsterClass == 472 || MonsterClass == 473 || MonsterClass == 474 ||
-		MonsterClass == 475 || MonsterClass == 371 || MonsterClass == 479 || MonsterClass == 540 || MonsterClass == 492 ||
-		MonsterClass == 522 || MonsterClass == 464 || MonsterClass == 450 || MonsterClass == 451|| MonsterClass == 452 || MonsterClass == 453 ||
-		MonsterClass == 543 || MonsterClass == 544 || MonsterClass == 380 ||MonsterClass == 383 ||MonsterClass == 384 ||MonsterClass == 385)
+#endif
+		|| MonsterClass == 375
+		|| (MonsterClass >= 406 && MonsterClass <= 408))
+
 	{
 		lpObj->Type = OBJ_NPC;
 	}
@@ -3291,25 +3299,6 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 		lpObj->Type = OBJ_MONSTER;
 	}
 
-	if( MonsterClass == 376 || MonsterClass == 377 ) //Season 2.5 add-on
-	{
-		lpObj->Type = OBJ_NPC;
-	}
-
-	if( MonsterClass == 379 ) //Season 2.5 add-on
-	{
-		lpObj->Type = OBJ_NPC;
-	}
-	if( MonsterClass == 385 || //Season 2.5 add-on 
-		MonsterClass == 380 || 
-		MonsterClass == 381 || 
-		MonsterClass == 382 || 
-		MonsterClass == 383 || 
-		MonsterClass == 384 ||
-		MonsterClass == 479 )//Season 4.6 addon
-	{
-		lpObj->Type = OBJ_NPC;
-	}
 	if ( MonsterClass == 77 )
 	{
 		int iSL = gObjAddMonster(MAP_INDEX_ICARUS);
@@ -3318,7 +3307,7 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 		{
 			if ( gObjSetMonster(iSL, 76) == FALSE )
 			{
-				MsgBox("Ãµ°øº¸½º¸÷ ¼³Á¤ ½ÇÆÐ");
+				MsgBox("SkyLand Boss Monster Setting Fail");
 				return false;
 			}
 
@@ -3327,7 +3316,7 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 		}
 		else
 		{
-			MsgBox("Ãµ°øº¸½º¸÷ ¼³Á¤ ½ÇÆÐ");
+			MsgBox("SkyLand Boss Monster Setting Fail");
 			return false;
 		}
 	}
@@ -4981,6 +4970,25 @@ void gObjStateProc(LPOBJ lpObj, int aMsgCode, int aIndex, int SubCode)
 				gObjAttack(lpObj, &gObj[aIndex], 0, 0, 0, SubCode, 0);
 			}
 			break;
+
+		case 12:
+		{
+			gObjAttack(lpObj, &gObj[aIndex], 0, 0, 0, SubCode, 0);
+		}
+		break;
+		case 13:
+		{
+			lpObj->Life = (float)lpObj->AddLife + (float)lpObj->MaxLife; //season4.5 changed
+			GCReFillSend(lpObj->m_Index, lpObj->Life, -1, 0, lpObj->iShield);
+		}
+		break;
+		case 14:
+		{
+			lpObj->Mana = (float)lpObj->AddMana + (float)lpObj->MaxMana; //season 4.5 changed
+			GCManaSend(lpObj->m_Index, lpObj->Mana, -1, 0, lpObj->BP);
+		}
+		break;
+
 		case 54:
 			if( lpObj->Live )
 			{
@@ -5105,6 +5113,11 @@ BOOL gObjBackSpring(LPOBJ lpObj, LPOBJ lpTargetObj)
 	}
 	
 	if ( lpObj->Class == 348 )
+	{
+		return FALSE;
+	}
+
+	if (lpObj->Class == 275) //Season 2.5 add-on (Kundun Fix)
 	{
 		return FALSE;
 	}
@@ -5273,6 +5286,11 @@ BOOL gObjBackSpring2(LPOBJ lpObj, LPOBJ lpTargetObj, int count)
 	}
 	
 	if ( lpObj->Class == 348 )
+	{
+		return FALSE;
+	}
+
+	if (lpObj->Class == 275) //Season 2.5 add-on (Kundun Fix)
 	{
 		return FALSE;
 	}
@@ -5624,6 +5642,14 @@ int  retResistance(LPOBJ lpObj, int Resistance_Type)
 		return 1;
 	}
 
+	if ((lpObj->Authority & 32) == 32) //Season 2.5 add-on (GM Ring +255 Resistance Attribute)
+	{
+		if (lpObj->pInventory[10].m_Type == ITEMGET(13, 42) || lpObj->pInventory[11].m_Type == ITEMGET(13, 42))
+		{
+			return TRUE;
+		}
+	}
+
 	if ( r > 0 && lpObj->m_iPotionSoulTime > 0 && (Resistance_Type == 2 || Resistance_Type == 0 ))
 	{
 		r += r * 50 / 100;
@@ -5763,7 +5789,7 @@ void gObjPlayerKiller(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 		else
 		{
-			LogAddTD("[U.System][Rival][Player Kill][¡ÚERROR : Can't find GuildInfo] (  [%s][%s] ) vs ( [%s][%s] )",
+			LogAddTD("[U.System][Rival][Player Kill][Ë‡ÃšERROR : Can't find GuildInfo] (  [%s][%s] ) vs ( [%s][%s] )",
 				lpObj->AccountID,lpObj->Name,lpTargetObj->AccountID,lpTargetObj->Name);
 		}
 		return;
@@ -6627,7 +6653,7 @@ BOOL gObjWingSprite(LPOBJ lpObj)
 
 	CItem * Wing = &lpObj->pInventory[7];
 
-	if ( (Wing->m_Type >= ITEMGET(12,0) && Wing->m_Type <= ITEMGET(12,6)) || Wing->m_Type <= ITEMGET(13,30) || (Wing->m_Type >= ITEMGET(12,36) && Wing->m_Type <= ITEMGET(12,43)))	// Apply DEathway Fix HEre, last Must be == not <=
+	if ( (Wing->m_Type >= ITEMGET(12,0) && Wing->m_Type <= ITEMGET(12,6)) || Wing->m_Type <= ITEMGET(13,30) || (Wing->m_Type >= ITEMGET(12,36) && Wing->m_Type <= ITEMGET(12,40)))	// Apply DEathway Fix HEre, last Must be == not <=
 	{
 		if ( Wing->m_Durability > 0.0f )
 		{
@@ -6752,7 +6778,7 @@ void gObjSpriteDamage(LPOBJ lpObj, int damage)
 					CDarkSpirit::SendLevelmsg(lpObj->m_Index, 8, 1, (BYTE)-1);
 				}
 
-				LogAddTD("[%s][%s] ´ÙÅ©È£½ºÀÇ»Ô Item is Broken because durability is exhausted [%d]",
+				LogAddTD("[%s][%s] Â´Å®Ä¹Â©ÄŒÅËÅŸÅ”Ã‡Â»Ã” Item is Broken because durability is exhausted [%d]",
 						lpObj->AccountID,lpObj->Name,lpObj->pInventory[8].m_Number);
 			}
 
@@ -7148,6 +7174,67 @@ void gObjChangeDurProc(LPOBJ lpObj)
 			}
 		}
 	}
+	//Season 2.5 add-on
+	else if (lpObj->pInventory[10].IsItem() == 1 && lpObj->pInventory[10].m_Type == ITEMGET(13, 41)) //Season 2.5 Santa Girl Ring
+	{
+		int m_Durability = lpObj->pInventory[10].m_Durability;
+
+		lpObj->pInventory[10].m_Durability -= (float)0.02;
+
+		if (m_Durability > (int)lpObj->pInventory[10].m_Durability)
+		{
+			if (lpObj->pInventory[10].m_Durability < 1)
+			{
+				lpObj->pInventory[10].m_Durability = 0;
+			}
+
+			BYTE dur = lpObj->pInventory[10].m_Durability;
+
+			GCItemDurSend(lpObj->m_Index, 10, dur, 0);
+
+			if (dur == 0)
+			{
+				gObjUseSkill.SkillChangeUse(lpObj->m_Index);
+				LogAddTD(lMsg.Get(544), lpObj->AccountID, lpObj->Name, lpObj->pInventory[10].GetName(), lpObj->pInventory[10].m_Level, dur);
+				lpObj->pInventory[10].Clear();
+				GCInventoryItemDeleteSend(lpObj->m_Index, 10, 0);
+			}
+		}
+	}
+	else if (lpObj->pInventory[11].IsItem() == 1 && lpObj->pInventory[11].m_Type == ITEMGET(13, 41)) //Season 2.5 Santa Girl Ring
+	{
+		int m_Durability = lpObj->pInventory[11].m_Durability;
+
+		lpObj->pInventory[11].m_Durability -= (float)0.02;
+
+		if (m_Durability > (int)lpObj->pInventory[11].m_Durability)
+		{
+			if (lpObj->pInventory[11].m_Durability < 1)
+			{
+				lpObj->pInventory[11].m_Durability = 0;
+			}
+
+			BYTE dur = lpObj->pInventory[11].m_Durability;
+
+			GCItemDurSend(lpObj->m_Index, 11, dur, 0);
+
+			if (dur == 0)
+			{
+				gObjUseSkill.SkillChangeUse(lpObj->m_Index);
+				LogAddTD(lMsg.Get(544), lpObj->AccountID, lpObj->Name, lpObj->pInventory[11].GetName(), lpObj->pInventory[11].m_Level, dur);
+				lpObj->pInventory[11].Clear();
+				GCInventoryItemDeleteSend(lpObj->m_Index, 11, 0);
+			}
+		}
+	}
+	else if (lpObj->pInventory[10].IsItem() == 1 && lpObj->pInventory[10].m_Type == ITEMGET(13, 42)) //Season 2.5 GameMaster Ring
+	{
+		//wtf??
+	}
+	else if (lpObj->pInventory[11].IsItem() == 1 && lpObj->pInventory[10].m_Type == ITEMGET(13, 42)) //Season 4.5 add-on (fix) GameMaster Ring
+	{
+		//wtf??
+	}
 }
 
 
@@ -7157,9 +7244,32 @@ void gObjChangeDurProc(LPOBJ lpObj)
 
 void gObjWingDurProc(LPOBJ lpObj) 
 {
-	BYTE send_dur=0; // HERE GOES A MACRO
+	BYTE send_dur = 0;
+
+	// ì´ë²ˆ ë²„ì ¼ì—ì„œëŠ” ë‚´êµ¬ë ¥ ì•ˆ ë‹³ê²Œ..
+	return;
+
+	if (lpObj->pInventory[7].IsItem() == TRUE)
 	{
-		int dur;
+		int dur = (int)lpObj->pInventory[7].m_Durability;
+		lpObj->pInventory[7].m_Durability -= (float)0.0002;
+
+		if (dur > (int)lpObj->pInventory[7].m_Durability)
+		{
+			if (lpObj->pInventory[7].m_Durability < 1)
+				lpObj->pInventory[7].m_Durability = 0;
+
+			send_dur = (BYTE)lpObj->pInventory[7].m_Durability;
+			GCItemDurSend(lpObj->m_Index, 7, send_dur, 0);
+			if (send_dur == 0)
+			{
+				LogAddTD(lMsg.Get(544), lpObj->AccountID, lpObj->Name, lpObj->pInventory[7].GetName(), lpObj->pInventory[7].m_Level, send_dur);
+				lpObj->pInventory[7].Clear();
+				GCInventoryItemDeleteSend(lpObj->m_Index, 7, 0);
+			}
+		}
+		//LogAdd("ë‚ ê°œ ë‚´êµ¬ë ¥ %f",lpObj->pInventory[7].m_Durability);
+		return;
 	}
 }
 
@@ -9716,6 +9826,41 @@ BOOL gObjIsItemPut(LPOBJ lpObj, CItem * lpItem, int pos )
 		}
 	}
 
+	if (lpItem->m_Type == ITEMGET(13, 40)) //Second Edition
+	{
+		int count = gObjGetItemCountInEquipment(lpObj->m_Index, 13, 40, 0);
+
+		if (count > 0)
+		{
+			return false;
+		}
+	}
+
+	if (lpItem->m_Type == ITEMGET(13, 41)) //Season 2.5 Santa Girl Ring Addition
+	{
+		int count = gObjGetItemCountInEquipment(lpObj->m_Index, 13, 41, 0);
+
+		if (count > 0)
+		{
+			return false;
+		}
+	}
+
+	if (lpItem->m_Type == ITEMGET(13, 42)) //Season 2.5 Game Master Ring Addition
+	{
+		if (CC_MAP_RANGE(lpObj->MapNumber))
+		{
+			return false;
+		}
+
+		int count = gObjGetItemCountInEquipment(lpObj->m_Index, 13, 42, 0);
+
+		if (count > 0)
+		{
+			return false;
+		}
+	}
+
 	if(lpItem->m_Type == ITEMGET(13,10))
 	{
 		if(CC_MAP_RANGE(lpObj->MapNumber))
@@ -9789,30 +9934,8 @@ BOOL gObjIsItemPut(LPOBJ lpObj, CItem * lpItem, int pos )
 		{
 			return false;
 		}
-
-		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,40,0);
-
-		if(count != 0)
-		{
-			return false;
-		}
-
-		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,41,0);
-
-		if(count != 0)
-		{
-			return false;
-		}
-
-		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,42,0);
-
-		if(count != 0)
-		{
-			return false;
-		}
 	}
-
-	if(lpItem->m_Type == ITEMGET(13,40))
+	if(lpItem->m_Type == ITEMGET(13,40)) //Second Edition
 	{
 		if(CC_MAP_RANGE(lpObj->MapNumber))
 		{
@@ -9821,46 +9944,14 @@ BOOL gObjIsItemPut(LPOBJ lpObj, CItem * lpItem, int pos )
 
 		int count = 0;
 
-		for(int n = 0; n < 7; n++)
-		{
-			count = gObjGetItemCountInEquipment(lpObj->m_Index,13,10,n);
-
-			if(count != 0)
-			{
-				return false;
-			}
-		}
-
-		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,39,0);
-
-		if(count != 0)
-		{
-			return false;
-		}
-
 		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,40,0);
 
-		if(count != 0)
+		if(count > 0)
 		{
 			return false;
-		}
-
-		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,41,0);
-
-		if(count != 0)
-		{
-			return false;
-		}
-
-		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,42,0);
-
-		if(count != 0)
-		{
-				return false;
 		}
 	}
-
-	if(lpItem->m_Type == ITEMGET(13,41))
+	if(lpItem->m_Type == ITEMGET(13,41)) //Season 2.5 Santa Girl Ring Addition
 	{
 		if(CC_MAP_RANGE(lpObj->MapNumber))
 		{
@@ -9869,154 +9960,16 @@ BOOL gObjIsItemPut(LPOBJ lpObj, CItem * lpItem, int pos )
 
 		int count = 0;
 
-		for(int n = 0; n < 7; n++)
-		{
-			count = gObjGetItemCountInEquipment(lpObj->m_Index,13,10,n);
-
-			if(count != 0)
-			{
-				//ogAdd("return false 37");
-				return false;
-			}
-		}
-
-		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,39,0);
-
-		if(count != 0)
-		{
-			//LogAdd("return false 38");
-			return false;
-		}
-
-		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,40,0);
-
-		if(count != 0)
-		{
-			//LogAdd("return false 40");
-			return false;
-		}
-
 		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,41,0);
 
-		if(count != 0)
+		if(count > 0)
 		{
-			//LogAdd("return false 41");
-			return false;
-		}
-
-		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,42,0);
-
-		if(count != 0)
-		{
-			//LogAdd("return false 42");
 			return false;
 		}
 	}
 
-	if(lpItem->m_Type == ITEMGET(13,42))
-	{
-		if(CC_MAP_RANGE(lpObj->MapNumber))
-		{
-			//LogAdd("return false 43");
-			return false;
-		}
-
-		int count = 0;
-
-		for(int n = 0; n < 7; n++)
-		{
-			count = gObjGetItemCountInEquipment(lpObj->m_Index,13,10,n);
-
-			if(count != 0)
-			{
-				//LogAdd("return false 44");
-				return false;
-			}
-		}
-
-		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,39,0);
-
-		if(count != 0)
-		{
-			//LogAdd("return false 45");
-			return false;
-		}
-
-		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,40,0);
-
-		if(count != 0)
-		{
-			//LogAdd("return false 46");
-			return false;
-		}
-
-		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,41,0);
-
-		if(count != 0)
-		{
-			//LogAdd("return false 47");
-			return false;
-		}
-
-		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,42,0);
-
-		if(count != 0)
-		{
-			//LogAdd("return false 48");
-			return false;
-		}
-
-	}
-	if(lpItem->m_Type == ITEMGET(13,10))
-	{
-		int count = 0;
-
-		for(int n = 0; n < 7; n ++)
-		{
-			count = gObjGetItemCountInEquipment(lpObj->m_Index,13,10,n);
-
-			if(count != 0)
-			{
-				//LogAdd("return false 49");
-				return false;
-			}
-		}
-
-		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,39,0);
-		
-		if(count != 0)
-		{
-			//LogAdd("return false 50");
-			return false;
-		}
-
-		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,40,0);
-		
-		if(count != 0)
-		{
-			//LogAdd("return false 51");
-			return false;
-		}
-
-		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,41,0);
-		
-		if(count != 0)
-		{
-			//LogAdd("return false 52");
-			return false;
-		}
-
-		count = gObjGetItemCountInEquipment(lpObj->m_Index,13,42,0);
-		
-		if(count != 0)
-		{
-			//LogAdd("return false 53");
-			return false;
-		}
-	}
 	else if(lpItem->m_Type >= ITEMGET(14,00))
 	{
-		//LogAdd("return false 54");
 		return false;
 	}
 
@@ -11041,6 +10994,15 @@ BYTE gObjInventoryMoveItem(int aIndex, unsigned char source, unsigned char targe
 			{
 				return -1;
 			}
+
+			if (lpObj->pInventory[source].m_Type == ITEMGET(13, 51)) //Season 2.5 add-on (illusion temple ticket)
+			{
+				if (lpObj->pInventory[source].m_Durability == 0.0f)
+				{
+					return -1;
+				}
+			}
+
 			EnterCriticalSection(&gObj[aIndex].m_critPShopTrade);
 
 			if(gObj[aIndex].m_bPShopTransaction == 1)
@@ -11206,7 +11168,10 @@ BYTE gObjInventoryMoveItem(int aIndex, unsigned char source, unsigned char targe
 						if(sitem->m_Durability > 0)
 						{
 							durSsend = 1;
-							durTsend = 1;
+							if (sitem->m_Type != ITEMGET(14, 29)) //Season 2.5 add-on (fix for symbol of kundun)
+							{
+								durTsend = 1;
+							}
 						}
 						else
 						{
@@ -11225,6 +11190,8 @@ BYTE gObjInventoryMoveItem(int aIndex, unsigned char source, unsigned char targe
 			}
 			return -1;
 		}
+
+
 
 		switch(tFlag)
 		{
@@ -11286,6 +11253,29 @@ BYTE gObjInventoryMoveItem(int aIndex, unsigned char source, unsigned char targe
 							}
 						}
 					}
+					//Season 2.5 add-on (GameMaster Ring)
+					if (target == 10)
+					{
+						if ((lpObj->Authority & 32) != 32)
+						{
+							if (lpObj->pInventory[source].m_Type == ITEMGET(13, 42))
+							{
+								return -1;
+							}
+						}
+					}
+					else if (target == 11)
+					{
+						if ((lpObj->Authority & 32) != 32)
+						{
+							if (lpObj->pInventory[source].m_Type == ITEMGET(13, 42))
+							{
+								return -1;
+							}
+						}
+					}
+					//
+				
 				}
 
 				useClass = sitem->IsClass(lpObj->Class,lpObj->ChangeUP, lpObj->ChangeUP3rd);
@@ -11294,12 +11284,10 @@ BYTE gObjInventoryMoveItem(int aIndex, unsigned char source, unsigned char targe
 				{
 					return -1;
 				}
-				LogAdd("Used Item Chek");
 				if(gObjIsItemPut(lpObj,sitem,target) == 0)
 				{
 					return -1;
 				}
-					LogAdd("Used Item END Chek");
 			}
 			else
 			{
@@ -11405,10 +11393,10 @@ BYTE gObjInventoryMoveItem(int aIndex, unsigned char source, unsigned char targe
 				switch(sFlag)
 				{
 				case 0:
-					if(lpObj->pInventory[source].m_Type == ITEMGET(13,20))
+					if (lpObj->pInventory[source].m_Type == ITEMGET(13, 20))
 					{
-						if(lpObj->pInventory[source].m_Level == 0 ||
-							lpObj->pInventory[source].m_Level == 1)
+						if (lpObj->pInventory[source].m_Level == 0 ||
+							lpObj->pInventory[source].m_Level == 1 || lpObj->pInventory[source].m_Level == 2) //Season 2.5 changed
 						{
 							return -1;
 						}
@@ -11439,10 +11427,16 @@ BYTE gObjInventoryMoveItem(int aIndex, unsigned char source, unsigned char targe
 						return -1;
 					}
 
-					if(lpObj->pInventory[source].m_QuestItem) //Season 2.5 add-on
+					if (lpObj->pInventory[source].m_Type == ITEMGET(13, 42)) //Season 2.5 add-on
 					{
 						return -1;
 					}
+
+					if (lpObj->pInventory[source].m_QuestItem) //Season 2.5 add-on
+					{
+						return -1;
+					}
+
 
 					res_1 = gObjWarehouseInsertItemPos(aIndex,lpObj->pInventory[source],target,-1);
 					break;
@@ -11876,6 +11870,17 @@ BYTE gObjTradeInventoryMove(LPOBJ lpObj, BYTE source, BYTE target)
 				gObjUseSkill.SkillChangeUse(lpObj->m_Index);
 				LogAdd(lMsg.Get(534),lpObj->Name,lpObj->pInventory[target].m_Level);
 			}
+			if (lpObj->pInventory[target].m_Type == ITEMGET(13, 40)) //Second Edition
+			{
+				gObjUseSkill.SkillChangeUse(lpObj->m_Index);
+				LogAdd(lMsg.Get(534), lpObj->Name, lpObj->pInventory[target].m_Level);
+			}
+			if (lpObj->pInventory[target].m_Type == ITEMGET(13, 41)) //Season 2.5 add-on
+			{
+				gObjUseSkill.SkillChangeUse(lpObj->m_Index);
+				LogAdd(lMsg.Get(534), lpObj->Name, lpObj->pInventory[target].m_Level);
+			}
+		
 		}
 
 		gObjMakePreviewCharSet(lpObj->m_Index);
@@ -11940,6 +11945,33 @@ BYTE gObjInventoryTradeMove(LPOBJ lpObj, BYTE source, BYTE target)
 			return -1;
 		}
 	}
+
+	if (lpObj->pInventory[source].m_Type == ITEMGET(13, 42)) //Season 2.5 add-on
+	{
+		return -1;
+	}
+
+	if ((lpObj->Authority & 32) != 32) //Season 2.5 add-on
+	{
+		if (lpObj->pInventory[source].m_Type == ITEMGET(14, 52))
+		{
+			return -1;
+		}
+	}
+
+	if (lpObj->pInventory[source].m_Type == ITEMGET(13, 51)) //Season 2.5 add-on (Illusion Temple Ticket)
+	{
+		if (lpObj->pInventory[source].m_Durability == 0.0f)
+		{
+			return -1;
+		}
+	}
+
+	if (lpObj->pInventory[source].m_Type == ITEMGET(14, 64)) //Season 2.5 add-on (Illusion Temple Ball)
+	{
+		return -1;
+	}
+
 
 	if(lpObj->pInventory[source].m_Type == ITEMGET(12,26))
 	{
@@ -12317,7 +12349,7 @@ BOOL TradeitemInventoryPut(int aIndex)
 			}
 			else
 			{
-				LogAdd("error : ÀÌ°Ç Å«ÀÏ³ª´ÂÀÏ!!");
+				LogAdd("error : Å”ÄšÂ°Ã‡ Ä¹Â«Å”ÄŽÅ‚ÅžÂ´Ã‚Å”ÄŽ!!");
 				return false;
 			}
 		}
@@ -12553,8 +12585,6 @@ void gObjAttackDamageCalc(int aIndex)
 	return;	// Here goes a Macro
 }
 
- 
-
 void gObjMakePreviewCharSet(int aIndex)
 {
 	if (!OBJMAX_RANGE(aIndex))
@@ -12563,35 +12593,22 @@ void gObjMakePreviewCharSet(int aIndex)
 		return;
 	}
 
- __int16 v1; // cx@31
-  int v2; // ST5C_4@41
-  int v3; // ST5C_4@41
-  int v4; // ST5C_4@41
-  int v5; // ST5C_4@41
-  int v6; // ST5C_4@41
-  int v7; // ST5C_4@41
-  int v8; // ST5C_4@41
-  __int16 v9; // cx@77
-  bool v10; // [sp+4Ch] [bp-10h]@2
-  OBJECTSTRUCT *v11; // [sp+54h] [bp-8h]@6
-  char v12; // [sp+58h] [bp-4h]@33
-  char v13; // [sp+58h] [bp-4h]@37
-
+	BYTE index;
 	LPOBJ lpObj = &gObj[aIndex];
 	memset(lpObj->CharSet, 0, sizeof(lpObj->CharSet));
 
-	lpObj->CharSet[CS_CLASS] =  32 * lpObj->Class & 0xE0;
-	lpObj->CharSet[CS_CLASS] |= 16 * lpObj->ChangeUP & 0x10;
-	lpObj->CharSet[CS_CLASS] |= 8  * lpObj->ChangeUP3rd & 0x08;
-		
+	lpObj->CharSet[CS_CLASS] = CS_SET_CLASS(lpObj->Class);
+	lpObj->CharSet[CS_CLASS] |= CS_SET_CHANGEUP(lpObj->ChangeUP);
+	lpObj->CharSet[CS_CLASS] |= CS_SET_3RD_CHANGEUP(lpObj->ChangeUP3rd); //Season 2.5 Third Type of Character
+
 	// Set Class
 	if (lpObj->m_ActionNumber == 0x80)
 	{
-		lpObj->CharSet[CS_CLASS] |= 2U; 
+		lpObj->CharSet[CS_CLASS] |= 2;
 	}
 	else if (lpObj->m_ActionNumber == 0x81)
 	{
-		lpObj->CharSet[CS_CLASS] |= 3U;
+		lpObj->CharSet[CS_CLASS] |= 3;
 	}
 	else
 	{
@@ -12599,221 +12616,285 @@ void gObjMakePreviewCharSet(int aIndex)
 	}
 
 	// Set Righth HAnd Item
-	if (lpObj->pInventory[0].m_Type >= 0)
+	if (lpObj->pInventory[0].m_Type < ITEMGET(0, 0))
 	{
-		lpObj->CharSet[CS_WEAPON1_DATA] |= (lpObj->pInventory->m_Type & 0xF00) >> 4;
-		lpObj->CharSet[CS_WEAPON1_TYPE] = lpObj->pInventory->m_Type;
+		lpObj->CharSet[CS_WEAPON1_DATA] |= (BYTE)DBI_GET_TYPE(-1);
+		lpObj->CharSet[CS_WEAPON1_TYPE] = (BYTE)DBI_GET_INDEX(-1);
 	}
 	else
 	{
-		lpObj->CharSet[CS_WEAPON1_DATA] |= 0xF0U;
-		lpObj->CharSet[CS_WEAPON1_TYPE] = -1;
+		lpObj->CharSet[CS_WEAPON1_DATA] |= DBI_GET_TYPE(lpObj->pInventory[0].m_Type);
+		lpObj->CharSet[CS_WEAPON1_TYPE] = DBI_GET_INDEX(lpObj->pInventory[0].m_Type);
 	}
 
-	if (lpObj->pInventory[1].m_Type >= 0)
+	// Set Left Hand
+	if (lpObj->pInventory[1].m_Type < ITEMGET(0, 0))
 	{
-		lpObj->CharSet[13] |= (lpObj->pInventory[1].m_Type & 0xF00) >> 4;
-  lpObj->CharSet[2] = lpObj->pInventory[1].m_Type;
+		lpObj->CharSet[CS_WEAPON2_DATA] |= (BYTE)DBI_GET_TYPE(-1);
+		lpObj->CharSet[CS_WEAPON2_TYPE] = (BYTE)DBI_GET_INDEX(-1);
 	}
 	else
 	{
-		lpObj->CharSet[13] |= 0xF0u;
-  lpObj->CharSet[2] = -1;
+		lpObj->CharSet[CS_WEAPON2_DATA] |= DBI_GET_TYPE(lpObj->pInventory[1].m_Type);
+		lpObj->CharSet[CS_WEAPON2_TYPE] = DBI_GET_INDEX(lpObj->pInventory[1].m_Type);
 	}
-    if ( lpObj->pInventory[2].m_Type >= 0 )
-    {
-      lpObj->CharSet[13] |= (lpObj->pInventory[2].m_Type & 0x1E0) >> 5;
-      lpObj->CharSet[9] |= 8 * (lpObj->pInventory[2].m_Type & 0x10);
-      lpObj->CharSet[3] |= 16 * (lpObj->pInventory[2].m_Type & 0xF);
-    }
-    else
-    {
-      lpObj->CharSet[13] |= 0xFu;
-      lpObj->CharSet[9] |= 0x80u;
-      lpObj->CharSet[3] |= 0xF0u;
-    }
-    if ( lpObj->pInventory[3].m_Type >= 0 )
-    {
-      lpObj->CharSet[14] |= (lpObj->pInventory[3].m_Type & 0x1E0) >> 1;
-      lpObj->CharSet[9] |= 4 * (lpObj->pInventory[3].m_Type & 0x10);
-      lpObj->CharSet[3] |= lpObj->pInventory[3].m_Type & 0xF;
-    }
-    else
-    {
-      lpObj->CharSet[14] |= 0xF0u;
-      lpObj->CharSet[9] |= 0x40u;
-      lpObj->CharSet[3] |= 0xFu;
-    }
-    if ( lpObj->pInventory[4].m_Type >= 0 )
-    {
-      lpObj->CharSet[14] |= (lpObj->pInventory[4].m_Type & 0x1E0) >> 5;
-      lpObj->CharSet[9] |= 2 * (lpObj->pInventory[4].m_Type & 0x10);
-      lpObj->CharSet[4] |= 16 * (lpObj->pInventory[4].m_Type & 0xF);
-    }
-    else
-    {
-      lpObj->CharSet[14] |= 0xFu;
-      lpObj->CharSet[9] |= 0x20u;
-      lpObj->CharSet[4] |= 0xF0u;
-    }
-    if ( lpObj->pInventory[5].m_Type >= 0 )
-    {
-      lpObj->CharSet[15] |= (lpObj->pInventory[5].m_Type & 0x1E0) >> 1;
-      lpObj->CharSet[9] |= lpObj->pInventory[5].m_Type & 0x10;
-      lpObj->CharSet[4] |= lpObj->pInventory[5].m_Type & 0xF;
-    }
-    else
-    {
-      lpObj->CharSet[15] |= 0xF0u;
-      lpObj->CharSet[9] |= 0x10u;
-      lpObj->CharSet[4] |= 0xFu;
-    }
-    if ( lpObj->pInventory[6].m_Type >= 0 )
-    {
-      lpObj->CharSet[15] |= (lpObj->pInventory[6].m_Type & 0x1E0) >> 5;
-      v1 = lpObj->pInventory[6].m_Type;
-      lpObj->CharSet[9] |= (v1 & 0x10) >> 1;
-      lpObj->CharSet[5] |= 16 * (lpObj->pInventory[6].m_Type & 0xF);
-    }
-    else
-    {
-      lpObj->CharSet[15] |= 0xFu;
-      lpObj->CharSet[9] |= 8u;
-      lpObj->CharSet[5] |= 0xF0u;
-    }
-    if ( lpObj->pInventory[7].m_Type >= 0 )
-      v12 = 4 * (lpObj->pInventory[7].m_Type & 3);
-    else
-      v12 = 12;
-    if ( lpObj->pInventory[8].m_Type == 6660 )
-    {
-      v13 = v12 | 3;
-    }
-    else
-    {
-      if ( lpObj->pInventory[8].m_Type >= 0 )
-        v13 = lpObj->pInventory[8].m_Type & 3 | v12;
-      else
-        v13 = v12 | 3;
-    }
-    lpObj->CharSet[5] |= v13;
-    v2 = (unsigned __int8)LevelSmallConvert(aIndex, 0);
-    v3 = 8 * (unsigned __int8)LevelSmallConvert(aIndex, 1) | v2;
-    v4 = ((unsigned __int8)LevelSmallConvert(aIndex, 2) << 6) | v3;
-    v5 = ((unsigned __int8)LevelSmallConvert(aIndex, 3) << 9) | v4;
-    v6 = ((unsigned __int8)LevelSmallConvert(aIndex, 4) << 12) | v5;
-    v7 = ((unsigned __int8)LevelSmallConvert(aIndex, 5) << 15) | v6;
-    v8 = ((unsigned __int8)LevelSmallConvert(aIndex, 6) << 18) | v7;
-    lpObj->CharSet[6] = v8 >> 16;
-    lpObj->CharSet[7] = BYTE(v8);
-    lpObj->CharSet[8] = v8;
-    if ( lpObj->pInventory[7].m_Type >= 6147 && lpObj->pInventory[7].m_Type <= 6150 || lpObj->pInventory[7].m_Type == 6686 )
-    {
-       switch (lpObj->pInventory[7].m_Type)
-      {
-        case 0x1A1E:
-          lpObj->CharSet[9] |= 5u;
-          break;
-        case 0x1829:
-          lpObj->CharSet[9] |= 6u;
-          break;
-        case 0x182A:
-          lpObj->CharSet[9] |= 7u;
-          break;
-        default:
-          lpObj->CharSet[9] |= (lpObj->pInventory[7].m_Type - 2) & 7;
-          break;
-      }
-				}
-    lpObj->CharSet[10] = 0;
 
+	// Set Helmet
+	if (lpObj->pInventory[2].m_Type < ITEMGET(0, 0))
+	{
+		lpObj->CharSet[13] |= CS_SET_HELMET1(-1);
+		lpObj->CharSet[9] |= CS_SET_HELMET2(-1);
+		lpObj->CharSet[3] |= CS_SET_HELMET3(-1);
+	}
+	else
+	{
+		lpObj->CharSet[13] |= CS_SET_HELMET1(lpObj->pInventory[2].m_Type);
+		lpObj->CharSet[9] |= CS_SET_HELMET2(lpObj->pInventory[2].m_Type);
+		lpObj->CharSet[3] |= CS_SET_HELMET3(lpObj->pInventory[2].m_Type);
+	}
 
-				if (lpObj->pInventory[2].IsExtItem() != FALSE)
-      lpObj->CharSet[10] = -128;
-    if (lpObj->pInventory[3].IsExtItem() != FALSE)
-      lpObj->CharSet[10] |= 0x40u;
-    if (lpObj->pInventory[4].IsExtItem() != FALSE)
-      lpObj->CharSet[10] |= 0x20u;
-    if (lpObj->pInventory[5].IsExtItem() != FALSE)
-      lpObj->CharSet[10] |= 0x10u;
-    if (lpObj->pInventory[6].IsExtItem() != FALSE)
-      lpObj->CharSet[10] |= 8u;
-				if (lpObj->pInventory[0].IsExtItem() != FALSE)
-      lpObj->CharSet[10] |= 4u;
-    if (lpObj->pInventory[1].IsExtItem() != FALSE)
-      lpObj->CharSet[10] |= 2u;
-    lpObj->CharSet[11] = 0;
-    if (lpObj->pInventory[2].IsSetItem() != FALSE)
-      lpObj->CharSet[11] = -128;
-    if (lpObj->pInventory[3].IsSetItem() != FALSE)
-      lpObj->CharSet[11] |= 0x40u;
-    if (lpObj->pInventory[4].IsSetItem() != FALSE)
-      lpObj->CharSet[11] |= 0x20u;
-    if (lpObj->pInventory[5].IsSetItem() != FALSE)
-      lpObj->CharSet[11] |= 0x10u;
-    if (lpObj->pInventory[6].IsSetItem() != FALSE)
-      lpObj->CharSet[11] |= 8u;
-    if (lpObj->pInventory[0].IsSetItem() != FALSE)
-      lpObj->CharSet[11] |= 4u;
-    if (lpObj->pInventory[1].IsSetItem() != FALSE)
-      lpObj->CharSet[11] |= 2u;
-    gObjCalCharacter(aIndex);
-    if ( lpObj->IsFullSetItem )
-      lpObj->CharSet[11] |= 1u;
-    v9 = lpObj->pInventory[8].m_Type;
-    if ( v9 & 3 )
-    {
-      if ( lpObj->pInventory[8].m_Type > 0 )
-        lpObj->CharSet[10] |= 1u;
-    }
-    if ( lpObj->pInventory[8].m_Type == 6660 )
-      lpObj->CharSet[12] |= 1u;
-			
-				unsigned int _real3;
+	// Set Armor
+	if (lpObj->pInventory[3].m_Type < ITEMGET(0, 0))
+	{
+		lpObj->CharSet[14] |= CS_SET_ARMOR1(-1);
+		lpObj->CharSet[9] |= CS_SET_ARMOR2(-1);
+		lpObj->CharSet[3] |= CS_SET_ARMOR3(-1);
+	}
+	else
+	{
+		lpObj->CharSet[14] |= CS_SET_ARMOR1(lpObj->pInventory[3].m_Type);
+		lpObj->CharSet[9] |= CS_SET_ARMOR2(lpObj->pInventory[3].m_Type);
+		lpObj->CharSet[3] |= CS_SET_ARMOR3(lpObj->pInventory[3].m_Type);
+	}
 
-				if (lpObj->pInventory->IsSetItem() == 1 && *(WORD*)(*(DWORD*)(lpObj + 3650) + 1926) == 6676 && (int)(lpObj + 1928) == 3
-      //&& *(float*)(*(DWORD*)(lpObj + 3650) + 1956) > (double)*(float *)&_real3
-      || lpObj->pInventory->IsSetItem() == 1
-      && *(WORD*)(*(DWORD*)(lpObj + 3650) + 2118) == 6676
-      && *(WORD *)(*(DWORD*)(lpObj + 3650) + 2120) == 3)
-      //&& *(float*)(*(DWORD *)(lpObj + 3650) + 2148) > (double)*(float *)&_real3)
-						lpObj->CharSet[12] |= 2u;
+	// Set Pants
+	if (lpObj->pInventory[4].m_Type < ITEMGET(0, 0))
+	{
+		lpObj->CharSet[14] |= CS_SET_PANTS1(-1);
+		lpObj->CharSet[9] |= CS_SET_PANTS2(-1);
+		lpObj->CharSet[4] |= CS_SET_PANTS3(-1);
+	}
+	else
+	{
+		lpObj->CharSet[14] |= CS_SET_PANTS1(lpObj->pInventory[4].m_Type);
+		lpObj->CharSet[9] |= CS_SET_PANTS2(lpObj->pInventory[4].m_Type);
+		lpObj->CharSet[4] |= CS_SET_PANTS3(lpObj->pInventory[4].m_Type);
+	}
 
-    if (lpObj->pInventory[8].m_Type == 6693)
-    {
-      lpObj->CharSet[10] &= 0xFEu;
-      lpObj->CharSet[12] &= 0xFEu;
-      lpObj->CharSet[12] |= 4u;
-      lpObj->CharSet[16] = 0;
-      lpObj->CharSet[17] = 0;
-						if (lpObj->pInventory[8].IsFenrirIncLastAttackDamage() != FALSE)
-        lpObj->CharSet[16] |= 1u;
-      if (lpObj->pInventory[8].IsFenrirDecLastAttackDamage() != FALSE)
-        lpObj->CharSet[16] |= 2u;
-						
-						if ((BYTE)lpObj->VpPlayer >= 6180 &&
-							   (BYTE)lpObj->VpPlayer <= 6184 ||
-										(BYTE)lpObj->VpPlayer == 6187)
-						{
-							lpObj->CharSet[5] |= 0xCu;
-							lpObj->CharSet[16] |= 4 * (((BYTE)lpObj->VpPlayer - 35) & 7);
-							lpObj->CharSet[16] |= 0x18u;
-						}
+	// Set Gloves
+	if (lpObj->pInventory[5].m_Type < ITEMGET(0, 0))
+	{
+		lpObj->CharSet[15] |= CS_SET_GLOVES1(-1);
+		lpObj->CharSet[9] |= CS_SET_GLOVES2(-1);
+		lpObj->CharSet[4] |= CS_SET_GLOVES3(-1);
+	}
+	else
+	{
+		lpObj->CharSet[15] |= CS_SET_GLOVES1(lpObj->pInventory[5].m_Type);
+		lpObj->CharSet[9] |= CS_SET_GLOVES2(lpObj->pInventory[5].m_Type);
+		lpObj->CharSet[4] |= CS_SET_GLOVES3(lpObj->pInventory[5].m_Type);
+	}
 
-						BYTE v21;
+	// Set Boots
+	if (lpObj->pInventory[6].m_Type < ITEMGET(0, 0))
+	{
+		lpObj->CharSet[15] |= CS_SET_BOOTS1(-1);
+		lpObj->CharSet[9] |= CS_SET_BOOTS2(-1);
+		lpObj->CharSet[5] |= CS_SET_BOOTS3(-1);
+	}
+	else
+	{
+		lpObj->CharSet[15] |= CS_SET_BOOTS1(lpObj->pInventory[6].m_Type);
+		lpObj->CharSet[9] |= CS_SET_BOOTS2(lpObj->pInventory[6].m_Type);
+		lpObj->CharSet[5] |= CS_SET_BOOTS3(lpObj->pInventory[6].m_Type);
+	}
 
-						if (lpObj->pInventory[8].m_Type == 6720)
-						{
-							v21 = 32;
-						}
-						else if (lpObj->pInventory[8].m_Type == 6721)
-						{
-							v21 = 64;
-						}
-						lpObj->CharSet[16] |= v21;
-    }
+	index = 0;
+
+	// Set Part onf Wings
+	if (lpObj->pInventory[7].m_Type < ITEMGET(0, 0))
+	{
+		index |= CS_SET_WING1(-1);
+	}
+	else
+	{
+		index |= CS_SET_WING1(lpObj->pInventory[7].m_Type);
+	}
+
+	if (lpObj->pInventory[8].m_Type != ITEMGET(13, 4))
+	{
+		if (lpObj->pInventory[8].m_Type < ITEMGET(0, 0))
+		{
+			index |= CS_SET_HELPER(-1);
 		}
-		
+		else if (lpObj->pInventory[8].m_Type != ITEMGET(13, 67))//Season 4.5 Addon
+		{
+			index |= CS_SET_HELPER(lpObj->pInventory[8].m_Type);
+		}
+	}
+	else
+	{
+		index |= CS_SET_HELPER(-1);
+	}
+
+	lpObj->CharSet[5] |= index;
+
+	int levelindex = CS_SET_SMALLLEVEL_RH(LevelSmallConvert(aIndex, 0));
+	levelindex |= CS_SET_SMALLLEVEL_LH(LevelSmallConvert(aIndex, 1));
+	levelindex |= CS_SET_SMALLLEVEL_HELMET(LevelSmallConvert(aIndex, 2));
+	levelindex |= CS_SET_SMALLLEVEL_ARMOR(LevelSmallConvert(aIndex, 3));
+	levelindex |= CS_SET_SMALLLEVEL_PANTS(LevelSmallConvert(aIndex, 4));
+	levelindex |= CS_SET_SMALLLEVEL_GLOVES(LevelSmallConvert(aIndex, 5));
+	levelindex |= CS_SET_SMALLLEVEL_BOOTS(LevelSmallConvert(aIndex, 6));
+
+	lpObj->CharSet[6] = CS_SET_SMALLLEVEL1(levelindex);
+	lpObj->CharSet[7] = CS_SET_SMALLLEVEL2(levelindex);
+	lpObj->CharSet[8] = CS_SET_SMALLLEVEL3(levelindex);
+
+	if ((lpObj->pInventory[7].m_Type >= ITEMGET(12, 3) && lpObj->pInventory[7].m_Type <= ITEMGET(12, 6)) ||
+		lpObj->pInventory[7].m_Type == ITEMGET(13, 30) ||
+		lpObj->pInventory[7].m_Type == ITEMGET(12, 41) || //Season3 add-on
+		lpObj->pInventory[7].m_Type == ITEMGET(12, 42))
+	{
+		lpObj->CharSet[5] |= CS_SET_WING1(-1);
+
+		if (lpObj->pInventory[7].m_Type == ITEMGET(13, 30))
+		{
+			lpObj->CharSet[9] |= 5;
+		}
+		else if (lpObj->pInventory[7].m_Type == ITEMGET(12, 41)) //Season3 add-on
+		{
+			lpObj->CharSet[9] |= 6;
+		}
+		else if (lpObj->pInventory[7].m_Type == ITEMGET(12, 42)) //Season3 add-on
+		{
+			lpObj->CharSet[9] |= 7;
+		}
+		else
+		{
+			lpObj->CharSet[9] |= (lpObj->pInventory[7].m_Type - 2) & 0x07;
+		}
+	}
+
+	// Set Excellent Items
+	lpObj->CharSet[10] = 0;
+
+	if (lpObj->pInventory[2].IsExtItem() != FALSE)
+		lpObj->CharSet[10] = (char)0x80;
+
+	if (lpObj->pInventory[3].IsExtItem() != FALSE)
+		lpObj->CharSet[10] |= 0x40;
+
+	if (lpObj->pInventory[4].IsExtItem() != FALSE)
+		lpObj->CharSet[10] |= 0x20;
+
+	if (lpObj->pInventory[5].IsExtItem() != FALSE)
+		lpObj->CharSet[10] |= 0x10;
+
+	if (lpObj->pInventory[6].IsExtItem() != FALSE)
+		lpObj->CharSet[10] |= 0x8;
+
+	if (lpObj->pInventory[0].IsExtItem() != FALSE)
+		lpObj->CharSet[10] |= 0x04;
+
+	if (lpObj->pInventory[1].IsExtItem() != FALSE)
+		lpObj->CharSet[10] |= 0x02;
+
+	// Set Set Items
+	lpObj->CharSet[11] = 0;
+
+	if (lpObj->pInventory[2].IsSetItem() != FALSE)
+		lpObj->CharSet[11] = (char)0x80;
+
+	if (lpObj->pInventory[3].IsSetItem() != FALSE)
+		lpObj->CharSet[11] |= 0x40;
+
+	if (lpObj->pInventory[4].IsSetItem() != FALSE)
+		lpObj->CharSet[11] |= 0x20;
+
+	if (lpObj->pInventory[5].IsSetItem() != FALSE)
+		lpObj->CharSet[11] |= 0x10;
+
+	if (lpObj->pInventory[6].IsSetItem() != FALSE)
+		lpObj->CharSet[11] |= 0x8;
+
+	if (lpObj->pInventory[0].IsSetItem() != FALSE)
+		lpObj->CharSet[11] |= 0x04;
+
+	if (lpObj->pInventory[1].IsSetItem() != FALSE)
+		lpObj->CharSet[11] |= 0x02;
+
+	gObjCalCharacter(aIndex);
+
+	if (lpObj->IsFullSetItem != false)
+		lpObj->CharSet[11] |= 0x01;
+
+	if ((lpObj->pInventory[8].m_Type & 0x03) != 0)
+	{
+		if (lpObj->pInventory[8].m_Type > 0)
+		{
+			lpObj->CharSet[10] |= 0x01;
+		}
+	}
+
+	if (lpObj->pInventory[8].m_Type == ITEMGET(13, 4))	// Dark Horse
+	{
+		lpObj->CharSet[12] |= 0x01;
+	}
+
+	if (lpObj->pInventory[8].m_Type == ITEMGET(13, 37))	// Fenrir
+	{
+		lpObj->CharSet[10] &= 0xFE;
+		lpObj->CharSet[12] &= 0xFE;
+		lpObj->CharSet[12] |= 0x04;
+		lpObj->CharSet[16] = 0;
+		lpObj->CharSet[17] = 0;
+
+		if (lpObj->pInventory[8].IsFenrirIncLastAttackDamage() != FALSE)
+		{
+			lpObj->CharSet[16] |= 0x01;
+		}
+
+		if (lpObj->pInventory[8].IsFenrirDecLastAttackDamage() != FALSE)
+		{
+			lpObj->CharSet[16] |= 0x02;
+		}
+
+		if (lpObj->pInventory[8].IsFenrirSpecial() != FALSE) // Season 2.5 Golden Fenrir Display
+		{
+			lpObj->CharSet[17] |= 0x01;
+		}
+	}
+
+	if ((lpObj->pInventory[7].m_Type >= ITEMGET(12, 36) && lpObj->pInventory[7].m_Type <= ITEMGET(12, 40)) ) // Season 2.5 Third Wings Display //Season3 add-on
+	{
+		lpObj->CharSet[5] |= 0x0C;
+		lpObj->CharSet[16] |= (((lpObj->pInventory[7].m_Type - 35) & 0x07) << 0x02);
+
+		if (lpObj->pInventory[7].m_Type == ITEMGET(12, 43))
+		{
+			lpObj->CharSet[16] |= 0x18;
+		}
+	}
+
+	BYTE btNewValue = 0;
+
+	switch (lpObj->pInventory[8].m_Type) //Season 3.5 CashShop Pet Display
+	{
+	case ITEMGET(13, 64):
+		btNewValue = 0x20;
+		break;
+	case ITEMGET(13, 65):
+		btNewValue = 0x40;
+		break;
+	case ITEMGET(13, 67): // Season 4.5 addon
+		btNewValue = 0x80;
+		break;
+	}
+
+	lpObj->CharSet[16] |= btNewValue;
+}
+
 
 void gObjViewportPaint(HWND hWnd, short aIndex)
 {
@@ -13000,8 +13081,8 @@ void gObjViewportPaint(HWND hWnd, short aIndex)
 
 	gObjTotalUser = totalplayer;
 
-	wsprintf(szTemp, "COUNT:%d  TotalPlayer : %d  Player(%d):%d VpCount:%d(%d/%d) : item count:%d max:%d",
-		count, totalplayer, aIndex, playerc, gObj[aIndex].VPCount, count3, count2, gItemLoop, gServerMaxUser);
+	wsprintf(szTemp, "Monsters: [%d] Players: [%d/%d]  Player(%d):%d VpCount:%d(%d/%d) : item count:%d ",
+		count, totalplayer, gServerMaxUser, aIndex, playerc, gObj[aIndex].VPCount, count3, count2, gItemLoop );
 
 	if ( gXMasEvent )
 		strcat(szTemp, ":StarOfXMas");
@@ -13015,7 +13096,7 @@ void gObjViewportPaint(HWND hWnd, short aIndex)
 	if ( gMedalEvent )
 		strcat(szTemp, ":MedalEvent");
 
-	TextOut(hdc, 200, 0, szTemp, strlen(szTemp));
+	TextOut(hdc, 150, 0, szTemp, strlen(szTemp));
 	ReleaseDC(hWnd, hdc);
 }
 		
@@ -15290,6 +15371,11 @@ void gObjViewportListProtocolCreate(LPOBJ lpObj)
 				pViewportCreateChange.ViewSkillState = 0;
 			}
 
+			//Season 2.5 add-on
+			lpObj->CharSet[0] &= 0xF8;
+			lpObj->CharSet[0] |= lpObj->m_ViewState & 0x07;
+
+
 			memcpy(pViewportCreateChange.Id,lpObj->Name,sizeof(pViewportCreateChange.Id));
 			memcpy(&sendBuf[lOfs],&pViewportCreateChange,sizeof(pViewportCreateChange));
 
@@ -15308,7 +15394,8 @@ void gObjViewportListProtocolCreate(LPOBJ lpObj)
 			pViewportCreate.NumberH = SET_NUMBERH(lpObj->m_Index);
 			pViewportCreate.NumberL = SET_NUMBERL(lpObj->m_Index);
 
-			//lpObj->CharSet[0] &= 0xF0;
+			lpObj->CharSet[0] &= 0xF8; //Season 2.5 changed
+
 
 			if(lpObj->m_State == 1 && lpObj->Teleport==0)
 			{
@@ -15317,7 +15404,7 @@ void gObjViewportListProtocolCreate(LPOBJ lpObj)
 
 			pViewportCreate.ViewSkillState = lpObj->m_ViewSkillState;
 
-//			lpObj->CharSet[0] |= lpObj->m_ViewState & 0x0F;
+	     	lpObj->CharSet[0] |= lpObj->m_ViewState & 0x07; //Season 2.5 changed
 
 			pViewportCreate.X = lpObj->X;
 			pViewportCreate.Y = lpObj->Y;
@@ -16985,7 +17072,9 @@ BOOL gObjMoveGate(int aIndex, int gt)
 			|| lpObj->pInventory[11].m_Type == ITEMGET(13,10)
 			|| lpObj->pInventory[10].m_Type == ITEMGET(13,10)
 			|| lpObj->pInventory[10].m_Type == ITEMGET(13,39)
-			|| lpObj->pInventory[11].m_Type == ITEMGET(13,39))
+			|| lpObj->pInventory[11].m_Type == ITEMGET(13,39)
+			|| lpObj->pInventory[11].m_Type == ITEMGET(13, 41) //Season 2.5 add-on
+			|| lpObj->pInventory[10].m_Type == ITEMGET(13, 41))
 		{
 			GCServerMsgStringSend(lMsg.Get(1604),lpObj->m_Index,1);
 
@@ -20606,7 +20695,7 @@ void MakeRewardSetItem(int aIndex, BYTE cDropX, BYTE cDropY, int iRewardType, in
 
 	if(iRewardType == 1)
 	{
-		LogAddTD("[¡Ú¡ÙReward][KUNDUN] [%s][%s] Set Item itemnum:[%d] skill:[%d] luck:[%d] option:[%d] SetOption:[%d]",
+		LogAddTD("[Ë‡ÃšË‡Å®Reward][KUNDUN] [%s][%s] Set Item itemnum:[%d] skill:[%d] luck:[%d] option:[%d] SetOption:[%d]",
 			gObj[aIndex].AccountID,gObj[aIndex].Name,itemnum,Option1,Option2,Option3,SetOption);
 	}
 	else

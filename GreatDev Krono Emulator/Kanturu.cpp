@@ -551,7 +551,8 @@ int CKanturu::CheckEnterKanturu(int iUserIndex)
 		if ( (gObj[iUserIndex].pInventory[7].m_Type < ITEMGET(12,0) || gObj[iUserIndex].pInventory[7].m_Type > ITEMGET(12,6) && gObj[iUserIndex].pInventory[7].m_Type < ITEMGET(12,36)) &&
 			 gObj[iUserIndex].pInventory[7].m_Type != ITEMGET(13,30) &&
 			 gObj[iUserIndex].pInventory[8].m_Type != ITEMGET(13,3)  &&
-			 gObj[iUserIndex].pInventory[8].m_Type != ITEMGET(13,37) )
+			 gObj[iUserIndex].pInventory[8].m_Type != ITEMGET(13,37)  &&
+			 (gObj[iUserIndex].pInventory[7].m_Type < ITEMGET(12, 36) || gObj[iUserIndex].pInventory[7].m_Type > ITEMGET(12, 40)))
 		{
 			LogAddTD("[ KANTURU ][ Entrance Fail ] Wing Item is not exist [%s][%s] State(%d)-(%d)",
 				gObj[iUserIndex].AccountID, gObj[iUserIndex].Name,

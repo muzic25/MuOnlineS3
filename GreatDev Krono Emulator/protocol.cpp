@@ -1,7 +1,6 @@
 #include "StdAfx.h"
 #include "protocol.h"
 #include "IllusionTemple.h"
-#include "ChatProtocol.h"
 
 int ltesttime;
 int logincounttest;
@@ -146,7 +145,7 @@ void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOO
 		{
 		case CHAT_PROC: //0x00:
 				tempindex = aIndex;
-				Chat.ChatProtocol((PMSG_CHATDATA *)aRecv, aIndex);
+				PChatProc((PMSG_CHATDATA *)aRecv, aIndex);
 				break;
 		case CHAT_RECV: //0x01:
 				CGChatRecv((PMSG_CHATDATA_NUMBER *)aRecv, aIndex);
@@ -1041,12 +1040,259 @@ struct CHAT_LOG_DATA
 };
 
 
-/*
 void PChatProc(PMSG_CHATDATA * lpChat, short aIndex)
 {
-	
-}	*/						
-			
+	int n;
+	LPOBJ lpObj = &gObj[aIndex];
+	int number;
+	int slen = strlen(lpChat->chatmsg);
+
+	if (slen < 1)
+		return;
+
+	if (slen > MAX_CHAT_LEN - 1)
+	{
+		LogAddTD("[Anti-HACK][PChatProc][%s][%s] Chat Message Len : %d", lpObj->AccountID, lpObj->Name, slen);
+		return;
+	}
+
+	char szId[MAX_ACCOUNT_LEN + 1];
+	szId[MAX_ACCOUNT_LEN] = 0;
+	CHAT_LOG_DATA pChatMsg;
+
+	memcpy(szId, gObj[aIndex].Name, MAX_ACCOUNT_LEN);
+	memcpy(lpChat->chatid, szId, MAX_ACCOUNT_LEN);
+	int szTargetNameCount = 0;
+
+	if (gWriteChatLog)
+	{
+		pChatMsg.h.c = 0xC1;
+		pChatMsg.h.headcode = 0x02;
+		memcpy(pChatMsg.AccountID, gObj[aIndex].AccountID, MAX_ACCOUNT_LEN);
+		memcpy(pChatMsg.Name, gObj[aIndex].Name, MAX_ACCOUNT_LEN);
+		pChatMsg.AccountID[MAX_ACCOUNT_LEN] = 0;
+		pChatMsg.Name[MAX_ACCOUNT_LEN] = 0;
+		pChatMsg.wServer = gGameServerCode;
+		pChatMsg.btType = 0xFF;
+	}
+
+	switch (lpChat->chatmsg[0])
+	{
+	case '!':	// Global Announcement
+		if (slen > 2)
+		{
+			if (lpObj->Authority & 32) //season4 changed
+			{
+				DataSend(aIndex, (LPBYTE)lpChat, lpChat->h.size);
+				AllSendServerMsg(&lpChat->chatmsg[1]);
+
+				LogAddTD(lMsg.Get(MSGGET(1, 215)), gObj[aIndex].AccountID, gObj[aIndex].Name, &lpChat->chatmsg[1]);
+
+				if (gWriteChatLog)
+				{
+					memcpy(pChatMsg.szChatMsg, &lpChat->chatmsg[1], MAX_CHAT_LEN - 1);
+					pChatMsg.szChatMsg[MAX_CHAT_LEN] = 0;
+					pChatMsg.btType = 0x03;
+				}
+				return;
+			}
+		}
+		break;
+	case '/':	// Command
+		if (slen > 2)
+		{
+
+			if ((GetTickCount() - lpObj->MySelfDefenseTime) < 60000) //season 2.5 add-on
+			{
+				GCServerMsgStringSend(lMsg.Get(1133), lpObj->m_Index, 1);
+				return;
+			}
+
+			cManager.ManagementProc(lpObj, lpChat->chatmsg, aIndex);
+			return;
+		}
+		break;
+	}
+
+	if ((lpObj->Penalty & 2) == 2)
+		return;
+
+	// Party Message
+	if (lpChat->chatmsg[0] == '~' || lpChat->chatmsg[0] == ']')
+	{
+		if (lpObj->PartyNumber >= 0)
+		{
+			int partycount = gParty.GetPartyCount(lpObj->PartyNumber);
+
+			if (partycount >= 0)
+			{
+				if (gWriteChatLog)
+				{
+					memcpy(pChatMsg.szChatMsg, &lpChat->chatmsg[1], MAX_CHAT_LEN - 1);
+					pChatMsg.szChatMsg[MAX_CHAT_LEN] = 0;
+					pChatMsg.btType = 0x01;
+				}
+
+				for (n = 0; n<MAX_USER_IN_PARTY; n++)
+				{
+					number = gParty.m_PartyS[lpObj->PartyNumber].Number[n];
+
+					if (number >= 0)
+					{
+						DataSend(number, (LPBYTE)lpChat, lpChat->h.size);
+
+						if (gWriteChatLog)
+						{
+							strcpy(pChatMsg.szTargetName[szTargetNameCount], gObj[number].Name);
+							szTargetNameCount++;
+						}
+					}
+				}
+			}
+		}
+	}
+	// Guild
+	else if (lpChat->chatmsg[0] == '@')
+	{
+		if (lpObj->GuildNumber > 0)
+		{
+			// Notice
+			if (lpChat->chatmsg[1] == '>')
+			{
+				if (lpObj->Name[0] == lpObj->lpGuild->Names[0][0])
+				{
+					if (!strcmp(lpObj->Name, lpObj->lpGuild->Names[0]))
+					{
+						GDGuildNoticeSave(lpObj->lpGuild->Name, &lpChat->chatmsg[2]);
+						LogAdd(lMsg.Get(MSGGET(1, 216)), lpObj->lpGuild->Name, lpChat->chatmsg);
+
+						if (gWriteChatLog)
+						{
+							memcpy(pChatMsg.szChatMsg, &lpChat->chatmsg[2], MAX_CHAT_LEN - 2);
+							pChatMsg.szChatMsg[MAX_CHAT_LEN] = 0;
+							pChatMsg.btType = 0x04;
+						}
+					}
+				}
+			}
+			// Aliances
+			else if (lpChat->chatmsg[1] == '@' && lpObj->lpGuild->iGuildUnion)
+			{
+				int iGuildCount = 0;
+				int iGuildList[MAX_UNION_GUILD] = { 0 };
+
+				if (UnionManager.GetGuildUnionMemberList(lpObj->lpGuild->iGuildUnion, iGuildCount, iGuildList) == TRUE)
+				{
+					for (int i = 0; i<iGuildCount; i++)
+					{
+						_GUILD_INFO_STRUCT *lpGuildInfo = Guild.SearchGuild_Number(iGuildList[i]);
+
+						if (!lpGuildInfo)
+							continue;
+
+						for (n = 0; n<MAX_USER_GUILD; n++)
+						{
+							if (lpGuildInfo->Use[n])
+							{
+								number = lpGuildInfo->Index[n];
+
+								if (number >= 0)
+								{
+									if (lpGuildInfo->Names[n][0] == gObj[number].Name[0])
+									{
+										if (!strcmp(lpGuildInfo->Names[n], gObj[number].Name))
+										{
+											DataSend(number, (LPBYTE)lpChat, lpChat->h.size);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+				if (g_iServerGroupUnionChatting == TRUE)
+					GDUnionServerGroupChattingSend(lpObj->lpGuild->iGuildUnion, lpChat);
+			}
+			// Just Guild
+			else
+			{
+				int count = lpObj->lpGuild->Count;
+
+				if (count >= 0)
+				{
+					for (n = 0; n<MAX_USER_GUILD; n++)
+					{
+						if (lpObj->lpGuild->Use[n])
+						{
+							number = lpObj->lpGuild->Index[n];
+
+							if (number >= 0)
+							{
+								if (lpObj->lpGuild->Names[n][0] == gObj[number].Name[0])
+								{
+									if (!strcmp(lpObj->lpGuild->Names[n], gObj[number].Name))
+									{
+										DataSend(number, (LPBYTE)lpChat, lpChat->h.size);
+									}
+								}
+							}
+						}
+					}
+				}
+
+				if (g_iServerGroupGuildChatting == TRUE)
+				{
+					if (lpObj->lpGuild->Count > 1)
+					{
+						GDGuildServerGroupChattingSend(lpObj->lpGuild->Number, lpChat);
+					}
+				}
+
+				if (gWriteChatLog)
+				{
+					memcpy(pChatMsg.szChatMsg, &lpChat->chatmsg[1], MAX_CHAT_LEN - 1);
+					pChatMsg.szChatMsg[MAX_CHAT_LEN] = 0;
+					pChatMsg.btType = 0x02;
+				}
+			}
+
+			if (gWriteChatLog)
+			{
+				strcpy(pChatMsg.szTargetName[szTargetNameCount], lpObj->GuildName);
+				szTargetNameCount++;
+			}
+		}
+	}
+	else
+	{
+
+		DataSend(aIndex, (LPBYTE)lpChat, lpChat->h.size);
+		MsgSendV2(lpObj, (LPBYTE)lpChat, lpChat->h.size);
+
+		if (gWriteChatLog)
+		{
+			memcpy(pChatMsg.szChatMsg, lpChat->chatmsg, MAX_CHAT_LEN);
+			pChatMsg.szChatMsg[MAX_CHAT_LEN] = 0;
+			pChatMsg.btType = 0x00;
+
+		}
+	}
+
+	if (gWriteChatLog)
+	{
+		if (pChatMsg.btType != 0xFF)
+		{
+			pChatMsg.btType |= szTargetNameCount << 4;
+			pChatMsg.h.size = sizeof(pChatMsg) - (5 - szTargetNameCount) - 1;
+
+			if (gWriteChatLog)
+			{
+				gSendHackLog.SendData((LPBYTE)&pChatMsg, pChatMsg.h.size);
+			}
+		}
+	}
+}
 
 
 void CGChatRecv(PMSG_CHATDATA_NUMBER * lpMsg, int aIndex)
@@ -8670,13 +8916,13 @@ void PMoveProc(PMSG_MOVE* lpMove, int aIndex)
 				}
 				break;
 			case 0x02:
-				if ( lpObj->Y > 17 && g_BloodCastle.CheckPlayStart(lpObj->MapNumber-MAP_INDEX_BLOODCASTLE1) == false)
+				if (lpObj->Y > 17 && g_BloodCastle.CheckPlayStart(lpObj->m_cBloodCastleIndex) == false)
 				{
 					gObjMoveGate(lpObj->m_Index, lpObj->MapNumber+0x37);
 					return;
 				}
 
-				if ( lpObj->TY > 15 && g_BloodCastle.CheckPlayStart(lpObj->MapNumber- MAP_INDEX_BLOODCASTLE1) == false )
+				if (lpObj->TY > 15 && g_BloodCastle.CheckPlayStart(lpObj->m_cBloodCastleIndex) == false)
 				{
 					lpObj->m_Rest = 1;
 					lpObj->PathCur = 0;
@@ -8721,7 +8967,7 @@ void PMoveProc(PMSG_MOVE* lpMove, int aIndex)
 				}
 				break;
 		}
-	}
+	}	
 
 	PHeadSetB((LPBYTE)&pMove, MOVE_PROTOCOL, sizeof(pMove));
 	pMove.NumberH = SET_NUMBERH(aIndex);
@@ -9009,7 +9255,7 @@ void GCDamageSend(int aIndex, int TargetIndex, int AttackDamage, int MSBFlag, in
 		DataSend(TargetIndex, (LPBYTE)&pResult, pResult.h.size);
 	}
 
-	if ( Chat.WatchTargetIndex == TargetIndex || Chat.WatchTargetIndex == aIndex )
+	if (cManager.WatchTargetIndex == TargetIndex || cManager.WatchTargetIndex == aIndex)
 	{
 		cManager.DataSend((LPBYTE)&pResult, pResult.h.size);
 	}

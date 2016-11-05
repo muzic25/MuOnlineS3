@@ -1789,6 +1789,7 @@ void ReadCommonServerInfo()
 	gMonsterHPAdjust = GetPrivateProfileInt("GameServerInfo","MonsterHPAdjust", 100, gDirPath.GetNewPath("commonserver.cfg"));
 
 	// COMMANDS Init ( /make / Create /trace etc...)
+	cManager.Init();
 
 	// Hack Log SERVER
 	GetPrivateProfileString("GameServerInfo", "HackLogServer", "10.1.2.69", gHackLogServerIp, 20, gDirPath.GetNewPath("commonserver.cfg"));

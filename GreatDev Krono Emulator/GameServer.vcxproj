@@ -156,7 +156,6 @@
     <ClCompile Include="ChaosBox.cpp" />
     <ClCompile Include="ChaosCastle.cpp" />
     <ClCompile Include="ChaosCastleSetItemDrop.cpp" />
-    <ClCompile Include="ChatProtocol.cpp" />
     <ClCompile Include="ChinaHackUserKick.cpp" />
     <ClCompile Include="classdef.cpp" />
     <ClCompile Include="CLoginCount.cpp" />
@@ -332,7 +331,6 @@
     <ClInclude Include="ChaosBox.h" />
     <ClInclude Include="ChaosCastle.h" />
     <ClInclude Include="ChaosCastleSetItemDrop.h" />
-    <ClInclude Include="ChatProtocol.h" />
     <ClInclude Include="ChinaHackUserKick.h" />
     <ClInclude Include="classdef.h" />
     <ClInclude Include="CLoginCount.h" />

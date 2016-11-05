@@ -13,6 +13,48 @@
 #include "user.h"
 
 
+class CGMCommand
+{
+
+public:
+
+
+	CGMCommand() // line : 119
+	{
+		this->Init();
+	}	// line : 122
+
+	void Init() // line : 125
+	{
+		for ( int n = 0; n<  MAX_GM_COMMAND; n++ )
+		{
+			this->nCmdCode[0] = -1;	// #error Change the Zero for n
+		}
+
+		this->count=0;
+	}	// line : 128
+
+	void Add(LPSTR command_str, int command_code) // line : 131
+	{
+		strcpy(this->szCmd[this->count], command_str);
+		this->nCmdCode[this->count]=command_code;
+
+		if ( this->count < MAX_GM_COMMAND-1 )
+		{
+			this->count++;
+		}
+	}	// line : 135
+
+
+public:
+	
+	char szCmd[MAX_GM_COMMAND][MAX_GMCOMMAND_LEN];	// 0
+	int nCmdCode[MAX_GM_COMMAND];	// 7D0
+	int count;	// 960
+};
+
+
+
 class CGMMng
 {
 
@@ -21,6 +63,7 @@ public:
 	CGMMng();
 	virtual ~CGMMng();
 
+	void Init();
 	int GetCmd(LPSTR szCmd);
 	int ManagementProc(LPOBJ lpObj, LPSTR szCmd, int aIndex);
 	LPSTR GetTokenString();
@@ -40,11 +83,14 @@ public:
 
 
 private:
-	// 4
+
+	CGMCommand cCommand;	// 4
 	char szManagerName[MAX_GAME_MASTER][11];	// 968
 	int ManagerIndex[MAX_GAME_MASTER];	// 9A0
 
 public:
+
+	int WatchTargetIndex;	// 9B4
 
 };
 

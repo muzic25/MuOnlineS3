@@ -960,6 +960,17 @@ void JGPGetCharList(unsigned char * lpRecv)
 					}
 				}
 
+				if ((TempInventory[7] >= 36 && TempInventory[7] <= 40) || TempInventory[7] == 43) //Season 2.5 Third Type of Wings
+				{
+					pCList.CharSet[5] |= 0x0C;
+					pCList.CharSet[16] |= (((TempInventory[7] - 35) & 0x07) << 0x02);
+
+					if (TempInventory[7] == 43)
+					{
+						pCList.CharSet[16] |= 0x18;
+					}
+				}
+
 				pCList.CharSet[10] = 0;
 
 				if ( (TempInventory[8] & 0x03) != 0 && TempInventory[8] != 0x1F )

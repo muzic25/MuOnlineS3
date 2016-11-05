@@ -57,9 +57,6 @@
     <Filter Include="Source Files\Logger">
       <UniqueIdentifier>{c0f4f456-14aa-4879-be31-eb140821b9dd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ChatProtocol">
-      <UniqueIdentifier>{cacdc0d3-8cf4-441f-a84d-2a5da32390b8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\GMSystem">
       <UniqueIdentifier>{ec880496-15b0-4b0f-a17b-18c85aef6723}</UniqueIdentifier>
     </Filter>
@@ -550,9 +547,6 @@
     </ClCompile>
     <ClCompile Include="QuestUtil.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ChatProtocol.cpp">
-      <Filter>Source Files\ChatProtocol</Filter>
     </ClCompile>
     <ClCompile Include="GmSystem.cpp">
       <Filter>Source Files\GMSystem</Filter>
@@ -1077,9 +1071,6 @@
     </ClInclude>
     <ClInclude Include="QuestUtil.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ChatProtocol.h">
-      <Filter>Source Files\ChatProtocol</Filter>
     </ClInclude>
     <ClInclude Include="GmSystem.h">
       <Filter>Source Files\GMSystem</Filter>
