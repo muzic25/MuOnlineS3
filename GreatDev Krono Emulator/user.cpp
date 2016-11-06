@@ -12478,6 +12478,7 @@ void gObjViewportPaint(HWND hWnd, short aIndex)
 	int count3 = 0;
 	int playerc = 0;
 	int totalplayer = 0;
+	int gamemasters = 0;
 
 	if ( !OBJMAX_RANGE(aIndex))
 		return;
@@ -12503,11 +12504,19 @@ void gObjViewportPaint(HWND hWnd, short aIndex)
 		if ( gObj[n].Type == OBJ_USER && gObj[n].Connected != PLAYER_EMPTY )
 		{
 			totalplayer++;
+
+			if ((gObj[n].Authority & 32) == 32)
+			{
+				gamemasters++;
+			}
+		
 		}
-		else if ( gObj[n].Connected != PLAYER_EMPTY )
+		else if (gObj[n].Connected != PLAYER_EMPTY)
 		{
 			count++;
 		}
+
+		
 	}				
 
 	if ( gCurPaintType == 1 )
@@ -12652,8 +12661,8 @@ void gObjViewportPaint(HWND hWnd, short aIndex)
 
 	gObjTotalUser = totalplayer;
 
-	wsprintf(szTemp, "Monsters: [%d] Players: [%d/%d]  Player(%d):%d VpCount:%d(%d/%d) : item count:%d ",
-		count, totalplayer, gServerMaxUser, aIndex, playerc, gObj[aIndex].VPCount, count3, count2, gItemLoop );
+	wsprintf(szTemp, "Monsters: [%d] Players: [%d/%d] GameMasters:[%d] Player(%d):%d VpCount:%d(%d/%d) : item count:%d ",
+		count, totalplayer, gServerMaxUser, gamemasters, aIndex, playerc, gObj[aIndex].VPCount, count3, count2, gItemLoop);
 
 	if (Configs.gXMasEvent)
 		strcat(szTemp, ":StarOfXMas");
@@ -12667,7 +12676,8 @@ void gObjViewportPaint(HWND hWnd, short aIndex)
 	if (Configs.gMedalEvent)
 		strcat(szTemp, ":MedalEvent");
 
-	TextOut(hdc, 150, 0, szTemp, strlen(szTemp));
+	//TextOut(hdc, 150, 0, szTemp, strlen(szTemp));
+	TextOut(hdc, GAMESERVER_WIDTH / 2 - 250, 0, szTemp, strlen(szTemp));
 	ReleaseDC(hWnd, hdc);
 }
 		

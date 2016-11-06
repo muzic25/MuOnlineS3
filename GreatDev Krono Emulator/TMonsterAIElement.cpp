@@ -184,7 +184,7 @@ TMonsterAIElement * TMonsterAIElement::FindAIElement(int iElementNumber)
 {
 	if ( iElementNumber < 0 || iElementNumber >= MAX_AI_ELEMENT )
 	{
-		LogAddTD("[Monster AI Element] FindAIElement() Error - (ElementNumber=%d) ", iElementNumber);
+		//LogAddTD("[Monster AI Element] FindAIElement() Error - (ElementNumber=%d) ", iElementNumber);
 		return NULL;
 	}
 
@@ -193,7 +193,7 @@ TMonsterAIElement * TMonsterAIElement::FindAIElement(int iElementNumber)
 		return &TMonsterAIElement::s_MonsterAIElementArray[iElementNumber];
 	}
 
-	LogAddTD("[Monster AI Element] FindAIElement() Error - (ElementNumber=%d) ", iElementNumber);
+	//LogAddTD("[Monster AI Element] FindAIElement() Error - (ElementNumber=%d) ", iElementNumber);
 	return NULL;
 }
 

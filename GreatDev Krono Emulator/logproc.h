@@ -1,7 +1,3 @@
-// ------------------------------
-// Decompiled by Deathway
-// Date : 2007-03-09
-// ------------------------------
 #ifndef LOGPROC_H
 #define LOGPROC_H
 
@@ -9,19 +5,15 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#define LOG_TEXT_LENGTH	120
-#define LOG_TEXT_LINE	30
+#define LOG_TEXT_LENGTH	180
+#define LOG_TEXT_LINE	37
 
-// Variables
-
- 
-extern void (*LogAdd)(char* szLog,...);
-extern void (*LogAddC)(BYTE, char*, ...);
-extern void (*LogAddTD)(char* szLog, ...);
-extern void (*LogAddHeadHex)(char*,char*, int);
-extern void (*LogTextPaint)(HWND);
-extern void (*LogAddL)(char * szLog, ...);
-
+extern void(*LogAdd)(char* szLog, ...);
+extern void(*LogAddC)(BYTE, char*, ...);
+extern void(*LogAddTD)(char* szLog, ...);
+extern void(*LogAddHeadHex)(char*, char*, int);
+extern void(*LogTextPaint)(HWND);
+extern void(*LogAddL)(char * szLog, ...);
 
 void LogInit(int logprint);
 void LogDataSet();
@@ -34,15 +26,13 @@ void LogAddFuncColor(BYTE Color, char* szLog, ...);
 void LogAddLocalFunc(char * szLog, ...);
 void LogAddLocalFuncVoid(char * szLog, ...);
 void LogAddTimeDateFunc(char* szLog, ...);
-void LogAddHeadHexFuncVoid(char* str,char* data,int len);
-void LogAddHeadHexFunc(int Type,char* data,int len);
-void LogAddStrHexFunc(char* str,char* data, int len);
+void LogAddHeadHexFuncVoid(char* str, char* data, int len);
+void LogAddHeadHexFunc(int Type, char* data, int len);
+void LogAddStrHexFunc(char* str, char* data, int len);
 void LogTextClear();
 void LogTextPaintProcVoid(HWND hWnd);
 void LogTextPaintProc(HWND hWnd);
-char* LogGetFileName();
+int LogGetFileName();
 void LogClose();
 void MsgBox(char *szlog, ...);
-
-
 #endif

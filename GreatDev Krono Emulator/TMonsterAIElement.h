@@ -14,7 +14,7 @@
 #include "TMonsterAIMovePath.h"
 #include "MapClass.h"
 
-#define MAX_AI_ELEMENT			100
+#define MAX_AI_ELEMENT			255
 #define MAX_AI_ELEMENT_CLASS	8
 
 

@@ -125,15 +125,15 @@ void CGMMng::Init()
 	this->cCommand.Add(lMsg.Get(MSGGET(13, 58)), 388);
 	this->cCommand.Add(lMsg.Get(MSGGET(13, 59)), 389);
 
-	this->cCommand.Add("/Fireworks", 217);	// Fire Cracker Effect	// #translation 
-
-	this->cCommand.Add("/post", 391);	// PostMsg
-	this->cCommand.Add("/pkclear", 392);	// ClearPkCommand
-	this->cCommand.Add("/addstr", 393);
-	this->cCommand.Add("/addagi", 394);
-	this->cCommand.Add("/addvit", 395);
-	this->cCommand.Add("/addene", 396);
-	this->cCommand.Add("/addcmd", 397);
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 183)), 217);	// Fire Cracker Effect	// #translation 
+	//Custom commands
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 0)), 391);	// PostMsg
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 1)), 392);	// ClearPkCommand
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 2)), 393);
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 3)), 394);
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 4)), 395);
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 5)), 396);
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 6)), 397);
 
 	this->WatchTargetIndex = -1;
 }
@@ -271,9 +271,8 @@ void ServerMsgSend(LPOBJ lpObj,int Type,char Sender[20],const char*Message,...)
 	int Len = (strlen(szBuffer)+0x13);
 	*(Packet+1)=Len;
 	if(!lpObj)DataSendAll(Packet,Len);
-	else
-		if(lpObj->Connected)
-			DataSend(lpObj->m_Index,Packet,Len);
+	else if(lpObj->Connected)
+	DataSend(lpObj->m_Index,Packet,Len);
 	free(Packet);
 }
 
@@ -356,12 +355,12 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 				{
 					this->WatchTargetIndex = -1;
 					
-					wsprintf(szTemp, "%s : °¨½ÃÇØÁ¦", lpTargetObj->Name);	// #translation
+					wsprintf(szTemp, "%s : You can not watch yourself", lpTargetObj->Name);	// #translation
 					GCServerMsgStringSend(szTemp, lpObj->m_Index, 1);
 				}
 				else
 				{
-					wsprintf(szTemp, "%s : °¨½Ã½ÃÀÛ", lpTargetObj->Name);	// #translation
+					wsprintf(szTemp, "%s : Watching User", lpTargetObj->Name);	// #translation
 					GCServerMsgStringSend(szTemp, lpObj->m_Index, 1);
 					this->WatchTargetIndex = lpTargetObj->m_Index;
 				}
@@ -826,9 +825,9 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 				}
 
 				LogAddTD("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
-					lpObj->Name, "ÄïµÐ»óÅÂº¸±â");	// #translation Require Translation
+					lpObj->Name, "BOSS HP STATUS");	// #translation Require Translation
 				KUNDUN_GM_LOG.Output("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
-					lpObj->Name, "ÄïµÐ»óÅÂº¸±â");	// #translation  Require Translation
+					lpObj->Name, "BOSS HP STATUS");	// #translation  Require Translation
 
 				for ( int n=0;n<MAX_VIEWPORT;n++)
 				{
@@ -844,8 +843,8 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 								{
 									TNotice pNotice(1);
 
-									pNotice.SendToUser(lpObj->m_Index, "ÄïµÐ HP = %7.0f / %7.0f", lpTarget->Life, lpTarget->MaxLife); //Require Translation
-									pNotice.SendToUser(lpObj->m_Index, "ÄïµÐ HP ÃÊ´çÈ¸º¹·® = %d È¸º¹·® = %d È¸º¹½Ã°£ = %d", Configs.giKundunRefillHPSec, Configs.giKundunRefillHP, Configs.giKundunRefillHPTime);	// Require Translation
+									pNotice.SendToUser(lpObj->m_Index, "Kundun HP = %7.0f / %7.0f", lpTarget->Life, lpTarget->MaxLife); //Require Translation
+									pNotice.SendToUser(lpObj->m_Index, "Kundun HP time = %d Recover = %d Recovery Time = %d", Configs.giKundunRefillHPSec, Configs.giKundunRefillHP, Configs.giKundunRefillHPTime);	// Require Translation
 								}
 							}
 						}
@@ -863,9 +862,9 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 				}
 
 				LogAddTD("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
-					lpObj->Name, "ÄïµÐHP¼³Á¤");	// Require Translation
+					lpObj->Name, "BOSS HP CHANGE");	// Require Translation
 				KUNDUN_GM_LOG.Output("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
-					lpObj->Name, "ÄïµÐHP¼³Á¤");	// Require Translation
+					lpObj->Name, "BOSS HP CHANGE");	// Require Translation
 
 				int iLife = this->GetTokenNumber();
 
@@ -895,7 +894,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 								
 									TNotice pNotice(1);
 
-									pNotice.SendToUser(lpObj->m_Index, "ÄïµÐ HP = %7.0f / %7.0f", lpTarget->Life, lpTarget->MaxLife); //Require Translation
+									pNotice.SendToUser(lpObj->m_Index, "BOSS HP = %7.0f / %7.0f", lpTarget->Life, lpTarget->MaxLife); //Require Translation
 								}
 							}
 						}
@@ -1082,7 +1081,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			if(lpObj->Level<Level)
 			{
 				char levelmsg[100];
-				sprintf(levelmsg,"[Atenção]: to use /post you need level %d ",Level);
+				sprintf(levelmsg,"[Global]: to use /post you need level %d ",Level);
 				GCServerMsgStringSend(levelmsg,aIndex,1);
 				return FALSE;
 			}
@@ -1124,13 +1123,13 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 		{
 			if(lpObj->m_PK_Level <= 3) 
 			{
-			char Msg[100] = "Você não está PK!";
+			char Msg[100] = "You're not PK!";
 			GCServerMsgStringSend(Msg,aIndex,1);
 			return TRUE;
 			}
 			else if(lpObj->Money < 10000000)
 			{
-			char Msg[100] = "Você não possui Zen suficiente!";
+			char Msg[100] = "You do not have enough Zen!";
 			GCServerMsgStringSend(Msg,aIndex,1);
 			return TRUE;
 			}
@@ -1140,7 +1139,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			GCMoneySend(lpObj->m_Index,lpObj->Money);
 			lpObj->m_PK_Level = 3;
 			GCPkLevelSend(lpObj->m_Index, 3);
-			char Msg[100] = "Seu PK foi removido";
+			char Msg[100] = "PK status removed.";
 			GCServerMsgStringSend(Msg,aIndex,1);
 
 			char timeStr[9];
@@ -1163,7 +1162,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			}
 			if(lpObj->LevelUpPoint < Pontos || Pontos < 1)
 			{
-				GCServerMsgStringSend("[CmdAdd]: not enough point.",lpObj->m_Index,1);
+				GCServerMsgStringSend("[CmdAdd]: not enough points.",lpObj->m_Index,1);
 				return FALSE;
 			}
 			if((Pontos + lpObj->Strength) > 65000)
@@ -1176,7 +1175,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			char Msg[100];
 			sprintf(Msg, "[CmdAdd]: Points added [%d] to strength.", Pontos);
 			GCServerMsgStringSend(Msg,lpObj->m_Index,1);
-			GCServerMsgStringSend("[CmdAdd]: Do switch char..",lpObj->m_Index,1);
+			GCServerMsgStringSend("[CmdAdd]: Do switch char.",lpObj->m_Index,1);
 			return TRUE;
 		}
 			break;
@@ -1191,7 +1190,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			}
 			if(lpObj->LevelUpPoint < Pontos || Pontos < 1)
 			{
-				GCServerMsgStringSend("[CmdAdd]: add more than 0 point.",lpObj->m_Index,1);
+				GCServerMsgStringSend("[CmdAdd]: add more than 0 points.",lpObj->m_Index,1);
 				return FALSE;
 			}
 			if((Pontos + lpObj->Dexterity) > 65000)
@@ -1214,7 +1213,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			Pontos = GetTokenNumber();
 			if(Pontos == NULL)
 			{
-				GCServerMsgStringSend("[CmdAdd]: Sintaxe errada. Comando precisa de pelo menos um número.",lpObj->m_Index,1);
+				GCServerMsgStringSend("[CmdAdd]: syntax error.",lpObj->m_Index,1);
 				return FALSE;
 			}
 			if(lpObj->LevelUpPoint < Pontos || Pontos < 1)
@@ -1276,7 +1275,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			Pontos = GetTokenNumber();
 			if(Pontos == NULL)
 			{
-				GCServerMsgStringSend("[UCD]: Syntax error",lpObj->m_Index,1);
+				GCServerMsgStringSend("[CmdAdd]: Syntax error",lpObj->m_Index,1);
 				return FALSE;
 			}
 			if(lpObj->LevelUpPoint < Pontos || Pontos < 1)
