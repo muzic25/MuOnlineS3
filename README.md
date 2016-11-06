@@ -3,22 +3,26 @@
 Status: Fully Bugs With some events    
   
 -Login: OK  
--Playable: No  
+-Playable: Yes  
 -Events:  
-CryWolf: Continius Event -> Fixed  
+CryWolf: Continius Event -> Fixed -> OK  
 CastleSiege: Bugged  
 DevilSquare: OK  
 Blood Castle: Gate Bugged (Using first floor localation) -> Fixed  
 Kantru: OK  
 Golden Invasion: OK  
 White Wizard:  OK   
-Illusion temple: Unknown  
+Illusion Temple: Unknown  
 Chaos Castle: OK  
 -ItemsBags: Some missing and missconfigured  
 -ChaosMachine: Bugged  
--Maps: missing  
+-Maps: missing -> Added/Fixed -> OK  
 -GameServer Interface: Logger bugged  
+-3rd wings: Fixed -> OK
 -Other bugs  
+
+Used Client: 1.04J (1.04.10) Korean  
+Client link: http://dfiles.eu/files/4tmc1jve5  
 
 Requiments:   
 MSSQL 2012  
