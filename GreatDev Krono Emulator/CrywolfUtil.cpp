@@ -136,7 +136,6 @@ void CCrywolfUtil::SendCrywolfUserAnyMsg(int iType, LPSTR lpszMsg, ...)
 
 }
 
-#pragma warning ( disable : 4101 )
 void CCrywolfUtil::SendCrywolfChattingMsg(int iObjIndex, LPSTR lpszMsg, ...)
 {
 	return;
@@ -159,9 +158,6 @@ void CCrywolfUtil::SendCrywolfChattingMsg(int iObjIndex, LPSTR lpszMsg, ...)
 		}
 	}
 }
-#pragma warning ( default : 4101 )
-
-
 
 int CCrywolfUtil::CrywolfMVPLevelUp(int iUserIndex, int iAddExp)
 {

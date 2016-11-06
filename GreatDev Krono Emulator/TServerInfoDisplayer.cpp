@@ -47,9 +47,9 @@ TServerInfoDisplayer::~TServerInfoDisplayer()
 
 void TServerInfoDisplayer::InitGDIObject()
 {
-	this->m_hFont = CreateFont(80, 0, 0, 0, FW_THIN, FALSE, TRUE, FALSE, 
+	this->m_hFont = CreateFont(80, 0, 0, 0, FW_THIN, FALSE, FALSE, FALSE, 
 		ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
-		DEFAULT_PITCH|FF_DONTCARE, "Times");
+		DEFAULT_PITCH|FF_DONTCARE, "System");
 
 	this->m_hNormalBrush = CreateSolidBrush(RGB(110, 240, 120));
 	this->m_hAbnormalBrush = CreateSolidBrush(RGB(250, 110, 110));
@@ -203,16 +203,16 @@ void TServerInfoDisplayer::PaintAllInfo(HWND hWnd, int iTopLeftX, int iTopLeftY)
 
 	if ( this->m_bValidJSConnection == FALSE || this->m_bValidDSConnection == FALSE || this->m_bValidFSConnection == FALSE || this->m_bValidEXDSConnection == FALSE || this->m_bValidEVDSConnection == FALSE || this->m_bValidRKDSConnection == FALSE )
 	{
-		SERVER_CONN_STATE_LOG.Output("Server Interconnection Check - [FS/%d] [DS/%d] [EX/%d] [ES/%d] [RS/%d]",
+		SERVER_CONN_STATE_LOG.Output("Server Interconnection Check - [FS/%d] [DS/%d] [EX/%d] [JS/%d] [ES/%d] [RS/%d]",
 			this->m_bValidFSConnection, this->m_bValidDSConnection, 
-			this->m_bValidEXDSConnection, this->m_bValidEVDSConnection,
-			this->m_bValidRKDSConnection);	// #error Deathway Tip ( Add also for JoinServer )
+			this->m_bValidEXDSConnection, this->m_bValidJSConnection, this->m_bValidEVDSConnection,
+			this->m_bValidRKDSConnection);
 	}
 
 	HFONT pOldFont = (HFONT)SelectObject(hDC, this->m_hFont);
 	SetTextColor(hDC, RGB(250, 250, 250));
 
-	TextOut(hDC, 250, 20, ServerTypeText[0], strlen(ServerTypeText[0]));
+	TextOut(hDC, 50, 19, ServerTypeText[0], strlen(ServerTypeText[0]));
 	SelectObject(hDC, pOldFont);
 	SetBkMode(hDC, iOldBkMode);
 	ReleaseDC(hWnd, hDC);

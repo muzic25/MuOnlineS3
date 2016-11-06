@@ -74,7 +74,6 @@ d:\git\season3\muonlines3\greatdev krono emulator\release\kanturubattleofnightma
 d:\git\season3\muonlines3\greatdev krono emulator\release\kanturubattleofmaya.obj
 d:\git\season3\muonlines3\greatdev krono emulator\release\kanturu.obj
 d:\git\season3\muonlines3\greatdev krono emulator\release\kalimagate.obj
-d:\git\season3\muonlines3\greatdev krono emulator\release\jewelofharmonysystem.obj
 d:\git\season3\muonlines3\greatdev krono emulator\release\jewelmixsystem.obj
 d:\git\season3\muonlines3\greatdev krono emulator\release\itemsystemfor380.obj
 d:\git\season3\muonlines3\greatdev krono emulator\release\itembagex.obj
@@ -111,6 +110,7 @@ d:\git\season3\muonlines3\greatdev krono emulator\release\sendhacklog.obj
 d:\git\season3\muonlines3\greatdev krono emulator\release\ringattackevent.obj
 d:\git\season3\muonlines3\greatdev krono emulator\release\questutil.obj
 d:\git\season3\muonlines3\greatdev krono emulator\release\questinfo.obj
+d:\git\season3\muonlines3\greatdev krono emulator\release\protocol.obj
 d:\git\season3\muonlines3\greatdev krono emulator\release\partyclass.obj
 d:\git\season3\muonlines3\greatdev krono emulator\release\packetchecksum.obj
 d:\git\season3\muonlines3\greatdev krono emulator\release\objuseskill.obj
@@ -162,7 +162,7 @@ d:\git\season3\muonlines3\greatdev krono emulator\release\tserveralertmanager.ob
 d:\git\season3\muonlines3\greatdev krono emulator\release\trandompoolmgr.obj
 d:\git\season3\muonlines3\greatdev krono emulator\release\zzzmathlib.obj
 d:\git\season3\muonlines3\greatdev krono emulator\release\zzzitem.obj
-d:\git\season3\muonlines3\greatdev krono emulator\release\protocol.obj
+d:\git\season3\muonlines3\greatdev krono emulator\release\jewelofharmonysystem.obj
 d:\git\season3\muonlines3\greatdev krono emulator\release\gameserver.exe
 d:\git\season3\muonlines3\greatdev krono emulator\release\temp\gameserver.exe.intermediate.manifest
 d:\git\season3\muonlines3\greatdev krono emulator\release\temp\gameserver.res

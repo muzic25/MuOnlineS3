@@ -458,14 +458,14 @@ BOOL CItemBagEx::DropRedRibbonBoxEventItem(int aIndex)
 	{
 		DropItemRate = rand() % 10000;
 
-		if ( DropItemRate < g_iRedRibbonBoxDropZenRate )
+		if ( DropItemRate < Configs.g_iRedRibbonBoxDropZenRate )
 		{
-			MapC[lpObj->MapNumber].MoneyItemDrop(g_iRedRibbonBoxDropZen, 
+			MapC[lpObj->MapNumber].MoneyItemDrop(Configs.g_iRedRibbonBoxDropZen, 
 				lpObj->X, lpObj->Y);
 
 			LogAddTD("[EVENT CHRISTMAS RIBBONBOX] RIBBONBOX Event ItemDrop [%s][%s] [%d Zen]",
 				lpObj->AccountID, lpObj->Name,
-				g_iRedRibbonBoxDropZen);
+				Configs.g_iRedRibbonBoxDropZen);
 		}
 		else
 		{
@@ -571,14 +571,14 @@ BOOL CItemBagEx::DropGreenRibbonBoxEventItem(int aIndex)
 	{
 		DropItemRate = rand() % 10000;
 
-		if ( DropItemRate < g_iGreenRibbonBoxDropZenRate )
+		if ( DropItemRate < Configs.g_iGreenRibbonBoxDropZenRate )
 		{
-			MapC[lpObj->MapNumber].MoneyItemDrop(g_iGreenRibbonBoxDropZen, 
+			MapC[lpObj->MapNumber].MoneyItemDrop(Configs.g_iGreenRibbonBoxDropZen, 
 				lpObj->X, lpObj->Y);
 
 			LogAddTD("[EVENT CHRISTMAS RIBBONBOX] GREENRIBBONBOX Event ItemDrop [%s][%s] [%d Zen]",
 				lpObj->AccountID, lpObj->Name,
-				g_iGreenRibbonBoxDropZen);
+				Configs.g_iGreenRibbonBoxDropZen);
 		}
 		else
 		{
@@ -693,14 +693,14 @@ BOOL CItemBagEx::DropBlueRibbonBoxEventItem(int aIndex)
 	{
 		DropItemRate = rand() % 10000;
 
-		if ( DropItemRate < g_iBlueRibbonBoxDropZenRate )
+		if ( DropItemRate < Configs.g_iBlueRibbonBoxDropZenRate )
 		{
-			MapC[lpObj->MapNumber].MoneyItemDrop(g_iBlueRibbonBoxDropZen, 
+			MapC[lpObj->MapNumber].MoneyItemDrop(Configs.g_iBlueRibbonBoxDropZen, 
 				lpObj->X, lpObj->Y);
 
 			LogAddTD("[EVENT CHRISTMAS RIBBONBOX] BLUERIBBONBOX Event ItemDrop [%s][%s] [%d Zen]",
 				lpObj->AccountID, lpObj->Name,
-				g_iBlueRibbonBoxDropZen);
+				Configs.g_iBlueRibbonBoxDropZen);
 		}
 		else
 		{
@@ -812,14 +812,14 @@ BOOL CItemBagEx::DropPinkChocolateBoxEventItem(int aIndex)
 	{
 		DropItemRate = rand() % 10000;
 
-		if ( DropItemRate < g_iPinkChocolateBoxDropZenRate )
+		if ( DropItemRate < Configs.g_iPinkChocolateBoxDropZenRate )
 		{
-			MapC[lpObj->MapNumber].MoneyItemDrop(g_iPinkChocolateBoxDropZen, 
+			MapC[lpObj->MapNumber].MoneyItemDrop(Configs.g_iPinkChocolateBoxDropZen, 
 				lpObj->X, lpObj->Y);
 
 			LogAddTD("[EVENT VALENTINE'S DAY CHOCOLATEBOX] PINKCHOCOLATE BOX Event ItemDrop [%s][%s] [%d Zen]",
 				lpObj->AccountID, lpObj->Name,
-				g_iPinkChocolateBoxDropZen);
+				Configs.g_iPinkChocolateBoxDropZen);
 		}
 		else
 		{
@@ -925,14 +925,14 @@ BOOL CItemBagEx::DropRedChocolateBoxEventItem(int aIndex)
 	{
 		DropItemRate = rand() % 10000;
 
-		if ( DropItemRate < g_iRedChocolateBoxDropZenRate )
+		if ( DropItemRate < Configs.g_iRedChocolateBoxDropZenRate )
 		{
-			MapC[lpObj->MapNumber].MoneyItemDrop(g_iRedChocolateBoxDropZen, 
+			MapC[lpObj->MapNumber].MoneyItemDrop(Configs.g_iRedChocolateBoxDropZen, 
 				lpObj->X, lpObj->Y);
 
 			LogAddTD("[EVENT VALENTINE'S DAY CHOCOLATEBOX] REDCHOCOLATEBOX Event ItemDrop [%s][%s] [%d Zen]",
 				lpObj->AccountID, lpObj->Name,
-				g_iRedChocolateBoxDropZen);
+				Configs.g_iRedChocolateBoxDropZen);
 		}
 		else
 		{
@@ -1047,14 +1047,14 @@ BOOL CItemBagEx::DropBlueChocolateBoxEventItem(int aIndex)
 	{
 		DropItemRate = rand() % 10000;
 
-		if ( DropItemRate < g_iBlueChocolateBoxDropZenRate )
+		if ( DropItemRate < Configs.g_iBlueChocolateBoxDropZenRate )
 		{
-			MapC[lpObj->MapNumber].MoneyItemDrop(g_iBlueChocolateBoxDropZen, 
+			MapC[lpObj->MapNumber].MoneyItemDrop(Configs.g_iBlueChocolateBoxDropZen, 
 				lpObj->X, lpObj->Y);
 
 			LogAddTD("[EVENT VALENTINE'S DAY CHOCOLATEBOX] BLUECHOCOLATEBOX Event ItemDrop [%s][%s] [%d Zen]",
 				lpObj->AccountID, lpObj->Name,
-				g_iBlueChocolateBoxDropZen);
+				Configs.g_iBlueChocolateBoxDropZen);
 		}
 		else
 		{
@@ -1166,14 +1166,14 @@ BOOL CItemBagEx::DropLightPurpleCandyBoxEventItem(int aIndex)
 	{
 		DropItemRate = rand() % 10000;
 
-		if ( DropItemRate < g_iLightPurpleCandyBoxDropZenRate )
+		if ( DropItemRate < Configs.g_iLightPurpleCandyBoxDropZenRate )
 		{
-			MapC[lpObj->MapNumber].MoneyItemDrop(g_iLightPurpleCandyBoxDropZen, 
+			MapC[lpObj->MapNumber].MoneyItemDrop(Configs.g_iLightPurpleCandyBoxDropZen, 
 				lpObj->X, lpObj->Y);
 
 			LogAddTD("[EVENT WHITE DAY CANDY BOX] LIGHT PURPLE BOX Event ItemDrop [%s][%s] [%d Zen]",
 				lpObj->AccountID, lpObj->Name,
-				g_iLightPurpleCandyBoxDropZen);
+				Configs.g_iLightPurpleCandyBoxDropZen);
 		}
 		else
 		{
@@ -1279,14 +1279,14 @@ BOOL CItemBagEx::DropVermilionCandyBoxEventItem(int aIndex)
 	{
 		DropItemRate = rand() % 10000;
 
-		if ( DropItemRate < g_iVermilionCandyBoxDropZenRate )
+		if ( DropItemRate < Configs.g_iVermilionCandyBoxDropZenRate )
 		{
-			MapC[lpObj->MapNumber].MoneyItemDrop(g_iVermilionCandyBoxDropZen, 
+			MapC[lpObj->MapNumber].MoneyItemDrop(Configs.g_iVermilionCandyBoxDropZen, 
 				lpObj->X, lpObj->Y);
 
 			LogAddTD("[EVENT WHITE DAY CANDY BOX] VERMILION BOX Event ItemDrop [%s][%s] [%d Zen]",
 				lpObj->AccountID, lpObj->Name,
-				g_iVermilionCandyBoxDropZen);
+				Configs.g_iVermilionCandyBoxDropZen);
 		}
 		else
 		{
@@ -1401,14 +1401,14 @@ BOOL CItemBagEx::DropDeepBlueCandyBoxEventItem(int aIndex)
 	{
 		DropItemRate = rand() % 10000;
 
-		if ( DropItemRate < g_iDeepBlueCandyBoxDropZenRate )
+		if ( DropItemRate < Configs.g_iDeepBlueCandyBoxDropZenRate )
 		{
-			MapC[lpObj->MapNumber].MoneyItemDrop(g_iDeepBlueCandyBoxDropZen, 
+			MapC[lpObj->MapNumber].MoneyItemDrop(Configs.g_iDeepBlueCandyBoxDropZen, 
 				lpObj->X, lpObj->Y);
 
 			LogAddTD("[EVENT WHITE DAY CANDY BOX] DEEP BLUE BOX Event ItemDrop [%s][%s] [%d Zen]",
 				lpObj->AccountID, lpObj->Name,
-				g_iDeepBlueCandyBoxDropZen);
+				Configs.g_iDeepBlueCandyBoxDropZen);
 		}
 		else
 		{
@@ -1637,26 +1637,26 @@ BOOL CItemBagEx::DropHallowinEventItem(LPOBJ lpObj)
 
 	if ( iItemBagCount > 0 )
 	{
-		iTotalDropRate = g_iHallowinDayEventJOLBlessDropRate +
-			             g_iHallowinDayEventJOLAngerDropRaTe +
-						 g_iHallowinDayEventJOLScreamDropRate +
-						 g_iHallowinDayEventJOLFoodDropRate +
-						 g_iHallowinDayEventJOLDrinkDropRate +
-						 g_iHallowinDayEventJOLPolymorphRingDropRate;
+		iTotalDropRate = Configs.g_iHallowinDayEventJOLBlessDropRate +
+			             Configs.g_iHallowinDayEventJOLAngerDropRaTe +
+						 Configs.g_iHallowinDayEventJOLScreamDropRate +
+						 Configs.g_iHallowinDayEventJOLFoodDropRate +
+						 Configs.g_iHallowinDayEventJOLDrinkDropRate +
+						 Configs.g_iHallowinDayEventJOLPolymorphRingDropRate;
 
 		iDropItemRate = rand() % iTotalDropRate;
 
-		if ( iDropItemRate >= (iTotalDropRate - g_iHallowinDayEventJOLBlessDropRate)  )
+		if ( iDropItemRate >= (iTotalDropRate - Configs.g_iHallowinDayEventJOLBlessDropRate)  )
 			iDropItemNum = 0;
-		else if ( iDropItemRate >= (iTotalDropRate - g_iHallowinDayEventJOLBlessDropRate - g_iHallowinDayEventJOLAngerDropRaTe) )
+		else if ( iDropItemRate >= (iTotalDropRate - Configs.g_iHallowinDayEventJOLBlessDropRate - Configs.g_iHallowinDayEventJOLAngerDropRaTe) )
 			iDropItemNum = 1;
-		else if ( iDropItemRate >= (iTotalDropRate - g_iHallowinDayEventJOLBlessDropRate - g_iHallowinDayEventJOLAngerDropRaTe - g_iHallowinDayEventJOLScreamDropRate) )
+		else if ( iDropItemRate >= (iTotalDropRate - Configs.g_iHallowinDayEventJOLBlessDropRate - Configs.g_iHallowinDayEventJOLAngerDropRaTe - Configs.g_iHallowinDayEventJOLScreamDropRate) )
 			iDropItemNum = 2;
-		else if ( iDropItemRate >= (iTotalDropRate - g_iHallowinDayEventJOLBlessDropRate - g_iHallowinDayEventJOLAngerDropRaTe - g_iHallowinDayEventJOLScreamDropRate - g_iHallowinDayEventJOLFoodDropRate) )
+		else if ( iDropItemRate >= (iTotalDropRate - Configs.g_iHallowinDayEventJOLBlessDropRate - Configs.g_iHallowinDayEventJOLAngerDropRaTe - Configs.g_iHallowinDayEventJOLScreamDropRate - Configs.g_iHallowinDayEventJOLFoodDropRate) )
 			iDropItemNum = 3;
-		else if ( iDropItemRate >= (iTotalDropRate - g_iHallowinDayEventJOLBlessDropRate - g_iHallowinDayEventJOLAngerDropRaTe - g_iHallowinDayEventJOLScreamDropRate - g_iHallowinDayEventJOLFoodDropRate - g_iHallowinDayEventJOLDrinkDropRate) )
+		else if ( iDropItemRate >= (iTotalDropRate - Configs.g_iHallowinDayEventJOLBlessDropRate - Configs.g_iHallowinDayEventJOLAngerDropRaTe - Configs.g_iHallowinDayEventJOLScreamDropRate - Configs.g_iHallowinDayEventJOLFoodDropRate - Configs.g_iHallowinDayEventJOLDrinkDropRate) )
 			iDropItemNum = 4;
-		else if ( iDropItemRate >= (iTotalDropRate - g_iHallowinDayEventJOLBlessDropRate - g_iHallowinDayEventJOLAngerDropRaTe - g_iHallowinDayEventJOLScreamDropRate - g_iHallowinDayEventJOLFoodDropRate - g_iHallowinDayEventJOLDrinkDropRate - g_iHallowinDayEventJOLPolymorphRingDropRate) )
+		else if ( iDropItemRate >= (iTotalDropRate - Configs.g_iHallowinDayEventJOLBlessDropRate - Configs.g_iHallowinDayEventJOLAngerDropRaTe - Configs.g_iHallowinDayEventJOLScreamDropRate - Configs.g_iHallowinDayEventJOLFoodDropRate - Configs.g_iHallowinDayEventJOLDrinkDropRate - Configs.g_iHallowinDayEventJOLPolymorphRingDropRate) )
 			iDropItemNum = 5;
 
 		X = lpObj->X;
@@ -1818,12 +1818,12 @@ BOOL CItemBagEx::DropCrywolfDarkElfItem(int aIndex, BYTE btMapNumber, BYTE cX, B
 	{
 		iDropItemRate = rand() % 10000;
 
-		if ( iDropItemRate < g_iCrywolfMonsterDarkElfDropZenRate ) 
+		if ( iDropItemRate < Configs.g_iCrywolfMonsterDarkElfDropZenRate ) 
 		{
-			MapC[lpObj->MapNumber].MoneyItemDrop(g_iCrywolfMonsterDarkElfDropZen, cX, cY);
+			MapC[lpObj->MapNumber].MoneyItemDrop(Configs.g_iCrywolfMonsterDarkElfDropZen, cX, cY);
 
 			LogAddTD("[ Crywolf ][Reward] Dark Elf Item Drop [%s][%s] [%d Zen]",
-				lpObj->AccountID, lpObj->Name, g_iCrywolfMonsterDarkElfDropZen);
+				lpObj->AccountID, lpObj->Name, Configs.g_iCrywolfMonsterDarkElfDropZen);
 		}
 		else
 		{
@@ -2022,12 +2022,12 @@ BOOL CItemBagEx::DropCrywolfBossMonsterItem(int aIndex, BYTE btMapNumber, BYTE c
 	{
 		iDropItemRate = rand() % 10000;
 
-		if ( iDropItemRate < g_iCrywolfBossMonsterDropZenRate ) 
+		if ( iDropItemRate < Configs.g_iCrywolfBossMonsterDropZenRate ) 
 		{
-			MapC[lpObj->MapNumber].MoneyItemDrop(g_iCrywolfBossMonsterDropZen, cX, cY);
+			MapC[lpObj->MapNumber].MoneyItemDrop(Configs.g_iCrywolfBossMonsterDropZen, cX, cY);
 
 			LogAddTD("[ Crywolf ][Reward] Boss Monster Item Drop [%s][%s] [%d Zen]",
-				lpObj->AccountID, lpObj->Name, g_iCrywolfBossMonsterDropZen);
+				lpObj->AccountID, lpObj->Name, Configs.g_iCrywolfBossMonsterDropZen);
 		}
 		else
 		{

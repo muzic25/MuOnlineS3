@@ -7,7 +7,7 @@
 
 #include "zzzitem.h"
 
-#define MAX_SHOP 14
+#define MAX_SHOP 17
 #define MAX_ITEM_IN_SHOP 120
 
 class CShop

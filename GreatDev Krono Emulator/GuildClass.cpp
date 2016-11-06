@@ -673,7 +673,7 @@ BOOL gGuildNoticeStringCheck(char* notice)
 	{
 		if ( (notice[i] & 0x80 ) != 0 )
 		{
-			if ( gLanguage == 2 )
+			if (Configs.gLanguage == 2)
 			{
 				if ( ((BYTE)notice[i]) != 0x81 )
 				{

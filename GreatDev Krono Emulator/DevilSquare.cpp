@@ -9,7 +9,6 @@ unsigned int __stdcall DevilSquareThreadFunc(void * p)
 	return pDevilSquare->Run();
 }
 
-#pragma warning ( disable : 4060 )
 void DevilSquareEventProtocolCore(BYTE protoNum, LPBYTE aRecv, int aLen)
 {
 	#ifdef TRACE_PROTOCOL
@@ -19,7 +18,6 @@ void DevilSquareEventProtocolCore(BYTE protoNum, LPBYTE aRecv, int aLen)
 	{
 	}
 }
-#pragma warning ( default : 4060 )
 
 
 
@@ -31,7 +29,7 @@ void DataSendRank(char* pMsg, int size)
 		wsRServerCli.Close();
 		wsRServerCli.CreateSocket(ghWnd);
 
-		if ( GMRankingServerConnect(gDevilSquareEventServerIp, WM_GM_RANKING_CLIENT_MSG_PROC) == FALSE )
+		if (GMRankingServerConnect(Configs.gDevilSquareEventServerIp, WM_GM_RANKING_CLIENT_MSG_PROC) == FALSE)
 		{
 			IsDevilSquareEventConnected = FALSE;
 			LogAddTD("Can not connect Ranking Server");
@@ -447,7 +445,7 @@ BOOL CDevilSquare::Run()
 
 	while ( this->m_bQuit == FALSE )
 	{
-		if ( gDevilSquareEvent != FALSE )
+		if (Configs.gDevilSquareEvent != FALSE)
 		{
 			switch ( this->m_eState )
 			{
@@ -985,7 +983,7 @@ void CDevilSquare::DieProcDevilSquare(LPOBJ lpObj)
 		pMsg.Score = lpObj->m_nEventScore;
 	}
 
-	pMsg.ServerCode = gGameServerCode;
+	pMsg.ServerCode = Configs.gGameServerCode;
 	memcpy(pMsg.AccountID, lpObj->AccountID, sizeof(pMsg.AccountID));
 	memcpy(pMsg.GameID, lpObj->Name, sizeof(pMsg.GameID));
 
@@ -1048,14 +1046,14 @@ int  CDevilSquare::gObjMonsterExpSingle(LPOBJ lpObj, LPOBJ lpTargetObj, int dmg,
 		exp = mymaxexp;
 	}
 
-	exp *= gAddExperience;
+	exp *= Configs.gAddExperience;
 
 	if ( lpObj->m_wExprienceRate == 0 )
 		exp = 0;
 	else
 		exp =  (float)exp * ((float)lpObj->m_wExprienceRate  / 100.0f);
 
-	if ( g_CrywolfSync.GetOccupationState() == 1 && g_iCrywolfApplyMvpPenalty != FALSE)
+	if (g_CrywolfSync.GetOccupationState() == 1 && Configs.g_iCrywolfApplyMvpPenalty != FALSE)
 	{
 		exp =  (exp * g_CrywolfSync.GetGettingExpPenaltyRate()) / 100;
 	}
@@ -1287,14 +1285,14 @@ void CDevilSquare::gObjExpParty(LPOBJ lpObj, LPOBJ lpTargetObj, int AttackDamage
 						}
 					}
 
-					exp *= gAddExperience;
+					exp *= Configs.gAddExperience;
 
 					if ( lpPartyObj->m_wExprienceRate == 0 )
 						exp = 0;
 					else
 						exp =  (float)exp * ((float)lpPartyObj->m_wExprienceRate  / 100.0f);
 
-					if ( g_CrywolfSync.GetOccupationState() == 1 && g_iCrywolfApplyMvpPenalty != FALSE)
+					if (g_CrywolfSync.GetOccupationState() == 1 && Configs.g_iCrywolfApplyMvpPenalty != FALSE)
 					{
 						exp =  (exp * g_CrywolfSync.GetGettingExpPenaltyRate()) / 100;
 					}

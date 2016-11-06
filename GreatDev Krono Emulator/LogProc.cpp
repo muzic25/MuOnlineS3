@@ -87,7 +87,7 @@ void LogDataSet()
 	wsprintf(Date, ".\\Log\\%02d.%02d.%02d\\", LogMYear, LogMonth, LogMDay); 
 	CreateDirectoryA(Date,NULL);
 
-	wsprintf(szTemp, ".\\Log\\%02d.%02d.%02d\\%s-Global.log", LogMYear, LogMonth, LogMDay,&szServerName);
+	wsprintf(szTemp, ".\\Log\\%02d.%02d.%02d\\%s-Global.log", LogMYear, LogMonth, LogMDay, &Configs.szServerName);
 
 	if (logfp != 0)
 	{
@@ -137,7 +137,7 @@ int LogDateChange()
 	wsprintf(Date, ".\\Log\\%02d.%02d.%02d\\", LogMYear, LogMonth, LogMDay); 
 	CreateDirectory(Date,NULL);
 
-	wsprintf(szTemp, ".\\Log\\%02d.%02d.%02d\\%s-Global.log", LogMYear, LogMonth, LogMDay,&szServerName);
+	wsprintf(szTemp, ".\\Log\\%02d.%02d.%02d\\%s-Global.log", LogMYear, LogMonth, LogMDay, &Configs.szServerName);
 
 	EnterCriticalSection(&LogCritical);
 	
@@ -259,7 +259,6 @@ void LogAddFuncColor(BYTE Color, char* szLog, ...)
 	}
 }
 
-#pragma warning ( disable : 4101 )
 void LogAddLocalFunc(char* szLog, ...)
 {
 	char szBuffer[512];
@@ -286,7 +285,6 @@ void LogAddLocalFunc(char* szLog, ...)
 
 #endif
 }
-#pragma warning ( default : 4101 )
 
 void LogAddLocalFuncVoid(char* szLog, ...)
 {

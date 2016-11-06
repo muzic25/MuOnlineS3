@@ -760,7 +760,7 @@ BOOL CDarkSpirit::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf * lpMagic, in
 	BOOL bAllMiss = FALSE;
 	int AttackDamage = 0;
 
-	if ( g_ShieldSystemOn == TRUE )
+	if (Configs.g_ShieldSystemOn == TRUE)
 	{
 		if ( lpObj->Type == OBJ_USER && lpTargetObj->Type == OBJ_USER )
 		{
@@ -941,7 +941,7 @@ BOOL CDarkSpirit::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf * lpMagic, in
 			}
 		}
 
-		if ( g_ShieldSystemOn == FALSE )
+		if (Configs.g_ShieldSystemOn == FALSE)
 		{
 			if ( lpObj->Type == OBJ_USER && lpTargetObj->Type == OBJ_USER )
 			{
@@ -962,7 +962,7 @@ BOOL CDarkSpirit::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf * lpMagic, in
 					{
 						AttackDamage = AttackDamage * 20 / 100;
 					}
-					else if ( g_ShieldSystemOn == 0)
+					else if (Configs.g_ShieldSystemOn == 0)
 					{
 						AttackDamage = AttackDamage * 40 / 100;
 					}
@@ -1216,7 +1216,7 @@ BOOL CDarkSpirit::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf * lpMagic, in
 
 int  CDarkSpirit::GetAttackDamage(LPOBJ lpObj, int targetDefense, BOOL bIsOnDuel, int crititcaldamage)
 {
-	if ( g_ShieldSystemOn == TRUE )
+	if (Configs.g_ShieldSystemOn == TRUE)
 	{
 		if ( bIsOnDuel == TRUE )
 		{
@@ -1360,7 +1360,7 @@ BOOL CDarkSpirit::MissCheckPvP(LPOBJ lpObj, LPOBJ lpTargetObj, int skill,  int s
 	iExpressionA /= 10000.0f;
 	iExpressionB /= 10000.0f;
 
-	iAttackSuccessRate = 100.0f * iExpressionA * g_fSuccessAttackRateOption * iExpressionB;
+	iAttackSuccessRate = 100.0f * iExpressionA * Configs.g_fSuccessAttackRateOption * iExpressionB;
 
 	if ( (lpTargetObj->Level - lpObj->Level) >= 100 )
 	{
@@ -1434,7 +1434,7 @@ int CDarkSpirit::GetShieldDamage(LPOBJ lpObj, LPOBJ lpTargetObj, int iAttackDama
 {
 	int iShieldDamage = 0;
 
-	if ( g_ShieldSystemOn == FALSE )
+	if (Configs.g_ShieldSystemOn == FALSE)
 		return 0;
 
 	if ( iAttackDamage <= 0 )
@@ -1444,7 +1444,7 @@ int CDarkSpirit::GetShieldDamage(LPOBJ lpObj, LPOBJ lpTargetObj, int iAttackDama
 	int iReduceShield = 0;
 	int iReduceLifeForEffect = 0; 
 	bool bReduceShieldGage = 0;
-	int iDamageDevideToSDRate = g_iDamageDevideToSDRate;
+	int iDamageDevideToSDRate = Configs.g_iDamageDevideToSDRate;
 	iDamageDevideToSDRate -= lpObj->m_JewelOfHarmonyEffect.HJOpDecreaseSDRate;
 	iDamageDevideToSDRate += lpTargetObj->m_JewelOfHarmonyEffect.HJOpAddSDRate;
 

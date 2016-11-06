@@ -58,7 +58,7 @@ void DataSendEventChip(PCHAR pMsg, int size)
 	{
 		wsEvenChipServerCli.Close();
 		wsEvenChipServerCli.CreateSocket(ghWnd);
-		if ( GMEventChipServerConnect(::gEventChipServerIp, WM_GM_EVENTCHIP_CLIENT_MSG_PROC) == FALSE )
+		if (GMEventChipServerConnect(::Configs.gEventChipServerIp, WM_GM_EVENTCHIP_CLIENT_MSG_PROC) == FALSE)
 		{
 			IsEventChipServerConnected = FALSE;
 			LogAddTD("Can not connect EventChip Server");
@@ -97,32 +97,32 @@ void EledoradoBoxOpenEven(LPOBJ lpObj, int boxtype,int addlevel,int money)
 	{
 		case 8:
 			EledoradoBox = ::GoldGoblenItemBag;
-			ItemDropRate = ::gEledoradoGoldGoblenItemDropRate;
-			ExItemDropRate = ::gEledoradoGoldGoblenExItemDropRate;
+			ItemDropRate = ::Configs.gEledoradoGoldGoblenItemDropRate;
+			ExItemDropRate = ::Configs.gEledoradoGoldGoblenExItemDropRate;
 			break;
 
 		case 9:
 			EledoradoBox = ::TitanItemBag;
-			ItemDropRate = ::gEledoradoTitanItemDropRate;
-			ExItemDropRate = ::gEledoradoTitanExItemDropRate;
+			ItemDropRate = ::Configs.gEledoradoTitanItemDropRate;
+			ExItemDropRate = ::Configs.gEledoradoTitanExItemDropRate;
 			break;
 
 		case 10:
 			EledoradoBox = ::GoldDerconItemBag;
-			ItemDropRate = ::gEledoradoGoldDerconItemDropRate;
-			ExItemDropRate = ::gEledoradoGoldDerconExItemDropRate;
+			ItemDropRate = ::Configs.gEledoradoGoldDerconItemDropRate;
+			ExItemDropRate = ::Configs.gEledoradoGoldDerconExItemDropRate;
 			break;
 
 		case 11:
 			EledoradoBox = ::DevilLizardKingItemBag;
-			ItemDropRate = ::gEledoradoDevilLizardKingItemDropRate;
-			ExItemDropRate = ::gEledoradoDevilLizardKingExItemDropRate;
+			ItemDropRate = ::Configs.gEledoradoDevilLizardKingItemDropRate;
+			ExItemDropRate = ::Configs.gEledoradoDevilLizardKingExItemDropRate;
 			break;
 
 		case 12:
 			EledoradoBox = ::KanturItemBag;
-			ItemDropRate = ::gEledoradoDevilTantarosItemDropRate;
-			ExItemDropRate = ::gEledoradoDevilTantarosExItemDropRate;
+			ItemDropRate = ::Configs.gEledoradoDevilTantarosItemDropRate;
+			ExItemDropRate = ::Configs.gEledoradoDevilTantarosExItemDropRate;
 			break;
 	}
 
@@ -277,7 +277,7 @@ void EventChipOpenEven(LPOBJ lpObj)
 	int DropItemNum;
 	int ExOption = 0;
 
-	if ( (rand()%100) < ::g_EventChipDropRateForBoxOfGold )
+	if ((rand() % 100) < ::Configs.g_EventChipDropRateForBoxOfGold)
 	{
 		dur = 255.0f;
 		x = lpObj->X;
@@ -297,7 +297,7 @@ void EventChipOpenEven(LPOBJ lpObj)
 
 	if ( LuckboxItemBag->GetBagCount() > 0 )
 	{
-		if ( (rand()%20) < ::g_ItemDropRateForBoxOfGold )
+		if ((rand() % 20) < ::Configs.g_ItemDropRateForBoxOfGold)
 		{
 			DropItemNum = rand() % LuckboxItemBag->GetBagCount();
 			dur = 0;
@@ -394,7 +394,7 @@ void GoldMedalOpenEven(LPOBJ lpObj)
 
 	if ( GoldMedalItemBag->GetBagCount() > 0 )
 	{
-		if ( (rand()%20) < g_ItemDropRateForGoldMedal )
+		if ((rand() % 20) < Configs.g_ItemDropRateForGoldMedal)
 		{
 			DropItemNum = rand()%GoldMedalItemBag->GetBagCount();
 			dur=0;
@@ -485,7 +485,7 @@ void SilverMedalOpenEven(LPOBJ lpObj)
 
 	if ( SilverMedalItemBag->GetBagCount() > 0 )
 	{
-		if ( (rand()%20) < g_ItemDropRateForSilverMedal )
+		if ((rand() % 20) < Configs.g_ItemDropRateForSilverMedal)
 		{
 			DropItemNum = rand()%SilverMedalItemBag->GetBagCount();
 			dur=0;
@@ -576,14 +576,14 @@ void HeartOfLoveOpenEven(LPOBJ lpObj)
 
 	if ( HeartOfLoveItemBag->GetBagCount() > 0 )
 	{
-		if ( (rand()%20) < g_ItemDropRateForgHeartOfLove )
+		if ((rand() % 20) < Configs.g_ItemDropRateForgHeartOfLove)
 		{
 			DropItemNum = rand()%HeartOfLoveItemBag->GetBagCount();
 			dur=0;
 			x = lpObj->X;
 			y = lpObj->Y;
 
-			if ( gLanguage == 0 )
+			if (Configs.gLanguage == 0)
 			{
 				level = HeartOfLoveItemBag->GetLevel(DropItemNum) + rand()%2;
 			}
@@ -670,7 +670,7 @@ void FireCrackerOpenEven(LPOBJ lpObj)
 	int Option3=0;
 	int DropItemNum;
 
-	if ( gOnlyFireCrackerEffectUse )
+	if (Configs.gOnlyFireCrackerEffectUse)
 	{
 		PMSG_SERVERCMD ServerCmd;
 
@@ -690,14 +690,14 @@ void FireCrackerOpenEven(LPOBJ lpObj)
 
 	if ( FireCrackerItemBag->GetBagCount() > 0 )
 	{
-		if ( (rand()%10) < g_ItemDropRateForgFireCracker )
+		if ((rand() % 10) < Configs.g_ItemDropRateForgFireCracker)
 		{
 			DropItemNum = rand()%FireCrackerItemBag->GetBagCount();
 			dur=0;
 			x = lpObj->X;
 			y = lpObj->Y;
 			
-			if ( gLanguage == 0 )
+			if (Configs.gLanguage == 0)
 			{
 				level = FireCrackerItemBag->GetLevel(DropItemNum) + rand()%2;
 			}
@@ -967,7 +967,7 @@ void DarkLordHeartItemBoxOpen(LPOBJ lpObj)
 	int DropItemNum;
 	int DropItemRate = 0;
 
-	if ( ((DWORD)rand()%60000) < (DWORD)g_iDarkLordHeartOffEventRate )	
+	if (((DWORD)rand() % 60000) < (DWORD)Configs.g_iDarkLordHeartOffEventRate)
 	{
 		if ( lpObj->Level > 100 )
 		{
@@ -1463,10 +1463,6 @@ BOOL AttackEvent55BagOpen(LPOBJ lpObj)
 	return FALSE;
 }
 
-
-
-
-#pragma warning ( disable : 4101 )
 void EGRecvEventChipInfo(PMSG_ANS_VIEW_EC_MN * aRecv)
 {
 	LPOBJ lpObj = &gObj[aRecv->iINDEX];
@@ -1484,9 +1480,6 @@ void EGRecvEventChipInfo(PMSG_ANS_VIEW_EC_MN * aRecv)
 
 	lpObj->UseEventServer = FALSE;
 }
-#pragma warning ( default : 4101 )
-
-
 
 void EGResultRegEventChip(PMSG_ANS_REGISTER_EVENTCHIP * aRecv)
 {
@@ -2385,7 +2378,7 @@ void EGReqBloodCastleEnterCount(int iIndex)
 	pMsg.h.size = sizeof(pMsg);
 	memcpy(pMsg.AccountID, gObj[iIndex].AccountID, 10);
 	memcpy(pMsg.GameID, gObj[iIndex].Name, 10);
-	pMsg.ServerCode = gGameServerCode / 20;
+	pMsg.ServerCode = Configs.gGameServerCode / 20;
 	pMsg.iObjIndex = iIndex;
 
 	if ( !IsDevilSquareEventConnected && !DevilSquareEventConnect )
@@ -2393,7 +2386,7 @@ void EGReqBloodCastleEnterCount(int iIndex)
 		wsRServerCli.Close();
 		wsRServerCli.CreateSocket(ghWnd);
 
-		if ( !GMRankingServerConnect(gDevilSquareEventServerIp, WM_GM_RANKING_CLIENT_MSG_PROC) )
+		if (!GMRankingServerConnect(Configs.gDevilSquareEventServerIp, WM_GM_RANKING_CLIENT_MSG_PROC))
 		{
 			IsDevilSquareEventConnected = 0;
 			LogAddTD("Can not connect Ranking Server");
@@ -2471,7 +2464,7 @@ void EGReqRegCCOfflineGift(int iIndex)
 	pMsg.h.size = sizeof(pMsg);
 	memcpy(pMsg.szUID, gObj[iIndex].AccountID, 11);
 	memcpy(pMsg.szNAME, gObj[iIndex].Name, 11);
-	pMsg.wServerCode = gGameServerCode / 20;
+	pMsg.wServerCode = Configs.gGameServerCode / 20;
 	pMsg.iINDEX = iIndex;
 	pMsg.szUID[10] = 0;
 	pMsg.szNAME[10] = 0;
@@ -2537,7 +2530,7 @@ void EGReqRegDLOfflineGift(int iIndex)
 	pMsg.h.size = sizeof(pMsg);
 	memcpy(pMsg.szUID, gObj[iIndex].AccountID, 11);
 	memcpy(pMsg.szNAME, gObj[iIndex].Name, 11);
-	pMsg.wServerCode = gGameServerCode / 20;
+	pMsg.wServerCode = Configs.gGameServerCode / 20;
 	pMsg.iINDEX = iIndex;
 	pMsg.szUID[10] = 0;
 	pMsg.szNAME[10] = 0;
@@ -2600,7 +2593,7 @@ void EGReqRegHTOfflineGift(int iIndex)
 	pMsg.h.size = sizeof(pMsg);
 	memcpy(pMsg.szUID, gObj[iIndex].AccountID, 11);
 	memcpy(pMsg.szNAME, gObj[iIndex].Name, 11);
-	pMsg.wServerCode = gGameServerCode / 20;
+	pMsg.wServerCode = Configs.gGameServerCode / 20;
 	pMsg.iINDEX = iIndex;
 	pMsg.szUID[10] = 0;
 	pMsg.szNAME[10] = 0;
@@ -2640,6 +2633,8 @@ void EGAnsRegHTOfflineGift( PMSG_ANS_REG_HT_OFFLINE_GIFT* lpMsg)
 	szName[10] = 0;
 	szGIFT_NAME[49] = 0;
 	char szText[256] = {0};
+
+#pragma message ("Translate this!")
 
 	wsprintf(szText, "[숨겨진 보물상자 이벤트] %s 님께서 %s 경품에 당첨되셨습니다.", szName, szGIFT_NAME);
 	AllSendServerMsg(szText);

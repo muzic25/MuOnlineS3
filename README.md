@@ -11,7 +11,7 @@ DevilSquare: OK
 Blood Castle: Gate Bugged (Using first floor localation) -> Fixed  
 Kantru: OK  
 Golden Invasion: OK  
-White Wizard:  
+White Wizard:  OK   
 Illusion temple: Unknown  
 Chaos Castle: OK  
 -ItemsBags: Some missing and missconfigured  

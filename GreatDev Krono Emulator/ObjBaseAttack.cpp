@@ -105,7 +105,7 @@ BOOL CObjBaseAttack::CheckAttackArea(LPOBJ lpObj, LPOBJ lpTargetObj)
 				lpObj->AccountID, lpObj->Name, lMsg.Get(MSGGET(7, 208) + lpObj->MapNumber),
 				lpObj->X, lpObj->Y, iRet);
 
-			if ( bIsIgnorePacketSpeedHackDetect != FALSE )
+			if (Configs.bIsIgnorePacketSpeedHackDetect != FALSE)
 			{
 				return FALSE;
 			}
@@ -121,7 +121,7 @@ BOOL CObjBaseAttack::CheckAttackArea(LPOBJ lpObj, LPOBJ lpTargetObj)
 
 BOOL CObjBaseAttack::PkCheck(LPOBJ lpObj, LPOBJ lpTargetObj)
 {
-	if ( gLanguage == 0 || gLanguage == 2 || gLanguage == 4)
+	if (Configs.gLanguage == 0 || Configs.gLanguage == 2 || Configs.gLanguage == 4)
 	{
 		if ( lpObj->Type == OBJ_USER )
 		{
@@ -129,7 +129,7 @@ BOOL CObjBaseAttack::PkCheck(LPOBJ lpObj, LPOBJ lpTargetObj)
 			{
 				if ( lpObj->m_PK_Count >= 3 )
 				{
-					if ( gPkLimitFree == FALSE )
+					if (Configs.gPkLimitFree == FALSE)
 					{
 						return FALSE;
 					}
@@ -147,7 +147,7 @@ BOOL CObjBaseAttack::PkCheck(LPOBJ lpObj, LPOBJ lpTargetObj)
 
 		if ( gObjGetRelationShip(lpObj, lpTargetObj) == 2 ) // Rivals
 		{
-			if ( gNonPK == FALSE )
+			if (Configs.gNonPK == FALSE)
 			{
 				return TRUE;
 			}
@@ -170,7 +170,7 @@ BOOL CObjBaseAttack::PkCheck(LPOBJ lpObj, LPOBJ lpTargetObj)
 			{
 				if ( lpTargetObj->MapNumber != 6 )
 				{
-					if ( !gNonPK )
+					if (!Configs.gNonPK)
 					{
 						return TRUE;
 					}
@@ -190,7 +190,7 @@ BOOL CObjBaseAttack::PkCheck(LPOBJ lpObj, LPOBJ lpTargetObj)
 				return FALSE;
 			}
 		}
-		else if ( gNonPK != FALSE )
+		else if (Configs.gNonPK != FALSE)
 		{
 			return FALSE;
 		}
@@ -213,13 +213,13 @@ BOOL CObjBaseAttack::PkCheck(LPOBJ lpObj, LPOBJ lpTargetObj)
 			}
 		}
 
-		if ( gLanguage == 0 || gLanguage == 2 )
+		if (Configs.gLanguage == 0 || Configs.gLanguage == 2)
 		{
 			if (lpObj->m_PK_Level >= 6 )
 			{
 				if ( lpObj->m_PK_Count >= 3 )
 				{
-					if ( gPkLimitFree == FALSE )
+					if (Configs.gPkLimitFree == FALSE)
 					{
 						return FALSE;
 					}
@@ -230,7 +230,7 @@ BOOL CObjBaseAttack::PkCheck(LPOBJ lpObj, LPOBJ lpTargetObj)
 			{
 				if ( lpTargetObj->m_PK_Count >= 3 )
 				{
-					if ( gPkLimitFree == FALSE )
+					if (Configs.gPkLimitFree == FALSE)
 					{ 
 						if ( g_CastleSiege.GetCastleState() != CASTLESIEGE_STATE_STARTSIEGE )
 						{ 
@@ -530,7 +530,7 @@ BOOL CObjBaseAttack::MissCheckPvP(LPOBJ lpObj , LPOBJ lpTargetObj, int skill, in
 	iExpressionA /= 10000.0f;
 	iExpressionB /= 10000.0f;
 
-	iAttackSuccessRate = 100.0f * iExpressionA * g_fSuccessAttackRateOption * iExpressionB;
+	iAttackSuccessRate = 100.0f * iExpressionA * Configs.g_fSuccessAttackRateOption * iExpressionB;
 
 	if ( (lpTargetObj->Level - lpObj->Level) >= 100 )
 	{
@@ -551,7 +551,7 @@ BOOL CObjBaseAttack::MissCheckPvP(LPOBJ lpObj , LPOBJ lpTargetObj, int skill, in
 	{
 		GCDamageSend(lpObj->m_Index, lpTargetObj->m_Index, 0, 0, 0, 0);
 
-		if ( g_bShieldComboMissOptionOn == TRUE )
+		if (Configs.g_bShieldComboMissOptionOn == TRUE)
 		{
 			if ( lpObj->comboSkill.ProgressIndex >= 0 )
 			{

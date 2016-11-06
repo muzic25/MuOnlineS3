@@ -354,7 +354,6 @@ void CKanturuUtil::SendDataToUser(int iIndex, LPBYTE lpMsg, int iSize)
 
 
 // #error Bad Coded Function
-#pragma warning ( disable : 4700 )
 void CKanturuUtil::SendKanturuChattingMsg(int iIndex, LPSTR lpMsg, ...)
 {
 	return;
@@ -374,7 +373,6 @@ void CKanturuUtil::SendKanturuChattingMsg(int iIndex, LPSTR lpMsg, ...)
 		}
 	}
 }
-#pragma warning ( default : 4700 )
 
 
 
@@ -403,13 +401,13 @@ void CKanturuUtil::SendDataKanturuTimeAttackEvent(int iIndex, BYTE btFlag, int i
 	pMsg.szUID[11] = '\0';	// #error Change 11 to 10
 	memcpy(pMsg.szNAME, gObj[iIndex].Name, MAX_ACCOUNT_LEN);
 	pMsg.szNAME[11] = '\0';	// #error Change 11 to 10
-	pMsg.wServerCode = gGameServerCode / 20;	// #warning Change the 20 for a posible macro of MapServerInfo
+	pMsg.wServerCode = Configs.gGameServerCode / 20;	// #warning Change the 20 for a posible macro of MapServerInfo
 
 	char szKanturuBattleDate[14];
 	memset(szKanturuBattleDate, 0, sizeof(szKanturuBattleDate));
 
 	wsprintf(szKanturuBattleDate, "%d%03d%02d",
-		g_Kanturu.GetKanturuBattleDate(), gGameServerCode,
+		g_Kanturu.GetKanturuBattleDate(), Configs.gGameServerCode,
 		g_Kanturu.GetKanturuBattleCounter());
 	
 	memcpy(pMsg.szBattleID, szKanturuBattleDate, sizeof(pMsg.szBattleID));

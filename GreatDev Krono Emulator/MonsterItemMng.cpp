@@ -225,15 +225,15 @@ void CMonsterItemMng::gObjGiveItemSearch(int monsterlevel, int maxlevel)
 
 			if ( type == 14 && index == 17 )
 			{
-				if ( gEyesOfDevilSquareDropRate <= 0 )
+				if (Configs.gEyesOfDevilSquareDropRate <= 0)
 				{
-					gEyesOfDevilSquareDropRate = 1;
+					Configs.gEyesOfDevilSquareDropRate = 1;
 				}
 
-				perc = rand() % gEyesOfDevilSquareDropRate;
+				perc = rand() % Configs.gEyesOfDevilSquareDropRate;
 				bCheckDevil = 1;
 
-				if ( gDevilSquareEvent == 0 )
+				if (Configs.gDevilSquareEvent == 0)
 				{
 					perc = 1;
 				}
@@ -241,10 +241,10 @@ void CMonsterItemMng::gObjGiveItemSearch(int monsterlevel, int maxlevel)
 
 			if ( type == 14 && index == 18 )
 			{
-				perc = rand() % gKeyOfDevilSquareDropRate;
+				perc = rand() % Configs.gKeyOfDevilSquareDropRate;
 				bCheckDevil = 1;
 
-				if ( gDevilSquareEvent == 0 )
+				if (Configs.gDevilSquareEvent == 0)
 				{
 					perc = 1;
 				}

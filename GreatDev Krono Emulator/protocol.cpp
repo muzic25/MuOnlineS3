@@ -36,13 +36,13 @@ void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOO
 	LogAddHeadHex(gObj[aIndex].AccountID, (char*)aRecv, aLen+2);
 #endif
 
-	if (gStalkProtocol)
+	if (Configs.gStalkProtocol)
 	{
-		if (gStalkProtocolId[0] == gObj[aIndex].AccountID[0])
+		if (Configs.gStalkProtocolId[0] == gObj[aIndex].AccountID[0])
 		{
-			if (gStalkProtocolId[1] == gObj[aIndex].AccountID[1])
+			if (Configs.gStalkProtocolId[1] == gObj[aIndex].AccountID[1])
 			{
-				if (!strcmp(gStalkProtocolId, gObj[aIndex].AccountID))
+				if (!strcmp(Configs.gStalkProtocolId, gObj[aIndex].AccountID))
 				{
 					LogAddHeadHex(gObj[aIndex].AccountID, (char*)aRecv, aLen);
 				}
@@ -1064,7 +1064,7 @@ void PChatProc(PMSG_CHATDATA * lpChat, short aIndex)
 	memcpy(lpChat->chatid, szId, MAX_ACCOUNT_LEN);
 	int szTargetNameCount = 0;
 
-	if (gWriteChatLog)
+	if (Configs.gWriteChatLog)
 	{
 		pChatMsg.h.c = 0xC1;
 		pChatMsg.h.headcode = 0x02;
@@ -1072,7 +1072,7 @@ void PChatProc(PMSG_CHATDATA * lpChat, short aIndex)
 		memcpy(pChatMsg.Name, gObj[aIndex].Name, MAX_ACCOUNT_LEN);
 		pChatMsg.AccountID[MAX_ACCOUNT_LEN] = 0;
 		pChatMsg.Name[MAX_ACCOUNT_LEN] = 0;
-		pChatMsg.wServer = gGameServerCode;
+		pChatMsg.wServer = Configs.gGameServerCode;
 		pChatMsg.btType = 0xFF;
 	}
 
@@ -1088,7 +1088,7 @@ void PChatProc(PMSG_CHATDATA * lpChat, short aIndex)
 
 				LogAddTD(lMsg.Get(MSGGET(1, 215)), gObj[aIndex].AccountID, gObj[aIndex].Name, &lpChat->chatmsg[1]);
 
-				if (gWriteChatLog)
+				if (Configs.gWriteChatLog)
 				{
 					memcpy(pChatMsg.szChatMsg, &lpChat->chatmsg[1], MAX_CHAT_LEN - 1);
 					pChatMsg.szChatMsg[MAX_CHAT_LEN] = 0;
@@ -1126,7 +1126,7 @@ void PChatProc(PMSG_CHATDATA * lpChat, short aIndex)
 
 			if (partycount >= 0)
 			{
-				if (gWriteChatLog)
+				if (Configs.gWriteChatLog)
 				{
 					memcpy(pChatMsg.szChatMsg, &lpChat->chatmsg[1], MAX_CHAT_LEN - 1);
 					pChatMsg.szChatMsg[MAX_CHAT_LEN] = 0;
@@ -1141,7 +1141,7 @@ void PChatProc(PMSG_CHATDATA * lpChat, short aIndex)
 					{
 						DataSend(number, (LPBYTE)lpChat, lpChat->h.size);
 
-						if (gWriteChatLog)
+						if (Configs.gWriteChatLog)
 						{
 							strcpy(pChatMsg.szTargetName[szTargetNameCount], gObj[number].Name);
 							szTargetNameCount++;
@@ -1166,7 +1166,7 @@ void PChatProc(PMSG_CHATDATA * lpChat, short aIndex)
 						GDGuildNoticeSave(lpObj->lpGuild->Name, &lpChat->chatmsg[2]);
 						LogAdd(lMsg.Get(MSGGET(1, 216)), lpObj->lpGuild->Name, lpChat->chatmsg);
 
-						if (gWriteChatLog)
+						if (Configs.gWriteChatLog)
 						{
 							memcpy(pChatMsg.szChatMsg, &lpChat->chatmsg[2], MAX_CHAT_LEN - 2);
 							pChatMsg.szChatMsg[MAX_CHAT_LEN] = 0;
@@ -1211,7 +1211,7 @@ void PChatProc(PMSG_CHATDATA * lpChat, short aIndex)
 					}
 				}
 
-				if (g_iServerGroupUnionChatting == TRUE)
+				if (Configs.g_iServerGroupUnionChatting == TRUE)
 					GDUnionServerGroupChattingSend(lpObj->lpGuild->iGuildUnion, lpChat);
 			}
 			// Just Guild
@@ -1241,7 +1241,7 @@ void PChatProc(PMSG_CHATDATA * lpChat, short aIndex)
 					}
 				}
 
-				if (g_iServerGroupGuildChatting == TRUE)
+				if (Configs.g_iServerGroupGuildChatting == TRUE)
 				{
 					if (lpObj->lpGuild->Count > 1)
 					{
@@ -1249,7 +1249,7 @@ void PChatProc(PMSG_CHATDATA * lpChat, short aIndex)
 					}
 				}
 
-				if (gWriteChatLog)
+				if (Configs.gWriteChatLog)
 				{
 					memcpy(pChatMsg.szChatMsg, &lpChat->chatmsg[1], MAX_CHAT_LEN - 1);
 					pChatMsg.szChatMsg[MAX_CHAT_LEN] = 0;
@@ -1257,7 +1257,7 @@ void PChatProc(PMSG_CHATDATA * lpChat, short aIndex)
 				}
 			}
 
-			if (gWriteChatLog)
+			if (Configs.gWriteChatLog)
 			{
 				strcpy(pChatMsg.szTargetName[szTargetNameCount], lpObj->GuildName);
 				szTargetNameCount++;
@@ -1270,7 +1270,7 @@ void PChatProc(PMSG_CHATDATA * lpChat, short aIndex)
 		DataSend(aIndex, (LPBYTE)lpChat, lpChat->h.size);
 		MsgSendV2(lpObj, (LPBYTE)lpChat, lpChat->h.size);
 
-		if (gWriteChatLog)
+		if (Configs.gWriteChatLog)
 		{
 			memcpy(pChatMsg.szChatMsg, lpChat->chatmsg, MAX_CHAT_LEN);
 			pChatMsg.szChatMsg[MAX_CHAT_LEN] = 0;
@@ -1279,14 +1279,14 @@ void PChatProc(PMSG_CHATDATA * lpChat, short aIndex)
 		}
 	}
 
-	if (gWriteChatLog)
+	if (Configs.gWriteChatLog)
 	{
 		if (pChatMsg.btType != 0xFF)
 		{
 			pChatMsg.btType |= szTargetNameCount << 4;
 			pChatMsg.h.size = sizeof(pChatMsg) - (5 - szTargetNameCount) - 1;
 
-			if (gWriteChatLog)
+			if (Configs.gWriteChatLog)
 			{
 				gSendHackLog.SendData((LPBYTE)&pChatMsg, pChatMsg.h.size);
 			}
@@ -1480,7 +1480,7 @@ void CGChatWhisperRecv(PMSG_CHATDATA_WHISPER* lpMsg, int aIndex)
 		CHAT_LOG_DATA pChatMsg;
 		int szTargetNameCount = 0;
 
-		if ( gWriteChatLog != FALSE )
+		if (Configs.gWriteChatLog != FALSE)
 		{
 			
 
@@ -1490,7 +1490,7 @@ void CGChatWhisperRecv(PMSG_CHATDATA_WHISPER* lpMsg, int aIndex)
 			memcpy(pChatMsg.Name, gObj[aIndex].Name, MAX_ACCOUNT_LEN);
 			pChatMsg.AccountID[MAX_ACCOUNT_LEN] = 0;
 			pChatMsg.Name[MAX_ACCOUNT_LEN] = 0;
-			pChatMsg.wServer = gGameServerCode;
+			pChatMsg.wServer = Configs.gGameServerCode;
 			memcpy(pChatMsg.szChatMsg, lpMsg->chatmsg, MAX_CHAT_LEN);
 			pChatMsg.szChatMsg[MAX_CHAT_LEN] = 0;
 			pChatMsg.btType = 5;
@@ -1509,10 +1509,6 @@ void CGChatWhisperRecv(PMSG_CHATDATA_WHISPER* lpMsg, int aIndex)
 	}
 }
 
-
-
-
-
 struct PMSG_JOINRESULT
 {
 	PBMSG_HEAD h;	// C1:F1
@@ -1522,8 +1518,6 @@ struct PMSG_JOINRESULT
 	BYTE NumberL;	// 6
 	BYTE CliVersion[5];	// 7
 };
-
-
 
 void SCPJoinResultSend(int aIndex, BYTE result)
 {
@@ -1538,16 +1532,15 @@ void SCPJoinResultSend(int aIndex, BYTE result)
 	pResult.result = result;
 	pResult.NumberH = SET_NUMBERH(aIndex);
 	pResult.NumberL = SET_NUMBERL(aIndex);
-	pResult.CliVersion[0] = szClientVersion[0];
-	pResult.CliVersion[1] = szClientVersion[1];
-	pResult.CliVersion[2] = szClientVersion[2];
-	pResult.CliVersion[3] = szClientVersion[3];
-	pResult.CliVersion[4] = szClientVersion[4];
+	pResult.CliVersion[0] = Configs.szClientVersion[0];
+	pResult.CliVersion[1] = Configs.szClientVersion[1];
+	pResult.CliVersion[2] = Configs.szClientVersion[2];
+	pResult.CliVersion[3] = Configs.szClientVersion[3];
+	pResult.CliVersion[4] = Configs.szClientVersion[4];
 
 	DataSend(aIndex, (unsigned char*)&pResult, pResult.h.size);
 	gObj[aIndex].ConnectCheckTime = GetTickCount();
 }
-
 
 
 struct SDHP_IDPASS
@@ -1566,11 +1559,11 @@ void CSPJoinIdPassRequest(PMSG_IDPASS* lpMsg, int aIndex)
 	char id[11];
 
 
-	if ( lpMsg->CliVersion[0] != szClientVersion[0] ||
-		 lpMsg->CliVersion[1] != szClientVersion[1] ||
-		 lpMsg->CliVersion[2] != szClientVersion[2] ||
-		 lpMsg->CliVersion[3] != szClientVersion[3] ||
-		 lpMsg->CliVersion[4] != szClientVersion[4] )
+	if (lpMsg->CliVersion[0] != Configs.szClientVersion[0] ||
+		lpMsg->CliVersion[1] != Configs.szClientVersion[1] ||
+		lpMsg->CliVersion[2] != Configs.szClientVersion[2] ||
+		lpMsg->CliVersion[3] != Configs.szClientVersion[3] ||
+		lpMsg->CliVersion[4] != Configs.szClientVersion[4])
 	{
 		GCJoinResult(JS_BAD_CLIENT_VERSION, aIndex);
 		CloseClient(aIndex);
@@ -1583,7 +1576,7 @@ void CSPJoinIdPassRequest(PMSG_IDPASS* lpMsg, int aIndex)
 	memcpy(id, lpMsg->Id, sizeof(lpMsg->Id));
 	BuxConvert(id, MAX_ACCOUNT_LEN);
 
-	if ( strcmp(serial, szGameServerExeSerial) != 0 )
+	if (strcmp(serial, Configs.szGameServerExeSerial) != 0)
 	{
 		LogAddC(2, "error-L1: Serial error [%s] [%s]", id, serial);
 		GCJoinResult(JS_BAD_CLIENT_VERSION, aIndex);
@@ -1591,7 +1584,7 @@ void CSPJoinIdPassRequest(PMSG_IDPASS* lpMsg, int aIndex)
 		return;
 	}
 	
-	if ( bCanConnectMember == TRUE )
+	if (Configs.bCanConnectMember == TRUE)
 	{
 		if ( ConMember.IsMember(id) == FALSE )
 		{
@@ -1649,7 +1642,7 @@ void CSPJoinIdPassRequest(PMSG_IDPASS* lpMsg, int aIndex)
 	gObj[aIndex].m_cAccountItemBlock = 0;
 
 	wsJServerCli.DataSend((char*)&spMsg, spMsg.h.size);
-	LogAddTD("join send : (%d)%s", aIndex, gObj[aIndex].AccountID);
+	LogAddTD("[%d] Join send: %s IP: %d", aIndex, gObj[aIndex].AccountID, gObj[aIndex].Ip_addr);
 	lpObj->m_bMapSvrMoveReq = false;
 	lpObj->m_sPrevMapSvrCode = -1; 
 	lpObj->m_sDestMapNumber = -1;
@@ -1846,7 +1839,7 @@ void CGPCharacterCreate( PMSG_CHARCREATE * lpMsg, int aIndex)
 	}
 
 
-	if ( !gCreateCharacter )
+	if (!Configs.gCreateCharacter)
 	{
 		GCServerMsgStringSend("서버분할 기간에는 캐릭터를 생성할수 없습니다", aIndex, 1);
 		JGCharacterCreateFailSend(aIndex, lpMsg->Name);
@@ -1963,7 +1956,7 @@ void CGPCharDel(PMSG_CHARDELETE * lpMsg,int aIndex)
 		return;
 	}
 
-	if ( !gGuildDestroy )
+	if (!Configs.gGuildDestroy)
 	{
 		pResult.result = 0;
 		DataSend(aIndex, (LPBYTE)&pResult, pResult.h.size);
@@ -3091,7 +3084,7 @@ BOOL CGItemDropRequest(PMSG_ITEMTHROW * lpMsg, int aIndex, BOOL drop_type)
 		||  lpObj->pInventory[lpMsg->Ipos].IsSetItem() != FALSE 
 		||  lpObj->pInventory[lpMsg->Ipos].IsExtItem() != FALSE )
 	{
-		if ( gPkLimitFree == FALSE )
+		if (Configs.gPkLimitFree == FALSE)
 		{
 			pResult.Result = false;
 		}
@@ -3436,7 +3429,7 @@ BOOL CGItemDropRequest(PMSG_ITEMTHROW * lpMsg, int aIndex, BOOL drop_type)
 						gObjInventoryDeleteItem(aIndex, lpMsg->Ipos);
 						pResult.Result = true;
 
-						if ( (rand()%10000) < g_iHiddenTreasureBoxOfflineRate )
+						if ((rand() % 10000) < Configs.g_iHiddenTreasureBoxOfflineRate)
 						{
 							EGReqRegHTOfflineGift(lpObj->m_Index);
 						}
@@ -3863,7 +3856,7 @@ void CGInventoryItemMove(PMSG_INVENTORYITEMMOVE * lpMsg, int aIndex)
 			return;
 		}
 
-		if ( ::bCanWarehouseLock == TRUE )
+		if (::Configs.bCanWarehouseLock == TRUE)
 		{
 			if ( gObj[aIndex].WarehouseLock == 1 )
 			{
@@ -4160,7 +4153,7 @@ void CGTalkRequestRecv(PMSG_TALKREQUEST * lpMsg, int aIndex)
 			return;
 		}
 
-		if ( gPkLimitFree == FALSE )
+		if (Configs.gPkLimitFree == FALSE)
 		{
 			if ( lpObj->m_PK_Level > 4 )
 			{
@@ -4173,7 +4166,7 @@ void CGTalkRequestRecv(PMSG_TALKREQUEST * lpMsg, int aIndex)
 			}
 		}
 	}
-	if ( gMerryXMasNpcEvent == TRUE )
+	if (Configs.gMerryXMasNpcEvent == TRUE)
 	{
 		if ( (rand()%6) == 0 )
 		{
@@ -4181,7 +4174,7 @@ void CGTalkRequestRecv(PMSG_TALKREQUEST * lpMsg, int aIndex)
 		}
 	}
 
-	if ( ::gHappyNewYearNpcEvent == TRUE )
+	if (::Configs.gHappyNewYearNpcEvent == TRUE)
 	{
 		if ( (rand()%6) == 0 )
 		{
@@ -4209,7 +4202,7 @@ void CGTalkRequestRecv(PMSG_TALKREQUEST * lpMsg, int aIndex)
 	}
 	else if ( ShopNum == 101 )
 	{
-		if ( bCanChaosBox == TRUE )
+		if (Configs.bCanChaosBox == TRUE)
 		{
 			if ( lpObj->m_bPShopOpen == true )
 			{
@@ -4222,7 +4215,7 @@ void CGTalkRequestRecv(PMSG_TALKREQUEST * lpMsg, int aIndex)
 			lpObj->m_IfState.state = 0;
 			pResult.result = 3;
 
-			if(gObj[DealerNumber].Class == 450) //Season 3.0 add-on
+		/*	if(gObj[DealerNumber].Class == 450) //Season 3.0 add-on
 			{
 				pResult.result = 0x16; //season4 changed
 			}
@@ -4230,16 +4223,16 @@ void CGTalkRequestRecv(PMSG_TALKREQUEST * lpMsg, int aIndex)
 			if(gObj[DealerNumber].Class == 478) //Season 4.0 add-on
 			{
 				pResult.result = 0x20;
-			}
+			}	*/
 
 			lpObj->bIsChaosMixCompleted = false;
 
-			pResult.level1 = gDQChaosSuccessRateLevel1;
-			pResult.level2 = gDQChaosSuccessRateLevel2;
-			pResult.level3 = gDQChaosSuccessRateLevel3;
-			pResult.level4 = gDQChaosSuccessRateLevel4;
-			pResult.level5 = gDQChaosSuccessRateLevel5;
-			pResult.level6 = gDQChaosSuccessRateLevel6;
+			pResult.level1 = Configs.gDQChaosSuccessRateLevel1;
+			pResult.level2 = Configs.gDQChaosSuccessRateLevel2;
+			pResult.level3 = Configs.gDQChaosSuccessRateLevel3;
+			pResult.level4 = Configs.gDQChaosSuccessRateLevel4;
+			pResult.level5 = Configs.gDQChaosSuccessRateLevel5;
+			pResult.level6 = Configs.gDQChaosSuccessRateLevel6;
 //			pResult.level7 = gDQChaosSuccessRateLevel7; //season 3.0 add-on
 
 			DataSend(aIndex, (LPBYTE)&pResult, pResult.h.size);
@@ -4253,11 +4246,11 @@ void CGTalkRequestRecv(PMSG_TALKREQUEST * lpMsg, int aIndex)
 	}
 	else
 	{
-		if(gObj[DealerNumber].Class == 492) //Season 4.6 add-on
+	/*	if(gObj[DealerNumber].Class == 492) //Season 4.6 add-on
 		{
 			pResult.result = 0x22;
 
-		}
+		} */
 
 		DataSend(aIndex, (LPBYTE)&pResult, pResult.h.size);
 	}
@@ -4952,7 +4945,7 @@ void CGTradeRequestSend(PMSG_TRADE_REQUEST * lpMsg, int aIndex)
 {
 	int number;
 
-	if (bCanTrade == FALSE )
+	if (Configs.bCanTrade == FALSE)
 	{
 		::GCServerMsgStringSend(lMsg.Get(MSGGET(4, 125)), aIndex, 1);
 		::GCServerMsgStringSend(lMsg.Get(MSGGET(4, 126)), aIndex, 1);
@@ -5505,7 +5498,7 @@ struct CG_REQ_PSHOP_SET_ITEM_PRICE
 
 void CGPShopReqSetItemPrice(PMSG_REQ_PSHOP_SETITEMPRICE * lpMsg, int aIndex)
 {
-	if ( gDoPShopOpen  == FALSE )
+	if (Configs.gDoPShopOpen == FALSE)
 	{
 		CGPShopAnsSetItemPrice(aIndex, 0, lpMsg->btItemPos);
 		return;
@@ -5639,7 +5632,7 @@ struct PMSG_ANS_PSHOP_TEXT_CHANGED
 
 void CGPShopReqOpen(PMSG_REQ_PSHOP_OPEN * lpMsg, int aIndex)
 {
-	if ( ::gDoPShopOpen == FALSE )
+	if (::Configs.gDoPShopOpen == FALSE)
 		return;
 
 	if ( !gObjIsConnected(aIndex))
@@ -5829,7 +5822,7 @@ void CGPShopAnsClose(int aIndex, BYTE btResult)
 
 void CGPShopReqBuyList(PMSG_REQ_BUYLIST_FROM_PSHOP * lpMsg, int aSourceIndex)
 {
-	if ( ::gDoPShopOpen == FALSE )
+	if (::Configs.gDoPShopOpen == FALSE)
 		return;
 
 	if ( gObjIsConnected(MAKE_NUMBERW(lpMsg->NumberH, lpMsg->NumberL)) == FALSE)
@@ -5941,7 +5934,7 @@ struct PMSG_ANS_BUYLIST_FROM_PSHOP
 
 void CGPShopAnsBuyList(int aSourceIndex, int aTargetIndex, BYTE btResult, bool bResend)
 {
-	if ( gDoPShopOpen == FALSE )
+	if (Configs.gDoPShopOpen == FALSE)
 		return;
 	
 
@@ -6025,7 +6018,7 @@ void CGPShopAnsBuyList(int aSourceIndex, int aTargetIndex, BYTE btResult, bool b
 
 void CGPShopReqBuyItem(PMSG_REQ_BUYITEM_FROM_PSHOP * lpMsg, int aSourceIndex)
 {
-	if ( gDoPShopOpen == FALSE )
+	if (Configs.gDoPShopOpen == FALSE)
 		return;
 
 	if ( gObjIsConnected( MAKE_NUMBERW(lpMsg->NumberH, lpMsg->NumberL)) == FALSE )
@@ -7212,7 +7205,7 @@ void CGGuildDelUser(PMSG_GUILDDELUSER * lpMsg, int aIndex)
 	PHeadSetB((LPBYTE)&pMsg, 0x53, sizeof(pMsg));
 	pMsg.Result = 3;
 
-	if ( !gGuildDestroy )
+	if (!Configs.gGuildDestroy)
 	{
 		DataSend(aIndex, (LPBYTE)&pMsg, pMsg.h.size);
 		return;
@@ -7232,7 +7225,7 @@ void CGGuildDelUser(PMSG_GUILDDELUSER * lpMsg, int aIndex)
 		{
 			if ( !strcmp(memberid, gObj[aIndex].Name ))
 			{ 
-				if ( g_bCastleGuildDestoyLimit )
+				if (Configs.g_bCastleGuildDestoyLimit)
 				{
 					if ( strcmp(gObj[aIndex].lpGuild->Name, g_CastleSiege.GetCastleOwnerGuild()) == 0 )
 					{
@@ -7670,7 +7663,7 @@ void GCGuildWarRequestResult(LPSTR GuildName, int aIndex, int type)
 		return;
 	}
 
-	if ( gPkLimitFree == FALSE && gObj[aIndex].m_PK_Level >= 6)
+	if (Configs.gPkLimitFree == FALSE && gObj[aIndex].m_PK_Level >= 6)
 	{
 		pMsg.Result = 4;
 
@@ -7738,7 +7731,7 @@ void GCGuildWarRequestResult(LPSTR GuildName, int aIndex, int type)
 					{
 						if ( !strcmp(gObj[n].Name, lpNode->Names[0]))
 						{
-							if ( gPkLimitFree == FALSE && gObj[n].m_PK_Level >= 6)
+							if (Configs.gPkLimitFree == FALSE && gObj[n].m_PK_Level >= 6)
 							{
 								pMsg.Result = 4;
 
@@ -7821,8 +7814,6 @@ struct PMSG_GUILDWARSEND
 	char GuildName[8];	// 3
 	BYTE Type;	// B
 };
- 
-#pragma warning ( disable : 4101 ) 
 
 void GCGuildWarRequestSend(LPSTR GuildName, int aIndex, int type)
 {
@@ -7836,7 +7827,7 @@ void GCGuildWarRequestSend(LPSTR GuildName, int aIndex, int type)
 	// (%s) guild declared guild war
 	LogAddTD(lMsg.Get(MSGGET(1, 237)), GuildName); 
 } 
-#pragma warning ( default : 4101 ) 
+
 struct PMSG_GUILDWAR_DECLARE
 {
 	PBMSG_HEAD h;	// C1:62
@@ -8015,7 +8006,7 @@ void GCGuildWarRequestSendRecv(PMSG_GUILDWARSEND_RESULT * lpMsg, int aIndex)
 										gObj[lpMyNode->Index[n]].IsInBattleGround = true;
 										pTeleportMsg.MoveNumber = 51;
 
-										if ( gPkLimitFree || gObj[lpMyNode->Index[n]].m_PK_Level < 6 )
+										if (Configs.gPkLimitFree || gObj[lpMyNode->Index[n]].m_PK_Level < 6)
 										{
 											gObjTeleport(lpMyNode->Index[n], 6, x++, 153);
 											count++;
@@ -8074,7 +8065,7 @@ void GCGuildWarRequestSendRecv(PMSG_GUILDWARSEND_RESULT * lpMsg, int aIndex)
 									if ( lpMyNode->lpTargetGuildNode->WarType == 1 )
 									{
 
-										if ( gPkLimitFree != 0 || gObj[lpMyNode->lpTargetGuildNode->Index[n]].m_PK_Level < 6 )
+										if (Configs.gPkLimitFree != 0 || gObj[lpMyNode->lpTargetGuildNode->Index[n]].m_PK_Level < 6)
 										{
 											gObj[lpMyNode->lpTargetGuildNode->Index[n]].IsInBattleGround = true;
 											gObjTeleport(lpMyNode->lpTargetGuildNode->Index[n], 6, x++, 164);
@@ -8102,10 +8093,6 @@ void GCGuildWarRequestSendRecv(PMSG_GUILDWARSEND_RESULT * lpMsg, int aIndex)
 		}
 	}
 }
-
-
- 
-#pragma warning ( disable : 4101 ) 
 
 void GCGuildWarDeclare(int aIndex, LPSTR _guildname)
 {
@@ -8175,8 +8162,6 @@ void GCGuildWarScore(int aIndex)
 	DataSend(aIndex, (LPBYTE)&pMsg, pMsg.h.size); 
 }	
 
- 
-#pragma warning ( default : 4101 ) 
 
 void CGWarehouseMoneyInOut(int aIndex, PMSG_WAREHOUSEMONEYINOUT* lpMsg)
 {
@@ -8232,7 +8217,7 @@ void CGWarehouseMoneyInOut(int aIndex, PMSG_WAREHOUSEMONEYINOUT* lpMsg)
 			break;
 		case 0x01:
 			{
-				if ( bCanWarehouseLock == TRUE)
+				if (Configs.bCanWarehouseLock == TRUE)
 				{
 					if ( lpObj->WarehouseLock == 1)
 					{
@@ -8378,7 +8363,7 @@ void GCWarehouseStateSend(int aIndex, BYTE state)
 
 void GCWarehouseRecivePassword(int aIndex, PMSG_WAREHOUSEPASSSEND* lpMsg)
 {
-	if ( bCanWarehouseLock == FALSE )
+	if (Configs.bCanWarehouseLock == FALSE)
 		return;
 
 	int pw = lpMsg->Pass;
@@ -9173,14 +9158,14 @@ void CGAttack(PMSG_ATTACK* lpMsg, int aIndex)
 		lpObj->m_DetectCount++;
 		lpObj->m_SumLastAttackTime += iTimeCalc;
 
-		if ( lpObj->m_DetectCount > gHackCheckCount )
+		if (lpObj->m_DetectCount > Configs.gHackCheckCount)
 		{
 			lpObj->m_DetectedHackKickCount++;
-			lpObj->m_SpeedHackPenalty = gSpeedHackPenalty;
+			lpObj->m_SpeedHackPenalty = Configs.gSpeedHackPenalty;
 			
-			if ( gIsKickDetecHackCountLimit )
+			if (Configs.gIsKickDetecHackCountLimit)
 			{
-				if ( lpObj->m_DetectedHackKickCount > gDetectedHackKickCount )
+				if (lpObj->m_DetectedHackKickCount > Configs.gDetectedHackKickCount)
 				{
 					LogAddTD("[%s][%s] %s Kick DetecHackCountLimit Over User (%d)",
 						lpObj->AccountID, lpObj->Name, lMsg.Get(MSGGET(7, 108)+lpObj->Class),
@@ -9206,7 +9191,7 @@ void CGAttack(PMSG_ATTACK* lpMsg, int aIndex)
 
 	lpObj->m_LastAttackTime = GetTickCount();
 
-	if ( bIsIgnorePacketSpeedHackDetect )
+	if (Configs.bIsIgnorePacketSpeedHackDetect)
 	{
 		if ( lpObj->m_SpeedHackPenalty > 0 )
 		{
@@ -9486,7 +9471,7 @@ void CGMagicAttack(PMSG_MAGICATTACK* lpMsg, int aIndex)
 		if ( lpObj->Class == 275 )	// Kundun
 			lpObj->TargetNumber = -1;
 
-		if ( bIsIgnorePacketSpeedHackDetect )
+		if (Configs.bIsIgnorePacketSpeedHackDetect)
 			return;
 	}
 
@@ -9530,7 +9515,7 @@ void CGMagicAttack(PMSG_MAGICATTACK* lpMsg, int aIndex)
 	{
 		DWORD dwTick = GetTickCount() - lpObj->m_dwSkillDistanceErrorTick;
 		
-		if ( dwTick > (g_iSkillDiatanceKickCheckTime*1000) )
+		if (dwTick > (Configs.g_iSkillDiatanceKickCheckTime * 1000))
 		{
 			lpObj->m_iSkillDistanceErrorCount = 0;
 			lpObj->m_dwSkillDistanceErrorTick = GetTickCount();
@@ -9538,9 +9523,9 @@ void CGMagicAttack(PMSG_MAGICATTACK* lpMsg, int aIndex)
 
 		lpObj->m_iSkillDistanceErrorCount++;
 
-		if ( lpObj->m_iSkillDistanceErrorCount > g_iSkillDistanceKickCount )
+		if (lpObj->m_iSkillDistanceErrorCount > Configs.g_iSkillDistanceKickCount)
 		{
-			if ( g_iSkillDistanceKick )
+			if (Configs.g_iSkillDistanceKick)
 			{
 				LogAddTD("[SKILL DISTANCE CHECK] [%s][%s] Kick Invalid Skill Area User. count(%d)",
 					lpObj->AccountID, lpObj->Name, lpObj->m_iSkillDistanceErrorCount);
@@ -10098,13 +10083,13 @@ void CGBeattackRecv(unsigned char* lpRecv, int aIndex, int magic_send)
 				lpObj->m_DetectCount++;
 				lpObj->m_SumLastAttackTime += iTimeCalc;
 
-				if ( lpObj->m_DetectCount > gHackCheckCount )
+				if (lpObj->m_DetectCount > Configs.gHackCheckCount)
 				{
 					lpObj->m_DetectedHackKickCount++;
 
-					if ( gIsKickDetecHackCountLimit )
+					if (Configs.gIsKickDetecHackCountLimit)
 					{
-						if ( lpObj->m_DetectedHackKickCount > gDetectedHackKickCount )
+						if (lpObj->m_DetectedHackKickCount > Configs.gDetectedHackKickCount)
 						{
 							LogAddTD("[%s][%s] %s Kick DetecHackCountLimit Over User (%d)",
 								lpObj->AccountID, lpObj->Name, lMsg.Get(MSGGET(7, 108)+lpObj->Class),
@@ -10133,7 +10118,7 @@ void CGBeattackRecv(unsigned char* lpRecv, int aIndex, int magic_send)
 		}
 	}
 
-	if ( bIsIgnorePacketSpeedHackDetect )
+	if (Configs.bIsIgnorePacketSpeedHackDetect)
 	{
 		LPOBJ lpObj = &gObj[aIndex];
 
@@ -10188,13 +10173,13 @@ void CGBeattackRecv(unsigned char* lpRecv, int aIndex, int magic_send)
 			}
 		}
 		
-		if ( gWriteSkillLog )
+		if (Configs.gWriteSkillLog)
 		{
 			LogAddTD("Magic Attack3 : %d, serial = %d, Tgt =  %d, cnt = %d",
 				lpMagic->m_Skill, lpCount->Serial, tNumber, lpCount->Count);
 		}
 
-		if ( gEnableCheckPenetrationSkill )
+		if (Configs.gEnableCheckPenetrationSkill)
 		{
 			if ( lpMagic->m_Skill == 78 )	// #error Also Put the Check for FireScream
 			{
@@ -12470,7 +12455,7 @@ void CGRequestEnterChaosCastle(PMSG_REQ_MOVECHAOSCASTLE* lpMsg, int iIndex)
 	if ( gObj[iIndex].m_IfState.use && gObj[iIndex].m_IfState.type != 12 )
 		return;
 
-	if ( gPkLimitFree == FALSE )
+	if (Configs.gPkLimitFree == FALSE)
 	{
 		if ( gObj[iIndex].m_PK_Level >= 6 )
 		{
@@ -12735,7 +12720,7 @@ struct SDHP_CHARACTER_TRANSFER
 
 void CGReqMoveOtherServer(PMSG_REQ_MOVE_OTHERSERVER * lpMsg, int aIndex)
 {
-	if ( !gEnableServerDivision)
+	if (!Configs.gEnableServerDivision)
 		return;
 
 	if ( !gObjIsConnectedGP(aIndex))
@@ -12761,10 +12746,8 @@ void CGReqMoveOtherServer(PMSG_REQ_MOVE_OTHERSERVER * lpMsg, int aIndex)
 		DataSend(aIndex, (LPBYTE)&pResult, pResult.h.size);
 		lpObj->m_MoveOtherServer = false;
 
-		LogAddTD("[CharTrasfer] Fail (JoominNumber) [%s][%s]",
-			lpObj->AccountID, lpObj->Name);
-
-		GCServerMsgStringSend("문제 발생시 change@webzen.co.kr로 문의해 주시기바랍니다", lpObj->m_Index, 1);
+		LogAddTD("[CharTrasfer] Fail (JoominNumber) [%s][%s]",lpObj->AccountID, lpObj->Name);
+		GCServerMsgStringSend("In case of trouble, please contact change@webzen.co.kr", lpObj->m_Index, 1);
 
 		return;
 	}
@@ -12860,13 +12843,13 @@ void CGDuelStartRequestRecv(PMSG_REQ_START_DUEL * lpMsg, int aIndex)
 	if ( gObj[aIndex].CloseType != -1 )
 		return;
 	
-	if ( gNonPK )
+	if (Configs.gNonPK)
 	{
 		GCServerMsgStringSend(lMsg.Get(MSGGET(4, 174)), aIndex, 1);
 		return;
 	}
 
-	if ( !gPkLimitFree )
+	if (!Configs.gPkLimitFree)
 	{
 		if ( gObj[aIndex].m_PK_Level >= 6 )
 		{
@@ -12911,7 +12894,7 @@ void CGDuelStartRequestRecv(PMSG_REQ_START_DUEL * lpMsg, int aIndex)
 	if ( iDuelIndex == aIndex  )
 		return;
 
-	if ( !gPkLimitFree )
+	if (!Configs.gPkLimitFree)
 	{
 		if ( gObj[iDuelIndex].m_PK_Level >= 6 )
 		{
@@ -14191,11 +14174,11 @@ void CGRelationShipReqKickOutUnionMember(PMSG_KICKOUT_UNIONMEMBER_REQ* aRecv, in
 
 void CGReqMapSvrAuth(PMSG_REQ_MAPSERVERAUTH * lpMsg, int iIndex)
 {
-	if ( lpMsg->btCliVersion[0] != szClientVersion[0] ||
-		 lpMsg->btCliVersion[1] != szClientVersion[1] ||
-		 lpMsg->btCliVersion[2] != szClientVersion[2] ||
-		 lpMsg->btCliVersion[3] != szClientVersion[3] ||
-		 lpMsg->btCliVersion[4] != szClientVersion[4] )
+	if (lpMsg->btCliVersion[0] != Configs.szClientVersion[0] ||
+		lpMsg->btCliVersion[1] != Configs.szClientVersion[1] ||
+		lpMsg->btCliVersion[2] != Configs.szClientVersion[2] ||
+		lpMsg->btCliVersion[3] != Configs.szClientVersion[3] ||
+		lpMsg->btCliVersion[4] != Configs.szClientVersion[4])
 	{
 		GCAnsMapSvrAuth(iIndex, 6);
 		CloseClient(iIndex);
@@ -14212,7 +14195,7 @@ void CGReqMapSvrAuth(PMSG_REQ_MAPSERVERAUTH * lpMsg, int iIndex)
 	memcpy(id, lpMsg->szAccountID, MAX_ACCOUNT_LEN);
 	BuxConvert(id, MAX_ACCOUNT_LEN);
 
-	if ( strcmp((char*)btSerial, szGameServerExeSerial) )
+	if (strcmp((char*)btSerial, Configs.szGameServerExeSerial))
 	{
 		LogAddC(2, "error-L1: Serial error [%s] [%s]", id, btSerial);
 		GCAnsMapSvrAuth(iIndex, 6);
@@ -14221,7 +14204,7 @@ void CGReqMapSvrAuth(PMSG_REQ_MAPSERVERAUTH * lpMsg, int iIndex)
 		return;
 	}
 
-	if ( bCanConnectMember == TRUE )
+	if (Configs.bCanConnectMember == TRUE)
 	{
 		if ( ConMember.IsMember(id) == FALSE )
 		{

@@ -318,9 +318,9 @@ BOOL NpcBattleAnnouncer(LPOBJ lpNpc, LPOBJ lpObj)
 
 BOOL NpcFasi(LPOBJ lpNpc, LPOBJ lpObj)
 {
-	if ( gLanguage != 0 )
+	if (Configs.gLanguage != 0)
 	{
-		if ( gDevilSquareEvent != FALSE )
+		if (Configs.gDevilSquareEvent != FALSE)
 		{
 			GCServerCmd(lpObj->m_Index, 1, 6, 0);
 		}
@@ -349,7 +349,7 @@ BOOL NpcFasi(LPOBJ lpNpc, LPOBJ lpObj)
 				}*/
 			}
 		}
-		else if ( gPkLimitFree == FALSE )
+		else if (Configs.gPkLimitFree == FALSE)
 		{
 			int numbertext = rand() % 3;
 
@@ -381,7 +381,7 @@ BOOL NpcFasi(LPOBJ lpNpc, LPOBJ lpObj)
 
 BOOL NpcGuildMasterTalk(LPOBJ lpNpc, LPOBJ lpObj)
 {
-	if ( gGuildCreate == FALSE )
+	if (Configs.gGuildCreate == FALSE)
 	{
 		ChatTargetSend(lpNpc, "서버분할 기간에는 길드를 생성할수가 없습니다", lpObj->m_Index);
 		return TRUE;
@@ -416,11 +416,11 @@ BOOL NpcGuildMasterTalk(LPOBJ lpNpc, LPOBJ lpObj)
 
 BOOL NpcRolensiaGuard(LPOBJ lpNpc, LPOBJ lpObj)
 {
-	if ( gLanguage != 0 )
+	if (Configs.gLanguage != 0)
 	{
 	
 	}
-	else if ( gEnableEventNPCTalk != FALSE )
+	else if (Configs.gEnableEventNPCTalk != FALSE)
 	{
 		GCServerCmd(lpObj->m_Index, 4, 0, 0);
 	}
@@ -449,7 +449,7 @@ BOOL NpcChaosCardMaster(LPOBJ lpNpc, LPOBJ lpObj)
 	if ( g_bUseLotterySystem == FALSE )
 		return FALSE;
 
-	if ( bCanChaosBox == TRUE )
+	if (Configs.bCanChaosBox == TRUE)
 	{
 		if ( lpObj->m_IfState.use > 0 )
 			return FALSE;
@@ -490,7 +490,7 @@ BOOL NpcChaosCardMaster(LPOBJ lpNpc, LPOBJ lpObj)
 
 BOOL NpcRusipher(LPOBJ lpNpc, LPOBJ lpObj)
 {
-	if ( gDevilSquareEvent == FALSE )
+	if (Configs.gDevilSquareEvent == FALSE)
 	{
 		return TRUE;
 	}
@@ -573,11 +573,11 @@ BOOL NpcWarehouse(LPOBJ lpNpc, LPOBJ lpObj)
 
 BOOL NpcNoriaRara(LPOBJ lpNpc, LPOBJ lpObj)
 {
-	if ( gLanguage != 0 )
+	if (Configs.gLanguage != 0)
 	{
 	
 	}
-	else if ( gEnableEventNPCTalk != FALSE )
+	else if (Configs.gEnableEventNPCTalk != FALSE)
 	{
 		GCServerCmd(lpObj->m_Index, 4, 2, 0);
 	}
@@ -588,11 +588,11 @@ BOOL NpcNoriaRara(LPOBJ lpNpc, LPOBJ lpObj)
 
 BOOL NpcDeviasMadam(LPOBJ lpNpc, LPOBJ lpObj)
 {
-	if ( gLanguage != 0 )
+	if (Configs.gLanguage != 0)
 	{
 	
 	}
-	else if ( gEnableEventNPCTalk != FALSE )
+	else if (Configs.gEnableEventNPCTalk != FALSE)
 	{
 		GCServerCmd(lpObj->m_Index, 4, 1, 0);
 	}
@@ -687,7 +687,7 @@ BOOL NpcQuestCheck(LPOBJ lpNpc, LPOBJ lpObj)
 
 BOOL NpcServerDivision(LPOBJ lpNpc, LPOBJ lpObj)
 {
-	if ( gEnableServerDivision == FALSE )
+	if (Configs.gEnableServerDivision == FALSE)
 	{
 		return TRUE;
 	}
@@ -927,7 +927,7 @@ BOOL NpcDeviasWeapon(LPOBJ lpNpc, LPOBJ lpObj)
 
 BOOL NpcDarkSpiritTrainer(LPOBJ lpNpc, LPOBJ lpObj)
 {
-	if ( bCanChaosBox == TRUE )
+	if (Configs.bCanChaosBox == TRUE)
 	{
 		PMSG_TALKRESULT pMsg;
 
@@ -950,12 +950,12 @@ BOOL NpcDarkSpiritTrainer(LPOBJ lpNpc, LPOBJ lpObj)
 		
 		pMsg.result = 0x07;
 		lpObj->bIsChaosMixCompleted = false;
-		pMsg.level1 = gDQChaosSuccessRateLevel1;
-		pMsg.level2 = gDQChaosSuccessRateLevel2;
-		pMsg.level3 = gDQChaosSuccessRateLevel3;
-		pMsg.level4 = gDQChaosSuccessRateLevel4;
-		pMsg.level5 = gDQChaosSuccessRateLevel5;
-		pMsg.level6 = gDQChaosSuccessRateLevel6;
+		pMsg.level1 = Configs.gDQChaosSuccessRateLevel1;
+		pMsg.level2 = Configs.gDQChaosSuccessRateLevel2;
+		pMsg.level3 = Configs.gDQChaosSuccessRateLevel3;
+		pMsg.level4 = Configs.gDQChaosSuccessRateLevel4;
+		pMsg.level5 = Configs.gDQChaosSuccessRateLevel5;
+		pMsg.level6 = Configs.gDQChaosSuccessRateLevel6;
 
 		DataSend(lpObj->m_Index, (LPBYTE)&pMsg, pMsg.h.size);
 
@@ -976,7 +976,7 @@ BOOL NpcDarkSpiritTrainer(LPOBJ lpNpc, LPOBJ lpObj)
 
 BOOL NpcJewelMixDealer(LPOBJ lpNpc, LPOBJ lpObj)
 {
-	if ( bCanChaosBox == TRUE )
+	if (Configs.bCanChaosBox == TRUE)
 	{
 		if ( (lpObj->m_IfState.use) > 0 )
 		{
@@ -1160,7 +1160,7 @@ BOOL NpcElderCircle(LPOBJ lpNpc, LPOBJ lpObj) //GS-CS Decompiled 100%
 	pMsg.level5 = 0;
 	pMsg.level6 = 0;
 
-	if( bCanChaosBox == TRUE) //Good
+	if (Configs.bCanChaosBox == TRUE) //Good
 	{
 		lpObj->m_IfState.type = 7;
 
@@ -1420,7 +1420,7 @@ BOOL NpcShadowPhantom(LPOBJ lpNpc, LPOBJ lpObj)
 		return TRUE;
 	}
 
-	if ( lpObj->Level > g_iShadowPhantomMaxLevel )
+	if (lpObj->Level > Configs.g_iShadowPhantomMaxLevel)
 	{
 		GCServerCmd(lpObj->m_Index, 0x0D, 0, 0);
 		

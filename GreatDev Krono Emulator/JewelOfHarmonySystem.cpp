@@ -559,8 +559,6 @@ BOOL CJewelOfHarmonySystem::_MakeOption(CItem *pItem, BYTE btOptionType, BYTE bt
 }
 
 
-
-#pragma warning ( disable : 4101 )
 void CJewelOfHarmonySystem::StrengthenItemByMacro(LPOBJ lpObj, BYTE invenrotyTargetPos, BYTE btOptionType,  BYTE btOptionLevel)
 {
 #pragma message("Add Here code to make an Artificial JOH Item")
@@ -595,7 +593,6 @@ void CJewelOfHarmonySystem::StrengthenItemByMacro(LPOBJ lpObj, BYTE invenrotyTar
 		char szMsg	[256];
 	}
 }
-#pragma warning ( default : 4101 )
 
 BYTE CJewelOfHarmonySystem::ShowStrengthenOption(CItem *pItem)
 {
@@ -1308,7 +1305,7 @@ BOOL CJewelOfHarmonySystem::NpcJewelOfHarmony(LPOBJ lpNpc, LPOBJ lpObj)
 		return TRUE;
 	}
 
-	if ( bCanChaosBox == TRUE )
+	if (Configs.bCanChaosBox == TRUE)
 	{
 		if ( lpObj->m_bPShopOpen == true )
 		{

@@ -413,7 +413,7 @@ void CDevilSquareGround::SendScore()
 			}
 		}
 
-		if ( g_CrywolfSync.GetOccupationState() == 1 && g_iCrywolfApplyMvpPenalty != FALSE)
+		if (g_CrywolfSync.GetOccupationState() == 1 && Configs.g_iCrywolfApplyMvpPenalty != FALSE)
 		{
 			this->m_DevilSquareScoreInfoTOP10.Score[0].BonusExp =  (this->m_DevilSquareScoreInfoTOP10.Score[0].BonusExp * g_CrywolfSync.GetGettingExpPenaltyRate()) / 100;
 		}
@@ -514,7 +514,7 @@ void CDevilSquareGround::SendRankingInfo(LPOBJ lpObj)
 	pMsg.Score = lpObj->m_nEventScore;
 	pMsg.SquareNum = lpObj->m_bDevilSquareIndex;
 	pMsg.Class = lpObj->Class;
-	pMsg.ServerCode = gGameServerCode;
+	pMsg.ServerCode = Configs.gGameServerCode;
 	memcpy(pMsg.AccountID, lpObj->AccountID, MAX_ACCOUNT_LEN);
 	memcpy(pMsg.GameID, lpObj->Name, MAX_ACCOUNT_LEN);
 

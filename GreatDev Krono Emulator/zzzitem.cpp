@@ -133,7 +133,7 @@ void CItem::Convert(int type, BYTE Option1, BYTE Option2, BYTE Option3,  BYTE At
 		this->m_NewOption=0;
 	}
 
-if ( ((_type >= ITEMGET(12,3) ) && (_type <= ITEMGET(12,6) ) ) || ( _type >= ITEMGET(12,36) && _type <= ITEMGET(12,43) ) || (_type == ITEMGET(13,30) ))
+if ( ((_type >= ITEMGET(12,3) ) && (_type <= ITEMGET(12,6) ) ) || ( _type >= ITEMGET(12,36) && _type <= ITEMGET(12,43) ) || (_type == ITEMGET(13,30)  ))
 	{
 		Attribute2=0;
 	}
@@ -333,23 +333,35 @@ if ( ((_type >= ITEMGET(12,3) ) && (_type <= ITEMGET(12,6) ) ) || ( _type >= ITE
 			AT_JEWELOFHARMONY_WEAPON_DECREASE_REQUIRE_STR);
 	}
 
-	if ( p->RequireLevel != 0 )
+	if (p->RequireLevel != 0)
 	{
-		if ( _type == ITEMGET(13,4) )	// DarkHorse
+		if (_type == ITEMGET(13, 4))	// DarkHorse
 		{
 			this->m_RequireLevel = this->m_PetItem_Level * 2 + 218;
 		}
-		else if ( _type >= ITEMGET(12,3) && _type <= ITEMGET(12,6) || ( _type >= ITEMGET(12,36) && _type <= ITEMGET(12,43) ))
-		{
-			this->m_RequireLevel = p->RequireLevel + (this->m_Level * 5);
-		}
-		else if ( _type >= ITEMGET(12,7) && _type <= ITEMGET(12,24) )
+		else if (_type >= ITEMGET(12, 36) && _type <= ITEMGET(12, 40))
 		{
 			this->m_RequireLevel = p->RequireLevel;
 		}
-		else if ( _type >= ITEMGET(0,0) && _type < ITEMGET(12,0) )
+		else if (_type >= ITEMGET(12, 3) && _type <= ITEMGET(12, 6))
 		{
-			if ( p->RequireLevel )
+			this->m_RequireLevel = p->RequireLevel + (this->m_Level * 5);
+		}
+		else if (_type == ITEMGET(12, 42)) //Season3
+		{
+			this->m_RequireLevel = p->RequireLevel + (this->m_Level * 5);
+		}
+		else if (_type == ITEMGET(12, 43)) //Season3
+		{
+			this->m_RequireLevel = p->RequireLevel;
+		}
+		else if (_type >= ITEMGET(12, 7) && _type <= ITEMGET(12, 24))
+		{
+			this->m_RequireLevel = p->RequireLevel;
+		}
+		else if (_type >= ITEMGET(0, 0) && _type < ITEMGET(12, 0))
+		{
+			if (p->RequireLevel)
 				this->m_RequireLevel = p->RequireLevel;
 		}
 		else
@@ -542,7 +554,16 @@ if ( ((_type >= ITEMGET(12,3) ) && (_type <= ITEMGET(12,6) ) ) || ( _type >= ITE
 				}
 			}
 			
-			if ( ( _type >= ITEMGET(12,3) && _type <= ITEMGET(12,6)) || _type == ITEMGET(13,30) || _type == ITEMGET(13,4) || ( _type >= ITEMGET(12,36) && _type <= ITEMGET(12,43) ))
+			if ((_type >= ITEMGET(12, 36) && _type <= ITEMGET(12, 40)))
+			{
+				this->m_Defense += this->m_Level * 4;
+
+				if (this->m_Level >= 10)
+				{
+					this->m_Defense += (this->m_Level - 9);
+				}
+			}
+			else if ((_type >= ITEMGET(12, 3) && _type <= ITEMGET(12, 6)) || _type == ITEMGET(13, 30) || _type == ITEMGET(13, 4))
 			{
 				this->m_Defense += this->m_Level * 2;
 			}
@@ -640,7 +661,7 @@ if ( ((_type >= ITEMGET(12,3) ) && (_type <= ITEMGET(12,6) ) ) || ( _type >= ITE
 			this->m_Option2 = 1;
 		}
 
-		if ( _type >= ITEMGET(12,36) && _type <= ITEMGET(12,43) )	// Wings s3
+		if (_type >= ITEMGET(12, 36) && _type <= ITEMGET(12, 40))	//Season 2.5 Third Wings
 		{
 			this->m_Special[this->m_SpecialNum] = 84;
 			this->m_Option2 = 1;
@@ -790,80 +811,80 @@ if ( ((_type >= ITEMGET(12,3) ) && (_type <= ITEMGET(12,6) ) ) || ( _type >= ITE
 			}
 
 		}
-		else if ( _type == ITEMGET(12,36) ) // wing of Storm
+		//Season 2.5 add-on (Third Wings)
+		if (_type == ITEMGET(12, 36)) // Wing of Storm
 		{
 			this->m_Option3 = Option3;
-			this->m_RequireStrength +=  Option3 * 4;
+			this->m_Special[this->m_SpecialNum] = 0x55;
 
-			if ( (this->m_NewOption&0x20) != 0 )
+			if ((this->m_NewOption & 0x10) != FALSE)
 			{
-				this->m_Special[this->m_SpecialNum] = 80;
+				this->m_Special[this->m_SpecialNum] = 0x50;
 			}
-			else
+			else if ((this->m_NewOption & 0x20) != FALSE)
 			{
-				this->m_Special[this->m_SpecialNum] = AT_LIFE_REGENERATION;
+				this->m_Special[this->m_SpecialNum] = 0x53;
 			}
-
 		}
-		else if ( _type == ITEMGET(12,37) ) // wing of space time
+
+		if (_type == ITEMGET(12, 37)) // Wing of Eternal
 		{
 			this->m_Option3 = Option3;
-			this->m_RequireStrength +=  Option3 * 4;
+			this->m_Special[this->m_SpecialNum] = 0x55;
 
-			if ( (this->m_NewOption&0x20) != 0 )
+			if ((this->m_NewOption & 0x10) != FALSE)
 			{
-				this->m_Special[this->m_SpecialNum] = AT_LIFE_REGENERATION;
+				this->m_Special[this->m_SpecialNum] = 0x51;
 			}
-			else
+			else if ((this->m_NewOption & 0x20) != FALSE)
 			{
-				this->m_Special[this->m_SpecialNum] = 81;
+				this->m_Special[this->m_SpecialNum] = 0x53;
 			}
-
 		}
-		else if ( _type == ITEMGET(12,38) ) // wing of illusion
+
+		if (_type == ITEMGET(12, 38)) // Wing of Illusion
 		{
 			this->m_Option3 = Option3;
-			this->m_RequireStrength +=  Option3 * 4;
+			this->m_Special[this->m_SpecialNum] = 0x55;
 
-			if ( (this->m_NewOption&0x20) != 0 )
+			if ((this->m_NewOption & 0x10) != FALSE)
 			{
-				this->m_Special[this->m_SpecialNum] = 80;
+				this->m_Special[this->m_SpecialNum] = 0x50;
 			}
-			else
+			else if ((this->m_NewOption & 0x20) != FALSE)
 			{
-				this->m_Special[this->m_SpecialNum] = AT_LIFE_REGENERATION;
+				this->m_Special[this->m_SpecialNum] = 0x53;
 			}
-
 		}
-		else if ( _type == ITEMGET(12,39) ) // wing of vorex
+
+		if (_type == ITEMGET(12, 39)) // Wing of Ruin
 		{
 			this->m_Option3 = Option3;
-			this->m_RequireStrength +=  Option3 * 4;
+			this->m_Special[this->m_SpecialNum] = 0x55;
 
-			if ( (this->m_NewOption&0x20) != 0 )
+			if ((this->m_NewOption & 0x10) != FALSE)
 			{
-				this->m_Special[this->m_SpecialNum] = 80;
+				this->m_Special[this->m_SpecialNum] = 0x50;
 			}
-			else
+			else if ((this->m_NewOption & 0x20) != FALSE)
 			{
-				this->m_Special[this->m_SpecialNum] = 81;
+				this->m_Special[this->m_SpecialNum] = 0x51;
 			}
-
 		}
-		else if ( _type == ITEMGET(12,40) ) // wing of monarch
+
+		if (_type == ITEMGET(12, 40)) // Cape of Emperor
 		{
 			this->m_Option3 = Option3;
-			this->m_RequireStrength +=  Option3 * 4;
+			this->m_Special[this->m_SpecialNum] = 0x55;
 
-			if ( (this->m_NewOption&0x20) != 0 )
+			if ((this->m_NewOption & 0x10) != FALSE)
 			{
-				this->m_Special[this->m_SpecialNum] = 80;
+				this->m_Special[this->m_SpecialNum] = 0x50;
 			}
-			else
+			else if ((this->m_NewOption & 0x20) != FALSE)
 			{
-				this->m_Special[this->m_SpecialNum] = AT_LIFE_REGENERATION;
+				this->m_Special[this->m_SpecialNum] = 0x53;
 			}
-
 		}
 		else if ( _type == ITEMGET(13,3) ) // dinorant
 		{
@@ -1584,6 +1605,64 @@ void CItem::Value()
 				break;
 		}
 	}
+	else if (this->m_Type == ITEMGET(14, 51)) //Star
+	{
+		Gold = 200000;
+	}
+	else if (this->m_Type == ITEMGET(14, 55) || //Green Chaos Box (Season 4.5)
+		this->m_Type == ITEMGET(14, 56) || //Red Chaos Box (Season 4.5)
+		this->m_Type == ITEMGET(14, 57))  //Purple Chaos Box (Season 4.5)
+	{
+		Gold = 9000;
+	}
+	else if (this->m_Type == ITEMGET(13, 49) || //Illusion Temple Items -> (Old Scroll, Covenant and Scroll of Blood)
+		this->m_Type == ITEMGET(13, 50) ||
+		this->m_Type == ITEMGET(13, 51))
+	{
+		switch (this->m_Level)
+		{
+		case 1:
+			Gold = 500000;
+			break;
+			//season 4 add-on
+		case 2:
+			Gold = 600000;
+			break;
+		case 3:
+			Gold = 800000;
+			break;
+		case 4:
+			Gold = 1000000;
+			break;
+		case 5:
+			Gold = 1200000;
+			break;
+		case 6:
+			Gold = 1400000;
+			break;
+		default:
+			Gold = 9000;
+			break;
+		}
+	}
+	else if (this->m_Type == ITEMGET(13, 52) || //Condor Flame and Condor Feather
+		this->m_Type == ITEMGET(13, 53))
+	{
+		Gold = 3000000;
+	}
+	else if (this->m_Type == ITEMGET(14, 23) || //Quest Items since Second Evolution
+		this->m_Type == ITEMGET(14, 24) ||
+		this->m_Type == ITEMGET(14, 25) ||
+		this->m_Type == ITEMGET(14, 26) ||
+		this->m_Type == ITEMGET(14, 65) ||
+		this->m_Type == ITEMGET(14, 66) ||
+		this->m_Type == ITEMGET(14, 67) ||
+		this->m_Type == ITEMGET(14, 68))
+	{
+		Gold = 9000;
+	}
+	//
+
 	else if ( p->Value > 0 )
 	{
 		Gold += (p->Value * p->Value * 10)/12;
@@ -1603,18 +1682,23 @@ void CItem::Value()
 			return;
 		}
 	}
-	else if ( (Type == 12 && this->m_Type > ITEMGET(12,6)) || ( Type == 12 && this->m_Type >= ITEMGET(12,36) && this->m_Type <= ITEMGET(12,40)) || Type == 13 || Type == 15 )
+	else if ((Type == 12 && this->m_Type > ITEMGET(12, 6) && (this->m_Type < ITEMGET(12, 36) && this->m_Type > ITEMGET(12, 43))) || Type == 13 || Type == 15) //Third Wings Addition
 	{
-		Gold = Level2*Level2*Level2+100;
+		Gold = Level2*Level2*Level2 + 100;
 
-		for (int u=0;u<this->m_SpecialNum;u++)
+		for (int u = 0; u<this->m_SpecialNum; u++)
 		{
-			switch ( this->m_Special[u] )
+			switch (this->m_Special[u])
 			{
-				case 0x55:
-					Gold += Gold*this->m_Option3;
+			case 0x55:
+				Gold += Gold*this->m_Option3;
 			}
 		}
+	}
+	//
+	else if (this->m_Type == ITEMGET(14, 63)) //Season 2.5 Firecreacker (from Natasha Seller)
+	{
+		Gold = 200000;
 	}
 	else
 	{
@@ -1631,13 +1715,21 @@ void CItem::Value()
 			case 13:	Level2 += 245;	break;
 		}
 
-		if ( Type == 12 && this->m_Type <= ITEMGET(12,6) || ( Type == 12 && this->m_Type >= ITEMGET(12,36) && this->m_Type <= ITEMGET(12,40) ))	// Wings
+		if (Type == 12 && this->m_Type <= ITEMGET(12, 6))	// Wings
 		{
-			Gold = (Level2+40)*Level2*Level2*11+40000000;
+			Gold = (Level2 + 40)*Level2*Level2 * 11 + 40000000;
+		}
+		else if (Type == 12 && (this->m_Type >= ITEMGET(12, 36) && this->m_Type <= ITEMGET(12, 40))) //Third Wings
+		{
+			Gold = (Level2 + 40)*Level2*Level2 * 11 + 40000000;
+		}
+		else if (Type == 12 && (this->m_Type >= ITEMGET(12, 41) && this->m_Type <= ITEMGET(12, 43))) //Summoner Wings
+		{
+			Gold = (Level2 + 40)*Level2*Level2 * 11 + 40000000;
 		}
 		else
 		{
-			Gold = (Level2+40)*Level2*Level2/8+100;
+			Gold = (Level2 + 40)*Level2*Level2 / 8 + 100;
 		}
 
 		if ( Type >= 0 && Type <=  6 )
@@ -1785,7 +1877,8 @@ void CItem::Value()
 		  this->m_Type != ITEMGET(14,47) &&
 		  this->m_Type != ITEMGET(14,48) &&
 		  this->m_Type != ITEMGET(14,49) &&
-		  this->m_Type != ITEMGET(14,50) )
+		  this->m_Type != ITEMGET(14, 50) &&
+		  this->m_Type != ITEMGET(14, 51))
 	{
 		float lc15 = 1.0f-(this->m_Durability / this->m_BaseDurability);
 		int lc16 = this->m_SellMoney*0.6*lc15;
@@ -2707,6 +2800,23 @@ int CItem::IsFenrirDecLastAttackDamage()
 	return 0;
 }
 
+int CItem::IsThirdWingOpGetOnePercentDamage()
+{
+	if (this->m_Type >= ITEMGET(12, 36) && this->m_Type <= ITEMGET(12, 40) || this->m_Type == ITEMGET(12, 43))
+	{
+		if (this->m_Durability < 1.0f)
+		{
+			return 0;
+		}
+		else if ((this->m_NewOption & 1) == 1)
+		{
+			return 5;
+		}
+	}
+
+	return 0;
+}
+
 
 int CItem::SimpleDurabilityDown(int iDecValue)
 {
@@ -3469,13 +3579,26 @@ int ItemGetDurability(int index, int itemLevel, int ExcellentItem, int SetItem)
 			dur=ItemAttribute[index].Durability + itemLevel*2-4;
 		}
 	}
+
+	if (index == ITEMGET(13, 51)) //Season 2.5 Illusion Temple Blood Scroll Ticket
+	{
+		dur = 1;
+	}
 	
 	if ( (index < ITEMGET(12,3) || index > ITEMGET(12,6) ) &&
 		  index != ITEMGET(0,19) &&
 		  index != ITEMGET(4,18) &&
 		  index != ITEMGET(5,10) &&
 		  index != ITEMGET(2,13) &&
-		  index != ITEMGET(13,30) )
+		  index != ITEMGET(13,30) &&
+		  index != ITEMGET(12, 36) &&
+		  index != ITEMGET(12, 37) &&
+		  index != ITEMGET(12, 38) &&
+		  index != ITEMGET(12, 39) &&
+		  index != ITEMGET(12, 40) &&
+		  index != ITEMGET(12, 41) &&
+		  index != ITEMGET(12, 42) &&
+		  index != ITEMGET(12, 43))
 	{
 		if ( SetItem != 0 )
 			dur +=20;

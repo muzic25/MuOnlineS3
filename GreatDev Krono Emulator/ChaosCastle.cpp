@@ -342,7 +342,7 @@ void CChaosCastle::ProcState_Closed(int iChaosCastleIndex)
 		this->m_stChaosCastleData[iChaosCastleIndex].m_iCC_REMAIN_MSEC -= iTICK_MSEC;
 		this->m_stChaosCastleData[iChaosCastleIndex].m_iCC_TICK_COUNT = GetTickCount();
 
-		if ( g_bChaosCastle != FALSE )
+		if (Configs.g_bChaosCastle != FALSE)
 		{
 			if ( this->m_stChaosCastleData[iChaosCastleIndex].m_iCC_REMAIN_MSEC <= ( this->m_iCC_TIME_MIN_OPEN * 60 * 1000 ) && this->m_stChaosCastleData[iChaosCastleIndex].m_bCC_CAN_ENTER == false)
 			{
@@ -394,7 +394,7 @@ void CChaosCastle::ProcState_Closed(int iChaosCastleIndex)
 
 	if ( this->m_stChaosCastleData[iChaosCastleIndex].m_iCC_REMAIN_MSEC <= 0 )
 	{
-		if ( g_bChaosCastle != FALSE )
+		if (Configs.g_bChaosCastle != FALSE)
 		{
 			this->SetState(iChaosCastleIndex, CC_STATE_PLAYING);
 		}
@@ -1664,7 +1664,7 @@ int  CChaosCastle::CalcSendRewardEXP(int iUserIndex, int iEXP, int iKILLCOUNT_US
 		return 0;
 
 	if ( g_CrywolfSync.GetOccupationState() == 1 &&
-		 g_iCrywolfApplyMvpPenalty )
+		Configs.g_iCrywolfApplyMvpPenalty)
 	{
 		iEXP = iEXP * g_CrywolfSync.GetGettingExpPenaltyRate() / 100;
 	}

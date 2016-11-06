@@ -53,7 +53,7 @@ void CMapItem::CreateItem(int type, int level, int x, int y, float dur, BYTE Opt
 	else
 	{
 		this->m_Time = GetTickCount() + 120000;
-		this->m_LootTime = GetTickCount() + gLootingTime*1000;
+		this->m_LootTime = GetTickCount() + Configs.gLootingTime * 1000;
 		this->m_Number = number;
 	}
 
@@ -102,7 +102,7 @@ void CMapItem::DropCreateItem(int type, int level, int x, int y, float dur, BYTE
 			this->m_Time = GetTickCount() + 120000;
 		}
 
-		this->m_LootTime = GetTickCount() + gLootingTime*1000;
+		this->m_LootTime = GetTickCount() + Configs.gLootingTime * 1000;
 		this->m_Number = number;
 	}
 

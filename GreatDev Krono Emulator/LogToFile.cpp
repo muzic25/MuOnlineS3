@@ -56,7 +56,7 @@ void CLogToFile::Output( LPSTR fmt, ...)
 	wsprintf(szLogFileName, "%s\\%s %04d-%02d-%02d_%s.txt",
 		&this->m_szLogDirectoryName[0] , &this->m_szLogFileName [0],
 		strSystime.wYear, strSystime.wMonth, strSystime.wDay,
-		szServerName);
+		Configs.szServerName);
 
 	if ( (this->m_fLogFile = fopen(szLogFileName, "a+"))==0)	//flipe +'0
 	{

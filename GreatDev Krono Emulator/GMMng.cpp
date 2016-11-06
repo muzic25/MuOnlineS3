@@ -769,7 +769,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 				}
 				else
 				{
-					if ( gEnableBattleSoccer != FALSE )
+					if (Configs.gEnableBattleSoccer != FALSE)
 					{
 						pId = this->GetTokenString();
 
@@ -817,7 +817,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 				}
 			}
 			break;
-
+#pragma message ("Translate start here!")
 		case 320:	//117:
 			{
 				if ( (lpObj->Authority &2) != 2 )
@@ -845,7 +845,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 									TNotice pNotice(1);
 
 									pNotice.SendToUser(lpObj->m_Index, "쿤둔 HP = %7.0f / %7.0f", lpTarget->Life, lpTarget->MaxLife); //Require Translation
-									pNotice.SendToUser(lpObj->m_Index, "쿤둔 HP 초당회복량 = %d 회복량 = %d 회복시간 = %d", giKundunRefillHPSec, giKundunRefillHP, giKundunRefillHPTime);	// Require Translation
+									pNotice.SendToUser(lpObj->m_Index, "쿤둔 HP 초당회복량 = %d 회복량 = %d 회복시간 = %d", Configs.giKundunRefillHPSec, Configs.giKundunRefillHP, Configs.giKundunRefillHPTime);	// Require Translation
 								}
 							}
 						}
@@ -923,11 +923,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 					return 0;
 				}
 
-				giKundunRefillHP = RefillHP;
+				Configs.giKundunRefillHP = RefillHP;
 
 				TNotice pNotice(0);
 
-				pNotice.SendToUser(lpObj->m_Index, "쿤둔 HP 초당회복량 = %d 회복량 = %d 회복시간 = %d", giKundunRefillHPSec, giKundunRefillHP, giKundunRefillHPTime);	// Require Translation
+				pNotice.SendToUser(lpObj->m_Index, "쿤둔 HP 초당회복량 = %d 회복량 = %d 회복시간 = %d", Configs.giKundunRefillHPSec, Configs.giKundunRefillHP, Configs.giKundunRefillHPTime);	// Require Translation
 
 			}
 
@@ -952,12 +952,12 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 					return 0;
 				}
 
-				giKundunRefillHPSec = RefillHPSec;
+				Configs.giKundunRefillHPSec = RefillHPSec;
 
 				TNotice pNotice(0);
 
 				pNotice.SendToUser(lpObj->m_Index, "쿤둔 HP 초당회복량 = %d 회복량 = %d 회복시간 = %d",
-					giKundunRefillHPSec, giKundunRefillHP, giKundunRefillHPTime);	// Require Translation
+					Configs.giKundunRefillHPSec, Configs.giKundunRefillHP, Configs.giKundunRefillHPTime);	// Require Translation
 
 			}
 
@@ -982,12 +982,12 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 					return 0;
 				}
 
-				giKundunRefillHPTime = RefillHPTime;
+				Configs.giKundunRefillHPTime = RefillHPTime;
 
 				TNotice pNotice(0);
 
-				pNotice.SendToUser(lpObj->m_Index, "쿤둔 HP 초당회복량 = %d 회복량 = %d 회복시간 = %d", giKundunRefillHPSec, giKundunRefillHP, giKundunRefillHPTime);	// Require Translation
-
+				pNotice.SendToUser(lpObj->m_Index, "쿤둔 HP 초당회복량 = %d 회복량 = %d 회복시간 = %d", Configs.giKundunRefillHPSec, Configs.giKundunRefillHP, Configs.giKundunRefillHPTime);	// Require Translation
+#pragma message ("Translate end here")
 			}
 			break;
 		case 369:

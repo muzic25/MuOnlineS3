@@ -1,0 +1,18 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Project Author : (c) Shatter							//
+// Project Info	  : Free Release 4 Ragezone MU Online Community			//
+// Last Edit Date : 30 / 12 / 2010                                              //
+//////////////////////////////////////////////////////////////////////////////////
+
+// Natasha The Fireworker
+
+14 0 0 50 0 0 0 0 // Apple
+14 1 0 30 0 0 0 0 // Small Healing Potion
+14 2 0 20 0 0 0 0 // Medium Healing Potion
+14 3 0 10 0 0 0 0 // Large Healing Potion
+14 4 0 30 0 0 0 0 // Small Mana Potion
+14 5 0 20 0 0 0 0 // Medium Mana Potion
+14 6 0 10 0 0 0 0 // Large Mana Potion
+14 8 0 10 0 0 0 0 // Antidote
+14 63 0 1 0 0 0 0 // Firecracker
+end

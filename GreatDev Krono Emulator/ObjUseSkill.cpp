@@ -159,11 +159,11 @@ BOOL CObjUseSkill::SpeedHackCheck(int aIndex)
 		lpObj->m_DetectCount++;
 		lpObj->m_SumLastAttackTime += iTimeCalc;
 
-		if(lpObj->m_DetectCount > gHackCheckCount)
+		if (lpObj->m_DetectCount > Configs.gHackCheckCount)
 		{
 			lpObj->m_DetectedHackKickCount++;
 
-			if(gIsKickDetecHackCountLimit != 0 && lpObj->m_DetectedHackKickCount > gDetectedHackKickCount)
+			if (Configs.gIsKickDetecHackCountLimit != 0 && lpObj->m_DetectedHackKickCount > Configs.gDetectedHackKickCount)
 			{
 				LogAddTD("[%s][%s] %s Kick DetecHackCountLimit Over User (%d)",
 					lpObj->AccountID,lpObj->Name,lMsg.Get(lpObj->Class+1900),lpObj->m_DetectedHackKickCount);
@@ -171,7 +171,7 @@ BOOL CObjUseSkill::SpeedHackCheck(int aIndex)
 				return false;
 			}
 
-			lpObj->m_SpeedHackPenalty = gSpeedHackPenalty;
+			lpObj->m_SpeedHackPenalty = Configs.gSpeedHackPenalty;
 			LogAddTD("[%s][%s] %s Attack Speed Is Wrong MagicSkill (%d)(%d) Penalty %d",
 				lpObj->AccountID,lpObj->Name,lMsg.Get(lpObj->Class+1900),lpObj->m_DetectSpeedHackTime,lpObj->m_SumLastAttackTime / lpObj->m_DetectCount,lpObj->m_SpeedHackPenalty);
 		}
@@ -184,7 +184,7 @@ BOOL CObjUseSkill::SpeedHackCheck(int aIndex)
 
 	lpObj->m_LastAttackTime = GetTickCount();
 
-	if(bIsIgnorePacketSpeedHackDetect != 0 && lpObj->m_SpeedHackPenalty > 0)
+	if (Configs.bIsIgnorePacketSpeedHackDetect != 0 && lpObj->m_SpeedHackPenalty > 0)
 	{
 		lpObj->m_SpeedHackPenalty--;
 		LogAddTD("[%s][%s] %s Apply Attack Speed Penalty (%d left)",

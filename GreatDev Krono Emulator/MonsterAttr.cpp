@@ -74,7 +74,7 @@ void CMonsterAttr::LoadAttr(char* filename)
 			Token = GetToken();					this->m_MonsterAttr[n].m_Resistance[R_LIGHTNING] = TokenNumber;
 			Token = GetToken();					this->m_MonsterAttr[n].m_Resistance[R_FIRE] = TokenNumber;
 
-			this->m_MonsterAttr[n].m_Hp = this->m_MonsterAttr[n].m_Hp - (INT)(this->m_MonsterAttr[n].m_Hp / 100.0f * gMonsterHp);
+			this->m_MonsterAttr[n].m_Hp = this->m_MonsterAttr[n].m_Hp - (INT)(this->m_MonsterAttr[n].m_Hp / 100.0f * Configs.gMonsterHp);
 			this->m_MonsterAttr[n].m_iScriptHP = this->m_MonsterAttr[n].m_Hp;
 
 			if ( this->m_MonsterAttr[n].m_Level <= 24 && this->m_MonsterAttr[n].m_Index < 50)
@@ -87,20 +87,20 @@ void CMonsterAttr::LoadAttr(char* filename)
 					 this->m_MonsterAttr[n].m_Level == 24 )
 				{
 					int modiryvalue = this->m_MonsterAttr[n].m_Hp*20/100;
-					modiryvalue-= modiryvalue*gMonsterHPAdjust/100;
+					modiryvalue -= modiryvalue*Configs.gMonsterHPAdjust / 100;
 					this->m_MonsterAttr[n].m_Hp -= modiryvalue;
 				}
 				else if ( this->m_MonsterAttr[n].m_Level == 20 ||
 						  this->m_MonsterAttr[n].m_Level == 22 )
 				{
 					int modiryvalue = this->m_MonsterAttr[n].m_Hp*30/100;
-					modiryvalue-= modiryvalue*gMonsterHPAdjust/100;
+					modiryvalue -= modiryvalue*Configs.gMonsterHPAdjust / 100;
 					this->m_MonsterAttr[n].m_Hp -= modiryvalue;
 				}
 				else
 				{
 					int modiryvalue = this->m_MonsterAttr[n].m_Hp/2;
-					modiryvalue-= modiryvalue*gMonsterHPAdjust/100;
+					modiryvalue -= modiryvalue*Configs.gMonsterHPAdjust / 100;
 					this->m_MonsterAttr[n].m_Hp -= modiryvalue;
 				}
 			}
@@ -116,8 +116,8 @@ void CMonsterAttr::LoadAttr(char* filename)
 					int modiryvaluemin = this->m_MonsterAttr[n].m_DamageMin*30/100;
 					int modiryvaluemax = this->m_MonsterAttr[n].m_DamageMax*30/100;
 
-					modiryvaluemin -= modiryvaluemin*gMonsterHPAdjust/100;
-					modiryvaluemax -= modiryvaluemax*gMonsterHPAdjust/100;
+					modiryvaluemin -= modiryvaluemin*Configs.gMonsterHPAdjust / 100;
+					modiryvaluemax -= modiryvaluemax*Configs.gMonsterHPAdjust / 100;
 
 					this->m_MonsterAttr[n].m_DamageMin -= modiryvaluemin;
 					this->m_MonsterAttr[n].m_DamageMax -= modiryvaluemax;
@@ -127,8 +127,8 @@ void CMonsterAttr::LoadAttr(char* filename)
 					int modiryvaluemin = this->m_MonsterAttr[n].m_DamageMin/2;
 					int modiryvaluemax = this->m_MonsterAttr[n].m_DamageMax/2;
 
-					modiryvaluemin -= modiryvaluemin*gMonsterHPAdjust/100;
-					modiryvaluemax -= modiryvaluemax*gMonsterHPAdjust/100;
+					modiryvaluemin -= modiryvaluemin*Configs.gMonsterHPAdjust / 100;
+					modiryvaluemax -= modiryvaluemax*Configs.gMonsterHPAdjust / 100;
 
 					this->m_MonsterAttr[n].m_DamageMin -= modiryvaluemin;
 					this->m_MonsterAttr[n].m_DamageMax -= modiryvaluemax;
@@ -197,7 +197,7 @@ void CMonsterAttr::LoadAttr(char* Buffer, int iSize)
 			Token = WzMemScript.GetToken();			this->m_MonsterAttr[n].m_Resistance[R_LIGHTNING] = WzMemScript.GetNumber();
 			Token = WzMemScript.GetToken();			this->m_MonsterAttr[n].m_Resistance[R_FIRE] = WzMemScript.GetNumber();
 
-			this->m_MonsterAttr[n].m_Hp = this->m_MonsterAttr[n].m_Hp - (INT)(this->m_MonsterAttr[n].m_Hp / 100.0f * gMonsterHp);
+			this->m_MonsterAttr[n].m_Hp = this->m_MonsterAttr[n].m_Hp - (INT)(this->m_MonsterAttr[n].m_Hp / 100.0f * Configs.gMonsterHp);
 			this->m_MonsterAttr[n].m_iScriptHP = this->m_MonsterAttr[n].m_Hp;
 
 			if ( this->m_MonsterAttr[n].m_Level <= 24 && this->m_MonsterAttr[n].m_Index < 50)
@@ -210,20 +210,20 @@ void CMonsterAttr::LoadAttr(char* Buffer, int iSize)
 					 this->m_MonsterAttr[n].m_Level == 24 )
 				{
 					int modiryvalue = this->m_MonsterAttr[n].m_Hp*20/100;
-					modiryvalue-= modiryvalue*gMonsterHPAdjust/100;
+					modiryvalue -= modiryvalue*Configs.gMonsterHPAdjust / 100;
 					this->m_MonsterAttr[n].m_Hp -= modiryvalue;
 				}
 				else if ( this->m_MonsterAttr[n].m_Level == 20 ||
 						  this->m_MonsterAttr[n].m_Level == 22 )
 				{
 					int modiryvalue = this->m_MonsterAttr[n].m_Hp*30/100;
-					modiryvalue-= modiryvalue*gMonsterHPAdjust/100;
+					modiryvalue -= modiryvalue*Configs.gMonsterHPAdjust / 100;
 					this->m_MonsterAttr[n].m_Hp -= modiryvalue;
 				}
 				else
 				{
 					int modiryvalue = this->m_MonsterAttr[n].m_Hp/2;
-					modiryvalue-= modiryvalue*gMonsterHPAdjust/100;
+					modiryvalue -= modiryvalue*Configs.gMonsterHPAdjust / 100;
 					this->m_MonsterAttr[n].m_Hp -= modiryvalue;
 				}
 			}
@@ -239,8 +239,8 @@ void CMonsterAttr::LoadAttr(char* Buffer, int iSize)
 					int modiryvaluemin = this->m_MonsterAttr[n].m_DamageMin*30/100;
 					int modiryvaluemax = this->m_MonsterAttr[n].m_DamageMax*30/100;
 
-					modiryvaluemin -= modiryvaluemin*gMonsterHPAdjust/100;
-					modiryvaluemax -= modiryvaluemax*gMonsterHPAdjust/100;
+					modiryvaluemin -= modiryvaluemin*Configs.gMonsterHPAdjust / 100;
+					modiryvaluemax -= modiryvaluemax*Configs.gMonsterHPAdjust / 100;
 
 					this->m_MonsterAttr[n].m_DamageMin -= modiryvaluemin;
 					this->m_MonsterAttr[n].m_DamageMax -= modiryvaluemax;
@@ -250,8 +250,8 @@ void CMonsterAttr::LoadAttr(char* Buffer, int iSize)
 					int modiryvaluemin = this->m_MonsterAttr[n].m_DamageMin/2;
 					int modiryvaluemax = this->m_MonsterAttr[n].m_DamageMax/2;
 
-					modiryvaluemin -= modiryvaluemin*gMonsterHPAdjust/100;
-					modiryvaluemax -= modiryvaluemax*gMonsterHPAdjust/100;
+					modiryvaluemin -= modiryvaluemin*Configs.gMonsterHPAdjust / 100;
+					modiryvaluemax -= modiryvaluemax*Configs.gMonsterHPAdjust / 100;
 
 					this->m_MonsterAttr[n].m_DamageMin -= modiryvaluemin;
 					this->m_MonsterAttr[n].m_DamageMax -= modiryvaluemax;

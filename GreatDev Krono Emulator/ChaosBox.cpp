@@ -13,7 +13,6 @@ cChaosBox ChaosBox;
 cChaosBox::cChaosBox() { /*Конструктор*/ this->LoadConfigs(); }
 cChaosBox::~cChaosBox() { /*Деструктор*/ }
 
-#pragma warning(disable: 4482)
 #pragma message("#TODO Fix Enum Chaos_Type_Msg")
 void ChaosEventProtocolCore(BYTE protoNum, unsigned char* aRecv, int aLen)
 {
@@ -87,7 +86,7 @@ void cChaosBox::CBUPR_ItemRequestRecv( CB_PMSG_REQ_PRESENT_RESULT * lpMsg)
 		pMsg.h.size = sizeof(pMsg);
 		pMsg.present = lpMsg->present;
 		pMsg.Seq_present = lpMsg->Seq_present;
-		pMsg.servernumber = gGameServerCode;
+		pMsg.servernumber = Configs.gGameServerCode;
 		memcpy(pMsg.AccountID, lpMsg->AccountId, sizeof(pMsg.AccountID));
 		memcpy(pMsg.GameID, lpMsg->GameId, sizeof(pMsg.GameID));
 
@@ -636,7 +635,7 @@ void cChaosBox::DevilSqueareMix(LPOBJ lpObj)
 
 	if (this->AddSuccessCharmSystem(lpObj) == FALSE) return;
 
-	if ( g_CrywolfSync.GetOccupationState() == 0 && g_iCrywolfApplyMvpBenefit )
+	if (g_CrywolfSync.GetOccupationState() == 0 && Configs.g_iCrywolfApplyMvpBenefit)
 		lpObj->ChaosSuccessRate += g_CrywolfSync.GetPlusChaosRate();
 	
 	/*Cнятие зен*/
@@ -694,7 +693,7 @@ void cChaosBox::BloodCastleTicketMix(LPOBJ lpObj)
 
 	if (this->AddSuccessCharmSystem(lpObj) == FALSE) return;
 
-	if ( g_CrywolfSync.GetOccupationState() == 0 && g_iCrywolfApplyMvpBenefit )
+	if (g_CrywolfSync.GetOccupationState() == 0 && Configs.g_iCrywolfApplyMvpBenefit)
 		lpObj->ChaosSuccessRate += g_CrywolfSync.GetPlusChaosRate();
 
 	/*Снятие Zen*/
@@ -752,7 +751,7 @@ void cChaosBox::IllusionTicketMix(LPOBJ lpObj)
 	
 	if (this->AddSuccessCharmSystem(lpObj) == FALSE) return;
 
-	if ( g_CrywolfSync.GetOccupationState() == 0 && g_iCrywolfApplyMvpBenefit )
+	if (g_CrywolfSync.GetOccupationState() == 0 && Configs.g_iCrywolfApplyMvpBenefit)
 		lpObj->ChaosSuccessRate += g_CrywolfSync.GetPlusChaosRate();
 
 	/*Снятие Зен*/
@@ -1427,7 +1426,7 @@ void cChaosBox::CastleItemMix(LPOBJ lpObj)
 		return;
 	}
 
-	if ( g_iCastleItemMixLimit <= 0 )
+	if (Configs.g_iCastleItemMixLimit <= 0)
 	{
 		LogAddTD("[CastleSpecialMix] [%s][%s] Item Mix Failed - Mix Count Limit Over",
 			lpObj->AccountID, lpObj->Name);
@@ -1570,7 +1569,7 @@ void cChaosBox::CastleItemMix(LPOBJ lpObj)
 			lpObj->AccountID, lpObj->Name, lpObj->ChaosSuccessRate,
 			lpObj->Money, nChaosNeedMoney);
 
-		g_iCastleItemMixLimit--;
+		Configs.g_iCastleItemMixLimit--;
 	}
 	else
 	{

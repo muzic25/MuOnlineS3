@@ -40,7 +40,7 @@ void CSendHackLog::Send(int aIndex, BYTE type, LPSTR Context)
 	PMSG_HACK_LOG Msg;
 	
 	PHeadSetB((LPBYTE)&Msg, 0x01, sizeof(Msg) );
-	Msg.wServer = gGameServerCode;
+	Msg.wServer = Configs.gGameServerCode;
 	memcpy(Msg.AccountID, gObj[aIndex].AccountID , MAX_ACCOUNT_LEN );
 	memcpy(Msg.Name, gObj[aIndex].Name, MAX_ACCOUNT_LEN );
 	Msg.AccountID[MAX_ACCOUNT_LEN] = 0;

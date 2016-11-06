@@ -43,7 +43,7 @@ void CPacketCheckSum::Check(int aIndex)
 
 			this->ClearCheckSum(aIndex);
 
-			if ( gDisconnectHackUser != FALSE )
+			if (Configs.gDisconnectHackUser != FALSE)
 			{
 				gObjCloseSet(aIndex, 0);
 			}
@@ -93,7 +93,7 @@ BOOL CPacketCheckSum::Add(int aIndex, int funcindex, DWORD checksum)
 
 		gSendHackLog.Send(aIndex, 1, szPacketError);
 
-		if ( gDisconnectHackUser != FALSE )
+		if (Configs.gDisconnectHackUser != FALSE)
 		{
 			gObjCloseSet(aIndex, 0);
 		}

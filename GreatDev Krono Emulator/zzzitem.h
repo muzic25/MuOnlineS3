@@ -177,6 +177,7 @@ public:
 	int IsDinorantReduceAttackDamaege();
 	int IsFenrirIncLastAttackDamage();
 	int IsFenrirDecLastAttackDamage();
+	int IsThirdWingOpGetOnePercentDamage();
 	int SimpleDurabilityDown(int iDur);
 	int DurabilityDown(int dur, int aIndex);
 	int DurabilityDown2(int dur, int aIndex);

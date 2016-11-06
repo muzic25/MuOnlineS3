@@ -244,14 +244,12 @@ BOOL WzUdp::RecvThread()
 	}
 }
 
-#pragma warning ( disable : 4035 )
 DWORD __stdcall WzUdpRecvThread(WzUdp* lpWzUdp)
 {
 	lpWzUdp->RecvThread();
 	__asm MOV EAX, 1
 	//	return 1;
 }
-#pragma warning ( default : 4035 )
 
 
 

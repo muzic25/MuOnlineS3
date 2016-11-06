@@ -80,7 +80,7 @@ int CGameServerAuth::AGSetSubInfo(...)
 // А может я и не прав (не исключено) 
 void CGameServerAuth::SendInfo()
 {
-	this->AGSetSubInfo(gServerMaxUser, gObjTotalUser, gMonsterHp, gItemDropPer, gAddExperience, GetEventFlag());
+	this->AGSetSubInfo(gServerMaxUser, gObjTotalUser, Configs.gMonsterHp, Configs.gItemDropPer, Configs.gAddExperience, GetEventFlag());
 }
 
 void CGameServerAuth::GetKey(char *key, int startindex, int len)
@@ -179,8 +179,21 @@ void CGameServerAuth::RequestData(int type)
 	case 0x1E:
 		filename = "..\\Data\\Shops\\Shop13.txt";
 		break;
+	case 0x1F:
+		filename = "..\\Data\\Shops\\Shop14.txt";
+		break;
+	case 0x20:
+		filename = "..\\Data\\Shops\\Shop15.txt";
+		break;
+	case 0x21:
+		filename = "..\\Data\\Shops\\Shop16.txt";
+		break;
+	case 0x22:
+		filename = "..\\Data\\Shops\\Shop17.txt";
+		break;
 	default:
-		filename = "Error!"; ::ExitProcess(0);
+		filename = "Error!"; 
+		::ExitProcess(0);
 		break;
 	}
 

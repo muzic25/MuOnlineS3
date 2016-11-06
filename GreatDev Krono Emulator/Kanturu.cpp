@@ -269,14 +269,13 @@ void CKanturu::SetNextState(int iCurrentState)
 }
 
 
-#pragma warning ( disable : 4060 )
+
 void CKanturu::ChangeState(int iState, int DetailState)
 {
 	switch ( iState )
 	{
 	}
 }
-#pragma warning ( default : 4060 )
 
 void CKanturu::SetState_NONE()
 {
@@ -680,7 +679,6 @@ BOOL CKanturu::CheckEqipmentMoonStone(int iUserIndex)
 }
 
 
-#pragma warning ( disable : 4101 )
 void CKanturu::OperateGmCommand(int iUserIndex, int iCommand)
 {
 	return;
@@ -688,7 +686,6 @@ void CKanturu::OperateGmCommand(int iUserIndex, int iCommand)
 		int iCurrentState[3];///???
 	}
 }
-#pragma warning ( default : 4101 )
 
 #include "LogToFile.h"
 CLogToFile KANTURU_TEST_LOG("KANTURU_TEST_LOG", ".\\Log", TRUE);

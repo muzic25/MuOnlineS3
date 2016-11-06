@@ -987,7 +987,7 @@ void CCashShop::CGCashItemBuy(LPOBJ lpObj, PMSG_REQ_CASHITEM_BUY *lpMsg)
 
 	if ( btResult == 0 )
 	{
-		this->GSReqBuyCashItem(gGameServerCode, lpObj->DBNumber, lpObj->m_Index, lpObj->Name, 1, lpMsg->dwItemPriceGuid);
+		this->GSReqBuyCashItem(Configs.gGameServerCode, lpObj->DBNumber, lpObj->m_Index, lpObj->Name, 1, lpMsg->dwItemPriceGuid);
 	}
 	else
 	{
@@ -1329,7 +1329,7 @@ void SGAnsBuyCashItem( protocol::MSG_STOG_BUY_ITEM_ANS* aRecv)
 
 	lpObj->m_wCashPoint = aRecv->dwUserCash;
 	iItemBuyTransactionCount = aRecv->dwCount;
-	pMsg.dwServerGuid = gGameServerCode;
+	pMsg.dwServerGuid = Configs.gGameServerCode;
 	pMsg.dwUserGuid = lpObj->DBNumber;
 	pMsg.dwCharGuid = lpObj->m_Index;
 	pMsg.dwCount = iItemBuyTransactionCount;

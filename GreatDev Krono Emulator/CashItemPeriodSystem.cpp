@@ -542,7 +542,7 @@ void CCashItemPeriodSystem::GDReqPeriodItemDelete(LPOBJ lpObj, LPSTR pchCharacte
 	cDBSMng.Send((char*)&pMsg, sizeof(PMSG_REQ_PERIODITEM_DELETE));
 }
 
-#pragma warning ( disable : 4060 )
+
 void CCashItemPeriodSystem::DGAnsPeriodItemDelete(PMSG_ANS_PERIODITEM_DELETE *aRecv)
 {
 	LPOBJ lpObj = NULL;
@@ -557,7 +557,6 @@ void CCashItemPeriodSystem::DGAnsPeriodItemDelete(PMSG_ANS_PERIODITEM_DELETE *aR
 
 	switch ( aRecv->btResult ){}
 }
-#pragma warning ( disable : 4060 )
 
 
 void CCashItemPeriodSystem::GCSendPeriodItemInserResult(LPOBJ lpObj, BYTE btResult)

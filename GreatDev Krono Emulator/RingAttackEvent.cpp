@@ -48,7 +48,7 @@ BOOL CRingMonsterHerd::MonsterHerdItemDrop(LPOBJ lpObj)
 			return TRUE;
 		}
 		
-		if ( (rand() % g_iRingOrcKillGiftRate) == 0 )
+		if ((rand() % Configs.g_iRingOrcKillGiftRate) == 0)
 		{
 			int iIndex = gObjMonsterTopHitDamageUser(lpObj);
 			this->SendEventGiftWinner(iIndex, 1);

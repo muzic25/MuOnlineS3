@@ -1,5 +1,3 @@
-#pragma warning ( disable : 4786 )	// Disable Warning of Large Debuf Strings ( truncated to 255 len )
-
 #if !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)
 #define AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_
 
@@ -7,7 +5,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#pragma warning ( disable : 4786 4244 4554 4018 4996 4995 )
+#pragma warning ( disable : 4786 4244 4482 4101 4060 4554 4018 4996 4995 4700 4646 4532 4748 )
 #define _WIN32_WINNT 0x500
 #define WIN32_LEAN_AND_MEAN
 

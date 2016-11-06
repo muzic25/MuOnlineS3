@@ -277,6 +277,9 @@ BOOL ShopDataLoad()
 	ShopC[11].LoadShopItem(22);
 	ShopC[12].LoadShopItem(23);
 	ShopC[13].LoadShopItem(30);
+	ShopC[14].LoadShopItem(31);
+	ShopC[15].LoadShopItem(32);
+	ShopC[16].LoadShopItem(33);
 	LogAdd(lMsg.Get(MSGGET(1, 209)));
 
 	return TRUE;

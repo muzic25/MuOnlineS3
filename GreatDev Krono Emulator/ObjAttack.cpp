@@ -47,11 +47,11 @@ BOOL CObjAttack::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf* lpMagic,  int
 		}
 	} 
 
-	if ( g_iUseCharacterAutoRecuperationSystem && lpObj->Level <= g_iCharacterRecuperationMaxLevel )
+	if (Configs.g_iUseCharacterAutoRecuperationSystem && lpObj->Level <= Configs.g_iCharacterRecuperationMaxLevel)
 	{
 		if ( lpObj->Type == OBJ_USER )
 		{
-			if ( lpObj->Level <= g_iCharacterRecuperationMaxLevel ) // #warning useless code
+			if (lpObj->Level <= Configs.g_iCharacterRecuperationMaxLevel) // #warning useless code
 			{
 				lpObj->m_iAutoRecuperationTime = GetTickCount();
 			}
@@ -59,7 +59,7 @@ BOOL CObjAttack::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf* lpMagic,  int
 
 		if ( lpTargetObj->Type == OBJ_USER )
 		{
-			if ( lpTargetObj->Level <= g_iCharacterRecuperationMaxLevel )
+			if (lpTargetObj->Level <= Configs.g_iCharacterRecuperationMaxLevel)
 			{
 				lpTargetObj->m_iAutoRecuperationTime = GetTickCount();
 			}
@@ -301,7 +301,7 @@ BOOL CObjAttack::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf* lpMagic,  int
 	
 	if ( AttackDamage == 0 )
 	{
-		if ( g_ShieldSystemOn == TRUE )
+		if (Configs.g_ShieldSystemOn == TRUE)
 		{
 			if ( lpObj->Type == OBJ_USER && lpTargetObj->Type == OBJ_USER )
 			{
@@ -888,7 +888,7 @@ BOOL CObjAttack::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf* lpMagic,  int
 					{
 						AttackDamage = AttackDamage * 20 / 100;
 					}
-					else if ( g_ShieldSystemOn == 0 )
+					else if (Configs.g_ShieldSystemOn == 0)
 					{
 						AttackDamage = AttackDamage * 40 / 100;
 					}
@@ -1154,12 +1154,12 @@ BOOL CObjAttack::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf* lpMagic,  int
 			MsgDamage |= 0x40;
 		}
 
-		if ( g_ShieldSystemOn == TRUE )
+		if (Configs.g_ShieldSystemOn == TRUE)
 		{
 			AttackDamage -= iTotalShieldDamage;
 		}
 
-		if ( g_ShieldSystemOn == FALSE )
+		if (Configs.g_ShieldSystemOn == FALSE)
 		{
 			if ( lpObj->Type == OBJ_USER && lpTargetObj->Type == OBJ_USER )
 			{
@@ -1218,7 +1218,7 @@ BOOL CObjAttack::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf* lpMagic,  int
 
 int  CObjAttack::GetAttackDamage(LPOBJ lpObj, int targetDefense, BYTE& effect, BOOL bIsOnDuel, CMagicInf* lpMagic)
 {
-	if ( g_ShieldSystemOn == TRUE )
+	if (Configs.g_ShieldSystemOn == TRUE)
 	{
 		if ( bIsOnDuel == TRUE )
 		{
@@ -1494,7 +1494,7 @@ int  CObjAttack::GetAttackDamage(LPOBJ lpObj, int targetDefense, BYTE& effect, B
 
 int  CObjAttack::GetAttackDamageWizard(LPOBJ lpObj, int targetDefense, CMagicInf* lpMagic, BYTE& effect, BOOL bIsOnDuel)
 {
-	if ( g_ShieldSystemOn == TRUE )
+	if (Configs.g_ShieldSystemOn == TRUE)
 	{
 		if ( bIsOnDuel == TRUE )
 		{
@@ -1744,7 +1744,7 @@ int CObjAttack::GetShieldDamage(LPOBJ lpObj, LPOBJ lpTargetObj, int iAttackDamag
 {
 	int iShieldDamage = 0;
 
-	if ( g_ShieldSystemOn == FALSE )
+	if (Configs.g_ShieldSystemOn == FALSE)
 		return 0;
 
 	if ( iAttackDamage <= 0 )
@@ -1754,7 +1754,7 @@ int CObjAttack::GetShieldDamage(LPOBJ lpObj, LPOBJ lpTargetObj, int iAttackDamag
 	int iReduceShield = 0;
 	int iReduceLifeForEffect = 0; 
 	bool bReduceShieldGage = 0;
-	int iDamageDevideToSDRate = g_iDamageDevideToSDRate;
+	int iDamageDevideToSDRate = Configs.g_iDamageDevideToSDRate;
 	iDamageDevideToSDRate -= lpObj->m_JewelOfHarmonyEffect.HJOpDecreaseSDRate;
 	iDamageDevideToSDRate += lpTargetObj->m_JewelOfHarmonyEffect.HJOpAddSDRate;
 

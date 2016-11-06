@@ -42,7 +42,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	MSG msg;
 	HACCEL hAccelTable;
 	// Check if the original language == KOREA
-	if (gLanguage == 0) 
+	if (Configs.gLanguage == 0)
 	{
 		WIN32_FIND_DATA  wfd;
 
@@ -75,30 +75,30 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	memset(DataServerIp2, 0, sizeof(DataServerIp2));
 	memset(ExDbIp, 0, sizeof(ExDbIp));
 
-	DataServerPort2 = 0;
+	Configs.DataServerPort2 = 0;
 
-	ExDbPort = 0;
+	Configs.ExDbPort = 0;
 	
 	GetPrivateProfileString("GameServerConnect", "JoinServerIp", "127.0.0.1", JoinServerIp, 50, ".\\GameServer.ini");
 	GetPrivateProfileString("GameServerConnect", "DataServerIp", "127.0.0.1", DataServerIp, 50, ".\\GameServer.ini");
-	JoinServerPort = GetPrivateProfileInt("GameServerConnect","JoinServerPort", 55970, ".\\GameServer.ini");
-	DataServerPort = GetPrivateProfileInt("GameServerConnect","DataServerPort", 55960, ".\\GameServer.ini");
-	GameServerPort = GetPrivateProfileInt("GameServerConnect","GameServerPort", 55901, ".\\GameServer.ini");
+	Configs.JoinServerPort = GetPrivateProfileInt("GameServerConnect", "JoinServerPort", 55970, ".\\GameServer.ini");
+	Configs.DataServerPort = GetPrivateProfileInt("GameServerConnect", "DataServerPort", 55960, ".\\GameServer.ini");
+	Configs.GameServerPort = GetPrivateProfileInt("GameServerConnect", "GameServerPort", 55901, ".\\GameServer.ini");
 
 	
 	if (DataServerIp2[0] == 0)
 		memcpy(DataServerIp2, DataServerIp, sizeof(DataServerIp2));
 
-	if (DataServerPort2 == 0)
-		DataServerPort2 = 55962;
+	if (Configs.DataServerPort2 == 0)
+		Configs.DataServerPort2 = 55962;
 
 	if (ExDbIp[0] == 0)
 		memcpy(ExDbIp, DataServerIp, sizeof(ExDbIp));
 
-	if (ExDbPort == 0)
-		ExDbPort = 55906; 
+	if (Configs.ExDbPort == 0)
+		Configs.ExDbPort = 55906;
 
-	gWhatsUpDummyServer.Start(ghWnd, GameServerPort + 1);
+	gWhatsUpDummyServer.Start(ghWnd, Configs.GameServerPort + 1);
 	AllServerStart(); 
 
 	GMS.LoadIniConfig();
@@ -136,7 +136,7 @@ BOOL AllServerStart(void){
 
 	if ((DevilSquareEventConnect == 0) && (IsDevilSquareEventConnected == 0))
 	{
-		if (GMRankingServerConnect(gDevilSquareEventServerIp, WM_GM_RANKING_CLIENT_MSG_PROC) == 0)
+		if (GMRankingServerConnect(Configs.gDevilSquareEventServerIp, WM_GM_RANKING_CLIENT_MSG_PROC) == 0)
 		{
 			MsgBox("Cannot connect to Ranking Server \n Check CommonServer.cfg");
 			return 0;
@@ -146,7 +146,7 @@ BOOL AllServerStart(void){
 
 	if ((EventChipServerConnect!=0) && (IsEventChipServerConnected==0))
 	{
-		if (GMEventChipServerConnect(gEventChipServerIp, WM_GM_EVENTCHIP_CLIENT_MSG_PROC) == 0)
+		if (GMEventChipServerConnect(Configs.gEventChipServerIp, WM_GM_EVENTCHIP_CLIENT_MSG_PROC) == 0)
 		{
 			MsgBox("Cannot connect to Event Server \n Check CommonServer.cfg");
 			return 0;
@@ -166,7 +166,7 @@ BOOL GameServerStart(void)
 		return FALSE;
 	}
 
-	CreateGIocp(GameServerPort);
+	CreateGIocp(Configs.GameServerPort);
 
 	SetTimer(ghWnd, WM_LOG_PAINT, 2000, NULL);
 	SetTimer(ghWnd, WM_FIRST_MSG_PROCESS, 1000, NULL);
@@ -329,16 +329,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						DragonEvent->Start();
 					break;
 				case IDM_STARTOFXMAS_EVENT:
-					if ( gXMasEvent != 0 )
-						gXMasEvent = 0;
+					if (Configs.gXMasEvent != 0)
+						Configs.gXMasEvent = 0;
 					else
-						gXMasEvent=1;
+						Configs.gXMasEvent = 1;
 					break;
 				case IDM_FIRECRACKER:
-					if ( gFireCrackerEvent != 0 )
-						gFireCrackerEvent = 0;
+					if (Configs.gFireCrackerEvent != 0)
+						Configs.gFireCrackerEvent = 0;
 					else
-						gFireCrackerEvent=1;
+						Configs.gFireCrackerEvent = 1;
 					break;
 				case IDM_5_MINUTE_CLOSE:
 					if ( gCloseMsg == 0 )
@@ -541,7 +541,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						
 						for (int n = OBJ_STARTUSERINDEX; n < OBJMAX; n++)
 						{
-								if (gDoPShopOpen != FALSE)
+							if (Configs.gDoPShopOpen != FALSE)
 								{
 									PShop_ViewportListRegenarate(n);
 									if (gObjIsConnected(n) != PLAYER_EMPTY )
@@ -625,12 +625,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				case WM_LOG_DATE_CHANGE: 
 					LogDateChange(); 
 					if (LogDateChange() == TRUE)
-						g_iCastleItemMixLimit = 1; 
+						Configs.g_iCastleItemMixLimit = 1;
 					break;
 			}
 			break;
 		case WM_CLOSE:
-			if ( gLanguage != 3 )
+			if (Configs.gLanguage != 3)
 			{
 				if (MessageBox(ghWnd, "GameServer close?", "Close", MB_YESNO|MB_APPLMODAL) == IDYES)
 				{

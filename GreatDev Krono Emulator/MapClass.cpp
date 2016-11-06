@@ -457,7 +457,7 @@ BOOL MapClass::MoneyItemDrop(int money, int x, int y)
 			this->m_cItem[count].live = 1;
 			this->m_cItem[count].Give = 0;
 			this->m_cItem[count].m_State = 1;
-			this->m_cItem[count].m_Time = GetTickCount() + ::gZenDurationTime * 1000;
+			this->m_cItem[count].m_Time = GetTickCount() + ::Configs.gZenDurationTime * 1000;
 			this->m_cItem[count].m_LootTime = 0;
 			this->m_ItemCount++;
 
@@ -536,7 +536,7 @@ BOOL MapClass::ItemGive(int aIndex, int item_num, bool bFailNotSend)
 
 	int lootresult = 1;
 
-	if ( gLootingTime > 0 )
+	if (Configs.gLootingTime > 0)
 	{
 		if ( this->m_cItem[item_num].m_UserIndex != -1 )
 		{

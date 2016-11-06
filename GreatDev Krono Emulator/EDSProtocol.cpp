@@ -186,10 +186,10 @@ void ExDataServerLogin()
 	pInfo.h.c = 0xC1;
 	pInfo.h.size = sizeof(SDHP_SERVERINFO);
 	pInfo.h.headcode = 0x00;
-	pInfo.Port = GameServerPort;
+	pInfo.Port = Configs.GameServerPort;
 	pInfo.Type = 0x01;
-	pInfo.ServerCode = gGameServerCode;
-	strcpy(pInfo.ServerName, szServerName);
+	pInfo.ServerCode = Configs.gGameServerCode;
+	strcpy(pInfo.ServerName, Configs.szServerName);
 
 	wsExDbCli.DataSend((char*)&pInfo, pInfo.h.size);
 }
@@ -2140,7 +2140,7 @@ void FriendListRequest(int aIndex)
 	pMsg.h.set((LPBYTE)&pMsg, 0x60, sizeof(FHP_FRIENDLIST_REQ));
 	memcpy(pMsg.Name, gObj[aIndex].Name, sizeof(pMsg.Name));
 	pMsg.Number = aIndex;
-	pMsg.pServer = gGameServerCode;
+	pMsg.pServer = Configs.gGameServerCode;
 	
 	wsExDbCli.DataSend((char*)&pMsg, pMsg.h.size);
 

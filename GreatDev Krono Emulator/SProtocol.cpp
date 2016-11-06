@@ -82,10 +82,10 @@ void GJServerLogin()
 	pInfo.h.c = 0xC1;
 	pInfo.h.size = sizeof(SDHP_SERVERINFO);
 	pInfo.h.headcode = 0x00;
-	pInfo.Port = GameServerPort;
+	pInfo.Port = Configs.GameServerPort;
 	pInfo.Type = 1;
-	strcpy(pInfo.ServerName , szServerName);
-	pInfo.ServerCode = gGameServerCode;
+	strcpy(pInfo.ServerName, Configs.szServerName);
+	pInfo.ServerCode = Configs.gGameServerCode;
 
 	wsJServerCli.DataSend((char*)&pInfo, pInfo.h.size);
 }
@@ -153,7 +153,7 @@ void JGPAccountRequest(SDHP_IDPASSRESULT * lpMsg)
 	
 	if ( lpMsg->result  == 1 || lpMsg->result  == 15 )
 	{
-		if ( gNonPK == 0 && gLanguage == 0 )
+		if (Configs.gNonPK == 0 && Configs.gLanguage == 0)
 		{
 			if (gJoomin15Check(szJN) == 0 )
 			{
@@ -162,7 +162,7 @@ void JGPAccountRequest(SDHP_IDPASSRESULT * lpMsg)
 			}
 		}
 			
-		if ( gPkLimitFree == 1 && gLanguage == 0 )
+		if (Configs.gPkLimitFree == 1 && Configs.gLanguage == 0)
 		{
 			if (gJoominCheck(szJN, 18) == 0 )
 			{
@@ -378,19 +378,19 @@ void JGPEventControl( SDHP_EVENTCONTROL * lpMsg )
 			break;
 
 		case XMAS_EVENT:
-			gXMasEvent = lpMsg->Stat  ;
+			Configs.gXMasEvent = lpMsg->Stat;
 			break;
 
 		case FIRECRACKER_EVENT:
-			gFireCrackerEvent = lpMsg->Stat  ;
+			Configs.gFireCrackerEvent = lpMsg->Stat;
 			break;
 
 		case HEARTOFLOVE_EVENT:
-			gHeartOfLoveEvent = lpMsg->Stat  ;
+			Configs.gHeartOfLoveEvent = lpMsg->Stat;
 			break;
 
 		case MEDAL_EVENT:
-			gMedalEvent = lpMsg->Stat  ;
+			Configs.gMedalEvent = lpMsg->Stat;
 			break;
 	}
 }
@@ -595,7 +595,7 @@ void GJReqMapSvrMove(int iIndex, WORD wDesMapSvrCode, WORD wMapNumber, BYTE btX,
 		memcpy(pMsg.szCharName, gObj[iIndex].Name, sizeof( pMsg.szCharName)-1);
 		pMsg.szCharName[10] = 0;
 
-		pMsg.wCurMapSvrCode = gGameServerCode;
+		pMsg.wCurMapSvrCode = Configs.gGameServerCode;
 		pMsg.wDstMapSvrCode = wDesMapSvrCode;
 		pMsg.wMapNumber = wMapNumber;
 		pMsg.btX = btX;
@@ -716,7 +716,7 @@ void GJReqMapSvrAuth(int iIndex, LPSTR lpszAccountID, LPSTR lpszCharName, int iJ
 	pMsg.iIndex = iIndex;
 	memcpy(pMsg.szAccountID, lpszAccountID, MAX_ACCOUNT_LEN);
 	memcpy(pMsg.szCharName, lpszCharName, MAX_ACCOUNT_LEN);
-	pMsg.wDstMapSvrCode = gGameServerCode;
+	pMsg.wDstMapSvrCode = Configs.gGameServerCode;
 	pMsg.iJoinAuthCode1 = iJA1;
 	pMsg.iJoinAuthCode2 = iJA2;
 	pMsg.iJoinAuthCode3 = iJA3;
@@ -857,7 +857,7 @@ void GJNotifyMaxUserCount()
 	PMSG_NOTIFY_MAXUSER pMsg;
 
 	PHeadSetB((LPBYTE)&pMsg, 0x7C, sizeof(PMSG_NOTIFY_MAXUSER));
-	pMsg.iSvrCode = gGameServerCode;
+	pMsg.iSvrCode = Configs.gGameServerCode;
 	pMsg.iMaxUserCount = gServerMaxUser;
 	pMsg.iCurUserCount = gObjTotalUser;
 	

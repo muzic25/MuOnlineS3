@@ -1596,8 +1596,8 @@ int GetMapMoveLevel(LPOBJ lpObj, int mapnumber, int max_over)
 	}
 	else
 	{
-		max_over = MapMinUserLevel[mapnumber];
-		overLevel = MapMinUserLevel[mapnumber];
+		max_over = Configs.MapMinUserLevel[mapnumber];
+		overLevel = Configs.MapMinUserLevel[mapnumber];
 	}
 	
 	if ( lpObj->Class == 4 || lpObj->Class == 3 )
@@ -2304,7 +2304,7 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 	{
 		short sSVR_CODE = ::g_MapServerManager.CheckMoveMapSvr(lpObj->m_Index, lpObj->m_sDestMapNumber, lpObj->m_sPrevMapSvrCode);
 
-		if ( sSVR_CODE == gGameServerCode )
+		if (sSVR_CODE == Configs.gGameServerCode)
 		{
 			lpObj->MapNumber = lpObj->m_sDestMapNumber;
 			lpObj->X = lpObj->m_btDestX;
@@ -2341,7 +2341,7 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 	{
 		short sSVR_CODE = ::g_MapServerManager.CheckMoveMapSvr(lpObj->m_Index, lpObj->m_sDestMapNumber, lpObj->m_sPrevMapSvrCode);
 
-		if ( sSVR_CODE == gGameServerCode )
+		if (sSVR_CODE == Configs.gGameServerCode)
 		{
 			lpObj->MapNumber = lpObj->m_sDestMapNumber;
 			lpObj->X = lpObj->m_btDestX;
@@ -2384,7 +2384,7 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 	mapNumber = lpObj->MapNumber;
 	gt = 0;
 
-	if(g_iBlockKanturuMapEnter == 1)
+	if (Configs.g_iBlockKanturuMapEnter == 1)
 	{
 		if(gObj[aIndex].MapNumber >= MAP_INDEX_KANTURU1 && gObj[aIndex].MapNumber <= MAP_INDEX_KANTURU_BOSS)
 		{
@@ -2395,7 +2395,7 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 		}
 	}
 
-	if(g_iBlockCastleSiegeMapEnter == 1)
+	if (Configs.g_iBlockCastleSiegeMapEnter == 1)
 	{
 		if(gObj[aIndex].MapNumber == MAP_INDEX_CASTLESIEGE
 			|| gObj[aIndex].MapNumber == MAP_INDEX_CASTLEHUNTZONE
@@ -2503,7 +2503,7 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 	lpObj->m_PK_Level = lpMsg->PkLevel;
 	lpObj->m_PK_Time  = lpMsg->PkTime;
 
-	if ( ::gApplyHeroSystem != FALSE )
+	if (::Configs.gApplyHeroSystem != FALSE)
 	{
 		if ( lpObj->m_PK_Level <= 3 )
 		{
@@ -2855,11 +2855,11 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 	if ( bAllItemExist == false )
 	{
 		PMSG_NOTICE pNotice;
-		TNotice::MakeNoticeMsgEx((TNotice *)&pNotice, 1, "Wrong items int the inventory!!!");	// Deathway need Translation
+		TNotice::MakeNoticeMsgEx((TNotice *)&pNotice, 1, "Wrong items in the inventory!!!");	// Deathway need Translation
 		DataSend(lpObj->m_Index, (UCHAR *)&pNotice, pNotice.h.size);
 	}
 
-	if ( lpObj->Level <= g_iCharacterRecuperationMaxLevel )
+	if (lpObj->Level <= Configs.g_iCharacterRecuperationMaxLevel)
 	{
 		lpObj->m_iAutoRecuperationTime = GetTickCount();
 	}
@@ -2897,13 +2897,6 @@ BOOL gObjCanItemTouch(LPOBJ lpObj, int type )
 	return true;
 }
 
-
-
-
-
-
-
-
 void gObjMagicTextSave(LPOBJ lpObj)
 {
 	int total=0;
@@ -2917,13 +2910,6 @@ void gObjMagicTextSave(LPOBJ lpObj)
 		}
 	}
 }
-
-
-
-
-
-
-
 
 void ItemIsBufExOption(BYTE * buf, CItem * lpItem)
 {
@@ -2964,12 +2950,6 @@ void ItemIsBufExOption(BYTE * buf, CItem * lpItem)
 
 }
 
-
-
-
-
-
-
 void gObjStatTextSave(LPOBJ lpObj)
 {
 	LogAddTD("[%s][%s] CharInfoSave : Class=%d Level=%d LVPoint=%d Exp=%u Str=%d Dex=%d Vit=%d Energy=%d Leadership:%d Map=%d Pk=%d",
@@ -2977,12 +2957,6 @@ void gObjStatTextSave(LPOBJ lpObj)
 		lpObj->Strength, lpObj->Dexterity, lpObj->Vitality, lpObj->Energy, lpObj->Leadership, lpObj->MapNumber,
 		lpObj->m_PK_Level);
 }
-
-
-
-
-
-
 
 void gObjItemTextSave(LPOBJ lpObj)
 {
@@ -3008,13 +2982,6 @@ void gObjItemTextSave(LPOBJ lpObj)
 
 	LogAddTD(lMsg.Get(MSGGET(1, 249)), lpObj->AccountID, lpObj->Name, lpObj->Money);
 }
-
-
-
-
-
-
-
 
 void gObjWarehouseTextSave(LPOBJ lpObj)
 {
@@ -3042,13 +3009,6 @@ void gObjWarehouseTextSave(LPOBJ lpObj)
 
 	LogAddTD(lMsg.Get(MSGGET(1, 251)), lpObj->AccountID, lpObj->Name, lpObj->WarehouseMoney);
 }
-
-
-
-
-
-
-
 
 void gObjAuthorityCodeSet(LPOBJ lpObj)
 {
@@ -3098,13 +3058,6 @@ void gObjAuthorityCodeSet(LPOBJ lpObj)
 	}
 
 }
-
-
-
-
-
-
-
 
 BOOL gObjSetPosMonster(int aIndex, int PosTableNum)
 {
@@ -3160,14 +3113,6 @@ BOOL gObjSetPosMonster(int aIndex, int PosTableNum)
 	return true;
 }
 
-
-
-
-
-
-
-
-
 BOOL gObjSetMonster(int aIndex, int MonsterClass)
 {
 	int Level;
@@ -3213,6 +3158,9 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 			break;
 
 		case 239:
+			lpObj->ShopNumber = 14;
+			break;
+
 		case 253:
 			lpObj->ShopNumber = 5;
 			break;
@@ -3257,7 +3205,7 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 			lpObj->ShopNumber = 102;
 			break;
 		case 259:
-			lpObj->ShopNumber = 5;
+			lpObj->ShopNumber = 15;
 			break;
 		case 368:
 		case 369:
@@ -3266,6 +3214,12 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 			break;
 		case 379:
 			lpObj->ShopNumber = 13;
+			break;
+		case 376:
+			lpObj->ShopNumber = 16;
+			break;
+		case 377:
+			lpObj->ShopNumber = 17;
 			break;
 	}
 
@@ -3542,12 +3496,6 @@ short gObjAddSearch(SOCKET aSocket, char* ip)
 	return -1;
 }
 
-
-
-
-
-
-
 short gObjAdd(SOCKET aSocket, char* ip, int aIndex)
 {
 	if ( gObj[aIndex].Connected != PLAYER_EMPTY )
@@ -3582,12 +3530,6 @@ short gObjAdd(SOCKET aSocket, char* ip, int aIndex)
 	return aIndex;
 }
 
-
-
-
-
-
-
 short gObjMonsterRecall(int iMapNumber)
 {
 	int number = gObjAddMonster(iMapNumber);
@@ -3598,12 +3540,6 @@ short gObjMonsterRecall(int iMapNumber)
 	}
 	return -1;
 }
-
-
-
-
-
-
 
 short gObjAddMonster(int iMapNumber)
 {
@@ -3653,12 +3589,6 @@ short gObjAddMonster(int iMapNumber)
 	return -1;
 }
 
-
-
-
-
-
-
 short gObjAddCallMon()
 {
 	int count;
@@ -3703,12 +3633,6 @@ short gObjAddCallMon()
 
 }
 
-
-
-
-
-
-
 void gObjUserKill(int aIndex)
 {
 	LPOBJ lpObj = &gObj[aIndex];
@@ -3719,11 +3643,6 @@ void gObjUserKill(int aIndex)
 		lpObj->CloseType = 0;
 	}
 }
-
-
-
-
-
 
 void gObjAllLogOut()
 {
@@ -3737,11 +3656,6 @@ void gObjAllLogOut()
 		LogAddC(2, lMsg.Get( MSGGET(2, 0)));
 	}
 }
-
-
-
-
-
 
 void gObjAllDisconnect()
 {
@@ -3758,11 +3672,6 @@ void gObjAllDisconnect()
 		}
 	}
 }
-
-
-
-
-
 
 void gObjTradeSave(LPOBJ lpObj, int index)
 {
@@ -3834,28 +3743,8 @@ short gObjMemFree(int index)
 	return 1;
 }
 
-
-
-
-
-
-
-
 BOOL gObjGameClose(int aIndex)
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
 	if ( aIndex < 0 || aIndex > OBJMAX )	// Deathway fix
 	{
 		LogAdd("(%s)(%d) = index over error (%d)", __FILE__, __LINE__, aIndex);
@@ -4005,13 +3894,6 @@ BOOL gObjGameClose(int aIndex)
 	return TRUE;
 }
 
-
-
-
-
-
-
-
 short gObjDel(int index)
 {
 	int i = 0;
@@ -4066,11 +3948,6 @@ short gObjDel(int index)
 	return 1;
 }
 
-
-
-
-
-
 short gObjSometimeClose(int index)
 {
 	if ( gDisconnect == 1 )
@@ -4111,12 +3988,6 @@ short gObjSometimeClose(int index)
 	return 1;
 }
 
-
-
-
-
-
-
 BOOL gObjIsGamePlaing(LPOBJ lpObj)
 {
 	if ( lpObj->Connected < PLAYER_PLAYING )
@@ -4126,10 +3997,6 @@ BOOL gObjIsGamePlaing(LPOBJ lpObj)
 
 	return TRUE;
 }
-
-
-
-
 
 BOOL gObjIsConnectedGP(int aIndex)
 {
@@ -4155,9 +4022,6 @@ BOOL gObjIsConnectedGP(int aIndex)
 
 	return TRUE;
 }
-
-
-
 
 BOOL gObjIsConnectedGP(int aIndex, char * CharName)
 {
@@ -4189,13 +4053,6 @@ BOOL gObjIsConnectedGP(int aIndex, char * CharName)
 	return TRUE;
 }
 
-
-
-
-
-
-
-
 BOOL gObjIsConnected(LPOBJ lpObj)
 {
 	if ( lpObj->Type != OBJ_USER )
@@ -4216,12 +4073,6 @@ BOOL gObjIsConnected(LPOBJ lpObj)
 	return TRUE;
 }
 
-
-
-
-
-
-
 BOOL gObjIsConnected(int aIndex) 
 {
 	if ( aIndex < 0 || aIndex > OBJMAX-1)
@@ -4234,11 +4085,6 @@ BOOL gObjIsConnected(int aIndex)
 	}
 	return TRUE;
 }
-
-
-
-
-
 
 BOOL gObjIsConnected(LPOBJ lpObj, int dbnumber)
 {
@@ -4254,16 +4100,6 @@ BOOL gObjIsConnected(LPOBJ lpObj, int dbnumber)
 
 	return 1;
 }
-
-
-
-
-
-
-
-
-
-
 
 BOOL gObjIsAccontConnect(int aIndex, char* accountid)
 {
@@ -4289,19 +4125,11 @@ BOOL gObjIsAccontConnect(int aIndex, char* accountid)
 	return 1;
 }
 
-
-
-
-
-
-
-
-
 BOOL gObjJoominCheck(int aIndex, char* szInJN)
 {
 	LPOBJ lpObj = &gObj[aIndex];
 	
-	switch ( gLanguage )
+	switch (Configs.gLanguage)
 	{
 		case 1:
 		case 5:
@@ -4359,12 +4187,6 @@ BOOL gObjJoominCheck(int aIndex, char* szInJN)
 	return FALSE;
 }
 
-
-
-
-
-
-
 BOOL gObjTaiwanJoominCheck(int aIndex, char* szInJN)
 {
 	LPOBJ lpObj = &gObj[aIndex];
@@ -4381,12 +4203,6 @@ BOOL gObjTaiwanJoominCheck(int aIndex, char* szInJN)
 
 	return FALSE;
 }
-
-
-
-
-
-
 
 BOOL gObjCheckXYMapTile(LPOBJ lpObj, int iDbgName)
 {
@@ -4417,16 +4233,16 @@ BOOL gObjCheckXYMapTile(LPOBJ lpObj, int iDbgName)
 		mapnumber = MAP_INDEX_RORENCIA;
 	}
 
-	int mapminlevel = MapMinUserLevel[mapnumber];
+	int mapminlevel = Configs.MapMinUserLevel[mapnumber];
 	mapminlevel = 0;
 
 	if ( lpObj->Class == 4 || lpObj->Class == 3 )
 	{
 		if ( mapminlevel > 0 )
 		{
-			if ( MapMinUserLevel[mapnumber] > 0 )
+			if (Configs.MapMinUserLevel[mapnumber] > 0)
 			{
-				mapminlevel = MapMinUserLevel[mapnumber] - (MapMinUserLevel[mapnumber] / 3 * 2);
+				mapminlevel = Configs.MapMinUserLevel[mapnumber] - (Configs.MapMinUserLevel[mapnumber] / 3 * 2);
 			}
 		}
 	}
@@ -4476,12 +4292,6 @@ BOOL gObjCheckXYMapTile(LPOBJ lpObj, int iDbgName)
 
 }
 
-
-
-
-
-
-
 BOOL gObjSetAccountLogin(int aIndex, char * szId, int aUserNumber, int aDBNumber, char* JoominNumber)
 {
 	if ( !OBJMAX_RANGE(aIndex) )
@@ -4510,12 +4320,6 @@ BOOL gObjSetAccountLogin(int aIndex, char * szId, int aUserNumber, int aDBNumber
 
 }
 
-
-
-
-
-
-
 BOOL gObjGetUserNumber(int aIndex)
 {
 	int usernumber;
@@ -4530,13 +4334,6 @@ BOOL gObjGetUserNumber(int aIndex)
 	return usernumber;
 }
 
-
-
-
-
-
-
-
 BOOL gObjGetNumber(int aIndex, int& UN, int& DBN)
 {
 	if ( aIndex < 0 || aIndex > OBJMAX-1)
@@ -4548,12 +4345,6 @@ BOOL gObjGetNumber(int aIndex, int& UN, int& DBN)
 	DBN=gObj[aIndex].DBNumber;
 	return 1;
 }
-
-
-
-
-
-
 
 // gObj Address 653DBF8
 char* gObjGetAccountId(int aIndex)
@@ -4570,13 +4361,6 @@ char* gObjGetAccountId(int aIndex)
 	}
 	return 0;
 }
-
-
-
-
-
-
-
 
 int gObjGetIndex(char* szId)
 {
@@ -4597,13 +4381,6 @@ int gObjGetIndex(char* szId)
 	}
 	return -1;
 }
-
-
-
-
-
-
-
 
 BOOL gObjUserIdConnectCheck(char* szId,int index)
 {
@@ -4629,13 +4406,6 @@ BOOL gObjUserIdConnectCheck(char* szId,int index)
 	}
 	return 0;
 }
-
-
-
-
-
-
-
 
 BYTE GetPathPacketDirPos(int px, int py)
 {
@@ -4677,13 +4447,6 @@ BYTE GetPathPacketDirPos(int px, int py)
 	return pos;
 }
 
-
-
-
-
-
-
-
 int  gObjCalDistance(LPOBJ lpObj1, LPOBJ lpObj2)
 {
 	if ( lpObj1->X == lpObj2->X && lpObj1->Y == lpObj2->Y )
@@ -4696,13 +4459,6 @@ int  gObjCalDistance(LPOBJ lpObj1, LPOBJ lpObj2)
 
 	return sqrt( (tx*tx)+(ty*ty) );
 }
-
-
-
-
-
-
-
 
 BOOL gObjPositionCheck(LPOBJ lpObj)
 {
@@ -4722,13 +4478,6 @@ BOOL gObjPositionCheck(LPOBJ lpObj)
 	return TRUE;
 }
 
-
-
-
-
-
-
-
 BOOL gObjCheckTileArea(int aIndex, int x, int y, int dis)
 {
 	LPOBJ lpObj = & gObj[aIndex];
@@ -4740,13 +4489,6 @@ BOOL gObjCheckTileArea(int aIndex, int x, int y, int dis)
 	return TRUE;
 }
 
-
-
-
-
-
-
-
 BOOL ExtentCheck(int x, int y, int w, int h)
 {
 	if ( (x >=0) && (x<w) && (y >=0) && (y<h) )
@@ -4756,11 +4498,6 @@ BOOL ExtentCheck(int x, int y, int w, int h)
 	return 0;
 }
 
-
-
-
-
-
 void gObjSetInventory1Pointer(LPOBJ lpObj)
 {
 	lpObj->pInventory = lpObj->Inventory1;
@@ -4768,20 +4505,12 @@ void gObjSetInventory1Pointer(LPOBJ lpObj)
 	lpObj->pInventoryCount  = &lpObj->InventoryCount1;
 }
 
-
-
-
-
 void gObjSetInventory2Pointer(LPOBJ lpObj)
 {
 	lpObj->pInventory = lpObj->Inventory2;
 	lpObj->pInventoryMap = lpObj->InventoryMap2;
 	lpObj->pInventoryCount  = &lpObj->InventoryCount2;
 }
-
-
-
-	
 
 void gObjAddMsgSend(LPOBJ lpObj, int aMsgCode, int aIndex, int  SubCode)
 {
@@ -4811,11 +4540,6 @@ void gObjAddMsgSend(LPOBJ lpObj, int aMsgCode, int aIndex, int  SubCode)
 		}
 	}
 }
-
-
-
-
-
 
 void gObjAddMsgSendDelay(LPOBJ lpObj, int aMsgCode, int aIndex, int delay, int SubCode)
 {
@@ -4847,10 +4571,6 @@ void gObjAddMsgSendDelay(LPOBJ lpObj, int aMsgCode, int aIndex, int delay, int S
 
 }
 
-
-
-
-
 void gObjAddMsgSendDelayInSpecificQPos(LPOBJ lpObj, int aMsgCode, int aIndex, int delay, int SubCode, int iQPosition)
 {
 	if ( iQPosition >= 0 &&  iQPosition < MAX_MONSTER_SEND_MSG )
@@ -4862,11 +4582,6 @@ void gObjAddMsgSendDelayInSpecificQPos(LPOBJ lpObj, int aMsgCode, int aIndex, in
 	}
 
 }
-
-
-
-
-
 
 void gObjAddAttackProcMsgSendDelay(LPOBJ lpObj, int aMsgCode, int aIndex, int delay, int SubCode, int SubCode2)
 {
@@ -4887,10 +4602,6 @@ void gObjAddAttackProcMsgSendDelay(LPOBJ lpObj, int aMsgCode, int aIndex, int de
 	}
 
 }
-
-
-
-
 
 void gObjMsgProc(LPOBJ lpObj)
 {
@@ -4916,11 +4627,6 @@ void gObjMsgProc(LPOBJ lpObj)
 		}
 	}
 }
-
-
-
-
-
 
 void gObjStateProc(LPOBJ lpObj, int aMsgCode, int aIndex, int SubCode)
 {
@@ -4976,6 +4682,7 @@ void gObjStateProc(LPOBJ lpObj, int aMsgCode, int aIndex, int SubCode)
 			gObjAttack(lpObj, &gObj[aIndex], 0, 0, 0, SubCode, 0);
 		}
 		break;
+
 		case 13:
 		{
 			lpObj->Life = (float)lpObj->AddLife + (float)lpObj->MaxLife; //season4.5 changed
@@ -4998,12 +4705,6 @@ void gObjStateProc(LPOBJ lpObj, int aMsgCode, int aIndex, int SubCode)
 			break;
 	}
 }
-
-
-
-
-
-
 
 void gObjStateAttackProc(LPOBJ lpObj, int aMsgCode, int aIndex, int SubCode, int SubCode2)
 {
@@ -5035,11 +4736,6 @@ void gObjStateAttackProc(LPOBJ lpObj, int aMsgCode, int aIndex, int SubCode, int
 	}
 
 }
-
-
-
-
-
 
 BOOL gObjBackSpring(LPOBJ lpObj, LPOBJ lpTargetObj)
 {
@@ -5175,12 +4871,6 @@ BOOL gObjBackSpring(LPOBJ lpObj, LPOBJ lpTargetObj)
 
 	return TRUE;
 }
-
-
-
-
-
-
 
 BOOL BackSpringCheck(int & x, int & y, int & dir, BYTE map)
 {
@@ -5332,13 +5022,6 @@ BOOL gObjBackSpring2(LPOBJ lpObj, LPOBJ lpTargetObj, int count)
 	return TRUE;
 }
 
-
-
-
-
-
-
-
 bool gObjLevelUp(LPOBJ lpObj, int addexp, int iMonsterType, int iEventType)
 {
 	LogAddTD("Experience : Map[%d]-(%d,%d) [%s][%s](%d) %u %d MonsterIndex : %d, EventType : %d",
@@ -5418,7 +5101,6 @@ bool gObjLevelUp(LPOBJ lpObj, int addexp, int iMonsterType, int iEventType)
 		}
 	}
 
-
 	GJSetCharacterInfo(lpObj, lpObj->m_Index, 0);
 	gObjSetBP(lpObj->m_Index);
 	GCLevelUpMsgSend(lpObj->m_Index, 1);
@@ -5426,12 +5108,6 @@ bool gObjLevelUp(LPOBJ lpObj, int addexp, int iMonsterType, int iEventType)
 
 	return true;
 }
-
-
-
-
-
-
 
 BOOL gObjLevelUpPointAdd(BYTE type, LPOBJ lpObj)	// type : [1:Strength][2:Agility][3:Vitality][4:Energy][5:Leadership]
 {
@@ -5478,12 +5154,6 @@ BOOL gObjLevelUpPointAdd(BYTE type, LPOBJ lpObj)	// type : [1:Strength][2:Agilit
 
 	return TRUE;
 }
-
-
-
-
-
-
 
 void gObjMonsterItemLoadScript(LPOBJ lpObj, char* script_file)
 {
@@ -5550,27 +5220,141 @@ void gObjMonsterItemLoadScript(LPOBJ lpObj, char* script_file)
 	fclose(SMDFile);
 }
 
-
 void gObjGiveItemSearch(LPOBJ lpObj, int maxlevel)
 {
-#if ACTIVE_ITEM_SEARCH == 0
-	//goto lavelend;
-#endif
+	return;
+	int result;
+	int count = 256;
+	int incount = 0;
+	int type;
+	int index;
 
-//	int count;
-	//while (--count)
+	memset(lpObj->pInventoryMap, 0xFF, 8 * 8);
+	while (count--)
 	{
+		if ((rand() % 40) == 0)
+		{
+			type = 15;
+			index = rand() % MAX_SUBTYPE_ITEMS;
+		}
+		else
+		{
+			type = rand() % MAX_TYPE_ITEMS;
+			index = rand() % MAX_SUBTYPE_ITEMS;
+		}
 
+		if (
+			((type == 13) && (index<8)) ||
+			((type == 14) && ((index == 9) || (index == 10) || (index == 13) || (index == 14) || (index == 16) || (index == 17) || (index == 18))) ||
+			((type == 12) && (index == 15))
+			)
+		{
+			int perc = rand() % 8;
+			int btResult = FALSE;
+
+			if (type == 12 && index == 15)
+			{
+				perc = rand() % 4;
+			}
+
+			/*if( type == 14 && index == 17 ) //season4.5 removed
+			{
+			if( gEyesOfDevilSquareDropRate <= 0 )
+			{
+			gEyesOfDevilSquareDropRate = 1;
+			}
+
+			perc = rand()%gEyesOfDevilSquareDropRate;
+			btResult = TRUE;
+			}
+
+			if( type == 14 && index == 18 )
+			{
+			perc = rand()%gKeyOfDevilSquareDropRate;
+			btResult = TRUE;
+			}*/
+
+			if (perc == 0)
+			{
+				if (btResult == TRUE)
+				{
+					int level = 0;
+
+					if (rand() % 5 != 0)
+					{
+						if (lpObj->Level < 3) level = 0;
+						else if (lpObj->Level < 36) level = 1;
+						else if (lpObj->Level < 47) level = 2;
+						else if (lpObj->Level < 60) level = 3;
+						else if (lpObj->Level < 70) level = 4;
+						else if (lpObj->Level < 80) level = 5;
+						else level = 6;
+
+						if (level != 0)
+						{
+							if (gObjMonsterInventoryInsertItem(lpObj, type, index, level,0,0,0) != 0xFF)
+							{
+								incount++;
+								if (incount > 75) break;
+							}
+						}
+
+					}
+				}
+				else
+				{
+					if (zzzItemLevel(type, index, lpObj->Level) == TRUE)
+					{
+						if (gObjMonsterInventoryInsertItem(lpObj, type, index, 0,0,0,0) != 0xFF)
+						{
+							incount++;
+							if (incount > 75) break;
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			result = GetLevelItem(type, index, lpObj->Level);
+			if (result >= 0)
+			{
+				if ((type == 13 && index == 10) ||
+					(type == 12 && index == 11))
+				{
+					if (gObjMonsterInventoryInsertItem(lpObj, type, index, result, 0,0,0) != 0xFF)
+					{
+						incount++;
+						if (incount > 75) break;
+					}
+				}
+				else if (result <= maxlevel)
+				{
+					if (type == 12)
+					{
+						if (index != 11) result = 0;
+					}
+					if (type == 12 && index == 11)
+					{
+
+					}
+					else if (result > maxlevel) result = maxlevel;
+
+					if ((type == 4 && index == 7) || (type == 4 && index == 15))	// 석궁,화살 스킬 없이
+					{
+						result = 0;
+					}
+
+					if (gObjMonsterInventoryInsertItem(lpObj, type, index, result,0,0,0) != 0xFF)
+					{
+						incount++;
+						if (incount > 75) break;
+					}
+				}
+			}
+		}
 	}
-
-#if ACTIVE_ITEM_SEARCH == 0
-	//labelend:
-#endif
 }
-
-
-
-
 
 BYTE gObjWarehouseInsertItem(LPOBJ lpObj, int type, int index, int level, int pos)
 {
@@ -5583,55 +5367,149 @@ BYTE gObjWarehouseInsertItem(LPOBJ lpObj, int type, int index, int level, int po
 	return pos;
 }
 
-
-
-
-
-
-
 void gObjGiveItemWarehouseSearch(LPOBJ lpObj, int maxlevel)
 {
-#if ACTIVE_ITEM_SEARCH == 0
-	//goto lavelend;
-#endif
+	return; //HermeX Decompilation
+	int result;
+	int count = 256;
+	int incount = 0; //c
+	int type; //10
+	int index; //14
+	int pos = 0; //18 (change here the starting position)
+	int level = 0; //1C
+	int StartItem; //20
 
-	
+	memset(lpObj->pInventoryMap, 0xFF, 8 * 8);
+	while (count--)
+	{
+		if ((rand() % 40) == 0)
+		{
+			type = 15;
+			index = rand() % MAX_SUBTYPE_ITEMS;
+		}
+		else
+		{
+			type = rand() % MAX_TYPE_ITEMS;
+			index = rand() % MAX_SUBTYPE_ITEMS;
+		}
 
-#if ACTIVE_ITEM_SEARCH == 0
-	//labelend:
-#endif
+		if (lpObj->Class == 275)
+		{
+			StartItem = (type << 9) + index;
+			if (ItemAttribute[StartItem].Level == (BYTE)255)
+			{
+				continue;
+			}
+
+			if (ItemAttribute[StartItem].Level == (BYTE)0)
+			{
+				continue;
+			}
+
+			if (ItemAttribute[StartItem].Level < (BYTE)125)
+			{
+				continue;
+			}
+		}
+
+		if ((type == 13) && (index == 3))
+		{
+			continue;
+		}
+
+		if (((type == 13) && (index<8)) ||
+			((type == 14) && ((index == 9) || (index == 10) || (index == 13) || (index == 14) || (index == 16) || (index == 17) || (index == 18))) ||
+			((type == 12) && (index == 15))
+			)
+		{
+			int perc = rand() % 8;
+
+			if (type == 12 && index == 15)
+			{
+				perc = 1;
+			}
+
+			if (type == 14 && index == 17)
+			{
+				perc = 1;
+			}
+
+			if (type == 14 && index == 18)
+			{
+				perc = 1;
+			}
+
+			if (perc == 0)
+			{
+				if (zzzItemLevel(type, index, level) == TRUE)
+				{
+					if (gObjWarehouseInsertItem(lpObj, type, index, 0, pos) != 0xFF)
+					{
+						pos++;
+						incount++;
+						if (incount > 75) break;
+					}
+				}
+			}
+		}
+		else
+		{
+			result = GetLevelItem(type, index, level);
+			if (result >= 0)
+			{
+				if ((type == 13 && index == 10) ||
+					(type == 12 && index == 11))
+				{
+					if (gObjWarehouseInsertItem(lpObj, type, index, 0, pos) != 0xFF)
+					{
+						pos++;
+						incount++;
+						if (incount > 75) break;
+					}
+				}
+				else if (result <= maxlevel)
+				{
+					if (type == 12)
+					{
+						if (index != 11) result = 0;
+					}
+					if (type == 12 && index == 11)
+					{
+
+					}
+					else if (result > maxlevel) result = maxlevel;
+
+					if ((type == 4 && index == 7) || (type == 4 && index == 15))	// 석궁,화살 스킬 없이
+					{
+						result = 0;
+					}
+
+					if (gObjWarehouseInsertItem(lpObj, type, index, 0, pos) != 0xFF)
+					{
+						pos++;
+						incount++;
+						if (incount > 75) break;
+					}
+				}
+			}
+		}
+	}
+	lpObj->WarehouseCount = pos;
 }
-
-
-
-
-
 
 BOOL gObjGuildMasterCapacityTest(LPOBJ lpObj)
 {
-	if (lpObj->Level < gGuildCreateLevel)
+	if (lpObj->Level < Configs.gGuildCreateLevel)
 	{
 		return 0;
 	}
 	return 1;
 }
 
-
-
-
-
-
-
 void gObjNextExpCal(LPOBJ lpObj)
 {
 	lpObj->NextExp = gLevelExperience[lpObj->Level];
 }
-
-
-
-
-
-
 
 int  retResistance(LPOBJ lpObj, int Resistance_Type)
 {
@@ -5668,11 +5546,6 @@ int  retResistance(LPOBJ lpObj, int Resistance_Type)
 	return 1;
 }
 
-
-
-
-
-
 BOOL retCalcSkillResistance(LPOBJ lpTargetObj, BOOL isDouble)
 {
 	if ( isDouble != FALSE )
@@ -5692,11 +5565,6 @@ BOOL retCalcSkillResistance(LPOBJ lpTargetObj, BOOL isDouble)
 
 	return FALSE;
 }
-
-
-
-
-
 
 BOOL gObjAttackQ(LPOBJ lpObj)
 {
@@ -5766,11 +5634,6 @@ BOOL gObjAttackQ(LPOBJ lpObj)
 
 	return TRUE;
 }
-
-
-
-
-
 
 void gObjPlayerKiller(LPOBJ lpObj, LPOBJ lpTargetObj)
 {
@@ -5843,7 +5706,7 @@ void gObjPlayerKiller(LPOBJ lpObj, LPOBJ lpTargetObj)
 	int iOriginPkLevel = lpObj->m_PK_Level;
 	int iOriginPkCount = lpObj->m_PK_Count;
 
-	if(g_PKLevelIncreaseOff == 1)
+	if(Configs.g_PKLevelIncreaseOff == 1)
 	{
 		return;
 	}
@@ -5966,11 +5829,6 @@ void gObjPlayerKiller(LPOBJ lpObj, LPOBJ lpTargetObj)
 
 }
 
-
-
-
-
-
 void gObjUserDie(LPOBJ lpObj, LPOBJ lpTargetObj)
 {
 	int count = 76;
@@ -6071,7 +5929,7 @@ void gObjUserDie(LPOBJ lpObj, LPOBJ lpTargetObj)
 		LogAddTD("Killed by User State Victim:[%s][%s], Murderer:[%s][%s], Dead State (Duel:%d, GuildWar:%d, SeldDefense:%d)",lpObj->AccountID,lpObj->Name,lpTargetObj->AccountID,lpTargetObj->Name,!!IsOnDuel(lpTargetObj->m_Index,lpObj->m_Index),!!gObjTargetGuildWarCheck(lpObj,lpTargetObj),!!gObjIsSelfDefense(lpTargetObj,lpObj->m_Index));
 	}
 
-	if(gPkLimitFree == 0)
+	if (Configs.gPkLimitFree == 0)
 	{
 		if(lpObj->m_PK_Level == 2)
 		{
@@ -6126,17 +5984,17 @@ void gObjUserDie(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 
-	if(gPkItemDrop == 0)
+	if (Configs.gPkItemDrop == 0)
 	{
-		if(lpTargetObj->m_PK_Level >= 4 && gPkLimitFree == 0)
+		if (lpTargetObj->m_PK_Level >= 4 && Configs.gPkLimitFree == 0)
 		{
 			itemdrop = 1;
 		}
 	}
 
-	if(gLanguage == 0)
+	if (Configs.gLanguage == 0)
 	{
-		if(lpTargetObj->Type == OBJ_USER && gPkLimitFree == 0)
+		if (lpTargetObj->Type == OBJ_USER && Configs.gPkLimitFree == 0)
 		{
 			itemdrop = 1;
 		}
@@ -6402,11 +6260,6 @@ void gObjUserDie(LPOBJ lpObj, LPOBJ lpTargetObj)
 	lpObj->Experience = subexp;
 }
 
-
-
-
-
-
 void gObjInterfaceTimeCheck(LPOBJ lpObj)
 {
 	int tObjNum;
@@ -6463,11 +6316,6 @@ void gObjInterfaceTimeCheck(LPOBJ lpObj)
 
 }
 
-
-
-
-
-
 void gObjPkDownTimeCheck(LPOBJ lpObj, int TargetLevel)
 {
 
@@ -6476,7 +6324,7 @@ void gObjPkDownTimeCheck(LPOBJ lpObj, int TargetLevel)
 		return;
 	}
 
-	unsigned int dwtime = ((GetTickCount() - lpObj->m_dwPKTimer) / 1000) * gPkTime;
+	unsigned int dwtime = ((GetTickCount() - lpObj->m_dwPKTimer) / 1000) * Configs.gPkTime;
 
 	if(dwtime > 5)
 	{
@@ -6580,11 +6428,6 @@ void gObjPkDownTimeCheck(LPOBJ lpObj, int TargetLevel)
 	}
 }
 
-
-
-
-
-
 BOOL gObjAngelSprite(LPOBJ lpObj)
 {
 	if ( lpObj->Type != OBJ_USER )
@@ -6606,11 +6449,6 @@ BOOL gObjAngelSprite(LPOBJ lpObj)
 
 	return FALSE;
 }
-
-
-
-
-
 
 BOOL gObjSatanSprite(LPOBJ lpObj)
 {
@@ -6634,40 +6472,32 @@ BOOL gObjSatanSprite(LPOBJ lpObj)
 	return FALSE;
 }
 
-
-
-
-
-
 BOOL gObjWingSprite(LPOBJ lpObj)
 {
-	if ( lpObj->Type != OBJ_USER )
+	if (lpObj->Type != OBJ_USER)
 	{
 		return FALSE;
 	}
 
-	if ( lpObj->pInventory[7].IsItem() == FALSE )
+	if (lpObj->pInventory[7].IsItem() == FALSE)
 	{
 		return FALSE;
 	}
 
 	CItem * Wing = &lpObj->pInventory[7];
 
-	if ( (Wing->m_Type >= ITEMGET(12,0) && Wing->m_Type <= ITEMGET(12,6)) || Wing->m_Type <= ITEMGET(13,30) || (Wing->m_Type >= ITEMGET(12,36) && Wing->m_Type <= ITEMGET(12,40)))	// Apply DEathway Fix HEre, last Must be == not <=
+	if ((Wing->m_Type >= ITEMGET(12, 0) && Wing->m_Type <= ITEMGET(12, 6)) || Wing->m_Type <= ITEMGET(13, 30) ||
+		(Wing->m_Type >= ITEMGET(12, 36) && Wing->m_Type <= ITEMGET(12, 40)) || //Season 2.5 Third Wing add-on
+		Wing->m_Type == ITEMGET(12, 41) || Wing->m_Type == ITEMGET(12, 42) || Wing->m_Type == ITEMGET(12, 43)) //Season 3 add-on
 	{
-		if ( Wing->m_Durability > 0.0f )
+		if (Wing->m_Durability > 0.0f)
 		{
 			return TRUE;
 		}
 	}
-	
+
 	return FALSE;
 }
-
-
-
-
-
 
 BOOL gObjUniriaSprite(LPOBJ lpObj)
 {
@@ -6685,8 +6515,6 @@ BOOL gObjUniriaSprite(LPOBJ lpObj)
 
 	return FALSE;
 }
-
-
 
 typedef struct tagITEM_BYTE_DB
 {
@@ -6794,7 +6622,7 @@ void gObjSpriteDamage(LPOBJ lpObj, int damage)
 			return;
 		}
 
-		int iMaxDurSmall = g_iFenrirDefaultMaxDurSmall;
+		int iMaxDurSmall = Configs.g_iFenrirDefaultMaxDurSmall;
 		int iMultipleDmg = 2;
 
 		if(lpObj->Class == CLASS_WIZARD)
@@ -6807,7 +6635,7 @@ void gObjSpriteDamage(LPOBJ lpObj, int damage)
 		}
 		else if(lpObj->Class == CLASS_ELF)
 		{
-			iMaxDurSmall = g_iFenrirElfMaxDurSmall;
+			iMaxDurSmall = Configs.g_iFenrirElfMaxDurSmall;
 			iMultipleDmg = 2;
 		}
 
@@ -6919,11 +6747,6 @@ void gObjSpriteDamage(LPOBJ lpObj, int damage)
 
 	}
 }
-
-
-
-
-
 
 void gObjSecondDurDown(LPOBJ lpObj)
 {
@@ -7061,11 +6884,6 @@ void gObjSecondDurDown(LPOBJ lpObj)
 		gObjCalCharacter(lpObj->m_Index);
 	}
 }
-
-
-
-
-
 
 void gObjChangeDurProc(LPOBJ lpObj)
 {
@@ -7237,11 +7055,6 @@ void gObjChangeDurProc(LPOBJ lpObj)
 	}
 }
 
-
-
-
-#pragma warning ( disable : 4101 )
-
 void gObjWingDurProc(LPOBJ lpObj) 
 {
 	BYTE send_dur = 0;
@@ -7272,11 +7085,6 @@ void gObjWingDurProc(LPOBJ lpObj)
 		return;
 	}
 }
-
-#pragma warning ( default : 4101 )
-
-
-
 
 void gObjPenaltyDurDown(LPOBJ lpObj, LPOBJ lpTargetObj)	// Functio n Not USed
 {
@@ -7824,14 +7632,14 @@ int gObjMonsterExpSingle(LPOBJ lpObj, LPOBJ lpTargetObj, int dmg, int tot_dmg, b
 		exp = mymaxexp;
 	}
 
-	exp *= gAddExperience;
+	exp *= Configs.gAddExperience;
 
 	if ( lpObj->m_wExprienceRate > 0 )
 	{
 		exp =  (float)exp * ((float)lpObj->m_wExprienceRate  / 100.0f);
 	}
 
-	if ( g_CrywolfSync.GetOccupationState() == 1 && g_iCrywolfApplyMvpPenalty != FALSE)
+	if (g_CrywolfSync.GetOccupationState() == 1 && Configs.g_iCrywolfApplyMvpPenalty != FALSE)
 	{
 		exp =  (exp * g_CrywolfSync.GetGettingExpPenaltyRate()) / 100;
 	}
@@ -8069,14 +7877,14 @@ void gObjExpParty(LPOBJ lpObj , LPOBJ lpTargetObj, int AttackDamage, int MSBFlag
 					exp = 0;
 				}
 
-				exp *= gAddExperience;
+				exp *= Configs.gAddExperience;
 
 				if(lpPartyObj->m_wExprienceRate > 0)
 				{
 					exp = (float)exp * ((float)lpPartyObj->m_wExprienceRate  / 100.0f);
 				}
 
-				if ( g_CrywolfSync.GetOccupationState() == 1 && g_iCrywolfApplyMvpPenalty != FALSE)
+				if (g_CrywolfSync.GetOccupationState() == 1 && Configs.g_iCrywolfApplyMvpPenalty != FALSE)
 				{
 					exp =  (exp * g_CrywolfSync.GetGettingExpPenaltyRate()) / 100;
 				}
@@ -8662,11 +8470,6 @@ int gObjInventoryCommit(int aIndex)
 	return true;
 }
 
-
-
-
-
-
 int gObjInventoryRollback(int aIndex)
 {
 	if(!OBJMAX_RANGE(aIndex))
@@ -8699,11 +8502,6 @@ int gObjInventoryRollback(int aIndex)
 
 	return true;
 }
-
-
-
-
-
 
 void gObjInventoryItemSet(int aIndex, int itempos, BYTE set_byte)
 {
@@ -8757,7 +8555,6 @@ void gObjInventoryItemBoxSet(int aIndex, int itempos, int xl, int yl, BYTE set_b
 	}
 }
 
-
 bool gObjFixInventoryPointer(int aIndex)
 {
 
@@ -8800,11 +8597,6 @@ bool gObjFixInventoryPointer(int aIndex)
 	return false;
 }
 
-
-
-
-
-
 void gObjInventoryItemSet_PShop(int aIndex, int itempos, BYTE set_byte)
 {
 	int width;
@@ -8826,9 +8618,6 @@ void gObjInventoryItemSet_PShop(int aIndex, int itempos, BYTE set_byte)
 
 	gObjInventoryItemBoxSet_PShop(aIndex,itempos,width,height,set_byte);
 }
-
-
-
 
 void gObjInventoryItemBoxSet_PShop(int aIndex, int itempos, int xl, int yl, BYTE set_byte)
 {
@@ -8858,11 +8647,6 @@ void gObjInventoryItemBoxSet_PShop(int aIndex, int itempos, int xl, int yl, BYTE
 	}
 }
 
-
-
-
-
-
 BYTE gObjInventoryDeleteItem(int aIndex ,int itempos)
 {
 	if(itempos < INVETORY_WEAR_SIZE)
@@ -8887,11 +8671,6 @@ BYTE gObjInventoryDeleteItem(int aIndex ,int itempos)
 	return true;
 }
 
-
-
-
-
-
 BYTE gObjWarehouseDeleteItem(int aIndex, int itempos)
 {
 	gObjWarehouseItemSet(aIndex, itempos, -1);
@@ -8900,11 +8679,6 @@ BYTE gObjWarehouseDeleteItem(int aIndex, int itempos)
 	return true;
 }
 
-
-
-
-
-
 BYTE gObjChaosBoxDeleteItem(int aIndex, int itempos)
 {
 	gObjChaosItemSet(aIndex, itempos, -1);
@@ -8912,11 +8686,6 @@ BYTE gObjChaosBoxDeleteItem(int aIndex, int itempos)
 
 	return true;
 }
-
-
-
-
-
 
 BYTE gObjInventoryInsertItem(int aIndex, int item_num)
 {
@@ -8964,30 +8733,15 @@ GOTO_EndFunc:
 
 }
 
-
-
-
-
-
 DWORD gGetItemNumber()	
 {
-	return gItemNumberCount;
+	return Configs.gItemNumberCount;
 }
-
-
-
-
-
 
 void gPlusItemNumber() 
 {
 	return;	// Maybe here Apply deathway fix (gItemNumberCount++)
 }
-
-
-
-
-
 
 BYTE gObjInventoryInsertItem(int aIndex, CItem item)
 {
@@ -9039,11 +8793,6 @@ GOTO_EndFunc:
 	return -1;
 }
 
-
-
-
-
-
 BYTE gObjOnlyInventoryInsertItem(int aIndex, CItem item)
 {
 		int w,h,iwidth,iheight;
@@ -9094,11 +8843,6 @@ GOTO_EndFunc:
 	return -1;
 }
 
-
-
-
-
-
 BYTE gObjInventoryInsertItem(int aIndex, CMapItem * item)
 {
 	int w,h,iwidth,iheight;
@@ -9148,11 +8892,6 @@ GOTO_EndFunc:
 	return -1;
 }
 
-
-
-
-
-
 BOOL gObjSearchItem(LPOBJ lpObj, int item_type, int add_dur, int nLevel)
 {
 	for(int n = INVETORY_WEAR_SIZE; n < MAIN_INVENTORY_SIZE; n++)
@@ -9176,11 +8915,6 @@ BOOL gObjSearchItem(LPOBJ lpObj, int item_type, int add_dur, int nLevel)
 	return false;
 }
 
-
-
-
-
-
 BOOL gObjSearchItemMinus(LPOBJ lpObj, int pos, int m_dur)
 {
 	int n = pos;
@@ -9201,9 +8935,6 @@ BOOL gObjSearchItemMinus(LPOBJ lpObj, int pos, int m_dur)
 	}
 	return 0;
 }
-
-
-
 
 BYTE gObjShopBuyInventoryInsertItem(int aIndex, CItem item)
 {
@@ -9252,7 +8983,6 @@ BYTE gObjShopBuyInventoryInsertItem(int aIndex, CItem item)
 GOTO_EndFunc:
 	return -1;
 }
-
 
 BYTE gObjShopBuyInventoryInsertItem(LPOBJ lpObj, int type, int index, int level, int iSerial, int iDur)
 {
@@ -9309,8 +9039,6 @@ GOTO_EndFunc:
 	return -1;
 }
 
-
-
 BYTE gObjInventoryInsertItemTemp(LPOBJ lpObj, CMapItem * Item)
 {
 	CItem item;
@@ -9346,12 +9074,6 @@ BYTE gObjInventoryInsertItemTemp(LPOBJ lpObj, CMapItem * Item)
 GOTO_EndFunc:
 	return -1;
 }
-
-
-
-
-
-
 
 BYTE gObjInventoryInsertItem(LPOBJ lpObj, int type, int index, int level)
 {
@@ -9401,11 +9123,6 @@ GOTO_EndFunc:
 	return -1;
 }
 
-
-
-
-
-
 BYTE gObjInventoryInsertItem(LPOBJ lpObj, int type, int index, int level, int iSerial, int iDur)
 {
 	CItem item;
@@ -9452,11 +9169,6 @@ BYTE gObjInventoryInsertItem(LPOBJ lpObj, int type, int index, int level, int iS
 GOTO_EndFunc:
 	return -1;
 }
-
-
-
-
-
 
 BYTE gObjMonsterInventoryInsertItem(LPOBJ lpObj, int type, int index, int level, int op1, int op2, int op3)
 {
@@ -9508,11 +9220,6 @@ GOTO_EndFunc:
 	return -1;
 }
 
-
-
-
-
-
 BYTE gObjInventoryRectCheck(int aIndex, int sx, int sy, int width, int height)
 {
 	int x,y;
@@ -9561,11 +9268,6 @@ BYTE gObjInventoryRectCheck(int aIndex, int sx, int sy, int width, int height)
 	}
 	return  -1;
 }
-
-
-
-
-
 
 BYTE gObjOnlyInventoryRectCheck(int aIndex, int sx, int sy, int width, int height)
 {
@@ -9616,7 +9318,6 @@ BYTE gObjOnlyInventoryRectCheck(int aIndex, int sx, int sy, int width, int heigh
 	return  -1;
 }
 
-
 BOOL CheckInventoryEmptySpace(LPOBJ lpObj, int iItemHeight, int iItemWidth)
 {
 	int h=0;
@@ -9642,8 +9343,6 @@ BOOL CheckInventoryEmptySpace(LPOBJ lpObj, int iItemHeight, int iItemWidth)
 
 	return FALSE;
 }
-
-
 
 BOOL gObjIsItemPut(LPOBJ lpObj, CItem * lpItem, int pos )
 {
@@ -9976,13 +9675,6 @@ BOOL gObjIsItemPut(LPOBJ lpObj, CItem * lpItem, int pos )
 	return true;
 }
 
-
-
-
-
-
-
-
 BYTE gObjWerehouseRectCheck(int aIndex, int sx, int sy, int width, int height)
 {
 	int x,y;
@@ -10044,11 +9736,6 @@ BYTE gObjWerehouseRectCheck(int aIndex, int sx, int sy, int width, int height)
 	return  -1;
 }
 
-
-
-
-
-
 BYTE gObjMapRectCheck(BYTE * lpMapBuf, int sx, int sy, int ex, int ey, int width, int height)
 {
 	int x,y;
@@ -10099,11 +9786,6 @@ BYTE gObjMapRectCheck(BYTE * lpMapBuf, int sx, int sy, int ex, int ey, int width
 	return -1;
 }
 
-
-
-
-
-
 void gObjWarehouseItemBoxSet(int aIndex, int itempos, int xl, int yl, BYTE set_byte)
 {
 	int itemposx = (itempos)%8;
@@ -10132,11 +9814,6 @@ void gObjWarehouseItemBoxSet(int aIndex, int itempos, int xl, int yl, BYTE set_b
 	}
 }
 
-
-
-
-
-
 void gObjWarehouseItemSet(int aIndex, int itempos, BYTE set_byte)
 {
 	int width;
@@ -10158,11 +9835,6 @@ void gObjWarehouseItemSet(int aIndex, int itempos, BYTE set_byte)
 
 	gObjWarehouseItemBoxSet(aIndex,itempos,width,height,set_byte);
 }
-
-
-
-
-
 
 void gObjChaosItemBoxSet(int aIndex, int itempos, int xl, int yl, BYTE set_byte)
 {
@@ -10192,11 +9864,6 @@ void gObjChaosItemBoxSet(int aIndex, int itempos, int xl, int yl, BYTE set_byte)
 	}
 }
 
-
-
-
-
-
 void gObjChaosItemSet(int aIndex, int itempos, BYTE set_byte)
 {
 	int width;
@@ -10218,11 +9885,6 @@ void gObjChaosItemSet(int aIndex, int itempos, BYTE set_byte)
 
 	gObjChaosItemBoxSet(aIndex,itempos,width,height,set_byte);
 }
-
-
-
-
-
 
 BYTE gObjChaosBoxInsertItemPos(int aIndex, CItem item, int pos, int source)
 {
@@ -10293,11 +9955,6 @@ BYTE gObjChaosBoxInsertItemPos(int aIndex, CItem item, int pos, int source)
 	return pos;
 }
 
-
-
-
-
-
 BYTE gObjWarehouseInsertItemPos(int aIndex, CItem item, int pos, int source)
 {
 	LPOBJ lpObj;
@@ -10365,11 +10022,6 @@ BYTE gObjWarehouseInsertItemPos(int aIndex, CItem item, int pos, int source)
 	lpObj->pWarehouse[pos] = item;
 	return pos;
 }
-
-
-
-
-
 
 BYTE gObjInventoryInsertItemPos(int aIndex, CItem item, int pos, BOOL RequestCheck)
 {
@@ -10467,17 +10119,12 @@ BYTE gObjInventoryInsertItemPos(int aIndex, CItem item, int pos, BOOL RequestChe
 	return pos;
 }
 
-
-
-
-
-
 BOOL gObjInventorySearchSerialNumber(LPOBJ lpObj, DWORD serial)
 {
 	int s_num;
 	int count = 0;
 
-	if(gItemSerialCheck == 0)
+	if(Configs.gItemSerialCheck == 0)
 	{
 		return true;
 	}
@@ -10517,17 +10164,12 @@ BOOL gObjInventorySearchSerialNumber(LPOBJ lpObj, DWORD serial)
 	return false;
 }
 
-
-
-
-
-
 BOOL gObjWarehouseSearchSerialNumber(LPOBJ lpObj, DWORD sirial)
 {
 int s_num;
 	int count = 0;
 
-	if(gItemSerialCheck == 0)
+	if (Configs.gItemSerialCheck == 0)
 	{
 		return true;
 	}
@@ -10566,11 +10208,6 @@ int s_num;
 
 	return false;
 }
-
-
-
-
-
 
 BYTE gObjInventoryMoveItem(int aIndex, unsigned char source, unsigned char target, int& durSsend, int& durTsend, unsigned char sFlag, unsigned char tFlag, unsigned char* siteminfo)
 {
@@ -10945,7 +10582,7 @@ BYTE gObjInventoryMoveItem(int aIndex, unsigned char source, unsigned char targe
 			}
 			break;
 		case 4:
-			if(gDoPShopOpen == 0)
+			if (Configs.gDoPShopOpen == 0)
 			{
 				return -1;
 			}
@@ -11702,11 +11339,6 @@ BYTE gObjInventoryMoveItem(int aIndex, unsigned char source, unsigned char targe
 	return false;
 }
 
-
-
-
-
-
 BYTE gObjTradeRectCheck(int aIndex, int sx, int sy, int width, int height )
 {
 	int x;
@@ -11757,11 +11389,6 @@ BYTE gObjTradeRectCheck(int aIndex, int sx, int sy, int width, int height )
 	return -1;
 }
 
-
-
-
-
-
 BOOL gObjTradeItemBoxSet(int aIndex, int itempos, int xl, int yl, BYTE set_byte)
 {
 	int itemposx = (itempos)%8;
@@ -11790,11 +11417,6 @@ BOOL gObjTradeItemBoxSet(int aIndex, int itempos, int xl, int yl, BYTE set_byte)
 	}
 	return true;
 }
-
-
-
-
-
 
 BYTE gObjTradeInventoryMove(LPOBJ lpObj, BYTE source, BYTE target)
 {
@@ -11889,11 +11511,6 @@ BYTE gObjTradeInventoryMove(LPOBJ lpObj, BYTE source, BYTE target)
 
 	return false;
 }
-
-
-
-
-
 
 BYTE gObjInventoryTradeMove(LPOBJ lpObj, BYTE source, BYTE target)
 {
@@ -12061,11 +11678,6 @@ BYTE gObjInventoryTradeMove(LPOBJ lpObj, BYTE source, BYTE target)
 	return -1;
 }
 
-
-
-
-
-
 BYTE gObjTradeTradeMove(LPOBJ lpObj, BYTE source, BYTE target)
 {
 	int h,w;
@@ -12137,11 +11749,6 @@ BYTE gObjTradeTradeMove(LPOBJ lpObj, BYTE source, BYTE target)
 	return -1;
 }
 
-
-
-
-
-
 void gObjTradeCancel(int aIndex)
 {
 	if(OBJMAX_RANGE(aIndex) == 0)
@@ -12183,11 +11790,6 @@ void gObjTradeCancel(int aIndex)
 	LogAddTD(lMsg.Get(514),gObj[aIndex].AccountID,gObj[aIndex].Name);
 }
 
-
-
-
-
-
 void gObjTempInventoryItemBoxSet(BYTE * TempMap, int itempos, int xl, int yl, BYTE set_byte)
 {
 	int itemposx = (itempos - INVETORY_WEAR_SIZE) % 8;
@@ -12201,11 +11803,6 @@ void gObjTempInventoryItemBoxSet(BYTE * TempMap, int itempos, int xl, int yl, BY
 		}
 	}
 }
-
-
-
-
-
 
 BYTE gObjTempInventoryRectCheck(BYTE * TempMap, int sx, int sy, int width, int height)
 {
@@ -12237,11 +11834,6 @@ BYTE gObjTempInventoryRectCheck(BYTE * TempMap, int sx, int sy, int width, int h
 	}
 	return -1;
 }
-
-
-
-
-
 
 BYTE gObjTempInventoryInsertItem(LPOBJ lpObj, CItem item, BYTE * TempMap)
 {
@@ -12277,11 +11869,6 @@ GOTO_EndFunc:
 	return -1;
 }
 
-
-
-
-
-
 BOOL TradeItemInventoryPutTest(int aIndex)
 {
 	BYTE TempInventoryMap[64];
@@ -12311,11 +11898,6 @@ BOOL TradeItemInventoryPutTest(int aIndex)
 	}
 	return false;
 }
-
-
-
-
-
 
 BOOL TradeitemInventoryPut(int aIndex)
 {
@@ -12356,11 +11938,6 @@ BOOL TradeitemInventoryPut(int aIndex)
 	}
 	return true;
 }
-
-
-
-
-
 
 void gObjTradeOkButton(int aIndex)
 {
@@ -12487,11 +12064,6 @@ void gObjTradeOkButton(int aIndex)
 	gObjNotifyUpdateUnionV1(&gObj[aIndex]);
 	gObjNotifyUpdateUnionV2(&gObj[aIndex]);
 }
-
-
-
-
-
 
 BYTE LevelSmallConvert(int aIndex, int inventoryindex)
 {
@@ -12895,7 +12467,6 @@ void gObjMakePreviewCharSet(int aIndex)
 	lpObj->CharSet[16] |= btNewValue;
 }
 
-
 void gObjViewportPaint(HWND hWnd, short aIndex)
 {
 
@@ -13084,16 +12655,16 @@ void gObjViewportPaint(HWND hWnd, short aIndex)
 	wsprintf(szTemp, "Monsters: [%d] Players: [%d/%d]  Player(%d):%d VpCount:%d(%d/%d) : item count:%d ",
 		count, totalplayer, gServerMaxUser, aIndex, playerc, gObj[aIndex].VPCount, count3, count2, gItemLoop );
 
-	if ( gXMasEvent )
+	if (Configs.gXMasEvent)
 		strcat(szTemp, ":StarOfXMas");
 
-	if ( gFireCrackerEvent )
+	if (Configs.gFireCrackerEvent)
 		strcat(szTemp, ":FireCracker");
 
-	if ( gHeartOfLoveEvent )
+	if (Configs.gHeartOfLoveEvent)
 		strcat(szTemp, ":HeartOfLove");
 
-	if ( gMedalEvent )
+	if (Configs.gMedalEvent)
 		strcat(szTemp, ":MedalEvent");
 
 	TextOut(hdc, 150, 0, szTemp, strlen(szTemp));
@@ -13427,8 +12998,6 @@ int  ViewportAdd(int aIndex, int aAddIndex, int aType)
 	return blank;
 }
 
-
-
 int  ViewportAdd2(int aIndex, int aAddIndex, int aType)
 {
 	int blank = -1;
@@ -13476,11 +13045,6 @@ int  ViewportAdd2(int aIndex, int aAddIndex, int aType)
 	return blank;
 }
 
-
-
-
-
-
 void ViewportDel(short aIndex, int aDelIndex)
 {
 	if(gObjIsConnected(aIndex) == 0)
@@ -13514,11 +13078,6 @@ void ViewportDel(short aIndex, int aDelIndex)
 		}
 	}
 }
-
-
-
-
-
 
 void Viewport2Del(short aIndex, int aDelIndex)
 {
@@ -13554,11 +13113,6 @@ void Viewport2Del(short aIndex, int aDelIndex)
 	}
 }
 
-
-
-
-
-
 void gObjViewportAllDel(short aIndex)
 {
 	if(gObjIsConnected(aIndex) == 0)
@@ -13587,11 +13141,6 @@ void gObjViewportAllDel(short aIndex)
 		}
 	}
 }
-
-
-
-
-
 
 void gObjViewportListDestroy(short aIndex)
 {
@@ -13898,11 +13447,6 @@ bool PShop_CheckInventoryEmpty(short aIndex)
 	return true;
 }
 
-
-
-
-
-
 void gObjStateSetCreate(int aIndex)
 {
 	LPOBJ lpObj = &gObj[aIndex];
@@ -14061,11 +13605,11 @@ void gObjStateSetCreate(int aIndex)
 
 		gEledoradoEvent.CheckGoldDercon(lpObj->MapNumber);
 
-		if(gTamaJJangEvent != 0 && gAppearTamaJJang != 0)
+		if (Configs.gTamaJJangEvent != 0 && Configs.gAppearTamaJJang != 0)
 		{
 			if(lpObj->MapNumber == 0)
 			{
-				GCMapEventStateSend(0,gAppearTamaJJang,2);
+				GCMapEventStateSend(0, Configs.gAppearTamaJJang, 2);
 			}
 		}
 	}
@@ -14332,7 +13876,7 @@ void gObjSetState()
 
 					if(lpObj->Type == OBJ_USER)
 					{
-						if(g_iUseCharacterAutoRecuperationSystem != 0 && lpObj->Level <= g_iCharacterRecuperationMaxLevel)
+						if (Configs.g_iUseCharacterAutoRecuperationSystem != 0 && lpObj->Level <= Configs.g_iCharacterRecuperationMaxLevel)
 						{
 							lpObj->m_iAutoRecuperationTime = GetTickCount();
 						}
@@ -14548,7 +14092,7 @@ void gObjSetState()
 
 						short m_Result = g_MapServerManager.CheckMoveMapSvr(lpObj->m_Index,lpObj->MapNumber,lpObj->m_sPrevMapSvrCode);
 
-						if(m_Result != gGameServerCode )
+						if (m_Result != Configs.gGameServerCode)
 						{
 							if(m_Result == -1)
 							{
@@ -14616,11 +14160,11 @@ void gObjSetState()
 							}
 						}
 
-						if(gTamaJJangEvent!=0 && gAppearTamaJJang!=0)
+						if (Configs.gTamaJJangEvent != 0 && Configs.gAppearTamaJJang != 0)
 						{
 							if(lpObj->MapNumber == MAP_INDEX_RORENCIA)
 							{
-								GCMapEventStateSend(0,gAppearTamaJJang,2);
+								GCMapEventStateSend(0, Configs.gAppearTamaJJang, 2);
 							}
 						}
 					}
@@ -14645,11 +14189,6 @@ void gObjSetState()
 		MapC[n].StateSetDestroy();
 	}
 }
-
-
-
-
-
 
 void gObjSecondProc()
 {
@@ -14686,7 +14225,7 @@ void gObjSecondProc()
 			{
 				if(lpObj->Class == 275)
 				{
-					gObjRefillMonsterHP(lpObj,giKundunRefillHPSec);
+					gObjRefillMonsterHP(lpObj, Configs.giKundunRefillHPSec);
 				}
 				if(lpObj->Class == 283 )
 				{
@@ -14763,9 +14302,9 @@ void gObjSecondProc()
 					}
 				}
 
-				if(g_iUseCharacterAutoRecuperationSystem != 0)
+				if (Configs.g_iUseCharacterAutoRecuperationSystem != 0)
 				{
-					if(lpObj->Level <= g_iCharacterRecuperationMaxLevel)
+					if (lpObj->Level <= Configs.g_iCharacterRecuperationMaxLevel)
 					{
 						gProcessAutoRecuperation(lpObj);
 					}
@@ -14927,27 +14466,27 @@ void gObjSecondProc()
 		}
 	}
 
-	if( gTamaJJangEvent != 0)
+	if (Configs.gTamaJJangEvent != 0)
 	{
-		gTamaJJangTime--;
+		Configs.gTamaJJangTime--;
 
-		if(gTamaJJangTime <= 0)
+		if (Configs.gTamaJJangTime <= 0)
 		{
-			if(gAppearTamaJJang==0)
+			if (Configs.gAppearTamaJJang == 0)
 			{
-				gAppearTamaJJang = 1;
-				gTamaJJangTime = gTamaJJangKeepTime;
-				LogAddTD("Appear TamaJJang : Keep Time (%d)",gTamaJJangTime);
+				Configs.gAppearTamaJJang = 1;
+				Configs.gTamaJJangTime = Configs.gTamaJJangKeepTime;
+				LogAddTD("Appear TamaJJang : Keep Time (%d)", Configs.gTamaJJangTime);
 			}
 			else
 			{
-				gAppearTamaJJang = 0;
+				Configs.gAppearTamaJJang = 0;
 
-				gTamaJJangTime = gTamaJJangDisappearTime +rand()% gTamaJJangDisappearTimeRandomRange;
-				LogAddTD("DisAppear TamaJJang : Keep Time (%d)",gTamaJJangTime);
+				Configs.gTamaJJangTime = Configs.gTamaJJangDisappearTime + rand() % Configs.gTamaJJangDisappearTimeRandomRange;
+				LogAddTD("DisAppear TamaJJang : Keep Time (%d)", Configs.gTamaJJangTime);
 			}
 
-			GCMapEventStateSend(0,gAppearTamaJJang,2);
+			GCMapEventStateSend(0, Configs.gAppearTamaJJang, 2);
 		}
 	}
 	
@@ -16586,7 +16125,7 @@ void gObjSkillBeAttackProc(LPOBJ lpObj)
 				ad = 0;
 			}
 
-			if(g_ShieldSystemOn == 1)
+			if (Configs.g_ShieldSystemOn == 1)
 			{
 				if(lpObj->Type == OBJ_USER && lpObj->lpAttackObj->Type == OBJ_USER)
 				{
@@ -17150,7 +16689,7 @@ BOOL gObjMoveGate(int aIndex, int gt)
 			return false;
 		}
 	}
-	if(g_iBlockKanturuMapEnter == 1)
+	if (Configs.g_iBlockKanturuMapEnter == 1)
 	{
 		x = lpObj->X;
 		y = lpObj->Y;
@@ -17186,7 +16725,7 @@ BOOL gObjMoveGate(int aIndex, int gt)
 		}
 	}
 
-	if(g_iBlockCastleSiegeMapEnter == 1)
+	if (Configs.g_iBlockCastleSiegeMapEnter == 1)
 	{
 		x = lpObj->X;
 		y = lpObj->Y;
@@ -17283,7 +16822,7 @@ BOOL gObjMoveGate(int aIndex, int gt)
 
 				short sSvrCode = g_MapServerManager.CheckMoveMapSvr(lpObj->m_Index,mapNumber,lpObj->m_sPrevMapSvrCode);
 
-				if(sSvrCode != gGameServerCode)
+				if (sSvrCode != Configs.gGameServerCode)
 				{
 					if(sSvrCode == -1)
 					{
@@ -17405,7 +16944,7 @@ void gObjTeleport(int aIndex, int map, int x, int y)
 	{
 		short sSvrCode = g_MapServerManager.CheckMoveMapSvr(lpObj->m_Index,map,lpObj->m_sPrevMapSvrCode);
 
-		if(sSvrCode != gGameServerCode)
+		if (sSvrCode != Configs.gGameServerCode)
 		{
 			if(sSvrCode == -1)
 			{
@@ -17987,11 +17526,6 @@ int gObjMonsterMagicAdd(LPOBJ lpObj, BYTE aSkill, BYTE Level)
 	return -1;
 }
 
-
-
-
-
-
 BOOL gObjMagicEnergyCheck(LPOBJ lpObj , BYTE aSkill)
 {
 	int reqeng,reqlevel;
@@ -18016,11 +17550,6 @@ BOOL gObjMagicEnergyCheck(LPOBJ lpObj , BYTE aSkill)
 	}
 return true;
 }
-
-
-
-
-
 
 BOOL gObjItemLevelUp(LPOBJ lpObj, int source, int target)
 {
@@ -18053,7 +17582,7 @@ BOOL gObjItemLevelUp(LPOBJ lpObj, int source, int target)
 			return false;
 		}
 
-		if(rand()% 10000 < g_iFenrirRepairRate)
+		if (rand() % 10000 < Configs.g_iFenrirRepairRate)
 		{
 			int iAddDur = rand()%150 + 50;
 
@@ -18080,14 +17609,13 @@ BOOL gObjItemLevelUp(LPOBJ lpObj, int source, int target)
 		return true;
 	}
 
-	if(!(lpObj->pInventory[target].m_Type < ITEMGET(12,7)
-		|| lpObj->pInventory[target].m_Type == ITEMGET(13,30)
-		|| lpObj->pInventory[target].m_Type == ITEMGET(4,7)
-		|| lpObj->pInventory[target].m_Type == ITEMGET(4,15)
-		|| lpObj->pInventory[target].m_Type >= ITEMGET(12,36) && lpObj->pInventory[target].m_Type <= ITEMGET(12,43)))
+	if (!((lpObj->pInventory[target].m_Type < ITEMGET(12, 7) || lpObj->pInventory[target].m_Type >= ITEMGET(12, 36)) &&
+		(lpObj->pInventory[target].m_Type <= ITEMGET(12, 43) || lpObj->pInventory[target].m_Type == ITEMGET(13, 30)) &&
+		(lpObj->pInventory[target].m_Type != ITEMGET(4, 7) && lpObj->pInventory[target].m_Type != ITEMGET(4, 15))))
 	{
 		return false;
 	}
+
 	LogAddTD(lMsg.Get(556),lpObj->AccountID,lpObj->Name,lpObj->pInventory[target].GetName(),lpObj->pInventory[target].m_Number,lpObj->pInventory[target].m_Level);
 
 	lpObj->pInventory[target].m_Level++;
@@ -18118,11 +17646,6 @@ BOOL gObjItemLevelUp(LPOBJ lpObj, int source, int target)
 	return true;
 }
 
-
-
-
-
-
 BOOL gObjItemRandomLevelUp(LPOBJ lpObj, int source, int target)
 {
 	if(source < 0 || source > MAIN_INVENTORY_SIZE -1)
@@ -18145,11 +17668,9 @@ BOOL gObjItemRandomLevelUp(LPOBJ lpObj, int source, int target)
 		return false;
 	}
 
-	if(!(lpObj->pInventory[target].m_Type < ITEMGET(12,7)
-		|| lpObj->pInventory[target].m_Type == ITEMGET(13,30)
-		|| lpObj->pInventory[target].m_Type == ITEMGET(4,7)
-		|| lpObj->pInventory[target].m_Type == ITEMGET(4,15)
-		|| lpObj->pInventory[target].m_Type >= ITEMGET(12,36) && lpObj->pInventory[target].m_Type <= ITEMGET(12,43)))
+	if (!((lpObj->pInventory[target].m_Type < ITEMGET(12, 7) || lpObj->pInventory[target].m_Type >= ITEMGET(12, 36)) &&
+		(lpObj->pInventory[target].m_Type <= ITEMGET(12, 43) || lpObj->pInventory[target].m_Type == ITEMGET(13, 30)) &&
+		(lpObj->pInventory[target].m_Type != ITEMGET(4, 7) && lpObj->pInventory[target].m_Type != ITEMGET(4, 15))))
 	{
 		return false;
 	}
@@ -18277,11 +17798,10 @@ BOOL gObjItemRandomOption3Up(LPOBJ lpObj, int source, int target)
 		return false;
 	}
 
-	if(!(lpObj->pInventory[target].m_Type < ITEMGET(12,7)
-		|| lpObj->pInventory[target].m_Type == ITEMGET(13,30)
-		|| lpObj->pInventory[target].m_Type == ITEMGET(4,7)
-		|| lpObj->pInventory[target].m_Type == ITEMGET(4,15)
-		|| lpObj->pInventory[target].m_Type >= ITEMGET(12,36) && lpObj->pInventory[target].m_Type <= ITEMGET(12,43)))
+	//season 3.5 changed (added summoner wings)
+	if (!((lpObj->pInventory[target].m_Type < ITEMGET(12, 7) || lpObj->pInventory[target].m_Type >= ITEMGET(12, 36)) &&
+		(lpObj->pInventory[target].m_Type <= ITEMGET(12, 43) || lpObj->pInventory[target].m_Type == ITEMGET(13, 30)) &&
+		(lpObj->pInventory[target].m_Type != ITEMGET(4, 7) && lpObj->pInventory[target].m_Type != ITEMGET(4, 15))))
 	{
 		return false;
 	}
@@ -18294,6 +17814,8 @@ BOOL gObjItemRandomOption3Up(LPOBJ lpObj, int source, int target)
 		lpObj->pInventory[target].m_Option3);
 
 	int _r = rand()%100;
+	int loc2;
+	int loc3;
 
 	if(lpObj->pInventory[target].m_Option3 == 0)
 	{
@@ -18316,6 +17838,41 @@ BOOL gObjItemRandomOption3Up(LPOBJ lpObj, int source, int target)
 		}
 		else
 		{
+			if ((lpObj->pInventory[target].m_Option3) == FALSE)
+			{
+				if (lpObj->pInventory[target].m_Type >= ITEMGET(12, 36) && lpObj->pInventory[target].m_Type <= ITEMGET(12, 40) || lpObj->pInventory[target].m_Type == ITEMGET(12, 43))
+				{
+					lpObj->pInventory[target].m_NewOption &= 0xEF;
+					lpObj->pInventory[target].m_NewOption &= 0xDF;
+
+					loc2 = rand() % 2;
+
+					switch (loc2)
+					{
+					case 0:
+					{
+						loc3 = rand() % 1000;
+
+						if (loc3 < 400)
+						{
+							lpObj->pInventory[target].m_NewOption |= 0x10;
+						}
+					}
+					break;
+
+					case 1:
+					{
+						loc3 = rand() % 1000;
+
+						if (loc2 < 300)
+						{
+							lpObj->pInventory[target].m_NewOption |= 0x20;
+						}
+					}
+					break;
+					}
+				}
+			}
 			lpObj->pInventory[target].m_Option3++;
 		}
 	}
@@ -20756,11 +20313,6 @@ void gObjRecall(int aIndex, int mapnumber, int x, int y)
 	}
 }
 
-
-
-
-
-
 void gObjSetExpPetItem(int aIndex, int exp)
 {
 	LPOBJ lpObj = &gObj[aIndex];
@@ -20770,7 +20322,7 @@ void gObjSetExpPetItem(int aIndex, int exp)
 		return;
 	}
 
-	exp *= gDarkSpiritAddExperience;
+	exp *= Configs.gDarkSpiritAddExperience;
 
 	if(lpObj->pInventory[8].m_Type == ITEMGET(13,4) && lpObj->pInventory[1].m_Type == ITEMGET(13,5))
 	{
@@ -21858,17 +21410,17 @@ void gObjShieldAutoRefill(LPOBJ lpObj)
 	int iRefillPoint = 0;
 	int iShieldRefillOption = 0;
 
-	if(g_ShieldSystemOn == 0)
+	if (Configs.g_ShieldSystemOn == 0)
 	{
 		return;
 	}
 
-	if(g_ShieldAutoRefillOn == 0)
+	if (Configs.g_ShieldAutoRefillOn == 0)
 	{
 		return;
 	}
 
-	if(g_ShieldAutoRefillOnSafeZone == 1)
+	if (Configs.g_ShieldAutoRefillOnSafeZone == 1)
 	{
 		unsigned char btMapAttribute = MapC[lpObj->MapNumber].GetAttr(lpObj->X,lpObj->Y);
 
@@ -21983,7 +21535,7 @@ int gObjOverlapItemUsingDur(class CItem* lpItem, int iMapNumber, int iItemNumber
 
 int gObjCheckSerial0ItemList(class CItem* lpItem)
 {
-	if(gItemSerialCheck == 0)
+	if (Configs.gItemSerialCheck == 0)
 	{
 		return true;
 	}
@@ -22018,7 +21570,7 @@ int iItemSerial;
 int iCount;
 int i;
 
-	if(gItemSerialCheck == 0)
+if (Configs.gItemSerialCheck == 0)
 	{
 		return true;
 	}
@@ -22061,7 +21613,7 @@ return false;
 
 BOOL gCheckSkillDistance(int aIndex, int aTargetIndex, int iSkillNum)
 {
-	if ( !g_iSkillDistanceCheck  )
+	if (!Configs.g_iSkillDistanceCheck)
 		return TRUE;
 
 	if ( iSkillNum == 40 )
@@ -22072,7 +21624,7 @@ BOOL gCheckSkillDistance(int aIndex, int aTargetIndex, int iSkillNum)
 	if ( iSkillDistance == -1 )
 		return FALSE;
 
-	iSkillDistance += g_iSkillDistanceCheckTemp;
+	iSkillDistance += Configs.g_iSkillDistanceCheckTemp;
 	LPOBJ lpObj = &gObj[aIndex];
 	LPOBJ lpTargetObj = &gObj[aTargetIndex];
 

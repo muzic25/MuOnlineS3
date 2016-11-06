@@ -485,10 +485,10 @@ void DataServerLogin(int server)
 	pInfo.h.c =0xC1;
 	pInfo.h.size = sizeof(SDHP_SERVERINFO);	// Size
 	pInfo.h.headcode =0x00;
-	pInfo.Port =(WORD)GameServerPort;
+	pInfo.Port = (WORD)Configs.GameServerPort;
 	pInfo.Type =1;
-	pInfo.ServerCode =gGameServerCode;
-	strcpy( (char*)&pInfo.ServerName[0], (const char*)&szServerName[0] );
+	pInfo.ServerCode = Configs.gGameServerCode;
+	strcpy((char*)&pInfo.ServerName[0], (const char*)&Configs.szServerName[0]);
 
 	cDBSMng.Send(server, (char*)&pInfo , pInfo.h.size  );	
 } 
@@ -1580,7 +1580,7 @@ void JGGetCharacterInfo( SDHP_DBCHAR_INFORESULT * lpMsg)
 
 		short wGameServerCode = g_MapServerManager.CheckMoveMapSvr(lpObj->m_Index, lpObj->MapNumber, lpObj->m_sPrevMapSvrCode);
 
-		if ( wGameServerCode != gGameServerCode )
+		if (wGameServerCode != Configs.gGameServerCode)
 		{
 			if ( wGameServerCode == -1 )
 			{
@@ -1664,13 +1664,13 @@ void JGGetCharacterInfo( SDHP_DBCHAR_INFORESULT * lpMsg)
 	DGGuildMemberInfoRequest(aIndex);
 	FriendListRequest(aIndex);
 
-	if ( gTamaJJangEvent != FALSE )
+	if (Configs.gTamaJJangEvent != FALSE)
 	{
-		if ( gAppearTamaJJang != 0 )
+		if (Configs.gAppearTamaJJang != 0)
 		{
 			if ( lpObj->MapNumber == MAP_INDEX_RORENCIA )
 			{
-				GCMapEventStateSend(MAP_INDEX_RORENCIA, gAppearTamaJJang, 2);
+				GCMapEventStateSend(MAP_INDEX_RORENCIA, Configs.gAppearTamaJJang, 2);
 			}
 		}
 	}
@@ -2142,7 +2142,7 @@ void DGGetWarehouseList(SDHP_GETWAREHOUSEDB_SAVE * lpMsg)
 	DataSend(lpObj->m_Index, (LPBYTE)&pResult, pResult.h.size);
 	GCUserWarehouseSend(&gObj[aIndex]);
 
-	if ( bCanWarehouseLock == TRUE )
+	if (Configs.bCanWarehouseLock == TRUE)
 	{
 		if ( gObj[aIndex].WarehousePW > 0 )
 		{
@@ -2725,7 +2725,7 @@ void ItemMovePathSave(char* ActID, char* Name, BYTE level, BYTE mapnumber, BYTE 
 	memcpy(pMsg.Account, ActID, sizeof(pMsg.Account));
 	strcpy(pMsg.ItemName, Item);
 	memcpy(pMsg.Name, Name, sizeof(pMsg.Name));
-	strcpy(pMsg.ServerName, szServerName);
+	strcpy(pMsg.ServerName, Configs.szServerName);
 
 	cDBSMng.Send((PCHAR)&pMsg, pMsg.h.size);
 }

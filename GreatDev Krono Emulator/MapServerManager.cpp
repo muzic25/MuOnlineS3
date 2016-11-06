@@ -329,7 +329,7 @@ BOOL CMapServerManager::LoadData(char* lpszFileName)
 
 		fclose(SMDFile);
 
-		std::map<int  ,_MAPSVR_DATA *>::iterator it = this->m_mapSVRCODE_MAP.find(gGameServerCode);
+		std::map<int, _MAPSVR_DATA *>::iterator it = this->m_mapSVRCODE_MAP.find(Configs.gGameServerCode);
 
 		if ( it != this->m_mapSVRCODE_MAP.end() )
 		{
@@ -343,7 +343,7 @@ BOOL CMapServerManager::LoadData(char* lpszFileName)
 		if ( this->m_lpThisMapSvrData == NULL )
 		{
 			MsgBox("[MapServerMng] CMapServerManager::LoadData() - file load error : This GameServerCode (%d) doesn't Exist at file '%s' != sSVR_CODE",
-				gGameServerCode, lpszFileName);
+				Configs.gGameServerCode, lpszFileName);
 
 			return FALSE;
 		}
@@ -396,17 +396,17 @@ BOOL CMapServerManager::CheckMapCanMove(int iMAP_NUM)
 short CMapServerManager::CheckMoveMapSvr(int iIndex, int iMAP_NUM, short sSVR_CODE_BEFORE)
 {
 	if ( this->m_bMapDataLoadOk == FALSE )
-		return gGameServerCode;
+		return Configs.gGameServerCode;
 
 	if ( !gObjIsConnected(iIndex))
-		return gGameServerCode;
+		return Configs.gGameServerCode;
 
 	if ( !MapNumberCheck(iMAP_NUM))
 	{
 		LogAddC(2, "[MapServerMng] CheckMoveMapSvr() - Map Index doesn't exist [%s][%s] : %d",
 			gObj[iIndex].AccountID, gObj[iIndex].Name, iMAP_NUM);
 
-		return gGameServerCode;
+		return Configs.gGameServerCode;
 	}
 
 	_MAPSVR_DATA * lpMapSvrData = this->m_lpThisMapSvrData;
@@ -416,7 +416,7 @@ short CMapServerManager::CheckMoveMapSvr(int iIndex, int iMAP_NUM, short sSVR_CO
 		LogAddC(2, "[MapServerMng] CheckMoveMapSvr() - m_lpThisMapSvrData == NULL [%s][%s] : %d",
 			gObj[iIndex].AccountID, gObj[iIndex].Name, iMAP_NUM);
 
-		return gGameServerCode;
+		return Configs.gGameServerCode;
 	}
 
 	if ( lpMapSvrData->m_bIN_USE == FALSE )
@@ -424,7 +424,7 @@ short CMapServerManager::CheckMoveMapSvr(int iIndex, int iMAP_NUM, short sSVR_CO
 		LogAddC(2, "[MapServerMng] CheckMoveMapSvr() - lpMapSvrData->m_bIN_USE == FALSE [%s][%s] : %d",
 			gObj[iIndex].AccountID, gObj[iIndex].Name, iMAP_NUM);
 
-		return gGameServerCode;
+		return Configs.gGameServerCode;
 	}
 
 	short sMAP_MOVE_INFO = lpMapSvrData->m_sMAP_MOVE[iMAP_NUM];
@@ -550,10 +550,10 @@ short CMapServerManager::CheckMoveMapSvr(int iIndex, int iMAP_NUM, short sSVR_CO
 
 		case -3:
 			LogAddTD("[MapServerMng] CheckMoveMapSvr() - MapServer Check OK [%s][%s] : MAP-%d / SVR-%d (State Map:%d X:%d Y:%d)",
-				gObj[iIndex].AccountID, gObj[iIndex].Name, iMAP_NUM, gGameServerCode,
+				gObj[iIndex].AccountID, gObj[iIndex].Name, iMAP_NUM, Configs.gGameServerCode,
 				gObj[iIndex].MapNumber, gObj[iIndex].X, gObj[iIndex].Y);
 
-			return gGameServerCode;
+			return Configs.gGameServerCode;
 			break;
 
 		default:
@@ -611,11 +611,11 @@ short CMapServerManager::CheckMoveMapSvr(int iIndex, int iMAP_NUM, short sSVR_CO
 				LogAddC(2, "[MapServerMng] CheckMoveMapSvr() - Unknown MapMove Info [%s][%s] : MAP-%d / INFO-%d",
 					gObj[iIndex].AccountID, gObj[iIndex].Name, iMAP_NUM, sMAP_MOVE_INFO);
 
-				return gGameServerCode;
+				return Configs.gGameServerCode;
 			}
 	}
 
-	return gGameServerCode;
+	return Configs.gGameServerCode;
 }
 
 

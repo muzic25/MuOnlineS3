@@ -86,31 +86,31 @@ void CEledoradoEvent::Run()
 	{
 		DWORD Time = GetTickCount();
 
-		if ( ( Time - this->GoldGoblenEventStartTime ) > gEledoradoGoldGoblenRegenTime * 60000 )
+		if ((Time - this->GoldGoblenEventStartTime) > Configs.gEledoradoGoldGoblenRegenTime * 60000)
 		{
 			this->GoldGoblenEventStartTime = Time;
 			this->RegenGoldGoblen();
 		}
 
-		if ( ( Time - this->TitanEventStartTime ) > gEledoradoTitanRegenTime * 60000 )
+		if ((Time - this->TitanEventStartTime) > Configs.gEledoradoTitanRegenTime * 60000)
 		{
 			this->TitanEventStartTime = Time;
 			this->RegenTitan();
 		}
 
-		if ( ( Time - this->GoldDerconEventStartTime ) > gEledoradoGoldDerconRegenTime * 60000 )
+		if ((Time - this->GoldDerconEventStartTime) > Configs.gEledoradoGoldDerconRegenTime * 60000)
 		{
 			this->GoldDerconEventStartTime = Time;
 			this->RegenGoldDercon();
 		}
 
-		if ( ( Time - this->DevilLizardKingEventStartTime ) > gEledoradoDevilLizardKingRegenTime * 60000 )
+		if ((Time - this->DevilLizardKingEventStartTime) > Configs.gEledoradoDevilLizardKingRegenTime * 60000)
 		{
 			this->DevilLizardKingEventStartTime = Time;
 			this->RegenDevilLizardKing();
 		}
 
-		if ( ( Time - this->KanturEventStartTime ) > gEledoradoDevilTantarosRegenTime * 60000 )
+		if ((Time - this->KanturEventStartTime) > Configs.gEledoradoDevilTantarosRegenTime * 60000)
 		{
 			this->KanturEventStartTime = Time;
 			this->RegenKantur();

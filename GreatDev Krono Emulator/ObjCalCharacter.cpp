@@ -366,16 +366,16 @@ void gObjCalCharacter(int aIndex)
 
 	if ( lpObj->Class == CLASS_WIZARD ) // Dark Wizard;
 	{
-		lpObj->m_DetectSpeedHackTime = (gAttackSpeedTimeLimit - (lpObj->m_MagicSpeed*2 * gDecTimePerAttackSpeed) );
+		lpObj->m_DetectSpeedHackTime = (Configs.gAttackSpeedTimeLimit - (lpObj->m_MagicSpeed * 2 * Configs.gDecTimePerAttackSpeed));
 	}
 	else
 	{
-		lpObj->m_DetectSpeedHackTime = (gAttackSpeedTimeLimit - (lpObj->m_AttackSpeed * gDecTimePerAttackSpeed) );
+		lpObj->m_DetectSpeedHackTime = (Configs.gAttackSpeedTimeLimit - (lpObj->m_AttackSpeed * Configs.gDecTimePerAttackSpeed));
 	}
 
-	if ( lpObj->m_DetectSpeedHackTime < gMinimumAttackSpeedTime )
+	if (lpObj->m_DetectSpeedHackTime < Configs.gMinimumAttackSpeedTime)
 	{
-		lpObj->m_DetectSpeedHackTime = gMinimumAttackSpeedTime;
+		lpObj->m_DetectSpeedHackTime = Configs.gMinimumAttackSpeedTime;
 	}
 
 	if ( lpObj->Class == 2 ) // elf
@@ -1398,14 +1398,14 @@ void gObjCalcShieldPoint(LPOBJ lpObj)
 		iExpressionA += lpObj->Leadership + lpObj->AddLeadership;
 	}
 
-	if ( g_iShieldGageConstB == 0 )
-		g_iShieldGageConstB = 30;
+	if (Configs.g_iShieldGageConstB == 0)
+		Configs.g_iShieldGageConstB = 30;
 
-	int iExpressionB = ( lpObj->Level * lpObj->Level) / g_iShieldGageConstB;
+	int iExpressionB = (lpObj->Level * lpObj->Level) / Configs.g_iShieldGageConstB;
 
-	if ( g_iShieldGageConstA == 0 )
-		g_iShieldGageConstA = 12;
+	if (Configs.g_iShieldGageConstA == 0)
+		Configs.g_iShieldGageConstA = 12;
 
-	iMaxShieldPoint = ( iExpressionA * g_iShieldGageConstA ) / 10 + iExpressionB  + lpObj->m_Defense;
+	iMaxShieldPoint = (iExpressionA * Configs.g_iShieldGageConstA) / 10 + iExpressionB + lpObj->m_Defense;
 	lpObj->iMaxShield = iMaxShieldPoint;
 }

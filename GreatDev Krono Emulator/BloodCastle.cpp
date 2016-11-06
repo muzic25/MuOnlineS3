@@ -273,11 +273,11 @@ void CBloodCastle::Load(char* filename)
 
 void CBloodCastle::LoadItemDropRate()
 {
-	g_bBloodCastle=GetPrivateProfileInt(COMMONSERVER_MAINSECTION, "BloodCastleEvent", 0, gDirPath.GetNewPath(COMMONSERVER_FILE));
-	g_iAngelKingsPaperDropRate=GetPrivateProfileInt(COMMONSERVER_MAINSECTION, "AngelKingsPaperDropRate", 0, gDirPath.GetNewPath(COMMONSERVER_FILE));
-	g_iBloodBoneDropRate=GetPrivateProfileInt(COMMONSERVER_MAINSECTION, "BloodBoneDropRate", 0, gDirPath.GetNewPath(COMMONSERVER_FILE));
-	g_iStoneDropRate=GetPrivateProfileInt(COMMONSERVER_MAINSECTION, "StoneDropRate", 0, gDirPath.GetNewPath(COMMONSERVER_FILE));
-	g_bStoneItemDrop=GetPrivateProfileInt(COMMONSERVER_MAINSECTION, "StoneItemDrop", 0, gDirPath.GetNewPath(COMMONSERVER_FILE));
+	Configs.g_bBloodCastle = GetPrivateProfileInt(COMMONSERVER_MAINSECTION, "BloodCastleEvent", 0, gDirPath.GetNewPath(COMMONSERVER_FILE));
+	Configs.g_iAngelKingsPaperDropRate = GetPrivateProfileInt(COMMONSERVER_MAINSECTION, "AngelKingsPaperDropRate", 0, gDirPath.GetNewPath(COMMONSERVER_FILE));
+	Configs.g_iBloodBoneDropRate = GetPrivateProfileInt(COMMONSERVER_MAINSECTION, "BloodBoneDropRate", 0, gDirPath.GetNewPath(COMMONSERVER_FILE));
+	Configs.g_iStoneDropRate = GetPrivateProfileInt(COMMONSERVER_MAINSECTION, "StoneDropRate", 0, gDirPath.GetNewPath(COMMONSERVER_FILE));
+	Configs.g_bStoneItemDrop = GetPrivateProfileInt(COMMONSERVER_MAINSECTION, "StoneItemDrop", 0, gDirPath.GetNewPath(COMMONSERVER_FILE));
 }
 
 void CBloodCastle::CheckSync(int iBridgeIndex)
@@ -293,12 +293,12 @@ void CBloodCastle::CheckSync(int iBridgeIndex)
 	time(&ltime);
 	today = localtime(&ltime);
 
-	if ( BC_TIME_RANGE(g_iBloodCastle_StartHour-1) == FALSE )
+	if (BC_TIME_RANGE(Configs.g_iBloodCastle_StartHour - 1) == FALSE)
 	{
-		g_iBloodCastle_StartHour = 1;
+		Configs.g_iBloodCastle_StartHour = 1;
 	}
 
-	switch ( g_iBloodCastle_StartHour )
+	switch (Configs.g_iBloodCastle_StartHour)
 	{
 		case 2:
 			
@@ -502,7 +502,7 @@ void CBloodCastle::ProcState_Closed(int iBridgeIndex)
 		this->m_BridgeData[iBridgeIndex].m_iBC_REMAIN_MSEC -= iTICK_MSEC;
 		this->m_BridgeData[iBridgeIndex].m_iBC_TICK_COUNT = GetTickCount();
 
-		if ( g_bBloodCastle != FALSE )
+		if (Configs.g_bBloodCastle != FALSE)
 		{
 			if ( this->m_BridgeData[iBridgeIndex].m_iBC_REMAIN_MSEC <= ( this->m_iBC_TIME_MIN_OPEN * 60 * 1000 ) && this->m_BridgeData[iBridgeIndex].m_bBC_CAN_ENTER == false)
 			{
@@ -554,7 +554,7 @@ void CBloodCastle::ProcState_Closed(int iBridgeIndex)
 
 	if ( this->m_BridgeData[iBridgeIndex].m_iBC_REMAIN_MSEC <= 0 )
 	{
-		if ( g_bBloodCastle != FALSE )
+		if (Configs.g_bBloodCastle != FALSE)
 		{
 			this->SetState(iBridgeIndex, BC_STATE_PLAYING);
 		}
@@ -1417,7 +1417,7 @@ int  CBloodCastle::GetRemainTime(int iBridgeIndex)
 		time(&ltime);
 		today = localtime(&ltime);
 
-		int iSTART_HOUR = g_iBloodCastle_StartHour;
+		int iSTART_HOUR = Configs.g_iBloodCastle_StartHour;
 
 		if ( iSTART_HOUR != 2 )
 		{
@@ -2860,7 +2860,7 @@ int  CBloodCastle::CalcSendRewardEXP(int iIndex, int iEXP)
 	int iRET_EXP = 0;
 	int iCAL_EXP = iEXP;
 
-	if ( g_CrywolfSync.GetOccupationState() == 1 && g_iCrywolfApplyMvpPenalty )
+	if (g_CrywolfSync.GetOccupationState() == 1 && Configs.g_iCrywolfApplyMvpPenalty)
 		iEXP = iEXP * g_CrywolfSync.GetGettingExpPenaltyRate() / 100;
 
 	if ( gObj[iIndex].m_wExprienceRate == 0 )
@@ -3006,7 +3006,7 @@ void CBloodCastle::SendRewardScore(int iIndex, int iSCORE, int iLeftTime, int iA
 	pMsg.Score = iSCORE;
 	pMsg.BridgeNum = gObj[iIndex].m_cBloodCastleIndex;
 	pMsg.Class = gObj[iIndex].Class;
-	pMsg.ServerCode = gGameServerCode;
+	pMsg.ServerCode = Configs.gGameServerCode;
 	pMsg.iLeftTime = iLeftTime;
 	memcpy(pMsg.AccountID, gObj[iIndex].AccountID, MAX_ACCOUNT_LEN);
 	memcpy(pMsg.GameID, gObj[iIndex].Name, MAX_ACCOUNT_LEN);
@@ -3017,7 +3017,7 @@ void CBloodCastle::SendRewardScore(int iIndex, int iSCORE, int iLeftTime, int iA
 		wsRServerCli.Close();
 		wsRServerCli.CreateSocket(ghWnd);
 
-		if ( GMRankingServerConnect(gDevilSquareEventServerIp, WM_GM_RANKING_CLIENT_MSG_PROC) == FALSE )
+		if (GMRankingServerConnect(Configs.gDevilSquareEventServerIp, WM_GM_RANKING_CLIENT_MSG_PROC) == FALSE)
 		{
 			::IsDevilSquareEventConnected = FALSE;
 			LogAddTD("Can not connect Ranking Server");

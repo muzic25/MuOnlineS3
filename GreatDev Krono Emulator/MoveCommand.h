@@ -7,7 +7,7 @@
 
 #include "user.h"
 
-#define MAX_MOVE_COMMAND 30
+#define MAX_MOVE_COMMAND 34
 
 struct MOVE_COMMAND_DATA
 {
