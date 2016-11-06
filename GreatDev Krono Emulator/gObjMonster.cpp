@@ -119,7 +119,7 @@ EndLabel:
 	{
 	
 	}
-	else if ( g_CrywolfSync.GetOccupationState() == 0 && g_iCrywolfApplyMvpBenefit != 0 )
+	else if ( g_CrywolfSync.GetOccupationState() == 0 && Configs.g_iCrywolfApplyMvpBenefit != 0 )
 	{
 		lpObj->Life = ( lpObj->m_iScriptMaxLife * g_CrywolfSync.GetMonHPBenefitRate()  ) / 100;
 		lpObj->MaxLife = (lpObj->m_iScriptMaxLife * g_CrywolfSync.GetMonHPBenefitRate() ) / 100;
@@ -2003,7 +2003,7 @@ void gObjMonsterBaseAct(LPOBJ lpObj)
 
 			if (lpObj->Class == 249 || lpObj->Class == 247 )	// Guard
 			{
-				if ( gEvent1 )
+				if (Configs.gEvent1)
 				{
 					if ( !(rand()%30) )
 					{
@@ -2523,14 +2523,14 @@ void gObjRefillMonsterHP(LPOBJ lpMonsterObj, int iRefillHPSec)
 	if(lpMonsterObj->Class == 275)
 	{
 	LPOBJ lpObj;
-		if(lpMonsterObj->iObjectSecTimer > giKundunRefillHPTime)
+	if (lpMonsterObj->iObjectSecTimer > Configs.giKundunRefillHPTime)
 		{
-			iRefillHP = rand() % ((giKundunRefillHP > 0)? giKundunRefillHP : 1) ;
+			iRefillHP = rand() % ((Configs.giKundunRefillHP > 0) ? Configs.giKundunRefillHP : 1);
 
 			lpMonsterObj->iObjectSecTimer = 0;
 
 			KUNDUN_EVENT_LOG.Output("[KUNDUN] HP Log -> [%d]회복  [%d]회복시간  [%7.0f]현재HP",
-				iRefillHP, giKundunRefillHPTime, lpMonsterObj->Life);	// Deathway Translation
+				iRefillHP, Configs.giKundunRefillHPTime, lpMonsterObj->Life);	// Deathway Translation
 			lpMonsterObj->iObjectSecTimer = 0;
 		}
 		else
@@ -2538,7 +2538,7 @@ void gObjRefillMonsterHP(LPOBJ lpMonsterObj, int iRefillHPSec)
 			lpMonsterObj->iObjectSecTimer++;
 		}
 
-		if(lpMonsterObj->iObjectSecTimer % giKundunHPLogSaveTime == 0)
+	if (lpMonsterObj->iObjectSecTimer % Configs.giKundunHPLogSaveTime == 0)
 		{
 			LogAddTD("[KUNDUN][Status Log] HP:%d RefillHP:%d Map:%d X:%d Y:%d",
 				iMonsterHP,iRefillHP,lpMonsterObj->MapNumber,lpMonsterObj->X,lpMonsterObj->Y);
@@ -2554,7 +2554,7 @@ void gObjRefillMonsterHP(LPOBJ lpMonsterObj, int iRefillHPSec)
 		{
 			if(g_CrywolfSync.GetKundunHPRefillState()==1)
 			{
-				if(g_iCrywolfApplyMvpBenefit!=0)
+				if(Configs.g_iCrywolfApplyMvpBenefit!=0)
 				{
 					iRefillHP = 0;
 					iRefillHPSec = 0;
@@ -2739,11 +2739,11 @@ void gObjMonsterDieGiveItem(LPOBJ lpObj, LPOBJ lpTargetObj)
 
 	if ( lpObj->Class == 340 )	// Dark Elf
 	{
-		if ( g_bCrywolfMonsterDarkElfItemDrop )
+		if ( Configs.g_bCrywolfMonsterDarkElfItemDrop )
 		{
 			int ItemDropRate = rand()%10000;
 
-			if ( ItemDropRate <= g_iCrywolfMonsterDarkElfItemDropRate )
+			if ( ItemDropRate <= Configs.g_iCrywolfMonsterDarkElfItemDropRate )
 			{
 				int iMaxHitUser = gObjMonsterTopHitDamageUser(lpObj);
 
@@ -2767,11 +2767,11 @@ void gObjMonsterDieGiveItem(LPOBJ lpObj, LPOBJ lpTargetObj)
 	
 	if ( lpObj->Class == 349 )	// Crywolf Boss Monster
 	{
-		if ( g_bCrywolfBossMonsterItemDrop )
+		if ( Configs.g_bCrywolfBossMonsterItemDrop )
 		{
 			int ItemDropRate = rand()%10000;
 
-			if ( ItemDropRate <= g_iCrywolfBossMonsterItemDropRate )
+			if ( ItemDropRate <= Configs.g_iCrywolfBossMonsterItemDropRate )
 			{
 				int iMaxHitUser = gObjMonsterTopHitDamageUser(lpObj);
 
@@ -2828,11 +2828,11 @@ void gObjMonsterDieGiveItem(LPOBJ lpObj, LPOBJ lpTargetObj)
 	 
 	if ( lpObj->Class == 362 || lpObj->Class == 363 )	// Maya Hand
 	{
-		if ( g_bKanturuMayaHandItemDrop )
+		if ( Configs.g_bKanturuMayaHandItemDrop )
 		{
 			int ItemDropRate = rand()%10000;
 
-			if ( ItemDropRate <= g_iKanturuMayaHandItemDropRate )
+			if ( ItemDropRate <= Configs.g_iKanturuMayaHandItemDropRate )
 			{
 				int iMaxHitUser = gObjMonsterTopHitDamageUser(lpObj);
 
@@ -2856,11 +2856,11 @@ void gObjMonsterDieGiveItem(LPOBJ lpObj, LPOBJ lpTargetObj)
 	
 	if ( lpObj->Class == 361 )	// NightMare
 	{
-		if ( g_bKanturuNightmareItemDrop )
+		if ( Configs.g_bKanturuNightmareItemDrop )
 		{
 			int ItemDropRate = rand()%10000;
 
-			if ( ItemDropRate <= g_iKanturuNightmareItemDropRate )
+			if ( ItemDropRate <= Configs.g_iKanturuNightmareItemDropRate )
 			{
 				int iMaxHitUser = gObjMonsterTopHitDamageUser(lpObj);
 
@@ -3156,8 +3156,8 @@ void gObjMonsterDieGiveItem(LPOBJ lpObj, LPOBJ lpTargetObj)
 	}
 
 	ExtDropPer = rand()%2000;	// Excellent Drop Percent #warning
-	int ItemDropPer = gItemDropPer;
-	ItemDropPer += gItemDropPer * lpTargetObj->SetOpImproveItemDropRate / 100;
+	int ItemDropPer = Configs.gItemDropPer;
+	ItemDropPer += Configs.gItemDropPer * lpTargetObj->SetOpImproveItemDropRate / 100;
 	ItemDropPer = ItemDropPer * (lpTargetObj->m_wItemDropRate / 100.0f);
 
 	if ( ExtDropPer == TRUE )
@@ -3229,7 +3229,7 @@ void gObjMonsterDieGiveItem(LPOBJ lpObj, LPOBJ lpTargetObj)
 		if ( DropItem->m_Type == ITEMGET(13,14) && lpObj->MapNumber != MAP_INDEX_ICARUS) // Loch Feather
 			item_drop = FALSE;
 
-		if ( g_CrywolfSync.GetOccupationState() == 1 && g_iCrywolfApplyMvpPenalty )
+		if ( g_CrywolfSync.GetOccupationState() == 1 && Configs.g_iCrywolfApplyMvpPenalty )
 		{
 			// Jewels
 			if ( DropItem->m_Type == ITEMGET(14,13) ||  DropItem->m_Type == ITEMGET(14,14) ||  DropItem->m_Type == ITEMGET(14,16) ||
@@ -3380,13 +3380,13 @@ void gObjMonsterDieGiveItem(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 
-	if ( gEvent1ItemDropTodayPercent > 0 )
+	if (Configs.gEvent1ItemDropTodayPercent > 0)
 	{
-		if ( (rand()%gEvent1ItemDropTodayPercent) == 0 )
+		if ((rand() % Configs.gEvent1ItemDropTodayPercent) == 0)
 		{
-			if ( gEvent1ItemDropTodayCount < gEvent1ItemDropTodayMax )
+			if (Configs.gEvent1ItemDropTodayCount < Configs.gEvent1ItemDropTodayMax)
 			{
-				gEvent1ItemDropTodayCount++;
+				Configs.gEvent1ItemDropTodayCount++;
 				type = ItemGetNumberMake(14, 12);	// Heart
 				dur = 0;
 				x = lpObj->X;
@@ -3421,40 +3421,40 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		return FALSE;
 	}
 
-	if ( g_bFenrirStuffItemDrop )
+	if ( Configs.g_bFenrirStuffItemDrop )
 	{
 		Option1=0;
 		Option2=0;
 		Option3=0;
 		BOOL bDropStuff=FALSE;
 
-		if ( lpObj->Level >= g_iFenrirStuff_01_DropLv_Min && lpObj->Level <= g_iFenrirStuff_01_DropLv_Max &&
-			lpObj->MapNumber == g_iFenrirStuff_01_DropMap &&
+		if ( lpObj->Level >= Configs.g_iFenrirStuff_01_DropLv_Min && lpObj->Level <= Configs.g_iFenrirStuff_01_DropLv_Max &&
+			lpObj->MapNumber == Configs.g_iFenrirStuff_01_DropMap &&
 			bDropStuff == FALSE )
 		{
-			if ( (rand()%10000) < g_iFenrirStuff_01_DropRate ) 
+			if ( (rand()%10000) < Configs.g_iFenrirStuff_01_DropRate ) 
 			{
 				bDropStuff = TRUE;
 				type = ItemGetNumberMake(13, 32);
 			}
 		}
 
-		if ( lpObj->Level >= g_iFenrirStuff_02_DropLv_Min && lpObj->Level <= g_iFenrirStuff_02_DropLv_Max &&
-			lpObj->MapNumber == g_iFenrirStuff_02_DropMap &&
+		if ( lpObj->Level >= Configs.g_iFenrirStuff_02_DropLv_Min && lpObj->Level <= Configs.g_iFenrirStuff_02_DropLv_Max &&
+			lpObj->MapNumber == Configs.g_iFenrirStuff_02_DropMap &&
 			bDropStuff == FALSE )
 		{
-			if ( (rand()%10000) < g_iFenrirStuff_02_DropRate ) 
+			if ( (rand()%10000) < Configs.g_iFenrirStuff_02_DropRate ) 
 			{
 				bDropStuff = TRUE;
 				type = ItemGetNumberMake(13, 33);
 			}
 		}
 
-		if ( lpObj->Level >= g_iFenrirStuff_03_DropLv_Min && lpObj->Level <= g_iFenrirStuff_03_DropLv_Max &&
-			lpObj->MapNumber == g_iFenrirStuff_03_DropMap &&
+		if ( lpObj->Level >= Configs.g_iFenrirStuff_03_DropLv_Min && lpObj->Level <= Configs.g_iFenrirStuff_03_DropLv_Max &&
+			lpObj->MapNumber == Configs.g_iFenrirStuff_03_DropMap &&
 			bDropStuff == FALSE )
 		{
-			if ( (rand()%10000) < g_iFenrirStuff_03_DropRate ) 
+			if ( (rand()%10000) < Configs.g_iFenrirStuff_03_DropRate ) 
 			{
 				bDropStuff = TRUE;
 				type = ItemGetNumberMake(13, 34);
@@ -3476,19 +3476,19 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 
-	if ( g_CompoundPotionDropOn == TRUE )
+	if ( Configs.g_CompoundPotionDropOn == TRUE )
 	{
 		BOOL bDropStuff = FALSE;
 		int iType = 0;
 
-		if ( lpObj->Level >= g_iCompoundPotionLv1DropLevel && (rand()%10000) <= g_iCompoundPotionLv1DropRate &&
+		if ( lpObj->Level >= Configs.g_iCompoundPotionLv1DropLevel && (rand()%10000) <= Configs.g_iCompoundPotionLv1DropRate &&
 			bDropStuff == FALSE )
 		{
 			bDropStuff = TRUE;
 			iType = ItemGetNumberMake(14, 38);
 		}
 
-		if ( bDropStuff == FALSE && lpObj->Level >= g_iCompoundPotionLv2DropLevel && (rand()%10000) <= g_iCompoundPotionLv2DropRate  )
+		if ( bDropStuff == FALSE && lpObj->Level >= Configs.g_iCompoundPotionLv2DropLevel && (rand()%10000) <= Configs.g_iCompoundPotionLv2DropRate  )
 		{
 			bDropStuff = TRUE;
 			iType = ItemGetNumberMake(14, 39);
@@ -3497,7 +3497,7 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 
 		if ( !bDropStuff )
 		{
-			if ( lpObj->Level >= g_iCompoundPotionLv3DropLevel && (rand()%10000) <= g_iCompoundPotionLv3DropRate )
+			if ( lpObj->Level >= Configs.g_iCompoundPotionLv3DropLevel && (rand()%10000) <= Configs.g_iCompoundPotionLv3DropRate )
 			{
 				bDropStuff = TRUE;
 				iType = ItemGetNumberMake(14, 40);
@@ -3517,9 +3517,9 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 
-	if ( gIsItemDropRingOfTransform )
+	if (Configs.gIsItemDropRingOfTransform)
 	{
-		if ( (rand()%10000) < gItemDropRingOfTransform )
+		if ((rand() % 10000) < Configs.gItemDropRingOfTransform)
 		{
 			LPMONSTER_ATTRIBUTE lpattr = gMAttr.GetAttr(lpObj->Class);
 
@@ -3554,9 +3554,9 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 
-	if ( gFireCrackerEvent ) 
+	if (Configs.gFireCrackerEvent)
 	{
-		if ( gLanguage == 0 )	// If Korea
+		if (Configs.gLanguage == 0)	// If Korea
 		{
 			if ( lpObj->MapNumber < 7 )
 			{
@@ -3566,7 +3566,7 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 				{
 					if ( lpattr->m_Level >= 17 )
 					{
-						if ( (rand()%10000) < gFireCrackerDropRate )
+						if ((rand() % 10000) < Configs.gFireCrackerDropRate)
 						{
 							dur = 255.0f;
 							x = lpObj->X;
@@ -3600,7 +3600,7 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 					{
 						if ( lpattr->m_Level >= 17 )
 						{
-							if ( (rand()%10000) < gFireCrackerDropRate )
+							if ((rand() % 10000) < Configs.gFireCrackerDropRate)
 							{
 								dur = 255.0f;
 								x = lpObj->X;
@@ -3620,7 +3620,7 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 
-	if ( gXMasEvent )
+	if (Configs.gXMasEvent)
 	{
 		if ( !StarOfXMasItemBag )
 			return FALSE;
@@ -3629,9 +3629,9 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 			return TRUE;
 	}
 
-	if ( gHeartOfLoveEvent )
+	if (Configs.gHeartOfLoveEvent)
 	{
-		if ( gLanguage == 2 )
+		if (Configs.gLanguage == 2)
 		{
 			LPMONSTER_ATTRIBUTE lpattr = gMAttr.GetAttr(lpObj->Class);
 
@@ -3639,7 +3639,7 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 			{
 				if ( lpattr->m_Level >=15 )
 				{
-					if ( (rand()%10000) < gHeartOfLoveDropRate )
+					if ((rand() % 10000) < Configs.gHeartOfLoveDropRate)
 					{
 						dur = 255.0f;
 						x = lpObj->X;
@@ -3666,7 +3666,7 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 				{
 					if ( lpattr->m_Level >=17 )
 					{
-						if ( (rand()%10000) < gHeartOfLoveDropRate )
+						if ((rand() % 10000) < Configs.gHeartOfLoveDropRate)
 						{
 							dur = 255.0f;
 							x = lpObj->X;
@@ -3686,11 +3686,11 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 	
-	if ( gMedalEvent )
+	if (Configs.gMedalEvent)
 	{
 		if ( lpObj->MapNumber == 1 || lpObj->MapNumber == 2 )	// Silver Medal
 		{
-			if ( (rand()%10000) < gSilverMedalDropRate )
+			if ((rand() % 10000) < Configs.gSilverMedalDropRate)
 			{
 				dur = 255.0f;
 				x = lpObj->X;
@@ -3707,7 +3707,7 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 		else if ( lpObj->MapNumber == 4 || lpObj->MapNumber == 7 || lpObj->MapNumber == 8 )	// Gold Medal
 		{
-			if ( (rand()%10000) < gGoldMedalDropRate )
+			if ((rand() % 10000) < Configs.gGoldMedalDropRate)
 			{
 				dur = 255.0f;
 				x = lpObj->X;
@@ -3724,9 +3724,9 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 
-	if ( gEventChipEvent )
+	if (Configs.gEventChipEvent)
 	{
-		if ( (rand()%10000) < gBoxOfGoldDropRate )
+		if ((rand() % 10000) < Configs.gBoxOfGoldDropRate)
 		{
 			dur = 255.0f;
 			x = lpObj->X;
@@ -3742,12 +3742,7 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 
-#if (FOREIGN_GAMESERVER==1)
-	if ( szAuthKey[16] != AUTHKEY16 )
-		DestroyGIocp();
-#endif
-
-	if ( (rand()%10000) < g_iKundunMarkDropRate )
+	if ( (rand()%10000) < Configs.g_iKundunMarkDropRate )
 	{
 		Option1=0;
 		Option2=0;
@@ -3785,7 +3780,7 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		return TRUE;
 	}
 
-	if ( (rand()%10000) < g_iMarkOfTheLord )
+	if ( (rand()%10000) < Configs.g_iMarkOfTheLord )
 	{
 		Option1=0;
 		Option2=0;
@@ -3803,7 +3798,7 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		return TRUE;
 	}
 
-	if ( (rand()%10000) < g_iJapan1StAnivItemDropRate )
+	if ( (rand()%10000) < Configs.g_iJapan1StAnivItemDropRate )
 	{
 		if ( lpTargetObj->PartyNumber >= 0 )
 		{
@@ -3875,11 +3870,11 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 
-	if ( gIsDropDarkLordItem )
+	if (Configs.gIsDropDarkLordItem)
 	{
-		if ( lpObj->Level >= gSleeveOfLordDropLevel )
+		if (lpObj->Level >= Configs.gSleeveOfLordDropLevel)
 		{
-			if ( (rand()%10000) < gSleeveOfLordDropRate)
+			if ((rand() % 10000) < Configs.gSleeveOfLordDropRate)
 			{
 				type = ItemGetNumberMake(13,14);
 				level = 1;
@@ -3894,9 +3889,9 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 			}
 		}
 
-		if ( lpObj->Level >= gSoulOfDarkHorseropLevel )
+		if (lpObj->Level >= Configs.gSoulOfDarkHorseropLevel)
 		{
-			if ( (rand()%10000) < gSoulOfDarkHorseDropRate)
+			if ((rand() % 10000) < Configs.gSoulOfDarkHorseDropRate)
 			{
 				type = ItemGetNumberMake(13,31);
 				level = 0;
@@ -3911,9 +3906,9 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 			}
 		}
 
-		if ( lpObj->Level >= gSoulOfDarkSpiritDropLevel )
+		if (lpObj->Level >= Configs.gSoulOfDarkSpiritDropLevel)
 		{
-			if ( (rand()%10000) < gSoulOfDarkSpiritDropRate )
+			if ((rand() % 10000) < Configs.gSoulOfDarkSpiritDropRate)
 			{
 				type = ItemGetNumberMake(13,31);
 				level = 1;
@@ -3929,16 +3924,16 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 
-	if ( gIsDropGemOfDefend )
+	if (Configs.gIsDropGemOfDefend)
 	{
 		if ( lpObj->MapNumber != MAP_INDEX_KALIMA7 && lpObj->MapNumber != MAP_INDEX_CASTLEHUNTZONE )
 		{
 		}
 		else
 		{
-			if ( lpObj->Level >= gGemOfDefendDropLevel )
+			if (lpObj->Level >= Configs.gGemOfDefendDropLevel)
 			{
-				if ( (rand()%10000)< gGemOfDefendDropRate )
+				if ((rand() % 10000)< Configs.gGemOfDefendDropRate)
 				{
 					type = ItemGetNumberMake(14,31);
 					level = 0;
@@ -3955,16 +3950,16 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 
-	if ( gIsDropSetItemInCastleHuntZone )
+	if (Configs.gIsDropSetItemInCastleHuntZone)
 	{
 		if ( lpObj->MapNumber != MAP_INDEX_CASTLEHUNTZONE )
 		{
 		}
 		else
 		{
-			if ( lpObj->Level >= gSetItemInCastleHuntZoneDropLevel )
+			if (lpObj->Level >= Configs.gSetItemInCastleHuntZoneDropLevel)
 			{
-				if ( (rand()%10000) < gSetItemInCastleHuntZoneDropRate )
+				if ((rand() % 10000) < Configs.gSetItemInCastleHuntZoneDropRate)
 				{
 					int MaxHitUser = gObjMonsterTopHitDamageUser(lpObj);
 
@@ -3980,11 +3975,11 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 			}
 		}
 	}
-	if ( g_bKanturuSpecialItemDropOn )
+	if ( Configs.g_bKanturuSpecialItemDropOn )
 	{
 		if ( lpObj->MapNumber == MAP_INDEX_KANTURU2 )
 		{
-			if ( (rand()%10000) < g_iKanturuMoonStoneDropRate )
+			if ( (rand()%10000) < Configs.g_iKanturuMoonStoneDropRate )
 			{
 				type = ItemGetNumberMake(13,38);	// Moon Stone
 				level = 0;
@@ -4003,7 +3998,7 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 			 lpObj->MapNumber == MAP_INDEX_KANTURU2 ||
 			 lpObj->MapNumber == MAP_INDEX_KANTURU_BOSS )
 		{
-			if ( (rand()%10000) < g_iKanturuJewelOfHarmonyDropRate )
+			if ( (rand()%10000) < Configs.g_iKanturuJewelOfHarmonyDropRate )
 			{
 				type = ItemGetNumberMake(14,41);
 				level = 0;
@@ -4026,12 +4021,12 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		{
 			case 304:	case 305:	case 306:
 			case 307:	case 308:	case 309:
-				if ( (rand()%10000) < g_iMysteriousBeadDropRate1 )
+				if ( (rand()%10000) < Configs.g_iMysteriousBeadDropRate1 )
 					bDropMysteriousBead = true;
 				break;
 
 			case 310:	case 311:	case 312:	case 313:
-				if ( (rand()%10000) < g_iMysteriousBeadDropRate2 )
+				if ( (rand()%10000) < Configs.g_iMysteriousBeadDropRate2 )
 					bDropMysteriousBead = true;
 				break;
 		}
@@ -4051,7 +4046,7 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 
-	if ( g_bBloodCastle )
+	if ( Configs.g_bBloodCastle )
 	{
 		if ( !BC_MAP_RANGE(lpObj->MapNumber ) )
 		{
@@ -4059,7 +4054,7 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 			Option2=0;
 			Option3=0;
 
-			if ( (rand()%10000) < g_iAngelKingsPaperDropRate )
+			if ( (rand()%10000) < Configs.g_iAngelKingsPaperDropRate )
 			{
 				dur = 128.0f;
 				x = lpObj->X;
@@ -4090,7 +4085,7 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 				return TRUE;
 			}
 
-			if ( (rand()%10000) < g_iBloodBoneDropRate )
+			if ( (rand()%10000) < Configs.g_iBloodBoneDropRate )
 			{
 				dur = 128.0f;
 				x = lpObj->X;
@@ -4123,7 +4118,7 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 
-	if ( (rand()%10000) < g_iDarkLordHeartDropRate )
+	if ( (rand()%10000) < Configs.g_iDarkLordHeartDropRate )
 	{
 		int iDropRate = 0;
 
@@ -4143,11 +4138,11 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 
-	if ( g_bRibbonBoxEvent )
+	if ( Configs.g_bRibbonBoxEvent )
 	{
-		if ( lpObj->Level >= g_iRedRibbonBoxDropLevelMin && lpObj->Level <= g_iRedRibbonBoxDropLevelMax )
+		if ( lpObj->Level >= Configs.g_iRedRibbonBoxDropLevelMin && lpObj->Level <= Configs.g_iRedRibbonBoxDropLevelMax )
 		{
-			if ( (rand()%10000) < g_iRedRibbonBoxDropRate )
+			if ( (rand()%10000) < Configs.g_iRedRibbonBoxDropRate )
 			{
 				type = ItemGetNumberMake(12,32);
 				level = 0;
@@ -4161,9 +4156,9 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 				return TRUE;
 			}
 		}
-		else if ( lpObj->Level >= g_iGreenRibbonBoxDropLevelMin && lpObj->Level <= g_iGreenRibbonBoxDropLevelMax )
+		else if ( lpObj->Level >= Configs.g_iGreenRibbonBoxDropLevelMin && lpObj->Level <= Configs.g_iGreenRibbonBoxDropLevelMax )
 		{
-			if ( (rand()%10000) < g_iGreenRibbonBoxDropRate )
+			if ( (rand()%10000) < Configs.g_iGreenRibbonBoxDropRate )
 			{
 				type = ItemGetNumberMake(12,33);
 				level = 0;
@@ -4177,9 +4172,9 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 				return TRUE;
 			}
 		}
-		else if ( lpObj->Level >= g_iBlueRibbonBoxDropLevelMin && lpObj->Level <= g_iBlueRibbonBoxDropLevelMax )
+		else if ( lpObj->Level >= Configs.g_iBlueRibbonBoxDropLevelMin && lpObj->Level <= Configs.g_iBlueRibbonBoxDropLevelMax )
 		{
-			if ( (rand()%10000) < g_iBlueRibbonBoxDropRate )
+			if ( (rand()%10000) < Configs.g_iBlueRibbonBoxDropRate )
 			{
 				type = ItemGetNumberMake(12,34);
 				level = 0;
@@ -4195,11 +4190,11 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 
-	if ( g_bChocolateBoxEvent )
+	if ( Configs.g_bChocolateBoxEvent )
 	{
-		if ( lpObj->Level >= g_iPinkChocolateBoxDropLevelMin && lpObj->Level <= g_iPinkChocolateBoxDropLevelMax )
+		if ( lpObj->Level >= Configs.g_iPinkChocolateBoxDropLevelMin && lpObj->Level <= Configs.g_iPinkChocolateBoxDropLevelMax )
 		{
-			if ( (rand()%10000) < g_iPinkChocolateBoxDropRate )
+			if ( (rand()%10000) < Configs.g_iPinkChocolateBoxDropRate )
 			{
 				type = ItemGetNumberMake(14,32);
 				level = 0;
@@ -4213,9 +4208,9 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 				return TRUE;
 			}
 		}
-		else if ( lpObj->Level >= g_iRedChocolateBoxDropLevelMin && lpObj->Level <= g_iRedChocolateBoxDropLevelMax )
+		else if ( lpObj->Level >= Configs.g_iRedChocolateBoxDropLevelMin && lpObj->Level <= Configs.g_iRedChocolateBoxDropLevelMax )
 		{
-			if ( (rand()%10000) < g_iRedChocolateBoxDropRate )
+			if ( (rand()%10000) < Configs.g_iRedChocolateBoxDropRate )
 			{
 				type = ItemGetNumberMake(14,33);
 				level = 0;
@@ -4229,9 +4224,9 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 				return TRUE;
 			}
 		}
-		else if ( lpObj->Level >= g_iBlueChocolateBoxDropLevelMin && lpObj->Level <= g_iBlueChocolateBoxDropLevelMax )
+		else if ( lpObj->Level >= Configs.g_iBlueChocolateBoxDropLevelMin && lpObj->Level <= Configs.g_iBlueChocolateBoxDropLevelMax )
 		{
-			if ( (rand()%10000) < g_iBlueChocolateBoxDropRate )
+			if ( (rand()%10000) < Configs.g_iBlueChocolateBoxDropRate )
 			{
 				type = ItemGetNumberMake(14,34);
 				level = 0;
@@ -4247,11 +4242,11 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 
-	if ( g_bCandyBoxEvent )
+	if ( Configs.g_bCandyBoxEvent )
 	{
-		if ( lpObj->Level >= g_iLightPurpleCandyBoxDropLevelMin && lpObj->Level <= g_iLightPurpleCandyBoxDropLevelMax )
+		if ( lpObj->Level >= Configs.g_iLightPurpleCandyBoxDropLevelMin && lpObj->Level <= Configs.g_iLightPurpleCandyBoxDropLevelMax )
 		{
-			if ( (rand()%10000) < g_iLightPurpleCandyBoxDropRate )
+			if ( (rand()%10000) < Configs.g_iLightPurpleCandyBoxDropRate )
 			{
 				type = ItemGetNumberMake(14,32);
 				level = 1;
@@ -4265,9 +4260,9 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 				return TRUE;
 			}
 		}
-		else if ( lpObj->Level >= g_iVermilionCandyBoxDropLevelMin && lpObj->Level <= g_iVermilionCandyBoxDropLevelMax )
+		else if ( lpObj->Level >= Configs.g_iVermilionCandyBoxDropLevelMin && lpObj->Level <= Configs.g_iVermilionCandyBoxDropLevelMax )
 		{
-			if ( (rand()%10000) < g_iVermilionCandyBoxDropRate )
+			if ( (rand()%10000) < Configs.g_iVermilionCandyBoxDropRate )
 			{
 				type = ItemGetNumberMake(14,33);
 				level = 1;
@@ -4281,9 +4276,9 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 				return TRUE;
 			}
 		}
-		else if ( lpObj->Level >= g_iDeepBlueCandyBoxDropLevelMin && lpObj->Level <= g_iDeepBlueCandyBoxDropLevelMax )
+		else if ( lpObj->Level >= Configs.g_iDeepBlueCandyBoxDropLevelMin && lpObj->Level <= Configs.g_iDeepBlueCandyBoxDropLevelMax )
 		{
-			if ( (rand()%10000) < g_iDeepBlueCandyBoxDropRate )
+			if ( (rand()%10000) < Configs.g_iDeepBlueCandyBoxDropRate )
 			{
 				type = ItemGetNumberMake(14,34);
 				level = 1;
@@ -4299,7 +4294,7 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 
-	if ( g_bHallowinDayEventOn )
+	if ( Configs.g_bHallowinDayEventOn )
 	{
 		bool bIsBossMonster = false;
 
@@ -4309,7 +4304,7 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 
 		if ( !bIsBossMonster )
 		{
-			if ( (rand()%10000) < g_iHallowinDayEventItemDropRate  )
+			if ( (rand()%10000) < Configs.g_iHallowinDayEventItemDropRate  )
 			{
 				type = ItemGetNumberMake(14,45);
 				level = 0;
@@ -4341,7 +4336,7 @@ void CQeustNpcTeleport::Run(int aIndex)
 
 	this->TimeCount++;
 
-	if ( this->TimeCount > gQuestNPCTeleportTime )
+	if (this->TimeCount > Configs.gQuestNPCTeleportTime)
 	{
 		PMSG_MAGICATTACK_RESULT pMsg;
 
@@ -4386,7 +4381,7 @@ void CQeustNpcTeleport::Run(int aIndex)
 		gObj[aIndex].m_State = 1;
 		gObj[aIndex].PathCount = 0;
 
-		LogAdd("NPC %d로 이동", tableindex);	// #warning Translation Deathway
+		LogAdd("Marlon NPC Teleport Map: %d", tableindex);	// #warning Translation Deathway
 	}
 }
 
