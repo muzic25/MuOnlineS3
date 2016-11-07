@@ -22,15 +22,15 @@ void DBSockMng::Connect()
 		int State;
 		this->wsCDBS[0].CreateSocket(ghWnd);
 		this->wsCDBS[0].SetProtocolCore(DataServerProtocolCore);
-		State=this->wsCDBS[0].Connect(DataServerIp, Configs.DataServerPort, WM_GM_DATA1_CLIENT_MSG_PROC);
+		State=this->wsCDBS[0].Connect(Configs.DataServerIp, Configs.DataServerPort, WM_GM_DATA1_CLIENT_MSG_PROC);
 		if (State == 0)
 		{
-			LogAdd(lMsg.Get(MSGGET(1, 147)), DataServerIp, Configs.DataServerPort);
+			LogAdd(lMsg.Get(MSGGET(1, 147)), Configs.DataServerIp, Configs.DataServerPort);
 			this->wsCDBS[0].Close();
 		}
 		else
 		{
-			LogAdd(lMsg.Get(MSGGET(1, 146)), DataServerIp, Configs.DataServerPort);	
+			LogAdd(lMsg.Get(MSGGET(1, 146)), Configs.DataServerIp, Configs.DataServerPort);
 			this->m_ActiveServer=DS_0;
 			DataServerLogin(DS_0);
 		}
@@ -41,15 +41,15 @@ void DBSockMng::Connect()
 		int State;
 		this->wsCDBS[1].CreateSocket(ghWnd);
 		this->wsCDBS[1].SetProtocolCore(DataServerProtocolCore);
-		State=this->wsCDBS[1].Connect(DataServerIp2, Configs.DataServerPort2, WM_GM_DATA2_CLIENT_MSG_PROC);// Two ports more than the used1
+		State = this->wsCDBS[1].Connect(Configs.DataServerIp2, Configs.DataServer2Port, WM_GM_DATA2_CLIENT_MSG_PROC);// Two ports more than the used1
 		if (State==0)
 		{
-			LogAdd(lMsg.Get(MSGGET(1, 147)), DataServerIp2, Configs.DataServerPort2);
+			LogAdd(lMsg.Get(MSGGET(1, 147)), Configs.DataServerIp2, Configs.DataServer2Port);
 			this->wsCDBS[1].Close();
 		}
 		else
 		{
-			LogAdd(lMsg.Get(MSGGET(1, 146)), DataServerIp2, Configs.DataServerPort2);
+			LogAdd(lMsg.Get(MSGGET(1, 146)), Configs.DataServerIp2, Configs.DataServer2Port);
 			if (this->m_ActiveServer==-1)
 			{
 				this->m_ActiveServer=DS_1;
@@ -62,14 +62,14 @@ void DBSockMng::Connect()
 	{
 		LogAddC(2, "ExDB Server Check..");
 		wsExDbCli.CreateSocket(ghWnd);
-		ExDataServerConnect(ExDbIp, WM_GM_EXDATA_CLIENT_MSG_PROC);
+		ExDataServerConnect(Configs.ExDbIP, WM_GM_EXDATA_CLIENT_MSG_PROC);
 	}
 	else
 	{
 		if ( wsExDbCli.GetConnect() == 0 )
 		{
 			LogAddC(2, "ExDB Server Check..");
-			ExDataServerConnect(ExDbIp, WM_GM_EXDATA_CLIENT_MSG_PROC);
+			ExDataServerConnect(Configs.ExDbIP, WM_GM_EXDATA_CLIENT_MSG_PROC);
 		}
 	}
 }

@@ -3237,14 +3237,20 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 		lpObj->m_State = 1;
 	} 
 
-	if ((MonsterClass >= 204 && MonsterClass <= 259)
-		|| (MonsterClass >= 368 && MonsterClass <= 385)
-#if(!GS_CASTLE)
+	if (MonsterClass >= 204 && MonsterClass <= 259
+		|| MonsterClass >= 368 && MonsterClass <= 385
 		|| MonsterClass == 367
-#endif
 		|| MonsterClass == 375
-		|| (MonsterClass >= 406 && MonsterClass <= 408))
-
+		|| (MonsterClass >= 406 && MonsterClass <= 408)
+		|| (MonsterClass >= 415 && MonsterClass <= 417)
+		|| (MonsterClass >= 450 && MonsterClass <= 453)
+		|| MonsterClass == 464
+		|| MonsterClass == 465
+		|| MonsterClass == 479 // 1.05P+
+		|| MonsterClass == 472 // 1.05P+
+		|| (MonsterClass >= 467 && MonsterClass <= 475)
+		|| MonsterClass == 450
+		|| MonsterClass == 479)
 	{
 		lpObj->Type = OBJ_NPC;
 	}
@@ -3282,7 +3288,7 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 
 	lpObj->Class = MonsterClass;
 	Level = lpObj->Level;
-	LPMONSTER_ATTRIBUTE lpm = gMAttr.GetAttr( lpObj->Class);
+	LPMONSTER_ATTRIBUTE lpm = gMAttr.GetAttr(lpObj->Class);
 
 	if ( lpm == NULL )
 	{

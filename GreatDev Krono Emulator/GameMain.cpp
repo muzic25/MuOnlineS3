@@ -237,8 +237,7 @@ void GameMainInit(HWND hWnd)
 		return;
 	}
 
-	int UDP = GetPrivateProfileInt("GameServerInfo", "UDP_Port", 60006, ".\\GameServer.ini");
-	gUdpSocCER.RecvSet( UDP ); // Same as MuManager to JS �
+	gUdpSocCER.RecvSet( Configs.UDP ); // Same as MuManager to JS �
 	gUdpSocCER.Run();
 
 	if ( gUdpSocCE.CreateSocket() == 0)
@@ -253,11 +252,6 @@ void GameMainInit(HWND hWnd)
 	if (false)
 	{
 		MsgBox(lMsg.Get(MSGGET(0, 210)) );	// No check on speed hack.
-	}
-
-	if (false)
-	{
-		MsgBox("주의!! 캐릭터 데이터를 저장하지 않습니다.");
 	}
 
 	gObjInit();
@@ -677,7 +671,7 @@ BOOL GMJoinServerConnect(LPSTR ConnectServer, DWORD wMsg)
 BOOL GMRankingServerConnect(char* RankingServer, DWORD wMsg)
 {
 	wsRServerCli.SetProtocolCore(DevilSquareEventProtocolCore);
-	int result = wsRServerCli.Connect(RankingServer, RANKING_SERVER_PORT, wMsg);
+	int result = wsRServerCli.Connect(RankingServer, Configs.RankingServerPort, wMsg);
 
 	if (result == 0)
 	{
@@ -690,7 +684,7 @@ BOOL GMRankingServerConnect(char* RankingServer, DWORD wMsg)
 BOOL GMEventChipServerConnect(char* ServerIP, DWORD wMsg)
 {
 	wsEvenChipServerCli.SetProtocolCore(EventChipEventProtocolCore);
-	int result = wsEvenChipServerCli.Connect(ServerIP, EVENT_CHIP_SERVER_PORT, wMsg);
+	int result = wsEvenChipServerCli.Connect(ServerIP, Configs.EventServerPort, wMsg);
 	if ( result == 0 )
 	{
 		return FALSE;
@@ -1422,9 +1416,7 @@ void ReadCommonServerInfo()
 	gUdpSoc.SendSet(Configs.connectserverip, Configs.connectserverport);
 	gUdpSocCE.SendSet(Configs.gChaosEventServerIp, 60005);
 	DevilSquareEventConnect = GetPrivateProfileInt("GameServerInfo","DevilSquareEventConnect", 1, gDirPath.GetNewPath("commonserver.cfg"));
-	GetPrivateProfileString("GameServerInfo", "DevilSquareEventServer", "210.181.89.241", Configs.gDevilSquareEventServerIp, 20, gDirPath.GetNewPath("commonserver.cfg"));
 	EventChipServerConnect = GetPrivateProfileInt("GameServerInfo","EventChipServerConnect", 0, gDirPath.GetNewPath("commonserver.cfg"));
-	GetPrivateProfileString("GameServerInfo", "EventChipServerIp", "192.168.10.150", Configs.gEventChipServerIp, 20, gDirPath.GetNewPath("commonserver.cfg"));
 
 	// Hero System
 	Configs.gApplyHeroSystem = GetPrivateProfileInt("GameServerInfo", "ApplyHeroSystem", 0, gDirPath.GetNewPath("commonserver.cfg"));

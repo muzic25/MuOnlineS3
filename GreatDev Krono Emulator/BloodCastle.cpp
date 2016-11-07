@@ -3017,7 +3017,7 @@ void CBloodCastle::SendRewardScore(int iIndex, int iSCORE, int iLeftTime, int iA
 		wsRServerCli.Close();
 		wsRServerCli.CreateSocket(ghWnd);
 
-		if (GMRankingServerConnect(Configs.gDevilSquareEventServerIp, WM_GM_RANKING_CLIENT_MSG_PROC) == FALSE)
+		if (GMRankingServerConnect(Configs.RankingServerIP, WM_GM_RANKING_CLIENT_MSG_PROC) == FALSE)
 		{
 			::IsDevilSquareEventConnected = FALSE;
 			LogAddTD("Can not connect Ranking Server");

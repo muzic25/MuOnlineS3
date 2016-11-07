@@ -67,10 +67,6 @@
 #define FINAL_PATH "..\\Data\\"
 #define COMMONSERVER_PATH "..\\Data\\CommonServer.cfg"
 
-extern char ExDbIp[256];
-extern char DataServerIp2[256];
-extern char DataServerIp[256];
-extern char JoinServerIp[256];
 extern int gServerReady;
 extern int gCloseMsg;
 extern int gCloseMsgTime;
@@ -87,8 +83,6 @@ extern HWND ghWnd;
 extern char szTitle[100];
 extern char szWindowClass[64];
 
-#define RANKING_SERVER_PORT 44455
-#define EVENT_CHIP_SERVER_PORT 44456
 #define MAX_LENGTH_SN 100
 
 

@@ -58,7 +58,7 @@ void DataSendEventChip(PCHAR pMsg, int size)
 	{
 		wsEvenChipServerCli.Close();
 		wsEvenChipServerCli.CreateSocket(ghWnd);
-		if (GMEventChipServerConnect(::Configs.gEventChipServerIp, WM_GM_EVENTCHIP_CLIENT_MSG_PROC) == FALSE)
+		if (GMEventChipServerConnect(::Configs.EventServerIP, WM_GM_EVENTCHIP_CLIENT_MSG_PROC) == FALSE)
 		{
 			IsEventChipServerConnected = FALSE;
 			LogAddTD("Can not connect EventChip Server");
@@ -2386,7 +2386,7 @@ void EGReqBloodCastleEnterCount(int iIndex)
 		wsRServerCli.Close();
 		wsRServerCli.CreateSocket(ghWnd);
 
-		if (!GMRankingServerConnect(Configs.gDevilSquareEventServerIp, WM_GM_RANKING_CLIENT_MSG_PROC))
+		if (!GMRankingServerConnect(Configs.RankingServerIP, WM_GM_RANKING_CLIENT_MSG_PROC))
 		{
 			IsDevilSquareEventConnected = 0;
 			LogAddTD("Can not connect Ranking Server");

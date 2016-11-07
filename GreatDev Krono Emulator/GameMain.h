@@ -174,9 +174,7 @@ public:
  int  gLanguage;
  BOOL gChaosEvent;
  char gChaosEventServerIp[20];
- char gDevilSquareEventServerIp[20];
  char gHackLogServerIp[20];
- char gEventChipServerIp[20];
  char gStalkProtocolId[11];
  BOOL gNonPK;
  BOOL gPkLimitFree;
@@ -214,8 +212,17 @@ public:
  int  GameServerPort;
  int  JoinServerPort;
  int  DataServerPort;
- int  DataServerPort2;
+ int  DataServer2Port;
  int  ExDbPort;
+ int  RankingServerPort;
+ int  EventServerPort;
+ int  UDP;
+ char ExDbIP[256];
+ char DataServerIp2[256];
+ char DataServerIp[256];
+ char JoinServerIp[256];
+ char RankingServerIP[256];
+ char EventServerIP[256];
  char szGameServerExeSerial[24];
  char szServerName[50];
  char szKorItemTextFileName[256];

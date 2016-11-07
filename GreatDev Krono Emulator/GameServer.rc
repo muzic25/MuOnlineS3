@@ -16,7 +16,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Корейский (Корея) resources
+// Korean (Korea) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
 LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
@@ -32,11 +32,11 @@ STYLE DS_SETFONT | DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
 CAPTION "About KronoGS"
 FONT 8, "System", 0, 0, 0x0
 BEGIN
-    ICON            IDI_NORMAL_V1,2,5,6,16,16
-    LTEXT           "GameServer Version 1.xx.xx MLT",-1,25,5,110,8,SS_NOPREFIX
+    ICON            IDI_NORMAL_V1,2,5,6,20,20
+    LTEXT           "GameServer Version 1.00.00 MLT",-1,25,5,110,8,SS_NOPREFIX
     LTEXT           "Copyright (C) 2007 Webzen Inc.",-1,25,14,119,8
     DEFPUSHBUTTON   "OK",1,140,5,26,15,WS_GROUP
-    LTEXT           "Coded by Imagination Arts && DeathWay",-1,25,23,147,15
+    LTEXT           "Coded by Imagination Arts && DeathWay && Knight",-1,25,23,150,17
 END
 
 IDD_GUILD_LIST_STATE DIALOG 0, 0, 195, 27
@@ -134,10 +134,10 @@ BEGIN
         MENUITEM "Log Paint",                   IDM_LOG_PAINT
         MENUITEM "Log CastleSiege",             IDM_LOG_CASTLESIEGE
         MENUITEM SEPARATOR
-        MENUITEM "Map1",                        IDM_MAP1, GRAYED
-        MENUITEM "Map2",                        IDM_MAP2, GRAYED
-        MENUITEM "Map3",                        IDM_MAP3, GRAYED
-        MENUITEM "Map4",                        IDM_MAP4, GRAYED
+        MENUITEM "Lorencia",                    IDM_MAP1
+        MENUITEM "Dungeon",                     IDM_MAP2
+        MENUITEM "Devias",                      IDM_MAP3
+        MENUITEM "Noria",                       IDM_MAP4
         MENUITEM "Crywolf",                     IDM_CRYWOLF
     END
     POPUP "Etc"
@@ -291,12 +291,12 @@ BEGIN
     IDS_GAMESERVER          "GAMESERVER"
 END
 
-#endif    // Корейский (Корея) resources
+#endif    // Korean (Korea) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Испанский (Перу) resources
+// Spanish (Peru) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ESR)
 LANGUAGE LANG_SPANISH, SUBLANG_SPANISH_PERU
@@ -308,7 +308,7 @@ LANGUAGE LANG_SPANISH, SUBLANG_SPANISH_PERU
 //
 
 IDB_BITMAP              BITMAP                  "bitmap.bmp"
-#endif    // Испанский (Перу) resources
+#endif    // Spanish (Peru) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

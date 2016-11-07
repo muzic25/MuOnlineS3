@@ -12,6 +12,7 @@
 #include "giocp.h"
 #include "Kanturu.h"
 #include "SkillAdditionInfo.h"
+#include "GmSystem.h"
 // GS-N 0.99.60T 0x004F0110
 //	GS-N	1.00.18	JPN	0x00519F60	-	Completed
 
@@ -134,6 +135,7 @@ void CGMMng::Init()
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 4)), 395);
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 5)), 396);
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 6)), 397);
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 7)), 398);
 
 	this->WatchTargetIndex = -1;
 }
@@ -1294,6 +1296,30 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			sprintf(Msg, "[CmdAdd]: [%d] points added to command.", Pontos);
 			GCServerMsgStringSend(Msg,lpObj->m_Index,1);
 			GCServerMsgStringSend("[CmdAdd]: do switch char.",lpObj->m_Index,1);
+			return TRUE;
+		}
+		break;
+
+		case 398:
+		{
+			//Unfinished Code 
+			//need to add the target infos 
+			char *chatmsg;
+			char Target[11];
+			sscanf(chatmsg, "%s", &Target);
+			int Index = gObjGetIndex(Target);
+
+			char Msg[100];
+			sprintf(Msg, "IP Address: %s", gObj[Index].Ip_addr);
+			GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
+			sprintf(Msg, "Account: %s | Character: %s", gObj[Index].AccountID, gObj[Index].Name);
+			GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
+			sprintf(Msg, "Level: %d | Zen: %d | Resets: %d", gObj[Index].Level, gObj[Index].Money, 0); //Need toadd resets
+			GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
+			sprintf(Msg, "Map: %d(%d,%d)", gObj[Index].MapNumber, gObj[Index].MapNumber, gObj[Index].X, gObj[Index].Y);
+			GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
+			sprintf(Msg, "[Status][GM] %s get your status!", lpObj->Name);
+			GCServerMsgStringSend(Msg, Index, 1);
 			return TRUE;
 		}
 			break;

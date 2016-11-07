@@ -38,8 +38,9 @@
 
 # fcktlog
 *.tlog
+*.log
+
 
 #folders
 ipch/
-GreatDev Krono Emulator/Release/
-
+Release/

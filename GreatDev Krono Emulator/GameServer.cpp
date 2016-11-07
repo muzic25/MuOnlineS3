@@ -3,10 +3,7 @@
 #include "Logger.h"
 #include "GmSystem.h"
 
-char ExDbIp[256];
-char DataServerIp2[256];
-char DataServerIp[256];
-char JoinServerIp[256];
+
 int gServerReady;
 int gCloseMsg;
 int gCloseMsgTime;
@@ -61,8 +58,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	InitCommonControls();
 	
-	if (!InitInstance(hInstance, nCmdShow)) return 0;
-
+	if (!InitInstance(hInstance, nCmdShow))
+	{
+		return 0;
+	}
 
 	ShowWindow(ghWnd, SW_NORMAL); 
 
@@ -72,31 +71,20 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	GameMainInit(ghWnd);  
 
-	memset(DataServerIp2, 0, sizeof(DataServerIp2));
-	memset(ExDbIp, 0, sizeof(ExDbIp));
-
-	Configs.DataServerPort2 = 0;
-
-	Configs.ExDbPort = 0;
-	
-	GetPrivateProfileString("GameServerConnect", "JoinServerIp", "127.0.0.1", JoinServerIp, 50, ".\\GameServer.ini");
-	GetPrivateProfileString("GameServerConnect", "DataServerIp", "127.0.0.1", DataServerIp, 50, ".\\GameServer.ini");
-	Configs.JoinServerPort = GetPrivateProfileInt("GameServerConnect", "JoinServerPort", 55970, ".\\GameServer.ini");
-	Configs.DataServerPort = GetPrivateProfileInt("GameServerConnect", "DataServerPort", 55960, ".\\GameServer.ini");
-	Configs.GameServerPort = GetPrivateProfileInt("GameServerConnect", "GameServerPort", 55901, ".\\GameServer.ini");
-
-	
-	if (DataServerIp2[0] == 0)
-		memcpy(DataServerIp2, DataServerIp, sizeof(DataServerIp2));
-
-	if (Configs.DataServerPort2 == 0)
-		Configs.DataServerPort2 = 55962;
-
-	if (ExDbIp[0] == 0)
-		memcpy(ExDbIp, DataServerIp, sizeof(ExDbIp));
-
-	if (Configs.ExDbPort == 0)
-		Configs.ExDbPort = 55906;
+	GetPrivateProfileString("GameServerConnect", "JoinServerIp", "127.0.0.1", Configs.JoinServerIp, 50, ".\\GameServer.ini");
+	GetPrivateProfileString("GameServerConnect", "DataServerIp", "127.0.0.1", Configs.DataServerIp, 50, ".\\GameServer.ini");
+	GetPrivateProfileString("GameServerConnect", "DataServer2Ip", "127.0.0.1", Configs.DataServerIp2, 50, ".\\GameServer.ini");
+	GetPrivateProfileString("GameServerConnect", "ExDBServerIP", "127.0.0.1", Configs.ExDbIP, 50, ".\\GameServer.ini");
+	GetPrivateProfileString("GameServerConnect", "RankingServerIP", "127.0.0.1", Configs.RankingServerIP, 50, ".\\GameServer.ini");
+	GetPrivateProfileString("GameServerConnect", "EventServerIP", "127.0.0.1", Configs.EventServerIP, 50, ".\\GameServer.ini");
+	Configs.JoinServerPort		= GetPrivateProfileInt("GameServerConnect", "JoinServerPort", 55970, ".\\GameServer.ini");
+	Configs.DataServerPort		= GetPrivateProfileInt("GameServerConnect", "DataServerPort", 55960, ".\\GameServer.ini");
+	Configs.DataServer2Port		= GetPrivateProfileInt("GameServerConnect", "DataServer2Port", 55962, ".\\GameServer.ini");
+	Configs.GameServerPort		= GetPrivateProfileInt("GameServerConnect", "GameServerPort", 55901, ".\\GameServer.ini");
+	Configs.ExDbPort			= GetPrivateProfileInt("GameServerConnect", "ExDBServerPort", 55906, ".\\GameServer.ini");
+	Configs.RankingServerPort	= GetPrivateProfileInt("GameServerConnect", "RankingServerPort", 44455, ".\\GameServer.ini");
+	Configs.EventServerPort		= GetPrivateProfileInt("GameServerConnect", "EventServerPort", 44456, ".\\GameServer.ini");
+	Configs.UDP					= GetPrivateProfileInt("GameServerConnect", "UpdatePort", 60006, ".\\GameServer.ini");
 
 	gWhatsUpDummyServer.Start(ghWnd, Configs.GameServerPort + 1);
 	AllServerStart(); 
@@ -126,7 +114,7 @@ BOOL AllServerStart(void){
 	
 	if (JoinServerConnected == 0)
 	{
-		if (GMJoinServerConnect(JoinServerIp, WM_GM_JOIN_CLIENT_MSG_PROC) == 0)
+		if (GMJoinServerConnect(Configs.JoinServerIp, WM_GM_JOIN_CLIENT_MSG_PROC) == 0)
 		{	
 			// LoginServer connect fail
 			MsgBox(lMsg.Get(MSGGET(1, 144)));
@@ -136,7 +124,7 @@ BOOL AllServerStart(void){
 
 	if ((DevilSquareEventConnect == 0) && (IsDevilSquareEventConnected == 0))
 	{
-		if (GMRankingServerConnect(Configs.gDevilSquareEventServerIp, WM_GM_RANKING_CLIENT_MSG_PROC) == 0)
+		if (GMRankingServerConnect(Configs.RankingServerIP, WM_GM_RANKING_CLIENT_MSG_PROC) == 0)
 		{
 			MsgBox("Cannot connect to Ranking Server \n Check CommonServer.cfg");
 			return 0;
@@ -146,7 +134,7 @@ BOOL AllServerStart(void){
 
 	if ((EventChipServerConnect!=0) && (IsEventChipServerConnected==0))
 	{
-		if (GMEventChipServerConnect(Configs.gEventChipServerIp, WM_GM_EVENTCHIP_CLIENT_MSG_PROC) == 0)
+		if (GMEventChipServerConnect(Configs.EventServerIP, WM_GM_EVENTCHIP_CLIENT_MSG_PROC) == 0)
 		{
 			MsgBox("Cannot connect to Event Server \n Check CommonServer.cfg");
 			return 0;
