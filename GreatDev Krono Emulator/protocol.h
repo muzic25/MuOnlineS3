@@ -263,6 +263,15 @@ enum MUPROTOCOL_DECL
  // ----------
 	FRIEND_ROOM_INVITATION_REQ   = 0xCB,
 	// ----------
+	EVENT_NPC					 = 0xD0,
+	//Subcode
+	LUKEHELPLERNPC				 = 0x03,
+	PCBANGSHOPBUY				 = 0x05,
+	PCBANGSHOPOPEN				 = 0x06,
+	THIRDQUESTWEREWOLF			 = 0x07,
+	THIRDQUESTGATEKEEPER		 = 0x08,
+	LEOHELPLERNPC				 = 0x09,
+	// ----------
 	KANTURU_PROTOCOL_ID          = 0xD1,
 	// SubCode
 	REQ_KANTURU_STATE_INFO       = 0x00,

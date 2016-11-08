@@ -90,12 +90,7 @@ BOOL NpcTalk(LPOBJ lpNpc, LPOBJ lpObj)
 				return TRUE;
 			}
 			break;
-		case 379:
-			if(NpcFireworkGirl( lpNpc, lpObj ) == TRUE )
-			{
-				return TRUE;
-			}
-
+		
 		case 245:
 			if ( NpcDeviasWizard( lpNpc, lpObj ) == TRUE )
 			{
@@ -264,7 +259,12 @@ BOOL NpcTalk(LPOBJ lpNpc, LPOBJ lpObj)
 				return TRUE;
 			}
 			break;
-
+		case 258:
+			if (NpcLukeTheHelper(lpNpc, lpObj) == TRUE)
+			{
+				return TRUE;
+			}
+			break;
 		case 368:
 		case 369:
 		case 370:
@@ -273,9 +273,32 @@ BOOL NpcTalk(LPOBJ lpNpc, LPOBJ lpObj)
 				return TRUE;
 			}
 			break;
-
+		case 371:
+			if (NpcLeoTheHelper(lpNpc, lpObj) == TRUE)
+			{
+				return TRUE;
+			}
+			break;
 		case 375:
 			if ( NpcChaosCardMaster( lpNpc, lpObj ) == TRUE )
+			{
+				return TRUE;
+			}
+			break;
+		case 376:
+			if (NpcPamelaSupplier(lpNpc, lpObj) == TRUE) //376 1 "Pamela the Supplier"
+			{
+				return TRUE;
+			}
+			break;
+		case 377:
+			if (NpcAngelaSupplier(lpNpc, lpObj) == TRUE) //377 1 "Angela the Supplier"
+			{
+				return TRUE;
+			}
+			break;
+		case 379:
+			if (NpcFireworkGirl(lpNpc, lpObj) == TRUE)
 			{
 				return TRUE;
 			}
@@ -1436,4 +1459,61 @@ BOOL NpcShadowPhantom(LPOBJ lpNpc, LPOBJ lpObj)
 	GCStateInfoSend(lpObj, 1, 0x2000000);
 
 	return TRUE;
+}
+
+BOOL NpcPamelaSupplier(LPOBJ lpNpc, LPOBJ lpObj)
+{
+	if (gObjIsConnected(lpObj->m_Index) == FALSE)
+	{
+		return TRUE;
+	}
+	return FALSE;
+}
+
+BOOL NpcAngelaSupplier(LPOBJ lpNpc, LPOBJ lpObj)
+{
+	if (gObjIsConnected(lpObj->m_Index) == FALSE)
+	{
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
+BOOL NpcLukeTheHelper(LPOBJ lpNpc, LPOBJ lpObj) // OK
+{
+	GCServerCmd(lpObj->m_Index, 0x0E, 0, 0);
+	return TRUE;
+}
+
+BOOL NpcLeoTheHelper(LPOBJ lpNpc, LPOBJ lpObj) // OK
+{
+	GCServerCmd(lpObj->m_Index, 0x0F, 1, 0);
+	return TRUE;
+}
+
+void CGNpcLukeTheHelperRecv(int aIndex) // OK
+{
+	LPOBJ lpObj = &gObj[aIndex];
+
+	if (gObjIsConnectedGP(aIndex) == 0)
+	{
+		return;
+	}
+
+	//this->GDNpcLeoTheHelperSend(aIndex);
+
+}
+
+void CGNpcLeoTheHelperRecv(int aIndex) // OK
+{
+	LPOBJ lpObj = &gObj[aIndex];
+
+	if (gObjIsConnectedGP(aIndex) == 0)
+	{
+		return;
+	}
+
+	//this->GDNpcLeoTheHelperSend(aIndex);
+
 }

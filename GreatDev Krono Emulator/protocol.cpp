@@ -144,507 +144,541 @@ void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOO
 		switch (protoNum)
 		{
 		case CHAT_PROC: //0x00:
-				tempindex = aIndex;
-				PChatProc((PMSG_CHATDATA *)aRecv, aIndex);
-				break;
+			tempindex = aIndex;
+			PChatProc((PMSG_CHATDATA *)aRecv, aIndex);
+			break;
 		case CHAT_RECV: //0x01:
-				CGChatRecv((PMSG_CHATDATA_NUMBER *)aRecv, aIndex);
-				break;
+			CGChatRecv((PMSG_CHATDATA_NUMBER *)aRecv, aIndex);
+			break;
 		case CHAT_WHISPER_RECV: //0x02:
-				CGChatWhisperRecv((PMSG_CHATDATA_WHISPER *)aRecv, aIndex);
-				break;
+			CGChatWhisperRecv((PMSG_CHATDATA_WHISPER *)aRecv, aIndex);
+			break;
 		case CHECK_MAIN_RECV: //0x03:
-				CGCheckMainRecv((PMSG_CHECK_MAINEXE_RESULT *)aRecv, aIndex);
-				break;
+			CGCheckMainRecv((PMSG_CHECK_MAINEXE_RESULT *)aRecv, aIndex);
+			break;
 		case LIVE_CLIENT: //0x0E:
-				CGLiveClient((PMSG_CLIENTTIME *)aRecv, aIndex);
-				break;
-				// --------------------------------------------------
-			case MOVE_PROTOCOL:
-				PMoveProc((PMSG_MOVE *)aRecv, aIndex); // Move
-				break;
-			case SETPOS_PROTOCOL:
-				RecvPositionSetProc((PMSG_POSISTION_SET*)aRecv, aIndex); //Skill
-				break;
-			case ATTACK_PROTOCOL:
-				CGAttack((PMSG_ATTACK *)aRecv, aIndex); // Attack
-				break;
-				// --------------------------------------------------
-			case ACTION_RECV: //0x18:
-				CGActionRecv((PMSG_ACTION *)aRecv, aIndex);
-				break;
-			case MAGIC_ATTACK: //0x19:
-				if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
-				{
-					CGMagicAttack((PMSG_MAGICATTACK *)aRecv, aIndex);
-				}
-				break;
-			case MAGIC_CANCEL: //0x1B:
-				CGMagicCancel((PMSG_MAGICCANCEL *)aRecv, aIndex);
-				break;
-			case TELEPORT_RECV: //0x1C:
-				if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
-				{
-					CGTeleportRecv((PMSG_TELEPORT *)aRecv, aIndex);
-				}
-				break;
-			case TARGET_TELEPORT_RECV: //0xB0:
-				if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
-				{
-					CGTargetTeleportRecv((PMSG_TARGET_TELEPORT *)aRecv, aIndex);
-				}
-				break;
-			case BEATTACK_PROTOCOL:
-				CGBeattackRecv(aRecv, aIndex, FALSE);
-				break;
-			case DURATION_MAGIC_RECV: //0x1E:
-				if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
-				{
-					CGDurationMagicRecv((PMSG_DURATION_MAGIC_RECV *)aRecv, aIndex);
-				}
-				break;
-			case ITEM_GET_REQUEST: //0x22:
-				if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
-				{
-					CGItemGetRequest((PMSG_ITEMGETREQUEST *)aRecv, aIndex);
-				}
-				break;
-			case ITEM_DROP_REQUEST: //0x23:
-				CGItemDropRequest((PMSG_ITEMTHROW *)aRecv, aIndex, 0);
-				break;
-			case INVENTORY_ITEM_MOVE: //0x24:
-				CGInventoryItemMove((PMSG_INVENTORYITEMMOVE *)aRecv, aIndex);
-				break;
-			case USE_ITEM_RECV: //0x26:
-				CGUseItemRecv((PMSG_USEITEM *)aRecv, aIndex);
-				break;
-			case TALK_REQ_RECV: //0x30:
-				if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
-				{
-					CGTalkRequestRecv((PMSG_TALKREQUEST *)aRecv, aIndex);
-				}
-				break;
-			case CLOSE_WINDOW: //0x31:
-				CGCloseWindow(aIndex);
-				break;
-			case BUY_REQ_RECV: //0x32:
-				if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
-				{
-					CGBuyRequestRecv((PMSG_BUYREQUEST *)aRecv, aIndex);
-				}
-				break;
-			case SELL_REQ_RECV: //0x33:
-				if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
-				{
-					CGSellRequestRecv((PMSG_SELLREQUEST *)aRecv, aIndex);
-				}
-				break;
-			case MODIFY_REQ_ITEM: //0x34:
-				CGModifyRequestItem((PMSG_ITEMDURREPAIR *)aRecv, aIndex);
-				break;
-			case TRADE_REQ_SEND: //0x36:
-				if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
-				{
-					CGTradeRequestSend((PMSG_TRADE_REQUEST *)aRecv, aIndex);
-				}
-				break;
-			case TRADE_RESPONSE_RECV: //0x37:
-				CGTradeResponseRecv((PMSG_TRADE_RESPONSE *)aRecv, aIndex);
-				break;
-			case TRADE_MONEY_RECV: //0x3A:
-				CGTradeMoneyRecv((PMSG_TRADE_GOLD *)aRecv, aIndex);
-				break;
-			case TRADE_OK_BUTTON_RECV: //0x3C:
-				if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
-				{
-					CGTradeOkButtonRecv((PMSG_TRADE_OKBUTTON *)aRecv, aIndex);
-				}
-				break;
-			case TRADE_CANCEL_BUTTON_RECV: //0x3D:
-				if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
-				{
-					CGTradeCancelButtonRecv(aIndex);
-				}
-				break;
-			case SHOP_PROTOCOL_ID: //0x3F:
-				{
-					PMSG_DEFAULT2 * lpDef = (PMSG_DEFAULT2 *)aRecv;
+			CGLiveClient((PMSG_CLIENTTIME *)aRecv, aIndex);
+			break;
+			// --------------------------------------------------
+		case MOVE_PROTOCOL:
+			PMoveProc((PMSG_MOVE *)aRecv, aIndex); // Move
+			break;
+		case SETPOS_PROTOCOL:
+			RecvPositionSetProc((PMSG_POSISTION_SET*)aRecv, aIndex); //Skill
+			break;
+		case ATTACK_PROTOCOL:
+			CGAttack((PMSG_ATTACK *)aRecv, aIndex); // Attack
+			break;
+			// --------------------------------------------------
+		case ACTION_RECV: //0x18:
+			CGActionRecv((PMSG_ACTION *)aRecv, aIndex);
+			break;
+		case MAGIC_ATTACK: //0x19:
+			if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
+			{
+				CGMagicAttack((PMSG_MAGICATTACK *)aRecv, aIndex);
+			}
+			break;
+		case MAGIC_CANCEL: //0x1B:
+			CGMagicCancel((PMSG_MAGICCANCEL *)aRecv, aIndex);
+			break;
+		case TELEPORT_RECV: //0x1C:
+			if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
+			{
+				CGTeleportRecv((PMSG_TELEPORT *)aRecv, aIndex);
+			}
+			break;
+		case TARGET_TELEPORT_RECV: //0xB0:
+			if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
+			{
+				CGTargetTeleportRecv((PMSG_TARGET_TELEPORT *)aRecv, aIndex);
+			}
+			break;
+		case BEATTACK_PROTOCOL:
+			CGBeattackRecv(aRecv, aIndex, FALSE);
+			break;
+		case DURATION_MAGIC_RECV: //0x1E:
+			if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
+			{
+				CGDurationMagicRecv((PMSG_DURATION_MAGIC_RECV *)aRecv, aIndex);
+			}
+			break;
+		case ITEM_GET_REQUEST: //0x22:
+			if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
+			{
+				CGItemGetRequest((PMSG_ITEMGETREQUEST *)aRecv, aIndex);
+			}
+			break;
+		case ITEM_DROP_REQUEST: //0x23:
+			CGItemDropRequest((PMSG_ITEMTHROW *)aRecv, aIndex, 0);
+			break;
+		case INVENTORY_ITEM_MOVE: //0x24:
+			CGInventoryItemMove((PMSG_INVENTORYITEMMOVE *)aRecv, aIndex);
+			break;
+		case USE_ITEM_RECV: //0x26:
+			CGUseItemRecv((PMSG_USEITEM *)aRecv, aIndex);
+			break;
+		case TALK_REQ_RECV: //0x30:
+			if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
+			{
+				CGTalkRequestRecv((PMSG_TALKREQUEST *)aRecv, aIndex);
+			}
+			break;
+		case CLOSE_WINDOW: //0x31:
+			CGCloseWindow(aIndex);
+			break;
+		case BUY_REQ_RECV: //0x32:
+			if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
+			{
+				CGBuyRequestRecv((PMSG_BUYREQUEST *)aRecv, aIndex);
+			}
+			break;
+		case SELL_REQ_RECV: //0x33:
+			if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
+			{
+				CGSellRequestRecv((PMSG_SELLREQUEST *)aRecv, aIndex);
+			}
+			break;
+		case MODIFY_REQ_ITEM: //0x34:
+			CGModifyRequestItem((PMSG_ITEMDURREPAIR *)aRecv, aIndex);
+			break;
+		case TRADE_REQ_SEND: //0x36:
+			if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
+			{
+				CGTradeRequestSend((PMSG_TRADE_REQUEST *)aRecv, aIndex);
+			}
+			break;
+		case TRADE_RESPONSE_RECV: //0x37:
+			CGTradeResponseRecv((PMSG_TRADE_RESPONSE *)aRecv, aIndex);
+			break;
+		case TRADE_MONEY_RECV: //0x3A:
+			CGTradeMoneyRecv((PMSG_TRADE_GOLD *)aRecv, aIndex);
+			break;
+		case TRADE_OK_BUTTON_RECV: //0x3C:
+			if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
+			{
+				CGTradeOkButtonRecv((PMSG_TRADE_OKBUTTON *)aRecv, aIndex);
+			}
+			break;
+		case TRADE_CANCEL_BUTTON_RECV: //0x3D:
+			if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
+			{
+				CGTradeCancelButtonRecv(aIndex);
+			}
+			break;
+		case SHOP_PROTOCOL_ID: //0x3F:
+		{
+			PMSG_DEFAULT2 * lpDef = (PMSG_DEFAULT2 *)aRecv;
 
-					switch (lpDef->subcode)
-					{
-					case SHOP_REQ_SET_ITEM_PRICE: //0x01:
-							CGPShopReqSetItemPrice((PMSG_REQ_PSHOP_SETITEMPRICE *)aRecv, aIndex);
-							break;
-					case SHOP_REQ_OPEN:  //0x02:
-							CGPShopReqOpen((PMSG_REQ_PSHOP_OPEN *)aRecv, aIndex);
-							break;
-					case SHOP_REQ_CLOSE: //0x03:
-							CGPShopReqClose(aIndex);
-							break;
-					case SHOP_REQ_BUY_LIST: //0x05:
-							CGPShopReqBuyList((PMSG_REQ_BUYLIST_FROM_PSHOP *)aRecv, aIndex);
-							break;
-					case SHOP_REQ_BUY_ITEM: //0x06:
-							CGPShopReqBuyItem((PMSG_REQ_BUYITEM_FROM_PSHOP *)aRecv, aIndex);
-							break;
-					}
-				}
+			switch (lpDef->subcode)
+			{
+			case SHOP_REQ_SET_ITEM_PRICE: //0x01:
+				CGPShopReqSetItemPrice((PMSG_REQ_PSHOP_SETITEMPRICE *)aRecv, aIndex);
 				break;
-			case PARTY_REQ_RECV: //0x40:
+			case SHOP_REQ_OPEN:  //0x02:
+				CGPShopReqOpen((PMSG_REQ_PSHOP_OPEN *)aRecv, aIndex);
+				break;
+			case SHOP_REQ_CLOSE: //0x03:
+				CGPShopReqClose(aIndex);
+				break;
+			case SHOP_REQ_BUY_LIST: //0x05:
+				CGPShopReqBuyList((PMSG_REQ_BUYLIST_FROM_PSHOP *)aRecv, aIndex);
+				break;
+			case SHOP_REQ_BUY_ITEM: //0x06:
+				CGPShopReqBuyItem((PMSG_REQ_BUYITEM_FROM_PSHOP *)aRecv, aIndex);
+				break;
+			}
+		}
+		break;
+		case PARTY_REQ_RECV: //0x40:
+			if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
+			{
+				CGPartyRequestRecv((PMSG_PARTYREQUEST *)aRecv, aIndex);
+			}
+			break;
+		case PARTY_REQ_RESULT_RECV: //0x41:
+			if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
+			{
+				CGPartyRequestResultRecv((PMSG_PARTYREQUESTRESULT *)aRecv, aIndex);
+			}
+			break;
+		case PARTY_LIST: //0x42:
+			CGPartyList(aIndex);
+			break;
+		case PARTY_DELETE_USER: //0x43:
+			if (PacketCheckTime(&gObj[aIndex]) == TRUE)
+			{
+				CGPartyDelUser((PMSG_PARTYDELUSER *)aRecv, aIndex);
+			}
+			break;
+		case GUILD_REQ_RECV: //0x50:
+			CGGuildRequestRecv((PMSG_GUILDJOINQ *)aRecv, aIndex);
+			break;
+		case GUILD_REQ_RESULT_RECV: //0x51:
+			CGGuildRequestResultRecv((PMSG_GUILDQRESULT *)aRecv, aIndex);
+			break;
+		case GUILD_LIST_ALL: //0x52:
+			CGGuildListAll(aIndex);
+			break;
+		case GUILD_DELETE_USER: //0x53:
+			CGGuildDelUser((PMSG_GUILDDELUSER *)aRecv, aIndex);
+			break;
+		case GUILD_MASTER_ANSWER_RECV: //0x54:
+			CGGuildMasterAnswerRecv((PMSG_GUILDMASTERANSWER *)aRecv, aIndex);
+			break;
+		case GUILD_MASTER_INFO_SAFE: //0x55:
+			CGGuildMasterInfoSave(aIndex, (PMSG_GUILDINFOSAVE *)aRecv);
+			break;
+		case GUILD_MASTER_CREATE_CANCEL: //0x57:
+			CGGuildMasterCreateCancel(aIndex);
+			break;
+		case GUILD_WAR_REQ_SEND_RECV: //0x61:
+			GCGuildWarRequestSendRecv((PMSG_GUILDWARSEND_RESULT *)aRecv, aIndex);
+			break;
+		case GUILD_VIEWPORT_INFO: //0x66:
+			GCGuildViewportInfo((PMSG_REQ_GUILDVIEWPORT *)aRecv, aIndex);
+			break;
+		case MAP_SRV_AUTH_PROTOCOL_ID: //0xB1:
+		{
+			PMSG_DEFAULT2 * lpDef = (PMSG_DEFAULT2 *)aRecv;
+
+			switch (lpDef->subcode)
+			{
+			case REQ_MAP_SRV_AUTH: //0x01:
 				if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
 				{
-					CGPartyRequestRecv((PMSG_PARTYREQUEST *)aRecv, aIndex);
+					CGReqMapSvrAuth((PMSG_REQ_MAPSERVERAUTH*)aRecv, aIndex);
 				}
 				break;
-			case PARTY_REQ_RESULT_RECV: //0x41:
-				if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
-				{
-					CGPartyRequestResultRecv((PMSG_PARTYREQUESTRESULT *)aRecv, aIndex);
-				}
-				break;
-			case PARTY_LIST: //0x42:
-				CGPartyList(aIndex);
-				break;
-			case PARTY_DELETE_USER: //0x43:
-				if (PacketCheckTime(&gObj[aIndex]) == TRUE)
-				{
-					CGPartyDelUser((PMSG_PARTYDELUSER *)aRecv, aIndex);
-				}
-				break;
-			case GUILD_REQ_RECV: //0x50:
-				CGGuildRequestRecv((PMSG_GUILDJOINQ *)aRecv, aIndex);
-				break;
-			case GUILD_REQ_RESULT_RECV: //0x51:
-				CGGuildRequestResultRecv((PMSG_GUILDQRESULT *)aRecv, aIndex);
-				break;
-			case GUILD_LIST_ALL: //0x52:
-				CGGuildListAll(aIndex);
-				break;
-			case GUILD_DELETE_USER: //0x53:
-				CGGuildDelUser((PMSG_GUILDDELUSER *)aRecv, aIndex);
-				break;
-			case GUILD_MASTER_ANSWER_RECV: //0x54:
-				CGGuildMasterAnswerRecv((PMSG_GUILDMASTERANSWER *)aRecv, aIndex);
-				break;
-			case GUILD_MASTER_INFO_SAFE: //0x55:
-				CGGuildMasterInfoSave(aIndex, (PMSG_GUILDINFOSAVE *)aRecv);
-				break;
-			case GUILD_MASTER_CREATE_CANCEL: //0x57:
-				CGGuildMasterCreateCancel(aIndex);
-				break;
-			case GUILD_WAR_REQ_SEND_RECV: //0x61:
-				GCGuildWarRequestSendRecv((PMSG_GUILDWARSEND_RESULT *)aRecv, aIndex);
-				break;
-			case GUILD_VIEWPORT_INFO: //0x66:
-				GCGuildViewportInfo((PMSG_REQ_GUILDVIEWPORT *)aRecv, aIndex);
-				break;
-			case MAP_SRV_AUTH_PROTOCOL_ID: //0xB1:
-				{
-					PMSG_DEFAULT2 * lpDef = (PMSG_DEFAULT2 *)aRecv;
-					
-					switch (lpDef->subcode)
-					{
-					case REQ_MAP_SRV_AUTH: //0x01:
-							if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
-							{
-								CGReqMapSvrAuth((PMSG_REQ_MAPSERVERAUTH*)aRecv, aIndex);
-							}
-							break;
-					}
-				}
-				break;
-			case CASTLE_SIEGE_PROTOCOL_ID: //0xB2:
-				{
-					PMSG_DEFAULT2 * lpDef = (PMSG_DEFAULT2 *)aRecv;
+			}
+		}
+		break;
+		case CASTLE_SIEGE_PROTOCOL_ID: //0xB2:
+		{
+			PMSG_DEFAULT2 * lpDef = (PMSG_DEFAULT2 *)aRecv;
 
-					switch ( lpDef->subcode )
-					{
-					case REQ_CASTLE_SIEGE_STATE: //0x00:
-							CGReqCastleSiegeState((PMSG_REQ_CASTLESIEGESTATE *)aRecv, aIndex);
-							break;
-					case REQ_REG_CASTLE_SIEGE: //0x01:
-							CGReqRegCastleSiege((PMSG_REQ_REGCASTLESIEGE *)aRecv, aIndex);
-							break;
-					case REQ_GIVE_UP_CASTLE_SIEGE: //0x02:
-							CGReqGiveUpCastleSiege((PMSG_REQ_GIVEUPCASTLESIEGE *)aRecv, aIndex);
-							break;
-					case REQ_GUILD_REG_INFO: //0x03:
-							CGReqGuildRegInfo((PMSG_REQ_GUILDREGINFO *)aRecv, aIndex);
-							break;
-					case REQ_REG_GUILD_MARK: //0x04:
-							CGReqRegGuildMark((PMSG_REQ_REGGUILDMARK *)aRecv, aIndex);
-							break;
-					case REQ_NPC_BUY: //0x05:
-							CGReqNpcBuy((PMSG_REQ_NPCBUY *)aRecv, aIndex);
-							break;
-					case REQ_NPC_REPAIR: //0x06:
-							CGReqNpcRepair((PMSG_REQ_NPCREPAIR *)aRecv, aIndex);
-							break;
-					case REQ_NPC_UPGRADE: //0x07:
-							CGReqNpcUpgrade((PMSG_REQ_NPCUPGRADE *)aRecv, aIndex);
-							break;
-					case REQ_TAX_MONEY_INFO: //0x08:
-							CGReqTaxMoneyInfo((PMSG_REQ_TAXMONEYINFO *)aRecv, aIndex);
-							break;
-					case REQ_TAX_RATE_CHANGE: //0x09:
-							CGReqTaxRateChange((PMSG_REQ_TAXRATECHANGE *)aRecv, aIndex);
-							break;
-					case REQ_MONEY_DRAW_OUT: //0x10:
-							CGReqMoneyDrawOut((PMSG_REQ_MONEYDRAWOUT *)aRecv, aIndex);
-							break;
-					case REQ_CS_GATE_OPERATE: //0x12:
-							CGReqCsGateOperate((PMSG_REQ_CSGATEOPERATE *)aRecv, aIndex);
-							break;
-					case REQ_CS_MINIMAP_DATA: //0x1B:
-							CGReqCsMiniMapData((PMSG_REQ_MINIMAPDATA *)aRecv, aIndex);
-							break;
-					case REQ_CS_STOP_MINIMAP_DATA: //0x1C:
-							CGReqStopCsMiniMapData((PMSG_REQ_STOPMINIMAPDATA *)aRecv, aIndex);
-							break;
-					case REQ_CS_SEND_COMMAND: //0x1D:
-							CGReqCsSendCommand((PMSG_REQ_CSCOMMAND *)aRecv, aIndex);
-							break;
-					case REQ_CS_SET_ENTER_HUNTZONE: //0x1F:
-							CGReqCsSetEnterHuntZone((PMSG_REQ_CSHUNTZONEENTER *)aRecv, aIndex);
-							break;
-					}
-				}
+			switch (lpDef->subcode)
+			{
+			case REQ_CASTLE_SIEGE_STATE: //0x00:
+				CGReqCastleSiegeState((PMSG_REQ_CASTLESIEGESTATE *)aRecv, aIndex);
 				break;
-			case REQ_NPC_DB_LIST: //0xB3:
-				CGReqNpcDbList((PMSG_REQ_NPCDBLIST *)aRecv, aIndex);
+			case REQ_REG_CASTLE_SIEGE: //0x01:
+				CGReqRegCastleSiege((PMSG_REQ_REGCASTLESIEGE *)aRecv, aIndex);
 				break;
-			case REQ_CS_REG_GUILD_LIST: //0xB4:
-				CGReqCsRegGuildList((PMSG_REQ_CSREGGUILDLIST *)aRecv, aIndex);
+			case REQ_GIVE_UP_CASTLE_SIEGE: //0x02:
+				CGReqGiveUpCastleSiege((PMSG_REQ_GIVEUPCASTLESIEGE *)aRecv, aIndex);
 				break;
-			case REQ_CS_ATTACK_GUILD_LIST: //0xB5:
-				CGReqCsAttkGuildList((PMSG_REQ_CSATTKGUILDLIST *)aRecv, aIndex);
+			case REQ_GUILD_REG_INFO: //0x03:
+				CGReqGuildRegInfo((PMSG_REQ_GUILDREGINFO *)aRecv, aIndex);
 				break;
-			case WEAPON_PROTOCOL_ID: //0xB7:
-				{
-					PMSG_DEFAULT2 * lpDef = (PMSG_DEFAULT2 *)aRecv;
+			case REQ_REG_GUILD_MARK: //0x04:
+				CGReqRegGuildMark((PMSG_REQ_REGGUILDMARK *)aRecv, aIndex);
+				break;
+			case REQ_NPC_BUY: //0x05:
+				CGReqNpcBuy((PMSG_REQ_NPCBUY *)aRecv, aIndex);
+				break;
+			case REQ_NPC_REPAIR: //0x06:
+				CGReqNpcRepair((PMSG_REQ_NPCREPAIR *)aRecv, aIndex);
+				break;
+			case REQ_NPC_UPGRADE: //0x07:
+				CGReqNpcUpgrade((PMSG_REQ_NPCUPGRADE *)aRecv, aIndex);
+				break;
+			case REQ_TAX_MONEY_INFO: //0x08:
+				CGReqTaxMoneyInfo((PMSG_REQ_TAXMONEYINFO *)aRecv, aIndex);
+				break;
+			case REQ_TAX_RATE_CHANGE: //0x09:
+				CGReqTaxRateChange((PMSG_REQ_TAXRATECHANGE *)aRecv, aIndex);
+				break;
+			case REQ_MONEY_DRAW_OUT: //0x10:
+				CGReqMoneyDrawOut((PMSG_REQ_MONEYDRAWOUT *)aRecv, aIndex);
+				break;
+			case REQ_CS_GATE_OPERATE: //0x12:
+				CGReqCsGateOperate((PMSG_REQ_CSGATEOPERATE *)aRecv, aIndex);
+				break;
+			case REQ_CS_MINIMAP_DATA: //0x1B:
+				CGReqCsMiniMapData((PMSG_REQ_MINIMAPDATA *)aRecv, aIndex);
+				break;
+			case REQ_CS_STOP_MINIMAP_DATA: //0x1C:
+				CGReqStopCsMiniMapData((PMSG_REQ_STOPMINIMAPDATA *)aRecv, aIndex);
+				break;
+			case REQ_CS_SEND_COMMAND: //0x1D:
+				CGReqCsSendCommand((PMSG_REQ_CSCOMMAND *)aRecv, aIndex);
+				break;
+			case REQ_CS_SET_ENTER_HUNTZONE: //0x1F:
+				CGReqCsSetEnterHuntZone((PMSG_REQ_CSHUNTZONEENTER *)aRecv, aIndex);
+				break;
+			}
+		}
+		break;
+		case REQ_NPC_DB_LIST: //0xB3:
+			CGReqNpcDbList((PMSG_REQ_NPCDBLIST *)aRecv, aIndex);
+			break;
+		case REQ_CS_REG_GUILD_LIST: //0xB4:
+			CGReqCsRegGuildList((PMSG_REQ_CSREGGUILDLIST *)aRecv, aIndex);
+			break;
+		case REQ_CS_ATTACK_GUILD_LIST: //0xB5:
+			CGReqCsAttkGuildList((PMSG_REQ_CSATTKGUILDLIST *)aRecv, aIndex);
+			break;
+		case WEAPON_PROTOCOL_ID: //0xB7:
+		{
+			PMSG_DEFAULT2 * lpDef = (PMSG_DEFAULT2 *)aRecv;
 
-					switch ( lpDef->subcode )
-					{
-					case REQ_WEAPON_USE: //0x01:
-							CGReqWeaponUse((PMSG_REQ_USEWEAPON *)aRecv, aIndex);
-							break;
-					case REQ_WEAPON_DAMAGE_VALUE: //0x04:
-							CGReqWeaponDamageValue((PMSG_REQ_WEAPON_DAMAGE_VALUE *)aRecv, aIndex);
-							break;
-					}
-				}
+			switch (lpDef->subcode)
+			{
+			case REQ_WEAPON_USE: //0x01:
+				CGReqWeaponUse((PMSG_REQ_USEWEAPON *)aRecv, aIndex);
 				break;
-			case CASTLESIEGE_PROTOCOL_ID: //0xB9:
-				{
-					PMSG_DEFAULT2 *lpDef = (PMSG_DEFAULT2*)aRecv;
+			case REQ_WEAPON_DAMAGE_VALUE: //0x04:
+				CGReqWeaponDamageValue((PMSG_REQ_WEAPON_DAMAGE_VALUE *)aRecv, aIndex);
+				break;
+			}
+		}
+		break;
+		case CASTLESIEGE_PROTOCOL_ID: //0xB9:
+		{
+			PMSG_DEFAULT2 *lpDef = (PMSG_DEFAULT2*)aRecv;
 
-					switch (lpDef->subcode)
-					{
-					case REQ_GUILD_MARK_OF_CS_OWNER: //0x02:
-							CGReqGuildMarkOfCastleOwner((PMSG_REQ_GUILDMARK_OF_CASTLEOWNER *)aRecv, aIndex);
-							break; 
-					case REQ_CS_HUNTZONE_ENTRANCE: //0x05:
-							CGReqCastleHuntZoneEntrance((PMSG_REQ_MOVE_TO_CASTLE_HUNTZONE*) aRecv, aIndex);
-							break; 
-					}
-				}
+			switch (lpDef->subcode)
+			{
+			case REQ_GUILD_MARK_OF_CS_OWNER: //0x02:
+				CGReqGuildMarkOfCastleOwner((PMSG_REQ_GUILDMARK_OF_CASTLEOWNER *)aRecv, aIndex);
 				break;
-			case JEWEL_PROTOCOL_ID: //0xBC:
-				{
-					PMSG_DEFAULT2 *lpDef = (PMSG_DEFAULT2*)aRecv;
+			case REQ_CS_HUNTZONE_ENTRANCE: //0x05:
+				CGReqCastleHuntZoneEntrance((PMSG_REQ_MOVE_TO_CASTLE_HUNTZONE*)aRecv, aIndex);
+				break;
+			}
+		}
+		break;
+		case JEWEL_PROTOCOL_ID: //0xBC:
+		{
+			PMSG_DEFAULT2 *lpDef = (PMSG_DEFAULT2*)aRecv;
 
-					switch (lpDef->subcode)
-					{
-					case REQ_JEWEL_MIX: //0x00:
-							CGReqJewelMix((PMSG_REQ_JEWEL_MIX *)aRecv, aIndex);
-							break;
-					case REQ_JEWEL_UNMIX: //0x01:
-							CGReqJewelUnMix((PMSG_REQ_JEWEL_UNMIX *)aRecv, aIndex);
-							break;
-					}
-				}
+			switch (lpDef->subcode)
+			{
+			case REQ_JEWEL_MIX: //0x00:
+				CGReqJewelMix((PMSG_REQ_JEWEL_MIX *)aRecv, aIndex);
 				break;
-			case CRYWOLF_PROTOCOL_ID: //0xBD:
-				{
-					PMSG_DEFAULT2 *lpDef = (PMSG_DEFAULT2*)aRecv;
+			case REQ_JEWEL_UNMIX: //0x01:
+				CGReqJewelUnMix((PMSG_REQ_JEWEL_UNMIX *)aRecv, aIndex);
+				break;
+			}
+		}
+		break;
+		case CRYWOLF_PROTOCOL_ID: //0xBD:
+		{
+			PMSG_DEFAULT2 *lpDef = (PMSG_DEFAULT2*)aRecv;
 
-					switch (lpDef->subcode)
-					{
-					case REQ_CRYWOLF_INFO: //0x00:
-							CGReqCrywolfInfo((PMSG_REQ_CRYWOLF_INFO *)aRecv, aIndex);
-							break;
-					case REQ_ALTAR_CONTRACT: //0x03:
-							CGReqAlatrContract((PMSG_REQ_CRYWOLF_ALTAR_CONTRACT *)aRecv, aIndex);
-							break;
-					case REQ_PLUS_CHAOS_RATE: //0x09:
-							CGReqPlusChaosRate((PMSG_REQ_CRYWOLF_BENEFIT_PLUS_CHAOSRATE *)aRecv, aIndex);
-							break;
-					}
-				}
+			switch (lpDef->subcode)
+			{
+			case REQ_CRYWOLF_INFO: //0x00:
+				CGReqCrywolfInfo((PMSG_REQ_CRYWOLF_INFO *)aRecv, aIndex);
 				break;
-			case GUILD_ASIGN_STATUS: //0xBE:
-				CGGuildAssignStatus((PMSG_GUILD_ASSIGN_STATUS_REQ *)aRecv, aIndex);
+			case REQ_ALTAR_CONTRACT: //0x03:
+				CGReqAlatrContract((PMSG_REQ_CRYWOLF_ALTAR_CONTRACT *)aRecv, aIndex);
 				break;
-			case ILLUSION_TEMPLE_PROTOCOL_ID: //0xBF:
-				ILPROTO_ProtocolCore(aIndex, aRecv, aLen);
+			case REQ_PLUS_CHAOS_RATE: //0x09:
+				CGReqPlusChaosRate((PMSG_REQ_CRYWOLF_BENEFIT_PLUS_CHAOSRATE *)aRecv, aIndex);
 				break;
-			case GUILD_ASIGN_TYPE: //0xE2:
-				CGGuildAssignType((PMSG_GUILD_ASSIGN_TYPE_REQ *)aRecv, aIndex);
-				break;
-			case REL_SHIP_REQ_JOIN_BREAK_OFF: //0xE5:
-				CGRelationShipReqJoinBreakOff((PMSG_RELATIONSHIP_JOIN_BREAKOFF_REQ *)aRecv, aIndex);
-				break;
-			case REL_SHIP_ANS_JOIN_BREAK_OFF: //0xE6:
-				CGRelationShipAnsJoinBreakOff((PMSG_RELATIONSHIP_JOIN_BREAKOFF_ANS *)aRecv, aIndex);
-				break;
-			case UNION_LIST:  //0xE9:
-				CGUnionList((PMSG_UNIONLIST_REQ *)aRecv, aIndex);
-				break;
-			case KICK_OUT_UNION_MEMBER_PROTOCOL_ID: //0xEB:
-				{
-					PMSG_DEFAULT2 *lpDef = (PMSG_DEFAULT2*)aRecv;
+			}
+		}
+		break;
+		case GUILD_ASIGN_STATUS: //0xBE:
+			CGGuildAssignStatus((PMSG_GUILD_ASSIGN_STATUS_REQ *)aRecv, aIndex);
+			break;
+		case ILLUSION_TEMPLE_PROTOCOL_ID: //0xBF:
+			ILPROTO_ProtocolCore(aIndex, aRecv, aLen);
+			break;
+		case GUILD_ASIGN_TYPE: //0xE2:
+			CGGuildAssignType((PMSG_GUILD_ASSIGN_TYPE_REQ *)aRecv, aIndex);
+			break;
+		case REL_SHIP_REQ_JOIN_BREAK_OFF: //0xE5:
+			CGRelationShipReqJoinBreakOff((PMSG_RELATIONSHIP_JOIN_BREAKOFF_REQ *)aRecv, aIndex);
+			break;
+		case REL_SHIP_ANS_JOIN_BREAK_OFF: //0xE6:
+			CGRelationShipAnsJoinBreakOff((PMSG_RELATIONSHIP_JOIN_BREAKOFF_ANS *)aRecv, aIndex);
+			break;
+		case UNION_LIST:  //0xE9:
+			CGUnionList((PMSG_UNIONLIST_REQ *)aRecv, aIndex);
+			break;
+		case KICK_OUT_UNION_MEMBER_PROTOCOL_ID: //0xEB:
+		{
+			PMSG_DEFAULT2 *lpDef = (PMSG_DEFAULT2*)aRecv;
 
-					switch (lpDef->subcode)
-					{
-					case REL_SHIP_REQ_KICK_OUT_UNION_MEMB: //0x01:
-							CGRelationShipReqKickOutUnionMember((PMSG_KICKOUT_UNIONMEMBER_REQ *)aRecv, aIndex);
-							break;
-					}
-				}
+			switch (lpDef->subcode)
+			{
+			case REL_SHIP_REQ_KICK_OUT_UNION_MEMB: //0x01:
+				CGRelationShipReqKickOutUnionMember((PMSG_KICKOUT_UNIONMEMBER_REQ *)aRecv, aIndex);
 				break;
-			case PING_SEND_RECV: //0x71:
-				GCPingSendRecv((PMSG_PING_RESULT *)aRecv, aIndex);
-				break;
-			case PACKET_CHECKSUM_RECV: //0x72:
-				if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
-				{
-					GCPacketCheckSumRecv((PMSG_PACKETCHECKSUM*)aRecv, aIndex);
-				}
-				break;
-			case GAMEGUARD_CHECKSUM_RECV: //0x73:
-				if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
-				{
-					//GCNPggCheckSumRecv((PMSG_NPROTECTGGCHECKSUM *)aRecv, aIndex);
-				}
-				break;
-			case WAREHOUSE_MONEY_IN_OUT: //0x81:
-				CGWarehouseMoneyInOut(aIndex, (PMSG_WAREHOUSEMONEYINOUT *)aRecv);
-				break;
-			case WAREHOUSE_USE_END: //0x82:
-				CGWarehouseUseEnd(aIndex);
-				break;
-			case WAREHOUSE_RECIVE_PASSWORD: //0x83:
-				GCWarehouseRecivePassword(aIndex, (PMSG_WAREHOUSEPASSSEND *)aRecv);
-				break;
-			case CHAOSBOX_ITEM_MIX_BTN_CLICK: //0x86:
-				CGChaosBoxItemMixButtonClick((PMSG_CHAOSMIX *)aRecv, aIndex);
-				break;
-			case CHAOSBOX_USE_END: //0x87:
-				CGChaosBoxUseEnd(aIndex);
-				break;
-			case REQ_MOVE_DEVILSQUARE: //0x90:
-				GCReqmoveDevilSquare((PMSG_REQ_MOVEDEVILSQUARE *)aRecv, aIndex);
-				break;
-			case REQ_DEVIL_SQUARE_REMAIN_TIME: //0x91:
-				GCReqDevilSquareRemainTime((PMSG_REQ_DEVILSQUARE_REMAINTIME *)aRecv, aIndex);
-				break;
-			case REQ_EVENT_CHIP_RECV: //0x95:
-				GCRegEventChipRecv((PMSG_REGEVENTCHIP *)aRecv, aIndex);
-				break;
-			case GET_MUTO_NUM_RECV: //0x96:
-				GCGetMutoNumRecv((PMSG_GETMUTONUMBER *)aRecv, aIndex);
-				break;
-			case USE_END_EVENT_CHIP_RECV: //0x97:
-				GCUseEndEventChipRescv(aIndex);
-				break;
-			case USE_RENA_CHANGE_ZEN_RECV: //0x98:
-				GCUseRenaChangeZenRecv((PMSG_EXCHANGE_EVENTCHIP *)aRecv, aIndex);
-				break;
-			case REQ_MOVE_OTHER_SERVER: //0x99:
-				CGReqMoveOtherServer((PMSG_REQ_MOVE_OTHERSERVER *)aRecv, aIndex);
-				break;
-			case REQ_QUEST_INFO: //0xA0:
-				CGRequestQuestInfo(aIndex);
-				break;
-			case SET_QUEST_STATE: //0xA2:
-				CGSetQuestState((PMSG_SETQUEST *)aRecv, aIndex);
-				break;
-			case REQ_PET_ITEM_COMMAND: //0xA7:
-				CGRequestPetItemCommand((PMSG_REQUEST_PET_ITEM_COMMAND *)aRecv, aIndex);
-				break;
-			case REQ_PET_ITEM_INFO: //0xA9:
-				CGRequestPetItemInfo((PMSG_REQUEST_PET_ITEMINFO *)aRecv, aIndex);
-				break;
-			case DUEL_START_REQ_RECV: //0xAA:
-				CGDuelStartRequestRecv((PMSG_REQ_START_DUEL *)aRecv, aIndex);
-				break;
-			case DUEL_END_REQ_RECV: //0xAB:
-				CGDuelEndRequestRecv((PMSG_REQ_END_DUEL *)aRecv, aIndex);
-				break;
-			case DUEL_OK_REQ_RECV: //0xAC:
-				CGDuelOkRequestRecv((PMSG_ANS_DUEL_OK *)aRecv, aIndex);
-				break;
-			case REQ_ENTER_BLOODCASTLE: //0x9A:
-				CGRequestEnterBloodCastle((PMSG_REQ_MOVEBLOODCASTLE*)aRecv, aIndex);
-				break;
-			case LACKING_PACKET_PROTOCOL_ID: //0x9B:
-				//#error LAcking PACKET HERE
-				break;
-			case REQ_EVENT_ENTER_COUNT: //0x9F:
-				CGRequestEventEnterCount((PMSG_REQ_CL_ENTERCOUNT *)aRecv, aIndex);
-				break;
-			case REQ_LOTTO_REGISTER: //0x9D:
-				CGRequestLottoRegister((PMSG_REQ_2ANV_LOTTO_EVENT *)aRecv, aIndex);
-				break;
-			case CHAOSCASTLE_PROTOCOL_ID: //0xAF:
-				{
-					PMSG_DEFAULT2 *lpDef = (PMSG_DEFAULT2*)aRecv;
+			}
+		}
+		break;
+		case PING_SEND_RECV: //0x71:
+			GCPingSendRecv((PMSG_PING_RESULT *)aRecv, aIndex);
+			break;
+		case PACKET_CHECKSUM_RECV: //0x72:
+			if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
+			{
+				GCPacketCheckSumRecv((PMSG_PACKETCHECKSUM*)aRecv, aIndex);
+			}
+			break;
+		case GAMEGUARD_CHECKSUM_RECV: //0x73:
+			if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
+			{
+				//GCNPggCheckSumRecv((PMSG_NPROTECTGGCHECKSUM *)aRecv, aIndex);
+			}
+			break;
+		case WAREHOUSE_MONEY_IN_OUT: //0x81:
+			CGWarehouseMoneyInOut(aIndex, (PMSG_WAREHOUSEMONEYINOUT *)aRecv);
+			break;
+		case WAREHOUSE_USE_END: //0x82:
+			CGWarehouseUseEnd(aIndex);
+			break;
+		case WAREHOUSE_RECIVE_PASSWORD: //0x83:
+			GCWarehouseRecivePassword(aIndex, (PMSG_WAREHOUSEPASSSEND *)aRecv);
+			break;
+		case CHAOSBOX_ITEM_MIX_BTN_CLICK: //0x86:
+			CGChaosBoxItemMixButtonClick((PMSG_CHAOSMIX *)aRecv, aIndex);
+			break;
+		case CHAOSBOX_USE_END: //0x87:
+			CGChaosBoxUseEnd(aIndex);
+			break;
+		case REQ_MOVE_DEVILSQUARE: //0x90:
+			GCReqmoveDevilSquare((PMSG_REQ_MOVEDEVILSQUARE *)aRecv, aIndex);
+			break;
+		case REQ_DEVIL_SQUARE_REMAIN_TIME: //0x91:
+			GCReqDevilSquareRemainTime((PMSG_REQ_DEVILSQUARE_REMAINTIME *)aRecv, aIndex);
+			break;
+		case REQ_EVENT_CHIP_RECV: //0x95:
+			GCRegEventChipRecv((PMSG_REGEVENTCHIP *)aRecv, aIndex);
+			break;
+		case GET_MUTO_NUM_RECV: //0x96:
+			GCGetMutoNumRecv((PMSG_GETMUTONUMBER *)aRecv, aIndex);
+			break;
+		case USE_END_EVENT_CHIP_RECV: //0x97:
+			GCUseEndEventChipRescv(aIndex);
+			break;
+		case USE_RENA_CHANGE_ZEN_RECV: //0x98:
+			GCUseRenaChangeZenRecv((PMSG_EXCHANGE_EVENTCHIP *)aRecv, aIndex);
+			break;
+		case REQ_MOVE_OTHER_SERVER: //0x99:
+			CGReqMoveOtherServer((PMSG_REQ_MOVE_OTHERSERVER *)aRecv, aIndex);
+			break;
+		case REQ_QUEST_INFO: //0xA0:
+			CGRequestQuestInfo(aIndex);
+			break;
+		case SET_QUEST_STATE: //0xA2:
+			CGSetQuestState((PMSG_SETQUEST *)aRecv, aIndex);
+			break;
+		case REQ_PET_ITEM_COMMAND: //0xA7:
+			CGRequestPetItemCommand((PMSG_REQUEST_PET_ITEM_COMMAND *)aRecv, aIndex);
+			break;
+		case REQ_PET_ITEM_INFO: //0xA9:
+			CGRequestPetItemInfo((PMSG_REQUEST_PET_ITEMINFO *)aRecv, aIndex);
+			break;
+		case DUEL_START_REQ_RECV: //0xAA:
+			CGDuelStartRequestRecv((PMSG_REQ_START_DUEL *)aRecv, aIndex);
+			break;
+		case DUEL_END_REQ_RECV: //0xAB:
+			CGDuelEndRequestRecv((PMSG_REQ_END_DUEL *)aRecv, aIndex);
+			break;
+		case DUEL_OK_REQ_RECV: //0xAC:
+			CGDuelOkRequestRecv((PMSG_ANS_DUEL_OK *)aRecv, aIndex);
+			break;
+		case REQ_ENTER_BLOODCASTLE: //0x9A:
+			CGRequestEnterBloodCastle((PMSG_REQ_MOVEBLOODCASTLE*)aRecv, aIndex);
+			break;
+		case LACKING_PACKET_PROTOCOL_ID: //0x9B:
+			//#error LAcking PACKET HERE
+			break;
+		case REQ_EVENT_ENTER_COUNT: //0x9F:
+			CGRequestEventEnterCount((PMSG_REQ_CL_ENTERCOUNT *)aRecv, aIndex);
+			break;
+		case REQ_LOTTO_REGISTER: //0x9D:
+			CGRequestLottoRegister((PMSG_REQ_2ANV_LOTTO_EVENT *)aRecv, aIndex);
+			break;
+		case CHAOSCASTLE_PROTOCOL_ID: //0xAF:
+		{
+			PMSG_DEFAULT2 *lpDef = (PMSG_DEFAULT2*)aRecv;
 
-					switch (lpDef->subcode)
-					{
-					case REQ_ENTER_CHAOSCASTLE: //0x01:
-							CGRequestEnterChaosCastle((PMSG_REQ_MOVECHAOSCASTLE *)aRecv, aIndex);
-							break;
-					case REQ_REPOSITION_USER_IN_CHAOSCASTLE: //0x02:
-							CGRequestRepositionUserInChaosCastle((PMSG_REQ_REPOSUSER_IN_CC *)aRecv, aIndex);
-							break;
-					}
-				}
+			switch (lpDef->subcode)
+			{
+			case REQ_ENTER_CHAOSCASTLE: //0x01:
+				CGRequestEnterChaosCastle((PMSG_REQ_MOVECHAOSCASTLE *)aRecv, aIndex);
 				break;
-			case FRIEND_LIST_REQ: //0xC0:
-				FriendListRequest(aIndex);
+			case REQ_REPOSITION_USER_IN_CHAOSCASTLE: //0x02:
+				CGRequestRepositionUserInChaosCastle((PMSG_REQ_REPOSUSER_IN_CC *)aRecv, aIndex);
 				break;
-			case FRIEND_ADD_REQ: //0xC1:
-				FriendAddRequest((PMSG_FRIEND_ADD_REQ *)aRecv, aIndex);
+			}
+		}
+		break;
+		case FRIEND_LIST_REQ: //0xC0:
+			FriendListRequest(aIndex);
+			break;
+		case FRIEND_ADD_REQ: //0xC1:
+			FriendAddRequest((PMSG_FRIEND_ADD_REQ *)aRecv, aIndex);
+			break;
+		case WAIT_FRIEND_ADD_REQ: //0xC2:
+			WaitFriendAddRequest((PMSG_FRIEND_ADD_SIN_RESULT *)aRecv, aIndex);
+			break;
+		case FRIEND_DELETE_REQ: //0xC3:
+			FriendDelRequest((PMSG_FRIEND_DEL_REQ *)aRecv, aIndex);
+			break;
+		case FRIEND_STATE_CLIENT_RECV: //0xC4:
+			FriendStateClientRecv((PMSG_FRIEND_STATE_C *)aRecv, aIndex);
+			break;
+		case FRIEND_MEMO_SEND: //0xC5:
+			FriendMemoSend((PMSG_FRIEND_MEMO *)aRecv, aIndex);
+			break;
+		case FRIEND_MEMO_READ_REQ: //0xC7:
+			FriendMemoReadReq((PMSG_FRIEND_READ_MEMO_REQ *)aRecv, aIndex);
+			break;
+		case FRIEND_MEMO_DELETE_REQ: //0xC8:
+			FriendMemoDelReq((PMSG_FRIEND_MEMO_DEL_REQ *)aRecv, aIndex);
+			break;
+		case FRIEND_MEMO_LIST_REQ: //0xC9:
+			FriendMemoListReq(aIndex);
+			break;
+		case FRIEND_CHAT_ROOM_CREATE_REQ: //0xCA:
+			FriendChatRoomCreateReq((PMSG_FRIEND_ROOMCREATE_REQ *)aRecv, aIndex);
+			break;
+		case FRIEND_ROOM_INVITATION_REQ: //0xCB:
+			FriendRoomInvitationReq((PMSG_ROOM_INVITATION *)aRecv, aIndex);
+			break;
+		case EVENT_NPC:	//0xD0
+		{
+			PMSG_DEFAULT2 *lpDef = (PMSG_DEFAULT2*)aRecv;
+
+			switch (lpDef->subcode)
+			{
+			case 0x00:
+				LogAdd("C1 D0 00 packet found!");
+				break; 
+			case 0x01:
+				LogAdd("C1 D0 01 packet found!");
 				break;
-			case WAIT_FRIEND_ADD_REQ: //0xC2:
-				WaitFriendAddRequest((PMSG_FRIEND_ADD_SIN_RESULT *)aRecv, aIndex);
+			case 0x02:
+				LogAdd("C1 D0 02 packet found!");
 				break;
-			case FRIEND_DELETE_REQ: //0xC3:
-				FriendDelRequest((PMSG_FRIEND_DEL_REQ *)aRecv, aIndex);
+			case LUKEHELPLERNPC: //0x03
+				//Luke The Helpler Packet
+				CGNpcLukeTheHelperRecv(aIndex);
 				break;
-			case FRIEND_STATE_CLIENT_RECV: //0xC4:
-				FriendStateClientRecv((PMSG_FRIEND_STATE_C *)aRecv, aIndex);
+			case 0x04:
+				LogAdd("C1 D0 04 packet found!");
 				break;
-			case FRIEND_MEMO_SEND: //0xC5:
-				FriendMemoSend((PMSG_FRIEND_MEMO *)aRecv, aIndex);
+			case THIRDQUESTWEREWOLF:  //0x07
+				CGReqWerewolfMove((PMSG_REQ_WEREWOLF_MOVE *)aRecv, aIndex);
 				break;
-			case FRIEND_MEMO_READ_REQ: //0xC7:
-				FriendMemoReadReq((PMSG_FRIEND_READ_MEMO_REQ *)aRecv, aIndex);
+			case THIRDQUESTGATEKEEPER: //0x08
+				CGReqGatekeeperMove((PMSG_REQ_GATEKEEPER_MOVE *)aRecv, aIndex);
 				break;
-			case FRIEND_MEMO_DELETE_REQ: //0xC8:
-				FriendMemoDelReq((PMSG_FRIEND_MEMO_DEL_REQ *)aRecv, aIndex);
+			case LEOHELPLERNPC:	  //0x09
+				CGNpcLeoTheHelperRecv(aIndex);
 				break;
-			case FRIEND_MEMO_LIST_REQ: //0xC9:
-				FriendMemoListReq(aIndex);
-				break;
-			case FRIEND_CHAT_ROOM_CREATE_REQ: //0xCA:
-				FriendChatRoomCreateReq((PMSG_FRIEND_ROOMCREATE_REQ *)aRecv, aIndex);
-				break;
-			case FRIEND_ROOM_INVITATION_REQ: //0xCB:
-				FriendRoomInvitationReq((PMSG_ROOM_INVITATION *)aRecv, aIndex);
-				break;
-			case KANTURU_PROTOCOL_ID: //0xD1:
+			} 	
+		}
+			break;
+		case KANTURU_PROTOCOL_ID: //0xD1:
 				{
 					PMSG_DEFAULT2 *lpDef = (PMSG_DEFAULT2*)aRecv;
 
@@ -701,13 +735,6 @@ void TestSend()
 	DataSend( tempindex, (LPBYTE)&pMsg, size);
 	LogAdd("TEST Data Send");
 }
-
-
-
-
-
-
-
 
 void MsgSendV2(LPOBJ lpObj, unsigned char* Msg, int size)
 {
@@ -771,26 +798,14 @@ void CGLiveClient(PMSG_CLIENTTIME * lpClientTime, short aIndex)
 		{
 			gObj[aIndex].m_AttackSpeedHackDetectedCount = 0;
 		}
-
-#if (FOREIGN_GAMESERVER == 1)
-		if (szAuthKey[10] != AUTHKEY10)
-			DestroyGIocp();
-
-		if (szAuthKey[11] != AUTHKEY11)
-			DestroyGIocp();
-#endif
 	}
 }
-
-
 
 struct PMSG_CHECK_MAINEXE
 {
 	PBMSG_HEAD h;	// C1:03
 	WORD m_wKey;	// 4
 };
-
-
 
 void GCCheckMainExeKeySend(int aIndex)
 {
@@ -841,12 +856,6 @@ void CGCheckMainRecv(PMSG_CHECK_MAINEXE_RESULT *lpMsg, int aIndex)
 	//gObj[aIndex].CheckSumTime = 0;
 }
 
-
-
-
-
-
-
 void PEchoProc(unsigned char * aMsg, int aLen, short aIndex)
 {
 	for ( int n = 0 ; n< OBJMAX ; n++)
@@ -858,15 +867,6 @@ void PEchoProc(unsigned char * aMsg, int aLen, short aIndex)
 	}
 }
 
-
-
-
-
-
-
-
-
-
 void GCResultSend(int aIndex, BYTE headcode, BYTE result)
 {
 	PMSG_DEFRESULT pResult;
@@ -876,9 +876,6 @@ void GCResultSend(int aIndex, BYTE headcode, BYTE result)
 	
 	DataSend(aIndex, (UCHAR*)&pResult, pResult.h.size);
 }
-
-
-
 
 void ChatSend(LPOBJ lpObj, char* szChat)
 {
@@ -909,10 +906,7 @@ void ChatSend(LPOBJ lpObj, char* szChat)
 	MsgSendV2(lpObj, (UCHAR*)&pMsg, pMsg.h.size);
 }
 
-
-
-/*
-
+ /*
 void vChatSend(LPOBJ lpObj, char* szChat, ...)
 {
 	char szBuffer[256] = "";
@@ -950,13 +944,6 @@ void vChatSend(LPOBJ lpObj, char* szChat, ...)
 }
 */
 
-
-
-
-
-
-
-
 void AllSendServerMsg( char* chatmsg)
 {
 	PMSG_NOTICE pNotice;
@@ -975,10 +962,6 @@ void AllSendServerMsg( char* chatmsg)
 	}
 }
 
-
-
-
-
 void DataSendAll(unsigned char* lpMsg, int iMsgSize)
 {			
 	for ( int n = OBJ_STARTUSERINDEX ; n < OBJMAX ; n++)
@@ -992,11 +975,6 @@ void DataSendAll(unsigned char* lpMsg, int iMsgSize)
 		}
 	}
 }
-
-
-
-
-
 
 void ChatTargetSend(LPOBJ lpObj, char * szChat, int senduser)
 {
@@ -1025,9 +1003,6 @@ void ChatTargetSend(LPOBJ lpObj, char * szChat, int senduser)
 	DataSend(senduser, (UCHAR*)&pMsg, pMsg.h.size);
 }
 
-
-
-
 struct CHAT_LOG_DATA
 {
 	PBMSG_HEAD h;	// C1:02
@@ -1038,7 +1013,6 @@ struct CHAT_LOG_DATA
 	char szChatMsg[61];	// 1D
 	char szTargetName[5][11];	// 5A
 };
-
 
 void PChatProc(PMSG_CHATDATA * lpChat, short aIndex)
 {
@@ -1308,16 +1282,11 @@ void CGChatRecv(PMSG_CHATDATA_NUMBER * lpMsg, int aIndex)
 	MsgSendV2(lpObj, (LPBYTE)lpMsg, lpMsg->h.size);
 }
 
-
-
-
-
 struct PMSG_SERVERMSG
 {
 	PBMSG_HEAD h;	// C1:0C
 	BYTE MsgNumber;	// 3
 };
-
 
 void GCServerMsgSend(BYTE msg, int aIndex)
 {
@@ -1328,11 +1297,6 @@ void GCServerMsgSend(BYTE msg, int aIndex)
 	DataSend(aIndex, (UCHAR*)&pMsg, pMsg.h.size);
 }
 
-
-
-
-
-
 void GCServerMsgStringSend(LPSTR  szMsg, int aIndex, BYTE type) 
 {
 	PMSG_NOTICE pNotice;
@@ -1340,10 +1304,6 @@ void GCServerMsgStringSend(LPSTR  szMsg, int aIndex, BYTE type)
 	TNotice::MakeNoticeMsg((TNotice*)&pNotice, type, szMsg);
 	DataSend(aIndex, (UCHAR*)&pNotice, pNotice.h.size);
 }
-
-
-
-
 
 void GCServerMsgStringSendGuild(_GUILD_INFO_STRUCT* lpNode, LPSTR szMsg, BYTE type)
 {
@@ -1699,11 +1659,6 @@ void GCJoinSocketResult(BYTE result, SOCKET Socket)
 	wsGServer.DataSocketSend(Socket, (char*)&pResult, pResult.h.size);
 }
 
-
-
-
-
-
 void CGClientCloseMsg(PMSG_CLIENTCLOSE * lpMsg, int aIndex)
 {
 	switch ( lpMsg->Flag )
@@ -1749,11 +1704,6 @@ void CGClientCloseMsg(PMSG_CLIENTCLOSE * lpMsg, int aIndex)
 	}
 }
 
-
-
-
-
-
 void GCCloseMsgSend(int aIndex, BYTE result)
 {
 	PMSG_RESULT pMsg;
@@ -1763,10 +1713,6 @@ void GCCloseMsgSend(int aIndex, BYTE result)
 	
 	DataSend(aIndex, (UCHAR*)&pMsg, pMsg.h.size);
 }
-
-
-
-
 
 void CGClientMsg(PMSG_CLIENTMSG* lpMsg, int aIndex)
 {
@@ -1797,9 +1743,6 @@ void CGClientMsg(PMSG_CLIENTMSG* lpMsg, int aIndex)
 	gSendHackLog.Send(aIndex, 0, msg);
 }
 
-
-
-
 struct SDHP_CREATECHAR
 {
 	PBMSG_HEAD h;	// C1:04
@@ -1810,8 +1753,6 @@ struct SDHP_CREATECHAR
 	char Name[10];	// 18
 	BYTE ClassSkin;	// 22
 };
-
-
 
 void CGPCharacterCreate( PMSG_CHARCREATE * lpMsg, int aIndex)
 {
@@ -1898,11 +1839,6 @@ void CGPCharacterCreate( PMSG_CHARCREATE * lpMsg, int aIndex)
 	cDBSMng.Send((char*)&sCreate, sCreate.h.size);
 }
 
-
-
-
-
-
 struct SDHP_CHARDELETE
 {
 	PBMSG_HEAD h;	// C1:05
@@ -1912,9 +1848,6 @@ struct SDHP_CHARDELETE
 	BYTE Guild;	// [0:NoGuild] [1:Master] [2:Member] 1A
 	char GuildName[8];	// 1B
 };
-
-
-
 
 void CGPCharDel(PMSG_CHARDELETE * lpMsg,int aIndex)
 {
@@ -2009,15 +1942,11 @@ void CGPCharDel(PMSG_CHARDELETE * lpMsg,int aIndex)
 	gObj[aIndex].Level = 0;
 }
 
-
-
-
-
 void CGPCharacterMapJoinRequest( PMSG_CHARMAPJOIN * lpMsg, int aIndex)
 {
 	if ( !PacketCheckTime(&gObj[aIndex]))
 	{
-		//JGCharacterCreateFailSend(aIndex, lpMsg->Name);
+		JGCharacterCreateFailSend(aIndex, lpMsg->Name);
 		return;
 	}
 
@@ -2044,8 +1973,6 @@ void CGPCharacterMapJoinRequest( PMSG_CHARMAPJOIN * lpMsg, int aIndex)
 	
 }
 
-
-
 struct PMSG_LEVELUP
 {
 	PBMSG_HEAD h;	// C1:F3:05
@@ -2061,8 +1988,6 @@ struct PMSG_LEVELUP
 	short MinusPoint;	// 14
 	short MaxMinusPoint;	// 16
 };
-
-
 
 void GCLevelUpMsgSend(int aIndex, int iSendEffect)
 {
@@ -2095,8 +2020,6 @@ void GCLevelUpMsgSend(int aIndex, int iSendEffect)
 	if ( iSendEffect == 1 )
 		GCSendEffectInfo(aIndex, 0x10);
 }
-
-
 
 struct PMSG_LVPOINTADDRESULT
 {
@@ -2138,20 +2061,13 @@ void CGLevelUpPointAdd(PMSG_LVPOINTADD * lpMsg, int aIndex)
 				break;
 		}
 
-#if (FOREIGN_GAMESERVER==1)
-		if ( szAuthKey[9] != AUTHKEY9 )
-			DestroyGIocp();
-#endif
 		pMsg.wMaxShield = gObj[aIndex].iMaxShield + gObj[aIndex].iAddShield;
 		gObjSetBP(aIndex);
 		pMsg.MaxBP = gObj[aIndex].MaxBP + gObj[aIndex].AddBP;
 	}
-
 	DataSend(aIndex, (UCHAR *)&pMsg, pMsg.h.size);
 
 }
-
-
 
 struct PMSG_INVENTORYITEMMODIFY
 {
@@ -2161,7 +2077,6 @@ struct PMSG_INVENTORYITEMMODIFY
 	BYTE ItemInfo[MAX_ITEM_INFO];	// 5
 
 };
-
 
 void GCInventoryItemOneSend(int aIndex, int pos)
 {
@@ -2177,8 +2092,6 @@ void GCInventoryItemOneSend(int aIndex, int pos)
 	DataSend(aIndex, (UCHAR *)&pMsg, pMsg.h.size);
 }
 
-
-
 struct PMSG_PKLEVEL
 {
 	PBMSG_HEAD h;	// C1:F3:08
@@ -2187,7 +2100,6 @@ struct PMSG_PKLEVEL
 	BYTE NumberL;	// 5
 	BYTE PkLevel;	// 6
 };
-
 
 void GCPkLevelSend(int aIndex, BYTE pklevel)
 {
@@ -2202,16 +2114,11 @@ void GCPkLevelSend(int aIndex, BYTE pklevel)
 	MsgSendV2(&gObj[aIndex], (UCHAR*)&pMsg, pMsg.h.size);
 }
 
-
-
-
-
 struct PMSG_MAGICLIST
 {
 	char Pos;	// 0
 	BYTE MagicInfo[MAX_MAGIC_INFO];	// 1
 };
-
 
 struct PMSG_MAGICLISTCOUNT
 {
@@ -2220,8 +2127,6 @@ struct PMSG_MAGICLISTCOUNT
 	BYTE Count;	// [0xFE:AddOne] [0xFF:DelOne] 4
 	BYTE btListType;	// 5
 };
-
-
 
 void GCMagicListOneSend(int aIndex, char Pos, BYTE type, BYTE level, BYTE skill, BYTE btListType)
 {
@@ -2245,8 +2150,6 @@ void GCMagicListOneSend(int aIndex, char Pos, BYTE type, BYTE level, BYTE skill,
 	DataSend(aIndex, sendbuf, lOfs);
 }
 
-
-
 void GCMagicListOneDelSend(int aIndex, char Pos, BYTE type, BYTE level, BYTE skill, BYTE btListType)
 {
 	PMSG_MAGICLISTCOUNT pCount;
@@ -2269,8 +2172,6 @@ void GCMagicListOneDelSend(int aIndex, char Pos, BYTE type, BYTE level, BYTE ski
 
 	DataSend(aIndex, sendbuf, lOfs);
 }
-
-
 
 void GCMagicListMultiSend(LPOBJ lpObj, BYTE btListType)
 {
@@ -2304,9 +2205,6 @@ void GCMagicListMultiSend(LPOBJ lpObj, BYTE btListType)
 	DataSend(lpObj->m_Index, sendbuf, lOfs);
 }
 
-
-
-
 struct PMSG_EQUIPMENTLIST
 {
 	PBMSG_HEAD h;	// C1:F3:13
@@ -2315,7 +2213,6 @@ struct PMSG_EQUIPMENTLIST
 	BYTE NumberL;	// 5
 	BYTE Equipment[CHAR_SET_SIZE];	// 6
 };
-
 
 void GCEquipmentSend(int aIndex)
 {
@@ -2331,15 +2228,12 @@ void GCEquipmentSend(int aIndex)
 	MsgSendV2(lpObj, (LPBYTE)&pMsg, pMsg.h.size);
 }
 
-
-
 struct PMSG_RECALLMONLIFE
 {
 	PBMSG_HEAD h;	// C1:F3:20
 	BYTE subcode;	// 3
 	BYTE Life;	// 4
 };
-
 
 void GCRecallMonLife(int aIndex, int maxlife, int life)
 {
@@ -2354,17 +2248,12 @@ void GCRecallMonLife(int aIndex, int maxlife, int life)
 	DataSend(aIndex, (UCHAR*)&pMsg, pMsg.h.size);
 }
 
-
-
-
-
 struct PMSG_TIMEVIEW
 {
 	PBMSG_HEAD h;	// C1:F3:22
 	BYTE subcode;	// 3
 	WORD Second;	// 4
 };
-
 
 void GCTimeViewSend(int aIndex, int second)
 {
@@ -2376,9 +2265,6 @@ void GCTimeViewSend(int aIndex, int second)
 	DataSend(aIndex, (UCHAR *)&pMsg, pMsg.h.size);
 }
 
-
-
-
 struct PMSG_GOALSEND
 {
 	PBMSG_HEAD h;	// C1:F3:23
@@ -2388,7 +2274,6 @@ struct PMSG_GOALSEND
 	char BlueTeamName[8];	// D
 	BYTE BlueTeamScore;	// 15
 };
-
 
 void GCGoalSend(int aIndex, char* Name1, BYTE score1, char* Name2, BYTE score2)
 {
@@ -2403,9 +2288,6 @@ void GCGoalSend(int aIndex, char* Name1, BYTE score1, char* Name2, BYTE score2)
 	DataSend(aIndex, (UCHAR*)&pMsg, pMsg.h.size);
 }
 
-
-
-
 void GCSkillKeyRecv(PMSG_SKILLKEY * lpMsg, int aIndex)
 {
 	if ( !gObjIsGamePlaing(&gObj[aIndex]))
@@ -2418,13 +2300,6 @@ void GCSkillKeyRecv(PMSG_SKILLKEY * lpMsg, int aIndex)
 	LogAddL("Option Recv %d %d %d %d", lpMsg->GameOption,
 		lpMsg->QkeyDefine,  lpMsg->WkeyDefine, lpMsg->EkeyDefine);
 }
-
-
-
-
-
-
-
 
 void GCSkillKeySend(int aIndex, LPBYTE keybuffer, BYTE GO, BYTE Qk, BYTE Wk, BYTE Ek, BYTE ChatWnd)
 {
@@ -2442,15 +2317,12 @@ void GCSkillKeySend(int aIndex, LPBYTE keybuffer, BYTE GO, BYTE Qk, BYTE Wk, BYT
 	LogAddL("Option Send %d %d %d %d", GO, Qk, Wk, Ek);
 }
 
-
-
 struct PMSG_ITEMGETRESULT
 {
 	PBMSG_HEAD h;	// C1:22
 	BYTE result;	// [0xFE:Money] 3
 	BYTE Data[MAX_ITEM_INFO];	// 4
 };
-
 
 void GCMoneySend(int aIndex, DWORD money)
 {
@@ -2471,8 +2343,6 @@ void GCMoneySend(int aIndex, DWORD money)
 	DataSend(aIndex, (UCHAR*)&pMsg, pMsg.h.size);
 }
 
-
-
 void GCItemInventoryPutSend(int aIndex,BYTE result, BYTE iteminfo1, BYTE iteminfo2)
 {
 	PMSG_ITEMGETRESULT pResult;
@@ -2487,10 +2357,6 @@ void GCItemInventoryPutSend(int aIndex,BYTE result, BYTE iteminfo1, BYTE iteminf
 
 	DataSend(aIndex, (UCHAR*)&pResult, pResult.h.size);
 }
-
-
-
-
 
 void CGItemGetRequest(PMSG_ITEMGETREQUEST * lpMsg, int aIndex)
 {
@@ -2552,7 +2418,6 @@ void CGItemGetRequest(PMSG_ITEMGETREQUEST * lpMsg, int aIndex)
 		return;
 
 	}
-
 
 	// Get RealNumber
 	item_num = MAKE_NUMBERW(lpMsg->NumberH, lpMsg->NumberL);
@@ -2974,13 +2839,6 @@ void CGItemGetRequest(PMSG_ITEMGETREQUEST * lpMsg, int aIndex)
 		DataSend(aIndex, (UCHAR*)&pResult, pResult.h.size);
 	}
 }
-
-
-
-
-
-
-
 
 BOOL CGItemDropRequest(PMSG_ITEMTHROW * lpMsg, int aIndex, BOOL drop_type)
 {
@@ -3621,14 +3479,6 @@ BOOL CGItemDropRequest(PMSG_ITEMTHROW * lpMsg, int aIndex, BOOL drop_type)
 	return pResult.Result;
 }
 
-
-
-
-
-
-
-
-
 struct PMSG_INVENTORYITEMMOVE_RESULT
 {
 	PBMSG_HEAD h;	// C3:24
@@ -3636,8 +3486,6 @@ struct PMSG_INVENTORYITEMMOVE_RESULT
 	BYTE Pos;	// 4
 	BYTE ItemInfo[MAX_ITEM_INFO];	// 5
 };
-
-
 
 void GCItemMoveResultSend(int aIndex, BYTE result, BYTE pos, LPBYTE const ItemInfo)
 {
@@ -3658,11 +3506,6 @@ void GCItemMoveResultSend(int aIndex, BYTE result, BYTE pos, LPBYTE const ItemIn
 
 	DataSend(aIndex, (LPBYTE)&pMsg, pMsg.h.size);
 }
-
-
-
-
-
 
 void CGInventoryItemMove(PMSG_INVENTORYITEMMOVE * lpMsg, int aIndex)
 {
@@ -3998,10 +3841,6 @@ void CGInventoryItemMove(PMSG_INVENTORYITEMMOVE * lpMsg, int aIndex)
 	}
 }
 
-
-
-
-
 void GCEquipmentChange(int aIndex, int pos)
 {
 	PMSG_USEREQUIPMENTCHANGED pChange;
@@ -4017,16 +3856,12 @@ void GCEquipmentChange(int aIndex, int pos)
 	MsgSendV2(lpObj, (LPBYTE)&pChange, pChange.h.size);
 }
 
-
-
-
 struct PMSG_SHOPITEMCOUNT
 {
 	PWMSG_HEAD h;	// C2:31
 	BYTE Type;	// 4
 	BYTE count;	// 5
 };
-
 
 void CGTalkRequestRecv(PMSG_TALKREQUEST * lpMsg, int aIndex) 
 {
@@ -4476,18 +4311,12 @@ void CGBuyRequestRecv(PMSG_BUYREQUEST * lpMsg, int aIndex)
 	DataSend(aIndex, (LPBYTE)&pResult, pResult.h.size);
 }
 
-
-
-
 struct PMSG_SELLRESULT
 {
 	PBMSG_HEAD h;	// C1:33
 	BYTE Result;	// 3
 	DWORD Money;	// 4
 };
-
-
-
 
 void CGSellRequestRecv(PMSG_SELLREQUEST * lpMsg, int aIndex)
 {
@@ -4677,8 +4506,6 @@ void CGSellRequestRecv(PMSG_SELLREQUEST * lpMsg, int aIndex)
 	DataSend(aIndex, (LPBYTE)&pResult, pResult.h.size);
 }
 
-
-
 int GetNeedMoneyItemDurRepaire(CItem *  DurItem, BOOL RequestPos)
 {
 	int iMoney = 0;
@@ -4747,17 +4574,11 @@ int GetNeedMoneyItemDurRepaire(CItem *  DurItem, BOOL RequestPos)
 	return iMoney;
 }
 
-
-
-
 struct PMSG_ITEMDURREPAIR_RESULT
 {
 	PBMSG_HEAD h;	// C1:34
 	int Money;	// 4
 };
-
-
-
 
 void ItemDurRepaire(LPOBJ lpObj, CItem * DurItem, int pos, int RequestPos)
 {
@@ -4826,11 +4647,6 @@ void ItemDurRepaire(LPOBJ lpObj, CItem * DurItem, int pos, int RequestPos)
 
 	DataSend(lpObj->m_Index, (LPBYTE)&pResult, pResult.h.size);
 }
-
-
-
-
-
 
 void CGModifyRequestItem(PMSG_ITEMDURREPAIR * lpMsg, int aIndex)
 {
@@ -4929,17 +4745,11 @@ void CGModifyRequestItem(PMSG_ITEMDURREPAIR * lpMsg, int aIndex)
 	gObjCalCharacter(lpObj->m_Index);
 }
 
-
-
-
-
 struct PMSG_TRADE_REQUESTSEND
 {
 	PBMSG_HEAD h;	// C3:36
 	char szId[10];	// 3
 };
-
-
 
 void CGTradeRequestSend(PMSG_TRADE_REQUEST * lpMsg, int aIndex)
 {
@@ -5061,9 +4871,6 @@ void CGTradeRequestSend(PMSG_TRADE_REQUEST * lpMsg, int aIndex)
 	LogAddTD(lMsg.Get(MSGGET(1, 230)), gObj[aIndex].AccountID, gObj[aIndex].Name, gObj[aIndex].Ip_addr,
 		gObj[number].AccountID, gObj[number].Name, gObj[number].Ip_addr);
 }
-
-
-
 
 void CGTradeResponseRecv(PMSG_TRADE_RESPONSE * lpMsg, int aIndex)
 {
@@ -5233,11 +5040,6 @@ void CGTradeResponseRecv(PMSG_TRADE_RESPONSE * lpMsg, int aIndex)
 		}
 	}
 }
-
-
-
-
-
 
 BOOL GCTradeResponseSend(BYTE response, int aIndex, LPSTR id, WORD level, int GuildNumber)
 {

@@ -38,7 +38,6 @@ BOOL NpcRolensiaGuard(LPOBJ lpNpc, LPOBJ lpObj);
 BOOL NpcChaosGoblelin(LPOBJ lpNpc, LPOBJ lpObj);
 BOOL NpcRusipher(LPOBJ lpNpc, LPOBJ lpObj);
 BOOL NpcPosionGirl(LPOBJ lpNpc, LPOBJ lpObj);
-BOOL NpcFireworkGirl(LPOBJ lpNpc, LPOBJ lpObj);
 BOOL NpcDeviasWizard(LPOBJ lpNpc, LPOBJ lpObj);
 BOOL NpcDeviasGuard(LPOBJ lpNpc, LPOBJ lpObj);
 BOOL NpcDeviasWareHousemen(LPOBJ lpNpc, LPOBJ lpObj);
@@ -67,5 +66,13 @@ BOOL NpcCastleSwitch(LPOBJ lpNpc, LPOBJ lpObj);
 BOOL NpcShadowPhantom(LPOBJ lpNpc, LPOBJ lpObj);
 BOOL NpcMainatenceMachine(LPOBJ lpNpc, LPOBJ lpObj);
 BOOL NpcReira(LPOBJ lpNpc, LPOBJ lpObj);
-BOOL NpcChaosCardMaster(LPOBJ lpNpc, LPOBJ lpObj);  
+BOOL NpcChaosCardMaster(LPOBJ lpNpc, LPOBJ lpObj);
+//NPCS New
+BOOL NpcPamelaSupplier(LPOBJ lpNpc, LPOBJ lpObj);
+BOOL NpcAngelaSupplier(LPOBJ lpNpc, LPOBJ lpObj);
+BOOL NpcFireworkGirl(LPOBJ lpNpc, LPOBJ lpObj);
+BOOL NpcLukeTheHelper(LPOBJ lpNpc, LPOBJ lpObj); // OK
+BOOL NpcLeoTheHelper(LPOBJ lpNpc, LPOBJ lpObj); // OK
+void CGNpcLukeTheHelperRecv(int aIndex); // OK
+void CGNpcLeoTheHelperRecv(int aIndex); // OK
 #endif

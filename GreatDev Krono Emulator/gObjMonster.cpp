@@ -127,15 +127,6 @@ EndLabel:
 	return TRUE;
 }
 
-
-
-
-
-
-
-
-
-
 int gObjMonsterViewportIsCharacter(LPOBJ lpObj)
 {
 	int tObjNum;
@@ -156,14 +147,6 @@ int gObjMonsterViewportIsCharacter(LPOBJ lpObj)
 	return -1;
 }
 
-
-
-
-
-
-
-
-
 void gObjMonsterHitDamageInit(LPOBJ lpObj)
 {
 	for ( int i = 0; i< MAX_ST_HIT_DAMAGE ; i++ )
@@ -173,14 +156,6 @@ void gObjMonsterHitDamageInit(LPOBJ lpObj)
 
 	lpObj->sHDCount = 0;
 }
-
-
-
-
-
-
-
-
 
 int gObjMonsterHitDamageUserDel(LPOBJ lpObj)
 {
@@ -228,13 +203,6 @@ int gObjMonsterHitDamageUserDel(LPOBJ lpObj)
 
 	return delindex;
 }
-
-
-
-
-
-
-
 
 void gObjMonsterSetHitDamage(LPOBJ lpObj, int hit_player, int hit_damage)
 {
@@ -287,14 +255,6 @@ void gObjMonsterSetHitDamage(LPOBJ lpObj, int hit_player, int hit_damage)
 	}
 }
 
-
-
-
-
-
-
-
-
 int gObjMonsterTopHitDamageUser(LPOBJ lpMonObj)
 {
 	int MaxHitDamage = 0;
@@ -314,15 +274,6 @@ int gObjMonsterTopHitDamageUser(LPOBJ lpMonObj)
 
 	return MaxHitDamageUser;
 }
-
-
-
-
-
-
-
-
-
 
 int	 gObjMonsterLastHitDamageUser(LPOBJ lpMonObj, int & hitindex)
 {
@@ -344,15 +295,6 @@ int	 gObjMonsterLastHitDamageUser(LPOBJ lpMonObj, int & hitindex)
 
 	return LastHitUser;
 }
-
-
-
-
-
-
-
-
-
 
 BOOL gObjMonsterMoveCheck(LPOBJ lpObj, int tx, int ty)
 {
@@ -396,14 +338,6 @@ BOOL gObjMonsterMoveCheck(LPOBJ lpObj, int tx, int ty)
 
 	return TRUE;
 }
-
-
-
-
-
-
-
-
 
 BOOL gObjMonsterGetTargetPos(LPOBJ lpObj)
 {
@@ -537,20 +471,6 @@ BOOL gObjMonsterGetTargetPos(LPOBJ lpObj)
 	return FALSE;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 BOOL gObjGetTargetPos(LPOBJ lpObj, int sx, int sy, int & tx , int & ty)
 {
 	int tpx;	// Target Player X
@@ -646,21 +566,6 @@ BOOL gObjGetTargetPos(LPOBJ lpObj, int sx, int sy, int & tx , int & ty)
 	return FALSE;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 int gObjCallMonsterSetEnemy(LPOBJ lpObj, int Target)
 {
 	if ( lpObj->Type != OBJ_USER )
@@ -684,18 +589,6 @@ int gObjCallMonsterSetEnemy(LPOBJ lpObj, int Target)
 
 	return -1;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 int gObjMonsterSearchEnemy(LPOBJ lpObj, BYTE objtype)
 {
@@ -742,14 +635,6 @@ int gObjMonsterSearchEnemy(LPOBJ lpObj, BYTE objtype)
 	return searchtarget;
 }
 
-
-
-
-
-
-
-
-
 int gObjGuardSearchEnemy(LPOBJ lpObj)
 {
 	int n;
@@ -790,12 +675,6 @@ int gObjGuardSearchEnemy(LPOBJ lpObj)
 
 	return searchtarget;
 }
-	
-
-
-
-
-
 
 void gObjMonsterStateProc(LPOBJ lpObj, int aMsgCode, int aIndex, int aMsgSubCode)
 {
@@ -1153,11 +1032,6 @@ void gObjMonsterStateProc(LPOBJ lpObj, int aMsgCode, int aIndex, int aMsgSubCode
 			break;
 	}
 }
-
-
-
-
-
 
 void gObjMonsterProcess(LPOBJ lpObj)
 {
