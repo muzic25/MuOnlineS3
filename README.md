@@ -29,8 +29,10 @@ MSSQL 2012
 Visual Studio 2010 With Sp1 or VS2012 + VS2010SP1 
   
 # Krono Dataserver Season 3  
+-Based on NanoGuy's CougarEmu 0.0.0.1 source  
   
 Credits:  
 Deathway  
+RMST Team  
 NanoGuy  
   
