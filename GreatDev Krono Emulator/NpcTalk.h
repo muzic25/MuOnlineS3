@@ -29,6 +29,56 @@ struct GC_ANS_NPC_TALK_V2
 	BYTE Param6;
 };
 
+struct SDHP_NPC_LEO_THE_HELPER_RECV
+{
+	PBMSG_HEAD header; // C1:0E:00
+	WORD index;
+	char account[11];
+	char name[11];
+	BYTE status;
+};
+struct SDHP_NPC_LEO_THE_HELPER_SEND
+{
+	PBMSG_HEAD header; // C1:0E:00
+	WORD index;
+	char account[11];
+	char name[11];
+};
+
+struct SDHP_NPC_LEO_THE_HELPER_SAVE_SEND
+{
+	PBMSG_HEAD header; // C1:0E:30
+	WORD index;
+	char account[11];
+	char name[11];
+	BYTE status;
+};
+
+struct SDHP_NPC_LUKE_THE_HELPER_RECV
+{
+	PBMSG_HEAD header; // C1:0E:01
+	WORD index;
+	char account[11];
+	char name[11];
+	BYTE status;
+};
+struct SDHP_NPC_LUKE_THE_HELPER_SEND
+{
+	PBMSG_HEAD header; // C1:0E:01
+	WORD index;
+	char account[11];
+	char name[11];
+};
+
+struct SDHP_NPC_LUKE_THE_HELPER_SAVE_SEND
+{
+	PBMSG_HEAD header; // C1:0E:31
+	WORD index;
+	char account[11];
+	char name[11];
+	BYTE status;
+};
+
 BOOL NpcTalk(LPOBJ lpNpc, LPOBJ lpObj);
 
 int NpcBattleAnnouncer(LPOBJ lpNpc, LPOBJ lpObj);
@@ -74,5 +124,12 @@ BOOL NpcFireworkGirl(LPOBJ lpNpc, LPOBJ lpObj);
 BOOL NpcLukeTheHelper(LPOBJ lpNpc, LPOBJ lpObj); // OK
 BOOL NpcLeoTheHelper(LPOBJ lpNpc, LPOBJ lpObj); // OK
 void CGNpcLukeTheHelperRecv(int aIndex); // OK
+void GDNpcLukeTheHelperSend(int aIndex); // OK
+void DGNpcLukeTheHelperRecv(SDHP_NPC_LUKE_THE_HELPER_RECV* lpMsg);
+void GDNpcLukeTheHelperSaveSend(int aIndex, BYTE status);
 void CGNpcLeoTheHelperRecv(int aIndex); // OK
+void GDNpcLeoTheHelperSend(int aIndex); // OK
+void DGNpcLeoTheHelperRecv(SDHP_NPC_LEO_THE_HELPER_RECV* lpMsg);
+void GDNpcLeoTheHelperSaveSend(int aIndex, BYTE status);
+
 #endif

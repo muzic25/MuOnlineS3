@@ -240,11 +240,26 @@ void DataServerProtocolCore(BYTE protoNum, unsigned char* aRecv, int aLen)
 			}
 			break;
 
+		case 0x0E:
+		{
+			PMSG_DEFAULT2 * lpMsg = (PMSG_DEFAULT2 *)aRecv;
+			switch (lpMsg->subcode)
+			{
+			case 0x00:
+				DGNpcLeoTheHelperRecv((SDHP_NPC_LEO_THE_HELPER_RECV*)lpMsg);
+				break;
+			case 0x01:
+				DGNpcLukeTheHelperRecv((SDHP_NPC_LUKE_THE_HELPER_RECV*)lpMsg);
+				break;
+			}
+		}
+		break;
+
 		case 0xFF:	// Test Packet
 			{
 				PMSG_TEST * pMsg = (PMSG_TEST *)aRecv;
 
-				LogAddC(2, "error-L2DataServer RECV : %d (%d)", aLen, pMsg->count);
+				LogAddC(2, "[error-L2] DataServer RECV : %d (%d)", aLen, pMsg->count);
 			}
 			break;
 	}

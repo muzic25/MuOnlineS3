@@ -72,8 +72,6 @@
 #define TEST_SERVER	0
 #define MAX_PASS_LEN	10 
 
-#define GAMESERVER_WIDTH		750	// Width of window
-
 #include "AcceptIp.h"
 #include "AttackEvent.h"
 #include "BattleGround.h"

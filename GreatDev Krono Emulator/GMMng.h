@@ -5,8 +5,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#define MAX_GM_COMMAND 100
-#define MAX_GMCOMMAND_LEN 20
+#define MAX_GM_COMMAND 200
+#define MAX_GMCOMMAND_LEN 30
 #define MAX_GAME_MASTER 5
 
 

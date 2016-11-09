@@ -12683,7 +12683,7 @@ void gObjViewportPaint(HWND hWnd, short aIndex)
 		strcat(szTemp, ":MedalEvent");
 
 	//TextOut(hdc, 150, 0, szTemp, strlen(szTemp));
-	TextOut(hdc, GAMESERVER_WIDTH / 2 - 250, 0, szTemp, strlen(szTemp));
+	TextOut(hdc, 200, 0, szTemp, strlen(szTemp));
 	ReleaseDC(hWnd, hdc);
 }
 		

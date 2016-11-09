@@ -19,7 +19,7 @@
 //Added Review by Hermex
 #include "DSProtocol.h"
 
-CLogToFile KUNDUN_GM_LOG("KUNDUN_EVENT_GM_LOG", ".\\LOG", 1);
+//CLogToFile KUNDUN_GM_LOG("KUNDUN_EVENT_GM_LOG", ".\\LOG", 1);
 CGMMng cManager;
 
 CGMMng::CGMMng()
@@ -85,7 +85,7 @@ void CGMMng::Init()
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 218)), 200);
 
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 219)), 202);
-	this->cCommand.Add(lMsg.Get(MSGGET(11, 220)), 203);
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 220)), 203);	 
 
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 201)), 214);
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 202)), 215);
@@ -94,7 +94,7 @@ void CGMMng::Init()
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 221)), 214);
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 222)), 215);
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 223)), 216);
-
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 7)), 218);
 	/*// KUNDUN Commands
 	this->cCommand.Add("/ÄïµÐ»óÅÂ", 320);	// #translation 
 	this->cCommand.Add("/ÄïµÐÇÇ", 321);	// #translation 
@@ -135,7 +135,6 @@ void CGMMng::Init()
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 4)), 395);
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 5)), 396);
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 6)), 397);
-	this->cCommand.Add(lMsg.Get(MSGGET(11, 7)), 398);
 
 	this->WatchTargetIndex = -1;
 }
@@ -298,762 +297,790 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 	szCmdToken = strtok(string, seps);
 	command_number = this->GetCmd(szCmdToken);
 
-	switch ( command_number )
+	switch (command_number)
 	{
-		case 217:	//116:
+	case 217:	//116:
+	{
+		if ((lpObj->Authority & 2) != 2 && (lpObj->Authority & 0x20) != 0x20)
+		{
+			return 0;
+		}
+
+		LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s",
+			lpObj->Ip_addr, lpObj->AccountID, lpObj->Name, "FIRECRACK.");
+		int x = lpObj->X;
+		int y = lpObj->Y;
+		PMSG_SERVERCMD pMsg;
+
+		PHeadSubSetB((LPBYTE)&pMsg, 0xF3, 0x40, sizeof(pMsg));
+		pMsg.CmdType = 0;
+
+		for (int i = 0; i < 15; i++)
+		{
+			pMsg.X = x + (rand() % 5) * 2 - 4;
+			pMsg.Y = y + (rand() % 5) * 2 - 4;
+			MsgSendV2(lpObj, (UCHAR*)&pMsg, sizeof(pMsg));
+			::DataSend(lpObj->m_Index, (UCHAR*)&pMsg, sizeof(pMsg));
+		}
+	}
+	break;
+
+	case 216:	//115:
+	{
+		if ((lpObj->Authority & 2) != 2 && (lpObj->Authority & 0x20) != 0x20)
+		{
+			return 0;
+		}
+
+		pId = this->GetTokenString();
+
+		if (pId == NULL)
+		{
+			return 0;
+		}
+
+		LPOBJ lpTargetObj = gObjFind(pId);
+
+		if (lpTargetObj == NULL)
+		{
+			return 0;
+		}
+
+		LogAddTD("Use GM Command -> [ %s ]	[ %s ]	[ %s ] / Target : [%s][%s] : %s ",
+			lpObj->Ip_addr, lpObj->AccountID, lpObj->Name, lpTargetObj->AccountID,
+			lpTargetObj->Name, "User Watching");
+
+		char szTemp[256];
+
+		if (this->WatchTargetIndex == lpTargetObj->m_Index)
+		{
+			this->WatchTargetIndex = -1;
+
+			wsprintf(szTemp, "%s : You can not watch yourself", lpTargetObj->Name);	// #translation
+			GCServerMsgStringSend(szTemp, lpObj->m_Index, 1);
+		}
+		else
+		{
+			wsprintf(szTemp, "%s : Watching User", lpTargetObj->Name);	// #translation
+			GCServerMsgStringSend(szTemp, lpObj->m_Index, 1);
+			this->WatchTargetIndex = lpTargetObj->m_Index;
+		}
+	}
+	break;
+
+	case 218:
+	{
+		char Msg[100];
+
+		if ((lpObj->Authority & 2) != 2 && (lpObj->Authority & 0x20) != 0x20)
+		{
+			return 0;
+		}
+
+		pId = this->GetTokenString();
+
+		if (pId == NULL)
+		{
+			return 0;
+		}
+
+		LPOBJ lpTargetObj = gObjFind(pId);
+
+		if (lpTargetObj == NULL)
+		{
+			sprintf(Msg, "%s User Offline", pId);
+			GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
+			return 0;
+		}
+
+		sprintf(Msg, "IP Address: %s", lpTargetObj->Ip_addr);
+		GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
+		sprintf(Msg, "Account: %s | Character: %s", lpTargetObj->AccountID, lpTargetObj->Name);
+		GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
+		sprintf(Msg, "Level: %d | Zen: %d | Resets: %d", lpTargetObj->Level, lpTargetObj->Money, 0); //Need toadd resets
+		GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
+		sprintf(Msg, "Map: %d(%d,%d)", lpTargetObj->MapNumber, lpTargetObj->X, lpTargetObj->Y);
+		GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
+		sprintf(Msg, "[Status][GM] %s get your status!", lpObj->Name);
+		GCServerMsgStringSend(Msg, lpTargetObj->m_Index, 1);
+	}
+	break;
+
+	case 215:	//114:
+	{
+		if ((lpObj->Authority & 2) != 2 && (lpObj->Authority & 0x20) != 0x20)
+		{
+			return 0;
+		}
+
+		pId = this->GetTokenString();
+
+		if (pId == NULL)
+		{
+			return 0;
+		}
+
+		int map;
+		int iX;
+		int iY;
+		LPOBJ lpTargetObj = gObjFind(pId);
+		int iIndex;
+
+		if (lpTargetObj == NULL)
+		{
+			return 0;
+		}
+
+		LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] / Target : [%s][%s] : %s",
+			lpObj->Ip_addr, lpObj->AccountID, lpObj->Name, lpTargetObj->AccountID,
+			lpTargetObj->Name, "User Tracking");
+		map = lpTargetObj->MapNumber;
+		iX = lpTargetObj->X;
+		iY = lpTargetObj->Y;
+		iIndex = lpObj->m_Index;
+
+		if (iIndex >= 0)
+		{
+			gObjTeleport(iIndex, map, iX, iY);
+		}
+	}
+	break;
+
+	case 214:	//113:
+	{
+		if ((lpObj->Authority & 2) != 2)
+		{
+			return 0;
+		}
+
+		LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s",
+			lpObj->Ip_addr, lpObj->AccountID, lpObj->Name,
+			"User Stat (connection)");
+
+		int lc151 = 0;
+		int lc152 = 400;
+		int iTokenNumber = this->GetTokenNumber();
+
+		if (iTokenNumber > 0)
+		{
+			lc151 = iTokenNumber;
+		}
+
+		int iTokenNumber2 = this->GetTokenNumber();
+
+		if (iTokenNumber2 > 0)
+		{
+			lc152 = iTokenNumber2;
+		}
+
+		gObjSendUserStatistic(lpObj->m_Index, lc151, lc152);
+	}
+	break;
+
+	case 100:	//100:
+	{
+		if ((lpObj->AuthorityCode & 4) != 4)
+		{
+			return 0;
+		}
+
+		pId = this->GetTokenString();
+
+		if (pId == NULL)
+		{
+			return 0;
+		}
+
+		int iTargetIndex = gObjGetIndex(pId);
+
+
+		if (iTargetIndex >= 0)
+		{
+			LPOBJ lpTargetObj = gObjFind(pId);
+
+			if (lpTargetObj == NULL)
 			{
-				if ( (lpObj->Authority & 2) != 2 && (lpObj->Authority & 0x20) != 0x20 )
-				{
-					return 0;
-				}
-
-				LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s",
-					lpObj->Ip_addr, lpObj->AccountID, lpObj->Name, "FIRECRACK.");
-				int x = lpObj->X;
-				int y = lpObj->Y;
-				PMSG_SERVERCMD pMsg;
-
-				PHeadSubSetB((LPBYTE)&pMsg,0xF3,0x40, sizeof(pMsg));
-				pMsg.CmdType = 0;
-
-				for ( int i=0;i<15;i++)
-				{
-					pMsg.X = x+(rand() % 5)*2 - 4;
-					pMsg.Y = y+(rand() % 5)*2 - 4;
-					MsgSendV2(lpObj,(UCHAR*)&pMsg, sizeof(pMsg));
-					::DataSend(lpObj->m_Index ,(UCHAR*)&pMsg, sizeof(pMsg));
-				}
+				return 0;
 			}
-			break;
 
-		case 216:	//115:
+			LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] / Target : [%s][%s] : %s",
+				lpObj->Ip_addr, lpObj->AccountID, lpObj->Name, lpTargetObj->AccountID,
+				lpTargetObj->Name, "User Disconnect");
+			LogAdd(lMsg.Get(MSGGET(1, 191)), pId);
+			CloseClient(iTargetIndex);
+		}
+	}
+	break;
+
+	case 112:	//108:
+	{
+		if ((lpObj->AuthorityCode & 4) != 4)
+		{
+			return 0;
+		}
+
+		LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s",
+			lpObj->Ip_addr, lpObj->AccountID, lpObj->Name,
+			"Guild Disconnect");
+
+		pId = this->GetTokenString();
+
+		if (pId == NULL)
+		{
+			return 0;
+		}
+
+		_GUILD_INFO_STRUCT * lpGuild = Guild.SearchGuild(pId);
+		int iIndex;
+
+		if (lpGuild != NULL)
+		{
+			for (int i = 0; i < MAX_USER_GUILD; i++)
 			{
-				if ( (lpObj->Authority & 2) != 2 && (lpObj->Authority & 0x20) != 0x20 )
+				if (lpGuild->Index[i] >= 0)
 				{
-					return 0;
-				}
+					iIndex = lpGuild->Index[i];
 
-				pId = this->GetTokenString();
-
-				if ( pId == NULL )
-				{
-					return 0;
-				}
-
-				LPOBJ lpTargetObj = gObjFind(pId);
-
-				if ( lpTargetObj == NULL )
-				{
-					return 0;
-				}
-
-				LogAddTD("Use GM Command -> [ %s ]	[ %s ]	[ %s ] / Target : [%s][%s] : %s ",
-					lpObj->Ip_addr, lpObj->AccountID, lpObj->Name, lpTargetObj->AccountID,
-					lpTargetObj->Name, "User Watching");
-
-				char szTemp[256];
-
-				if ( this->WatchTargetIndex == lpTargetObj->m_Index )
-				{
-					this->WatchTargetIndex = -1;
-					
-					wsprintf(szTemp, "%s : You can not watch yourself", lpTargetObj->Name);	// #translation
-					GCServerMsgStringSend(szTemp, lpObj->m_Index, 1);
-				}
-				else
-				{
-					wsprintf(szTemp, "%s : Watching User", lpTargetObj->Name);	// #translation
-					GCServerMsgStringSend(szTemp, lpObj->m_Index, 1);
-					this->WatchTargetIndex = lpTargetObj->m_Index;
-				}
-			}
-			break;
-
-		case 215:	//114:
-			{
-				if ( (lpObj->Authority & 2) != 2 && (lpObj->Authority & 0x20) != 0x20 )
-				{
-					return 0;
-				}
-
-				pId = this->GetTokenString();
-
-				if ( pId == NULL )
-				{
-					return 0;
-				}
-
-				int map;
-				int iX;
-				int iY;
-				LPOBJ lpTargetObj = gObjFind(pId);
-				int iIndex;
-
-				if ( lpTargetObj == NULL )
-				{
-					return 0;
-				}
-
-				LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] / Target : [%s][%s] : %s",
-					lpObj->Ip_addr, lpObj->AccountID, lpObj->Name, lpTargetObj->AccountID,
-					lpTargetObj->Name, "User Tracking");
-				map = lpTargetObj->MapNumber;
-				iX = lpTargetObj->X;
-				iY = lpTargetObj->Y;
-				iIndex = lpObj->m_Index;
-
-				if ( iIndex >= 0 )
-				{
-					gObjTeleport(iIndex, map, iX, iY);
-				}
-			}
-			break;
-
-		case 214:	//113:
-			{
-				if ( (lpObj->Authority & 2) != 2 )
-				{
-					return 0;
-				}
-
-				LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s",
-					lpObj->Ip_addr, lpObj->AccountID, lpObj->Name, 
-					"User Stat (connection)");
-
-				int lc151 = 0;
-				int lc152 = 400;
-				int iTokenNumber = this->GetTokenNumber();
-
-				if ( iTokenNumber > 0 )
-				{
-					lc151 = iTokenNumber;
-				}
-
-				int iTokenNumber2 = this->GetTokenNumber();
-
-				if ( iTokenNumber2 > 0 )
-				{
-					lc152 = iTokenNumber2;
-				}
-
-				gObjSendUserStatistic(lpObj->m_Index, lc151, lc152);
-			}
-			break;
-
-		case 100:	//100:
-			{
-				if ( (lpObj->AuthorityCode &4) != 4 )
-				{
-					return 0;
-				}
-
-				pId = this->GetTokenString();
-
-				if ( pId == NULL )
-				{
-					return 0;
-				}
-
-				int iTargetIndex = gObjGetIndex(pId);
-				
-
-				if ( iTargetIndex >= 0 )
-				{
-					LPOBJ lpTargetObj = gObjFind(pId);
-
-					if ( lpTargetObj == NULL )
+					if (iIndex >= 0)
 					{
-						return 0;
+						LogAdd(lMsg.Get(MSGGET(1, 191)), pId);
+						CloseClient(iIndex);
 					}
-
-					LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] / Target : [%s][%s] : %s",
-						lpObj->Ip_addr, lpObj->AccountID, lpObj->Name, lpTargetObj->AccountID,
-						lpTargetObj->Name, "User Disconnect");
-					LogAdd(lMsg.Get(MSGGET(1, 191)), pId);
-					CloseClient(iTargetIndex);
 				}
 			}
-			break;
+		}
+	}
+	break;
 
-		case 112:	//108:
+	case 101:	//101:
+	{
+		pId = this->GetTokenString();
+
+		if (pId != NULL)
+		{
+			int lc165 = -1;
+			int lc166 = 0;
+			int lc167 = 0;
+
+			if (lpObj->Teleport != 0)
 			{
-				if ( (lpObj->AuthorityCode &4) != 4 )
+				GCServerMsgStringSend(lMsg.Get(MSGGET(6, 68)), lpObj->m_Index, 1);
+				return 0;
+			}
+
+			if ((lpObj->m_IfState.use) != 0)
+			{
+				if (lpObj->m_IfState.type == 3)
 				{
-					return 0;
+					lpObj->TargetShopNumber = -1;
+					lpObj->m_IfState.type = 0;
+					lpObj->m_IfState.use = 0;
 				}
+			}
 
-				LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s",
-					lpObj->Ip_addr, lpObj->AccountID, lpObj->Name,
-					"Guild Disconnect");
+			if (lpObj->m_IfState.use > 0)
+			{
+				GCServerMsgStringSend(lMsg.Get(MSGGET(6, 68)), lpObj->m_Index, 1);
+				return 0;
+			}
 
+			if (gObj[aIndex].IsInBattleGround != false)
+			{
+				GCServerMsgStringSend(lMsg.Get(MSGGET(6, 68)), lpObj->m_Index, 1);
+				return 0;
+			}
+
+			if (lpObj->m_PK_Level >= 6)
+			{
+				GCServerMsgStringSend(lMsg.Get(MSGGET(4, 101)), lpObj->m_Index, 1);
+				return 0;
+			}
+
+			gMoveCommand.Move(lpObj, pId);
+		}
+	}
+	break;
+
+	case 108:	//104:
+	{
+		if ((lpObj->AuthorityCode & 8) != 8)
+		{
+			return 0;
+		}
+
+		LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s",
+			lpObj->Ip_addr, lpObj->AccountID, lpObj->Name,
+			"Guild SetPosition");
+
+		pId = this->GetTokenString();
+
+		if (pId == NULL)
+		{
+			return 0;
+		}
+
+		int iTokenNumber1 = this->GetTokenNumber();
+		int iTokenNumber2 = this->GetTokenNumber();
+		int iTokenNumber3 = this->GetTokenNumber();
+		_GUILD_INFO_STRUCT* lpGuild = Guild.SearchGuild(pId);
+		int iIndex;
+
+		if (lpGuild != NULL)
+		{
+			for (int i = 0; i < MAX_USER_GUILD; i++)
+			{
+				if (lpGuild->Index[i] >= 0)
+				{
+					iIndex = lpGuild->Index[i];
+					gObjTeleport(iIndex, iTokenNumber1, iTokenNumber2++, iTokenNumber3);
+				}
+			}
+		}
+	}
+	break;
+
+	case 109:	//105:
+	{
+		if ((lpObj->Authority & 2) == 2)
+		{
+			LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s",
+				lpObj->Ip_addr, lpObj->AccountID, lpObj->Name,
+				"Start BattleSoccer");
+
+			BattleSoccerGoalStart(0);
+		}
+	}
+	break;
+
+	case 110:	//106:
+	{
+		if ((lpObj->Authority & 2) == 2)
+		{
+			LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s",
+				lpObj->Ip_addr, lpObj->AccountID, lpObj->Name,
+				"Stop BattleSoccer");
+
+			BattleSoccerGoalEnd(0);
+		}
+		else
+		{
+			if (gObj[aIndex].lpGuild != NULL)
+			{
+				if (gObj[aIndex].lpGuild->WarType == 1)
+				{
+					strcmp(gObj[aIndex].Name, gObj[aIndex].lpGuild->Names[0]);
+				}
+			}
+		}
+	}
+
+	break;
+
+	case 111:	//107:
+	{
+		if ((lpObj->Authority & 2) == 2)
+		{
+			LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s",
+				lpObj->Ip_addr, lpObj->AccountID, lpObj->Name, "End GuildWar");
+
+			char * szGuild = this->GetTokenString();
+
+			if (szGuild != NULL)
+			{
+				GCManagerGuildWarEnd(szGuild);
+			}
+		}
+		else
+		{
+			if (gObj[aIndex].lpGuild != NULL && gObj[aIndex].lpGuild->lpTargetGuildNode != NULL)
+			{
+				if (strcmp(gObj[aIndex].Name, gObj[aIndex].lpGuild->Names[0]) == 0)
+				{
+					if (gObj[aIndex].lpGuild->BattleGroundIndex >= 0 && gObj[aIndex].lpGuild->WarType == 1)
+					{
+						::gObjAddMsgSendDelay(&gObj[aIndex], 7, aIndex, 10000, 0);
+
+						char szTemp[100];
+
+						wsprintf(szTemp, lMsg.Get(MSGGET(4, 129)), gObj[aIndex].lpGuild->Names[0]);
+						::GCServerMsgStringSendGuild(gObj[aIndex].lpGuild, szTemp, 1);
+						::GCServerMsgStringSendGuild(gObj[aIndex].lpGuild->lpTargetGuildNode, szTemp, 1);
+					}
+				}
+			}
+		}
+	}
+	break;
+
+	case 104:	//102:
+	{
+		if ((lpObj->AuthorityCode & 0x20) != 0x20)
+		{
+			return FALSE;
+		}
+
+		LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
+			lpObj->Name, "Ban Chatting");
+
+		pId = this->GetTokenString();
+
+		if (pId == NULL)
+		{
+			return FALSE;
+		}
+
+		int Index = ::gObjGetIndex(pId);
+
+		if (Index >= 0)
+		{
+			gObj[Index].Penalty |= 2;
+		}
+
+	}
+	break;
+
+	case 106:	//103:
+	{
+		if ((lpObj->AuthorityCode & 32) != 32)
+		{
+			return FALSE;
+		}
+
+		LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
+			lpObj->Name, "Free Ban-Chatting");
+
+		pId = this->GetTokenString();
+
+		if (pId == NULL)
+		{
+			return FALSE;
+		}
+
+		int Index = ::gObjGetIndex(pId);
+
+		if (Index >= 0)
+		{
+			gObj[Index].Penalty &= ~2;
+		}
+	}
+	break;
+
+	case 200:	//109:
+	{
+		pId = this->GetTokenString();
+
+		if (pId != NULL)
+		{
+			if (strlen(pId) >= 1)
+			{
+				::GCGuildWarRequestResult(pId, aIndex, 0);
+			}
+		}
+	}
+
+	break;
+
+	case 202:	//111:
+	{
+		if ((lpObj->Authority & 2) == 2)
+		{
+			LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
+				lpObj->Name, "Set GuildWar");
+
+			pId = this->GetTokenString();
+
+			if (pId != NULL)
+			{
+				char * Rival = this->GetTokenString();
+
+				if (Rival != NULL)
+				{
+					if (strlen(pId) >= 1)
+					{
+						if (strlen(Rival) >= 1)
+						{
+							::GCManagerGuildWarSet(pId, Rival, 1);
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			if (Configs.gEnableBattleSoccer != FALSE)
+			{
 				pId = this->GetTokenString();
 
-				if ( pId == NULL )
+				if (pId != NULL)
 				{
-					return 0;
-				}
-
-				_GUILD_INFO_STRUCT * lpGuild = Guild.SearchGuild(pId);
-				int iIndex;
-
-				if ( lpGuild != NULL )
-				{
-					for ( int i=0;i<MAX_USER_GUILD ; i++ )
+					if (strlen(pId) >= 1)
 					{
-						if ( lpGuild->Index[i] >= 0 )
-						{
-							iIndex = lpGuild->Index[i];
+						::GCGuildWarRequestResult(pId, aIndex, 1);
+					}
+				}
+			}
+		}
+	}
 
-							if ( iIndex >= 0 )
+	break;
+
+	case 201:	//110:
+	{
+		//	gObjBillRequest(&gObj[aIndex]);
+	}
+	break;
+
+	case 203:	//112:
+	{
+		pId = this->GetTokenString();
+
+		if (pId != NULL)
+		{
+			BOOL bState;
+
+			if (strcmp(pId, "on") == 0)
+			{
+				bState = TRUE;
+			}
+			else if (strcmp(pId, "off") == 0)
+			{
+				bState = FALSE;
+			}
+
+			if (bState >= FALSE && bState <= TRUE)
+			{
+				::gObjSetTradeOption(aIndex, bState);
+				::gObjSetDuelOption(aIndex, bState);
+			}
+		}
+	}
+	break;
+	case 320:	//117:
+	{
+		if ((lpObj->Authority & 2) != 2)
+		{
+			return FALSE;
+		}
+
+		LogAddTD("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
+			lpObj->Name, "BOSS HP STATUS");	// #translation Require Translation
+
+		for (int n = 0; n < MAX_VIEWPORT; n++)
+		{
+			if (lpObj->VpPlayer[n].state != 0)
+			{
+				if (lpObj->VpPlayer[n].type == OBJ_MONSTER)
+				{
+					if (lpObj->VpPlayer[n].number >= 0)
+					{
+						LPOBJ lpTarget = &gObj[lpObj->VpPlayer[n].number];
+
+						if (lpTarget->Class == 275)
+						{
+							TNotice pNotice(1);
+
+							pNotice.SendToUser(lpObj->m_Index, "Kundun HP = %7.0f / %7.0f", lpTarget->Life, lpTarget->MaxLife); //Require Translation
+							pNotice.SendToUser(lpObj->m_Index, "Kundun HP time = %d Recover = %d Recovery Time = %d", Configs.giKundunRefillHPSec, Configs.giKundunRefillHP, Configs.giKundunRefillHPTime);	// Require Translation
+						}
+					}
+				}
+			}
+		}
+
+	}
+	break;
+
+	case 321:	//118:
+	{
+		if ((lpObj->Authority & 2) != 2)
+		{
+			return FALSE;
+		}
+
+		LogAddTD("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
+			lpObj->Name, "BOSS HP CHANGE");	// Require Translation
+
+		int iLife = this->GetTokenNumber();
+
+		for (int n = 0; n < MAX_VIEWPORT; n++)
+		{
+			if (lpObj->VpPlayer[n].state != FALSE)
+			{
+				if (lpObj->VpPlayer[n].type == OBJ_MONSTER)
+				{
+					if (lpObj->VpPlayer[n].number >= 0)
+					{
+						LPOBJ lpTarget = &gObj[lpObj->VpPlayer[n].number];
+
+						if (lpTarget->Class == 275)
+						{
+							if (iLife <= 5000)
 							{
-								LogAdd(lMsg.Get(MSGGET(1, 191)), pId);
-								CloseClient(iIndex);
+								iLife = 5000;
 							}
-						}
-					}
-				}
-			}
-			break;
 
-		case 101:	//101:
-			{
-					pId = this->GetTokenString();
-
-					if ( pId != NULL )
-					{
-						int lc165 = -1;
-						int lc166 = 0;
-						int lc167 = 0;
-
-						if ( lpObj->Teleport != 0 )
-						{
-							GCServerMsgStringSend(lMsg.Get(MSGGET(6, 68)), lpObj->m_Index, 1);
-							return 0;
-						}
-
-						if ( (lpObj->m_IfState.use) != 0 )
-						{
-							if ( lpObj->m_IfState.type  == 3 )
+							if (iLife > lpTarget->MaxLife)
 							{
-								lpObj->TargetShopNumber = -1;
-								lpObj->m_IfState.type = 0;
-								lpObj->m_IfState.use = 0;
+								iLife = lpTarget->MaxLife;
 							}
-						}
 
-						if ( lpObj->m_IfState.use > 0 )
-						{
-							GCServerMsgStringSend(lMsg.Get(MSGGET(6, 68)), lpObj->m_Index, 1);
-							return 0;
-						}
+							lpTarget->Life = iLife;
 
-						if ( gObj[aIndex].IsInBattleGround != false )
-						{
-							GCServerMsgStringSend(lMsg.Get(MSGGET(6, 68)), lpObj->m_Index, 1);
-							return 0;
-						}
+							TNotice pNotice(1);
 
-						if ( lpObj->m_PK_Level >= 6 )
-						{
-							GCServerMsgStringSend(lMsg.Get(MSGGET(4, 101)), lpObj->m_Index, 1);
-							return 0;
-						}
-
-						gMoveCommand.Move(lpObj, pId);
-					}
-				}
-			break;
-
-		case 108:	//104:
-			{
-				if ( (lpObj->AuthorityCode &8)!= 8 )
-				{
-					return 0;
-				}
-
-				LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s",
-					lpObj->Ip_addr, lpObj->AccountID, lpObj->Name, 
-					"Guild SetPosition");
-
-				pId = this->GetTokenString();
-
-				if ( pId == NULL )
-				{
-					return 0;
-				}
-
-				int iTokenNumber1 = this->GetTokenNumber();
-				int iTokenNumber2 = this->GetTokenNumber();
-				int iTokenNumber3 = this->GetTokenNumber();
-				_GUILD_INFO_STRUCT* lpGuild = Guild.SearchGuild(pId);
-				int iIndex;
-			
-				if ( lpGuild != NULL )
-				{
-					for ( int i=0;i<MAX_USER_GUILD;i++)
-					{
-						if (lpGuild->Index[i] >= 0 )
-						{
-							iIndex = lpGuild->Index[i];
-							gObjTeleport(iIndex, iTokenNumber1, iTokenNumber2++, iTokenNumber3);
+							pNotice.SendToUser(lpObj->m_Index, "BOSS HP = %7.0f / %7.0f", lpTarget->Life, lpTarget->MaxLife); //Require Translation
 						}
 					}
 				}
 			}
-			break;
-
-		case 109:	//105:
-			{
-				if ( (lpObj->Authority &2)== 2 )
-				{
-					LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s",
-						lpObj->Ip_addr, lpObj->AccountID, lpObj->Name,
-						"Start BattleSoccer");
-
-					BattleSoccerGoalStart(0);
-				}
-			}
-			break;
-
-		case 110:	//106:
-			{
-				if ( (lpObj->Authority &2) == 2 )
-				{
-					LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s",
-						lpObj->Ip_addr, lpObj->AccountID, lpObj->Name,
-						"Stop BattleSoccer");
-
-					BattleSoccerGoalEnd(0);
-				}
-				else
-				{
-					if ( gObj[aIndex].lpGuild != NULL )
-					{
-						if (gObj[aIndex].lpGuild->WarType == 1 )
-						{
-							strcmp(gObj[aIndex].Name, gObj[aIndex].lpGuild->Names[0] );
-						}
-					}
-				}
-			}
-
-			break;
-
-		case 111:	//107:
-			{
-				if ( (lpObj->Authority & 2) == 2 )
-				{
-					LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s",
-						lpObj->Ip_addr, lpObj->AccountID, lpObj->Name, "End GuildWar");
-
-					char * szGuild = this->GetTokenString();
-
-					if ( szGuild != NULL )
-					{
-						GCManagerGuildWarEnd(szGuild);
-					}
-				}
-				else
-				{
-					if ( gObj[aIndex].lpGuild != NULL && gObj[aIndex].lpGuild->lpTargetGuildNode != NULL)
-					{
-						if ( strcmp( gObj[aIndex].Name, gObj[aIndex].lpGuild->Names[0] ) ==  0)
-						{
-							if ( gObj[aIndex].lpGuild->BattleGroundIndex >= 0 && gObj[aIndex].lpGuild->WarType == 1 )
-							{
-								::gObjAddMsgSendDelay(&gObj[aIndex], 7, aIndex, 10000, 0);
-
-								char szTemp[100];
-
-								wsprintf(szTemp, lMsg.Get(MSGGET(4, 129)), gObj[aIndex].lpGuild->Names[0] );
-								::GCServerMsgStringSendGuild(gObj[aIndex].lpGuild, szTemp, 1);
-								::GCServerMsgStringSendGuild(gObj[aIndex].lpGuild->lpTargetGuildNode, szTemp, 1);
-							}
-						}
-					}
-				}
-			}
-			break;
-
-		case 104:	//102:
-			{
-				if ( (lpObj->AuthorityCode&0x20 ) != 0x20 )
-				{
-					return FALSE;
-				}
-
-				LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
-					lpObj->Name, "Ban Chatting");
-
-				pId = this->GetTokenString();
-
-				if ( pId == NULL )
-				{
-					return FALSE;
-				}
-
-				int Index = ::gObjGetIndex(pId);
-
-				if ( Index >= 0 )
-				{
-					gObj[Index].Penalty |= 2;
-				}
-
-			}
-			break;
-
-		case 106:	//103:
-			{
-				if ( (lpObj->AuthorityCode & 32 ) != 32 )
-				{
-					return FALSE;
-				}
-
-				LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
-					lpObj->Name, "Free Ban-Chatting");
-
-				pId = this->GetTokenString();
-
-				if ( pId == NULL )
-				{
-					return FALSE;
-				}
-
-				int Index = ::gObjGetIndex(pId);
-
-				if ( Index >= 0 )
-				{
-					gObj[Index].Penalty &= ~2;
-				}
-			}
-			break;
-
-		case 200:	//109:
-			{
-				pId = this->GetTokenString();
-
-				if ( pId != NULL )
-				{
-					if ( strlen(pId) >= 1 )
-					{
-						::GCGuildWarRequestResult(pId, aIndex, 0);
-					}
-				}
-			}
-
-			break;
-
-		case 202:	//111:
-			{
-				if ( (lpObj->Authority & 2 ) == 2 )
-				{
-					LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
-						lpObj->Name, "Set GuildWar");
-		
-					pId = this->GetTokenString();
-
-					if ( pId != NULL )
-					{
-						char * Rival = this->GetTokenString();
-
-						if ( Rival != NULL )
-						{
-							if ( strlen(pId) >= 1 )
-							{
-								if ( strlen(Rival) >= 1 )
-								{
-									::GCManagerGuildWarSet(pId, Rival, 1);
-								}
-							}
-						}
-					}
-				}
-				else
-				{
-					if (Configs.gEnableBattleSoccer != FALSE)
-					{
-						pId = this->GetTokenString();
-
-						if ( pId != NULL )
-						{
-							if ( strlen(pId) >= 1 )
-							{
-								::GCGuildWarRequestResult(pId, aIndex, 1);
-							}
-						}
-					}
-				}
-			}
-
-			break;
-
-		case 201:	//110:
-			{
-			//	gObjBillRequest(&gObj[aIndex]);
-			}
-			break;
-
-		case 203:	//112:
-			{
-				pId = this->GetTokenString();
-
-				if ( pId != NULL )
-				{
-					BOOL bState;
-
-					if ( strcmp(pId, "on" ) == 0 )
-					{
-						bState = TRUE;
-					}
-					else if ( strcmp(pId, "off") == 0 )
-					{
-						bState = FALSE;
-					}
-
-					if ( bState >= FALSE && bState <= TRUE )
-					{
-						::gObjSetTradeOption(aIndex, bState);
-						::gObjSetDuelOption(aIndex, bState);
-					}
-				}
-			}
-			break;
+		}
+	}
+	break;
 #pragma message ("Translate start here!")
-		case 320:	//117:
-			{
-				if ( (lpObj->Authority &2) != 2 )
-				{
-					return FALSE;
-				}
+	case 322:	//119:
+	{
+		if ((lpObj->Authority & 2) != 2)
+		{
+			return FALSE;
+		}
 
-				LogAddTD("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
-					lpObj->Name, "BOSS HP STATUS");	// #translation Require Translation
-				KUNDUN_GM_LOG.Output("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
-					lpObj->Name, "BOSS HP STATUS");	// #translation  Require Translation
+		LogAddTD("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
+			lpObj->Name, "ÄïµÐHPÈ¸º¹·®¼³Á¤");	// Require Translation
 
-				for ( int n=0;n<MAX_VIEWPORT;n++)
-				{
-					if ( lpObj->VpPlayer[n].state != 0 )
-					{
-						if ( lpObj->VpPlayer[n].type == OBJ_MONSTER )
-						{
-							if ( lpObj->VpPlayer[n].number >= 0 )
-							{
-								LPOBJ lpTarget = &gObj[lpObj->VpPlayer[n].number];
+		int RefillHP = this->GetTokenNumber();
 
-								if ( lpTarget->Class == 275 )
-								{
-									TNotice pNotice(1);
+		if (RefillHP <= 0 || RefillHP > 5000000)
+		{
+			return 0;
+		}
 
-									pNotice.SendToUser(lpObj->m_Index, "Kundun HP = %7.0f / %7.0f", lpTarget->Life, lpTarget->MaxLife); //Require Translation
-									pNotice.SendToUser(lpObj->m_Index, "Kundun HP time = %d Recover = %d Recovery Time = %d", Configs.giKundunRefillHPSec, Configs.giKundunRefillHP, Configs.giKundunRefillHPTime);	// Require Translation
-								}
-							}
-						}
-					}
-				}
+		Configs.giKundunRefillHP = RefillHP;
 
-			}
-			break;
+		TNotice pNotice(0);
 
-		case 321:	//118:
-			{
-				if ( (lpObj->Authority &2 ) != 2 )
-				{
-					return FALSE;
-				}
+		pNotice.SendToUser(lpObj->m_Index, "ÄïµÐ HP ÃÊ´çÈ¸º¹·® = %d È¸º¹·® = %d È¸º¹½Ã°£ = %d", Configs.giKundunRefillHPSec, Configs.giKundunRefillHP, Configs.giKundunRefillHPTime);	// Require Translation
 
-				LogAddTD("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
-					lpObj->Name, "BOSS HP CHANGE");	// Require Translation
-				KUNDUN_GM_LOG.Output("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
-					lpObj->Name, "BOSS HP CHANGE");	// Require Translation
+	}
 
-				int iLife = this->GetTokenNumber();
+	break;
 
-				for ( int n=0;n<MAX_VIEWPORT;n++)
-				{
-					if ( lpObj->VpPlayer[n].state != FALSE )
-					{
-						if ( lpObj->VpPlayer[n].type == OBJ_MONSTER )
-						{
-							if ( lpObj->VpPlayer[n].number >= 0 )
-							{
-								LPOBJ lpTarget = &gObj[lpObj->VpPlayer[n].number];
+	case 323:	//120:
+	{
+		if ((lpObj->Authority & 2) != 2)
+		{
+			return FALSE;
+		}
 
-								if ( lpTarget->Class == 275 )
-								{
-									if  ( iLife <= 5000 )
-									{
-										iLife = 5000 ;
-									}
+		LogAddTD("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
+			lpObj->Name, "ÄïµÐHPÃÊ´çÈ¸º¹·®¼³Á¤");	// Require Translation
 
-									if ( iLife > lpTarget->MaxLife )
-									{
-										iLife = lpTarget->MaxLife;
-									}
+		int RefillHPSec = this->GetTokenNumber();
 
-									lpTarget->Life = iLife;
-								
-									TNotice pNotice(1);
+		if (RefillHPSec <= 0 || RefillHPSec > 10000)
+		{
+			return 0;
+		}
 
-									pNotice.SendToUser(lpObj->m_Index, "BOSS HP = %7.0f / %7.0f", lpTarget->Life, lpTarget->MaxLife); //Require Translation
-								}
-							}
-						}
-					}
-				}
-			}
-			break;
+		Configs.giKundunRefillHPSec = RefillHPSec;
 
-		case 322:	//119:
-			{
-				if ( (lpObj->Authority &2 ) != 2 )
-				{
-					return FALSE;
-				}
+		TNotice pNotice(0);
 
-				LogAddTD("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
-					lpObj->Name, "ÄïµÐHPÈ¸º¹·®¼³Á¤");	// Require Translation
-				KUNDUN_GM_LOG.Output("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
-					lpObj->Name, "ÄïµÐHPÈ¸º¹·®¼³Á¤");	// Require Translation
+		pNotice.SendToUser(lpObj->m_Index, "ÄïµÐ HP ÃÊ´çÈ¸º¹·® = %d È¸º¹·® = %d È¸º¹½Ã°£ = %d",
+			Configs.giKundunRefillHPSec, Configs.giKundunRefillHP, Configs.giKundunRefillHPTime);	// Require Translation
 
-				int RefillHP = this->GetTokenNumber();
+	}
 
-				if ( RefillHP <= 0 || RefillHP > 5000000 )
-				{
-					return 0;
-				}
+	break;
 
-				Configs.giKundunRefillHP = RefillHP;
+	case 324:	//121:
+	{
+		if ((lpObj->Authority & 2) != 2)
+		{
+			return FALSE;
+		}
 
-				TNotice pNotice(0);
+		LogAddTD("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
+			lpObj->Name, "ÄïµÐHPÈ¸º¹½Ã°£¼³Á¤");	// Require Translation
 
-				pNotice.SendToUser(lpObj->m_Index, "ÄïµÐ HP ÃÊ´çÈ¸º¹·® = %d È¸º¹·® = %d È¸º¹½Ã°£ = %d", Configs.giKundunRefillHPSec, Configs.giKundunRefillHP, Configs.giKundunRefillHPTime);	// Require Translation
+		int RefillHPTime = this->GetTokenNumber();
 
-			}
+		if (RefillHPTime < 0 || RefillHPTime > 60000)
+		{
+			return 0;
+		}
 
-			break;
+		Configs.giKundunRefillHPTime = RefillHPTime;
 
-		case 323:	//120:
-			{
-				if ( (lpObj->Authority &2 ) != 2 )
-				{
-					return FALSE;
-				}
+		TNotice pNotice(0);
 
-				LogAddTD("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
-					lpObj->Name, "ÄïµÐHPÃÊ´çÈ¸º¹·®¼³Á¤");	// Require Translation
-				KUNDUN_GM_LOG.Output("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
-					lpObj->Name, "ÄïµÐHPÃÊ´çÈ¸º¹·®¼³Á¤");	// Require Translation
-
-				int RefillHPSec = this->GetTokenNumber();
-
-				if ( RefillHPSec <= 0 || RefillHPSec > 10000 )
-				{
-					return 0;
-				}
-
-				Configs.giKundunRefillHPSec = RefillHPSec;
-
-				TNotice pNotice(0);
-
-				pNotice.SendToUser(lpObj->m_Index, "ÄïµÐ HP ÃÊ´çÈ¸º¹·® = %d È¸º¹·® = %d È¸º¹½Ã°£ = %d",
-					Configs.giKundunRefillHPSec, Configs.giKundunRefillHP, Configs.giKundunRefillHPTime);	// Require Translation
-
-			}
-
-			break;
-
-		case 324:	//121:
-			{
-				if ( (lpObj->Authority &2 ) != 2 )
-				{
-					return FALSE;
-				}
-
-				LogAddTD("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
-					lpObj->Name, "ÄïµÐHPÈ¸º¹½Ã°£¼³Á¤");	// Require Translation
-				KUNDUN_GM_LOG.Output("[KUNDUN] Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
-					lpObj->Name, "ÄïµÐHPÈ¸º¹½Ã°£¼³Á¤");	// Require Translation
-
-				int RefillHPTime = this->GetTokenNumber();
-
-				if ( RefillHPTime < 0 || RefillHPTime > 60000 )
-				{
-					return 0;
-				}
-
-				Configs.giKundunRefillHPTime = RefillHPTime;
-
-				TNotice pNotice(0);
-
-				pNotice.SendToUser(lpObj->m_Index, "ÄïµÐ HP ÃÊ´çÈ¸º¹·® = %d È¸º¹·® = %d È¸º¹½Ã°£ = %d", Configs.giKundunRefillHPSec, Configs.giKundunRefillHP, Configs.giKundunRefillHPTime);	// Require Translation
+		pNotice.SendToUser(lpObj->m_Index, "ÄïµÐ HP ÃÊ´çÈ¸º¹·® = %d È¸º¹·® = %d È¸º¹½Ã°£ = %d", Configs.giKundunRefillHPSec, Configs.giKundunRefillHP, Configs.giKundunRefillHPTime);	// Require Translation
 #pragma message ("Translate end here")
-			}
-			break;
-		case 369:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 0);
-			break;
-		case 370:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 1);
-			break;
-		case 371:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 2);
-			break;
-		case 372:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 3);
-			break;
-		case 373:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 4);
-			break;
-		case 374:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 5);
-			break;
-		case 375:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 6);
-			break;
-		case 376:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 7);
-			break;
-		case 377:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 8);
-			break;
-		case 378:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 9);
-			break;
-		case 379:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 10);
-			break;
-		case 380:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 11);
-			break;
-		case 381:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 12);
-			break;
-		case 382:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 13);
-			break;
-		case 383:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 14);
-			break;
-		case 384:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 15);
-			break;
-		case 385:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 16);
-			break;
-		case 386:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 17);
-			break;
-		case 387:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 18);
-			break;
-		case 388:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 19);
-			break;
-		case 389:
-			g_Kanturu.OperateGmCommand(lpObj->m_Index, 20);
-			break;
+	}
+	break;
+	case 369:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 0);
+		break;
+	case 370:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 1);
+		break;
+	case 371:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 2);
+		break;
+	case 372:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 3);
+		break;
+	case 373:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 4);
+		break;
+	case 374:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 5);
+		break;
+	case 375:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 6);
+		break;
+	case 376:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 7);
+		break;
+	case 377:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 8);
+		break;
+	case 378:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 9);
+		break;
+	case 379:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 10);
+		break;
+	case 380:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 11);
+		break;
+	case 381:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 12);
+		break;
+	case 382:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 13);
+		break;
+	case 383:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 14);
+		break;
+	case 384:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 15);
+		break;
+	case 385:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 16);
+		break;
+	case 386:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 17);
+		break;
+	case 387:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 18);
+		break;
+	case 388:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 19);
+		break;
+	case 389:
+		g_Kanturu.OperateGmCommand(lpObj->m_Index, 20);
+		break;
+	
 		case 390:
 		{
 			if ((lpObj->Authority & 2) != 2 && (lpObj->Authority & 0x20) != 0x20)
@@ -1076,7 +1103,9 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			int Item = ItemGetNumberMake( type, index);
 			ItemSerialCreateSend(aIndex, gObj[aIndex].MapNumber, gObj[aIndex].X, gObj[aIndex].Y, Item,ItemLevel,0,ItemSkill,ItemLuck,ItemOpt,-1,ItemExc,ItemAncient);
 			}
+
 		}
+		break;
 		case 391:
 		{
 			int Level = 50;
@@ -1112,7 +1141,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			::DataSend(lpObj->m_Index,Packet,Len);
 			free(Packet);*/
 
-			ServerMsgSend(0,1,lpObj->Name,"[POST] %s",(char*)szCmd+strlen("/post"));
+			ServerMsgSend(0,1,lpObj->Name,"[POST]%s",(char*)szCmd+strlen("/post"));
 					
 			char timeStr[9];
 			_strtime(timeStr);
@@ -1121,6 +1150,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			LogAddC(3,iPostLog);
 			return TRUE;
 		}
+		break;
 		case 392:
 		{
 			if(lpObj->m_PK_Level <= 3) 
@@ -1299,30 +1329,6 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			return TRUE;
 		}
 		break;
-
-		case 398:
-		{
-			//Unfinished Code 
-			//need to add the target infos 
-			char *chatmsg;
-			char Target[11];
-			sscanf(chatmsg, "%s", &Target);
-			int Index = gObjGetIndex(Target);
-
-			char Msg[100];
-			sprintf(Msg, "IP Address: %s", gObj[Index].Ip_addr);
-			GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
-			sprintf(Msg, "Account: %s | Character: %s", gObj[Index].AccountID, gObj[Index].Name);
-			GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
-			sprintf(Msg, "Level: %d | Zen: %d | Resets: %d", gObj[Index].Level, gObj[Index].Money, 0); //Need toadd resets
-			GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
-			sprintf(Msg, "Map: %d(%d,%d)", gObj[Index].MapNumber, gObj[Index].MapNumber, gObj[Index].X, gObj[Index].Y);
-			GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
-			sprintf(Msg, "[Status][GM] %s get your status!", lpObj->Name);
-			GCServerMsgStringSend(Msg, Index, 1);
-			return TRUE;
-		}
-			break;
 	}
 	return 0;
 }

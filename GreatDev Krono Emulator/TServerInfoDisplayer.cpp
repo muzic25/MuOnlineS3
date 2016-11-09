@@ -47,7 +47,7 @@ TServerInfoDisplayer::~TServerInfoDisplayer()
 
 void TServerInfoDisplayer::InitGDIObject()
 {
-	this->m_hFont = CreateFont(72, 0, 0, 0, FW_THIN, FALSE, FALSE, FALSE, 
+	this->m_hFont = CreateFontA(60, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
 		OEM_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
 		DEFAULT_PITCH|FF_DONTCARE, "System");
 
@@ -212,7 +212,7 @@ void TServerInfoDisplayer::PaintAllInfo(HWND hWnd, int iTopLeftX, int iTopLeftY)
 	HFONT pOldFont = (HFONT)SelectObject(hDC, this->m_hFont);
 	SetTextColor(hDC, RGB(250, 250, 250));
 
-	TextOut(hDC, 60, 20, ServerTypeText[0], strlen(ServerTypeText[0]));
+	TextOut(hDC, 100, 25, ServerTypeText[0], strlen(ServerTypeText[0]));
 	SelectObject(hDC, pOldFont);
 	SetBkMode(hDC, iOldBkMode);
 	ReleaseDC(hWnd, hDC);

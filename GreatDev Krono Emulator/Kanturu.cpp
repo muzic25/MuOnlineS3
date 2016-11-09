@@ -687,8 +687,8 @@ void CKanturu::OperateGmCommand(int iUserIndex, int iCommand)
 	}
 }
 
-#include "LogToFile.h"
-CLogToFile KANTURU_TEST_LOG("KANTURU_TEST_LOG", ".\\Log", TRUE);
+//#include "LogToFile.h"
+//CLogToFile KANTURU_TEST_LOG("KANTURU_TEST_LOG", ".\\Log", TRUE);
 
 
 
@@ -715,8 +715,8 @@ void CKanturu::UserMonsterCountCheck()
 		}
 	}
 
-	KANTURU_TEST_LOG.Output("[ KANTURU ][ Debug ] 2. All User Check:%d/(Die:%d)", iUserCount_Live, iUserCount_Die);
-	KANTURU_TEST_LOG.Output("[ KANTURU ][ Debug ] 3. MonsterMng Count:%d", g_KanturuMonsterMng.GetAliveMonsterCount());
+	//KANTURU_TEST_LOG.Output("[ KANTURU ][ Debug ] 2. All User Check:%d/(Die:%d)", iUserCount_Live, iUserCount_Die);
+	//KANTURU_TEST_LOG.Output("[ KANTURU ][ Debug ] 3. MonsterMng Count:%d", g_KanturuMonsterMng.GetAliveMonsterCount());
 
 	int iMonsterCount=0;
 
@@ -732,14 +732,14 @@ void CKanturu::UserMonsterCountCheck()
 			{
 				iMonsterCount++;
 
-				KANTURU_TEST_LOG.Output("[ KANTURU ][ Debug ] 4. Monster Info %s(%d/ObjIndex:%d) [%d]%d-%d HP:%0.1f IsAlive:%d Connected:%d State:%d ActState:Attack(%d)/Move(%d) DieRegen:%d",
+			/*	KANTURU_TEST_LOG.Output("[ KANTURU ][ Debug ] 4. Monster Info %s(%d/ObjIndex:%d) [%d]%d-%d HP:%0.1f IsAlive:%d Connected:%d State:%d ActState:Attack(%d)/Move(%d) DieRegen:%d",
 					gObj[iAllMonsterCount].Name, gObj[iAllMonsterCount].Class,
 					gObj[iAllMonsterCount].m_Index, gObj[iAllMonsterCount].MapNumber,
 					gObj[iAllMonsterCount].X, gObj[iAllMonsterCount].Y,
 					gObj[iAllMonsterCount].Life, gObj[iAllMonsterCount].Live,
 					gObj[iAllMonsterCount].Connected, gObj[iAllMonsterCount].m_State,
 					gObj[iAllMonsterCount].m_ActState.Attack, gObj[iAllMonsterCount].m_ActState.Move,
-					gObj[iAllMonsterCount].DieRegen);
+					gObj[iAllMonsterCount].DieRegen); */
 			}
 		}
 	}

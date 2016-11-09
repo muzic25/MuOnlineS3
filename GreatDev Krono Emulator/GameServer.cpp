@@ -156,7 +156,7 @@ BOOL GameServerStart(void)
 
 	CreateGIocp(Configs.GameServerPort);
 
-	SetTimer(ghWnd, WM_LOG_PAINT, 2000, NULL);
+	SetTimer(ghWnd, WM_LOG_PAINT, 500, NULL);
 	SetTimer(ghWnd, WM_FIRST_MSG_PROCESS, 1000, NULL);
 
 	SetTimer(ghWnd, WM_SET_DATE, 60000, NULL);
@@ -205,8 +205,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
 	HWND hWnd;
 	hInst = hInstance;
+	DWORD       dwStyle;                // Window Style
 
-	hWnd = CreateWindowEx(0, szWindowClass, szTitle, WS_OVERLAPPEDWINDOW, 
+	dwStyle = (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX);
+	
+	hWnd = CreateWindowEx(0, szWindowClass, szTitle, dwStyle,
 		CW_USEDEFAULT, 0, CW_USEDEFAULT,0, NULL, NULL, hInstance, NULL);
 	
 	if (hWnd == 0) return 0;

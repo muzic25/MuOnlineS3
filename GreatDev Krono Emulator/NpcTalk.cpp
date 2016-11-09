@@ -1501,8 +1501,7 @@ void CGNpcLukeTheHelperRecv(int aIndex) // OK
 		return;
 	}
 
-	//this->GDNpcLeoTheHelperSend(aIndex);
-
+	GDNpcLukeTheHelperSend(aIndex);
 }
 
 void CGNpcLeoTheHelperRecv(int aIndex) // OK
@@ -1514,6 +1513,111 @@ void CGNpcLeoTheHelperRecv(int aIndex) // OK
 		return;
 	}
 
-	//this->GDNpcLeoTheHelperSend(aIndex);
+	GDNpcLeoTheHelperSend(aIndex);
+}
 
+void DGNpcLeoTheHelperRecv(SDHP_NPC_LEO_THE_HELPER_RECV* lpMsg) // OK
+{
+	if (gObjIsAccontConnect(lpMsg->index, lpMsg->account) == 0)
+	{
+		LogAdd("[DGNpcLeoTheHelperRecv] Invalid Account [%d](%s)", lpMsg->index, lpMsg->account);
+		CloseClient(lpMsg->index);
+		return;
+	}
+
+	LPOBJ lpObj = &gObj[lpMsg->index];
+
+	if (lpMsg->status >= 1)
+	{
+		ChatSend(lpObj, "I will gived you a reward item!");
+		GCServerCmd(lpObj->m_Index,15,0,0);
+		return;
+	}
+		  
+	//gItemBagManager.DropItemBySpecialValue(ITEM_BAG_LEO_THE_HELPER,lpObj,lpObj->Map,lpObj->X,lpObj->Y);
+	//NewYearLuckMonsterItemBagOpen(lpObj, lpObj->MapNumber, lpObj->X, lpObj->Y);
+
+	GDNpcLeoTheHelperSaveSend(lpObj->m_Index, 1);
+}
+
+void GDNpcLeoTheHelperSend(int aIndex) // OK
+{
+	if (gObjIsAccontConnect(aIndex, gObj[aIndex].AccountID) == 0)
+	{
+		return;
+	}
+
+	SDHP_NPC_LEO_THE_HELPER_SEND pMsg;
+
+	PHeadSubSetB((LPBYTE)&pMsg, 0x0E, 0x00, sizeof(SDHP_NPC_LEO_THE_HELPER_SEND));
+	pMsg.index = aIndex;
+	memcpy(pMsg.account, gObj[aIndex].AccountID, sizeof(pMsg.account));
+	memcpy(pMsg.name, gObj[aIndex].Name, sizeof(pMsg.name));
+	cDBSMng.Send((char*)&pMsg, sizeof(SDHP_NPC_LEO_THE_HELPER_SEND));
+}
+
+void GDNpcLeoTheHelperSaveSend(int aIndex, BYTE status) // OK
+{
+	LPOBJ lpObj = &gObj[aIndex];
+	SDHP_NPC_LEO_THE_HELPER_SAVE_SEND pMsg;
+
+	PHeadSubSetB((LPBYTE)&pMsg, 0x0E, 0x30, sizeof(SDHP_NPC_LEO_THE_HELPER_SAVE_SEND));
+	pMsg.index = aIndex;
+	memcpy(pMsg.account, lpObj->AccountID, sizeof(pMsg.account));
+	memcpy(pMsg.name, lpObj->Name, sizeof(pMsg.name));
+	pMsg.status = status;
+	cDBSMng.Send((char*)&pMsg, sizeof(SDHP_NPC_LEO_THE_HELPER_SAVE_SEND));
+}
+
+void DGNpcLukeTheHelperRecv(SDHP_NPC_LUKE_THE_HELPER_RECV* lpMsg) // OK
+{
+	if (gObjIsAccontConnect(lpMsg->index, lpMsg->account) == 0)
+	{
+		LogAdd("[DGNpcLukeTheHelperRecv] Invalid Account [%d](%s)", lpMsg->index, lpMsg->account);
+		CloseClient(lpMsg->index);
+		return;
+	}
+
+	LPOBJ lpObj = &gObj[lpMsg->index];
+
+	if (lpMsg->status >= 1)
+	{
+		ChatSend(lpObj, "I will gived you a reward item!");
+		GCServerCmd(lpObj->m_Index, 14, 1, 0);
+		return;
+	}
+
+	//gItemBagManager.DropItemBySpecialValue(ITEM_BAG_LEO_THE_HELPER,lpObj,lpObj->Map,lpObj->X,lpObj->Y);
+	//NewYearLuckMonsterItemBagOpen(lpObj, lpObj->MapNumber, lpObj->X, lpObj->Y);
+
+	GDNpcLukeTheHelperSaveSend(lpObj->m_Index, 1);
+}
+
+void GDNpcLukeTheHelperSend(int aIndex) // OK
+{
+	if (gObjIsAccontConnect(aIndex, gObj[aIndex].AccountID) == 0)
+	{
+		return;
+	}
+
+	SDHP_NPC_LUKE_THE_HELPER_SEND pMsg;
+
+	PHeadSubSetB((LPBYTE)&pMsg, 0x0E, 0x01, sizeof(SDHP_NPC_LUKE_THE_HELPER_SEND));
+	pMsg.index = aIndex;
+	memcpy(pMsg.account, gObj[aIndex].AccountID, sizeof(pMsg.account));
+	memcpy(pMsg.name, gObj[aIndex].Name, sizeof(pMsg.name));
+	cDBSMng.Send((char*)&pMsg, sizeof(SDHP_NPC_LUKE_THE_HELPER_SEND));
+}
+
+void GDNpcLukeTheHelperSaveSend(int aIndex, BYTE status) // OK
+{
+	LPOBJ lpObj = &gObj[aIndex];
+	SDHP_NPC_LUKE_THE_HELPER_SAVE_SEND pMsg;
+
+	PHeadSubSetB((LPBYTE)&pMsg, 0x0E, 0x31, sizeof(SDHP_NPC_LUKE_THE_HELPER_SAVE_SEND));
+	pMsg.index = aIndex;
+	memcpy(pMsg.account, lpObj->AccountID, sizeof(pMsg.account));
+	memcpy(pMsg.name, lpObj->Name, sizeof(pMsg.name));
+	pMsg.status = status;
+	cDBSMng.Send((char*)&pMsg, sizeof(SDHP_NPC_LUKE_THE_HELPER_SAVE_SEND));
 }
