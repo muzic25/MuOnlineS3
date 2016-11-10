@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameServer", "GreatDev Krono Emulator\GameServer.vcxproj", "{80D494D7-D975-A7D3-2E12-129D2327D152}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90D15622-E35F-4AD1-80A7-A856A4F278AC}"
@@ -8,11 +10,14 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
+		DebugRelease|Win32 = DebugRelease|Win32
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{80D494D7-D975-A7D3-2E12-129D2327D152}.Debug|Win32.ActiveCfg = Debug|Win32
 		{80D494D7-D975-A7D3-2E12-129D2327D152}.Debug|Win32.Build.0 = Debug|Win32
+		{80D494D7-D975-A7D3-2E12-129D2327D152}.DebugRelease|Win32.ActiveCfg = DebugRelease|Win32
+		{80D494D7-D975-A7D3-2E12-129D2327D152}.DebugRelease|Win32.Build.0 = DebugRelease|Win32
 		{80D494D7-D975-A7D3-2E12-129D2327D152}.Release|Win32.ActiveCfg = Release|Win32
 		{80D494D7-D975-A7D3-2E12-129D2327D152}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection

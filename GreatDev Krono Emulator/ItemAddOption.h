@@ -11,6 +11,44 @@
 
 #define MAX_ITEM_ADD_OPTION	100
 
+#define ADD_OPTION_SPEED		 1
+#define ADD_OPTION_ATTACK_DAMAGE 2
+#define ADD_OPTION_DEFENSE		 3
+#define ADD_OPTION_LIFE			 4
+#define ADD_OPTION_MANA			 5
+#define ADD_OPTION_EXPERIENCE	 6
+#define ADD_OPTION_DROP_RATE	 7
+#define ADD_OPTION_SUSTENANCE	 8
+#define ADD_OPTION_STRENGTH		 9
+#define ADD_OPTION_DEXTERITY	10
+#define ADD_OPTION_VITALITY		11
+#define ADD_OPTION_ENERGY		12
+#define ADD_OPTION_LEADERSHIP	13
+#define ADD_OPTION_WRATH		14
+#define ADD_OPTION_WIZARDRY		15
+#define ADD_OPTION_MOBILITY		16
+
+#define ADD_OPTION_WIZARD_DEFENSE		21
+#define ADD_OPTION_MAGIC_DEFENSE		22
+
+#define ADD_OPTION_REDUCE_DEFENSE		23
+
+#define ADD_OPTION_REFLECT		24
+#define ADD_OPTION_ATTACK_RATE		26
+#define ADD_OPTION_WIZARD_DEFENSE_DURATION		28
+
+#define ADD_OPTION_ATTACK_NORMAL_DAMAGE		51
+#define ADD_OPTION_MONSTER_DAMAGE_ABSORB		52
+
+#define ADD_OPTION_LIFE_AUTO_RECOVERY		53
+#define ADD_OPTION_MANA_AUTO_RECOVERY		54
+
+#define ADD_OPTION_CRITICAL_DAMAGE		55
+#define ADD_OPTION_EXCELLENT_DAMAGE		56
+
+
+
+
 #include "user.h"
 
 typedef struct ITEMEFFECT
@@ -44,6 +82,8 @@ public:
 	bool SetItemEffect(LPOBJ lpObj, int iItemNumber, int iItemUseTime);
 	bool ClearItemEffect(LPOBJ lpObj, int iEffectOption);
 	bool SearchItemEffectType(int iItemNumber, int* iEffectType1, int* iEffectType2);
+	BYTE SearchForClearItemEffect(int iItemNumber);
+	LPITEMEFFECT SearchItemEffectType1(int iItemNumber);
 
 private:
 

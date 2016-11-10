@@ -8,16 +8,16 @@ Status: Fully Bugs With some events
 CryWolf: Continius Event -> Fixed -> OK  
 CastleSiege: Bugged  
 DevilSquare: OK  
-Blood Castle: Gate Bugged (Using first floor localation) -> Fixed  
+Blood Castle: Gate Bugged (Using first floor localation) -> Fixed -> OK  
 Kantru: OK  
 Golden Invasion: OK  
 White Wizard:  OK  
-Illusion Temple: Unknown  
+Illusion Temple: Unknown -> Original Functions Added  -> Test  
 Chaos Castle: OK  
--ItemsBags: Some missing and missconfigured  
+-ItemsBags: Fixed and Added new bags   
 -ChaosMachine: Bugged  
 -Maps: missing -> Added/Fixed -> OK  
--GameServer Interface: Logger bugged -> Fixed -> OK   
+-GameServer Interface: Logger bugged -> Fixed -> OK -> Bugged (WhiteScreen)    
 -3rd wings: Fixed -> OK  
 -Other bugs  
 

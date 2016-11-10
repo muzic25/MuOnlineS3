@@ -388,7 +388,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 
 		if (lpTargetObj == NULL)
 		{
-			sprintf(Msg, "%s User Offline", pId);
+			sprintf(Msg, "[Status] User %s Offline", pId);
 			GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
 			return 0;
 		}

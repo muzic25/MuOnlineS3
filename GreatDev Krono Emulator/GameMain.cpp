@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "GameMain.h"
-#include "IllusionTemple.h"
 
 BOOL JoinServerConnected;
 BOOL DataServerConnected;
@@ -46,6 +45,14 @@ CItemBagEx * CrywolfBossMonsterItemBag;
 CItemBagEx * KanturuMayaHandItemBag;
 CItemBagEx * KanturuNightmareItemBag;
 CItemBagEx * HallowinDayEventItemBag;
+CItemBag   * RingOfHeroBoxItemBag;
+CProbabilityItemBag * NewYearLuckyPouchItemBag; //test
+CProbabilityItemBag * GMPresentBoxItemBag; //test
+CProbabilityItemBag * IllusionTemple1ItemBag; //test
+CProbabilityItemBag * IllusionTemple2ItemBag; //test
+CProbabilityItemBag * IllusionTemple3ItemBag; //test
+CItemBagEx * LeoItemBag;
+CItemBagEx  * LukeItemBag;
 ///////////////////////////////////////////////////////////////////////////////
 CwsGameServer wsGServer;	// line : 213GameServer
 wsJoinServerCli wsJServerCli;	// line : 214 Join Server
@@ -256,11 +263,6 @@ void GameMainInit(HWND hWnd)
 
 	gObjInit();
 	InitBattleSoccer();
-	LoadIllusionTempleConfig();
-	ILAPI_ClearEvent();
-
-	DWORD ThreadId;
-	HANDLE hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)MUNET_TasksManager, NULL, 0, &ThreadId);
 
 #if (FOREIGN_GAMESERVER == 1)
 
@@ -373,12 +375,7 @@ void GameMainInit(HWND hWnd)
 	ShopDataLoad();
 	wsGServer.CreateSocket(hWnd);
 	wsJServerCli.CreateSocket(hWnd);
-	wsDataCli.CreateSocket(hWnd);
-
-#if (FOREIGN_GAMESERVER==1)
-	gGameServerAuth.GetKey(szAuthKey, 5,5 );
-#endif
-	
+	wsDataCli.CreateSocket(hWnd);	
 	wsRServerCli.CreateSocket(hWnd);
 	wsEvenChipServerCli.CreateSocket(hWnd);
 	GameServerInfoSend();
@@ -387,42 +384,9 @@ void GameMainInit(HWND hWnd)
 	acceptIP.Load(gDirPath.GetNewPath("IpList.dat"));
 	ConMember.Load(gDirPath.GetNewPath("ConnectMember.txt"));
 	GCTeleportSend(gObj, 1, 1, 1, 2, 3);
-	
-#if (FOREIGN_GAMESERVER == 1)
-	gGameServerAuth.GetKey(szAuthKey, 15, 5);
-#endif	
 }
-
-
-enum SHEDULE_TIME {
-	SECOND_SHEDULE	= 1000,
-	MINUTE_SHEDULE	= 60000,
-};
 
 unsigned int TickCount = GetTickCount();
-DWORD WINAPI MUNET_TasksManager() {
-	SYSTEMTIME Time = {0};
-
-	while(1)
-	{
-		if(GetTickCount() - TickCount >= SECOND_SHEDULE)
-		{
-			ILPROC_Core();
-			TickCount = GetTickCount();
-			Time.wSecond++;
-		}
-
-		if(Time.wSecond == 60) // minutes shedule
-		{
-			ILTIMER_Noticer();
-			Time.wSecond = 0;
-		}
-
-		Sleep(1);
-	}
-	return 0;
-}
-
 
 int GetWarehouseUsedHowMuch(int UserLevel, BOOL IsLock)
 {
@@ -531,6 +495,21 @@ void GameMonsterAllAdd()
 		{
 			continue;
 		}
+
+		if (IT_MAP_RANGE(gMSetBase.m_Mp[n].m_MapNumber) != FALSE && gMSetBase.m_Mp[n].m_Type != 381 && gMSetBase.m_Mp[n].m_Type != 382)
+		{
+			if (gMSetBase.m_Mp[n].m_Type == 380 || gMSetBase.m_Mp[n].m_Type == 383 || gMSetBase.m_Mp[n].m_Type == 384)
+			{
+				g_IllusionTempleEvent.CreateNPCPosition(gMSetBase.m_Mp[n].m_MapNumber, gMSetBase.m_Mp[n].m_Type, n);
+			}
+			else if (gMSetBase.m_Mp[n].m_Type >= 386 || gMSetBase.m_Mp[n].m_Type <= 403)
+			{
+				g_IllusionTempleEvent.CreateMonsterPosition(gMSetBase.m_Mp[n].m_MapNumber, gMSetBase.m_Mp[n].m_Type, n);
+			}
+
+			continue;
+		}
+
 			
 		result = gObjAddMonster(gMSetBase.m_Mp[n].m_MapNumber);
 
@@ -595,6 +574,12 @@ void GameMonsterAllAdd()
 	{
 		g_ChaosCastle.Init(false);
 	}
+
+	if (g_iIllusionTempleEvent != FALSE)
+	{
+		g_IllusionTempleEvent.Init();
+	}
+
 }
 
 void GameMonsterAllCloseAndReLoad()
@@ -637,6 +622,9 @@ void GameMonsterAllCloseAndReLoad()
 	gMSetBase.LoadSetBase(DataBuffer, DataBufferSize);
 
 #endif
+
+	g_IllusionTempleEvent.AllObjReset();
+
 	g_MonsterItemMng.Init();
 	gObjMonCount = 0;
 	GameMonsterAllAdd();
@@ -1406,6 +1394,7 @@ void ReadCommonServerInfo()
 	Configs.g_iHallowinDayEventJOLDrinkDropRate = GetPrivateProfileInt("GameServerInfo","HallowinEventJOLDrinkDropRate",25, gDirPath.GetNewPath("commonserver.cfg"));
 	Configs.g_iHallowinDayEventJOLPolymorphRingDropRate = GetPrivateProfileInt("GameServerInfo","HallowinEventJOLPolymorphRingDropRate", 5, gDirPath.GetNewPath("commonserver.cfg"));
 
+	g_IllusionTempleEvent.ReadCommonServerInfo();
 
 	// Servers
 	GetPrivateProfileString("ConnectServerInfo", "IP", "", Configs.connectserverip, 20, gDirPath.GetNewPath("commonserver.cfg"));
@@ -1519,7 +1508,9 @@ void ReadCommonServerInfo()
 
 	g_CashShop.CashShopOptioNReload();
 	g_CashItemPeriodSystem.Initialize();
-	g_CashLotterySystem.Load("..\\Data\\ChaosCardProbability.txt"); // gDirPath.GetNewPath("ChaosCardProbability.txt")
+	g_CashLotterySystem.Load(gDirPath.GetNewPath("ChaosCardProbability.txt"));
+
+	g_BuffEffect.Load(gDirPath.GetNewPath("BuffEffect.txt"));
 }
 
 void GameServerInfoSendStop()
@@ -1596,6 +1587,7 @@ void GameServerInfoSend()
 
 void LoadItemBag()
 {
+//--------------------------------------------------------------------------------
 	if ( LuckboxItemBag != FALSE )
 	{
 		delete LuckboxItemBag;
@@ -1610,7 +1602,7 @@ void LoadItemBag()
 	}
 
 	LuckboxItemBag->Init("\\EventItemBags\\EventItemBag.txt");
-
+//--------------------------------------------------------------------------------
 	if ( Mon55 != FALSE )	// Death king
 	{
 		delete Mon55;
@@ -1625,7 +1617,7 @@ void LoadItemBag()
 	}
 
 	Mon55->Init("\\EventItemBags\\EventItemBag2.txt");
-
+//--------------------------------------------------------------------------------
 	if ( Mon53 != FALSE )	// Golden Titan
 	{
 		delete Mon53;
@@ -1640,7 +1632,7 @@ void LoadItemBag()
 	}
 
 	Mon53->Init("\\EventItemBags\\EventItemBag3.txt");
-
+//--------------------------------------------------------------------------------
 	if ( StarOfXMasItemBag != FALSE )	
 	{
 		delete StarOfXMasItemBag;
@@ -1655,7 +1647,7 @@ void LoadItemBag()
 	}
 
 	StarOfXMasItemBag->Init("\\EventItemBags\\EventItemBag4.txt");
-
+//--------------------------------------------------------------------------------
 	if ( FireCrackerItemBag != FALSE )	
 	{
 		delete FireCrackerItemBag;
@@ -1670,7 +1662,7 @@ void LoadItemBag()
 	}
 
 	FireCrackerItemBag->Init("\\EventItemBags\\EventItemBag5.txt");
-
+//--------------------------------------------------------------------------------
 	if ( HeartOfLoveItemBag != FALSE )	
 	{
 		delete HeartOfLoveItemBag;
@@ -1685,7 +1677,7 @@ void LoadItemBag()
 	}
 
 	HeartOfLoveItemBag->Init("\\EventItemBags\\EventItemBag5.txt");
-
+//--------------------------------------------------------------------------------
 	if ( GoldMedalItemBag != FALSE )	
 	{
 		delete GoldMedalItemBag;
@@ -1701,6 +1693,7 @@ void LoadItemBag()
 
 	GoldMedalItemBag->Init("\\EventItemBags\\EventItemBag6.txt");
 
+//--------------------------------------------------------------------------------
 	if ( SilverMedalItemBag != FALSE )	
 	{
 		delete SilverMedalItemBag;
@@ -1716,6 +1709,7 @@ void LoadItemBag()
 
 	SilverMedalItemBag->Init("\\EventItemBags\\EventItemBag7.txt");
 
+//--------------------------------------------------------------------------------
 	if ( GoldGoblenItemBag != FALSE )	
 	{
 		delete GoldGoblenItemBag;
@@ -1731,6 +1725,7 @@ void LoadItemBag()
 
 	GoldGoblenItemBag->Init("\\EventItemBags\\EventItemBag8.txt");
 
+//--------------------------------------------------------------------------------
 	if ( TitanItemBag != FALSE )	
 	{
 		delete TitanItemBag;
@@ -1746,6 +1741,7 @@ void LoadItemBag()
 
 	TitanItemBag->Init("\\EventItemBags\\EventItemBag9.txt");
 
+//--------------------------------------------------------------------------------
 	if (GoldDerconItemBag != FALSE)	
 	{
 		delete GoldDerconItemBag;
@@ -1761,6 +1757,7 @@ void LoadItemBag()
 
 	GoldDerconItemBag->Init("\\EventItemBags\\EventItemBag10.txt");
 
+//--------------------------------------------------------------------------------
 	if ( DevilLizardKingItemBag != FALSE )	
 	{
 		delete DevilLizardKingItemBag;
@@ -1776,6 +1773,7 @@ void LoadItemBag()
 
 	DevilLizardKingItemBag->Init("\\EventItemBags\\EventItemBag11.txt");
 
+//--------------------------------------------------------------------------------
 	if ( KanturItemBag != FALSE )	
 	{
 		delete KanturItemBag;
@@ -1791,6 +1789,7 @@ void LoadItemBag()
 
 	KanturItemBag->Init("\\EventItemBags\\EventItemBag12.txt");
 
+//--------------------------------------------------------------------------------
 	if (RingEventItemBag != FALSE)	
 	{
 		delete RingEventItemBag;
@@ -1806,6 +1805,7 @@ void LoadItemBag()
 
 	RingEventItemBag->Init("\\EventItemBags\\EventItemBag13.txt");
 
+//--------------------------------------------------------------------------------
 	if ( FriendShipItemBag != FALSE )	
 	{
 		delete FriendShipItemBag;
@@ -1821,6 +1821,7 @@ void LoadItemBag()
 
 	FriendShipItemBag->Init("\\EventItemBags\\EventItemBag14.txt");
 
+//--------------------------------------------------------------------------------
 	if ( DarkLordHeartItemBag != FALSE )	
 	{
 		delete DarkLordHeartItemBag;
@@ -1835,7 +1836,7 @@ void LoadItemBag()
 	}
 
 	DarkLordHeartItemBag->Init("\\EventItemBags\\EventItemBag15.txt");
-
+//--------------------------------------------------------------------------------
 	if ( KundunEventItemBag != FALSE )	
 	{
 		delete KundunEventItemBag;
@@ -1850,7 +1851,8 @@ void LoadItemBag()
 	}
 
 	KundunEventItemBag->Init("\\EventItemBags\\EventItemBag17.txt");
-	 
+
+//-------------------------------------------------------------------------------- 
 	if ( CastleHuntZoneBossItemBag != NULL)
 		delete CastleHuntZoneBossItemBag;
 
@@ -1864,6 +1866,7 @@ void LoadItemBag()
 
 	CastleHuntZoneBossItemBag->Init("\\EventItemBags\\EventItemBag18.txt");
 
+//--------------------------------------------------------------------------------
 	if ( CastleItemMixItemBag != NULL)
 		delete CastleItemMixItemBag;
 
@@ -1877,6 +1880,7 @@ void LoadItemBag()
 
 	CastleItemMixItemBag->Init("\\EventItemBags\\EventItemBag19.txt"); 
 
+//--------------------------------------------------------------------------------
 	if ( HiddenTreasureBoxItemBag != NULL )
 		delete HiddenTreasureBoxItemBag;
 
@@ -1890,6 +1894,7 @@ void LoadItemBag()
 
 	HiddenTreasureBoxItemBag->Init("\\EventItemBags\\EventItemBag20.txt");
 
+//--------------------------------------------------------------------------------
 	if ( RedRibbonBoxEventItemBag != NULL )
 		delete RedRibbonBoxEventItemBag;
 
@@ -1903,6 +1908,7 @@ void LoadItemBag()
 
 	RedRibbonBoxEventItemBag->Init("\\EventItemBags\\EventItemBag21.txt");
 
+//--------------------------------------------------------------------------------
 	if ( GreenRibbonBoxEventItemBag != NULL )
 		delete GreenRibbonBoxEventItemBag;
 
@@ -1916,6 +1922,7 @@ void LoadItemBag()
 
 	GreenRibbonBoxEventItemBag->Init("\\EventItemBags\\EventItemBag22.txt");
 
+//--------------------------------------------------------------------------------
 	if ( BlueRibbonBoxEventItemBag != NULL )
 		delete BlueRibbonBoxEventItemBag;
 
@@ -1929,6 +1936,7 @@ void LoadItemBag()
 
 	BlueRibbonBoxEventItemBag->Init("\\EventItemBags\\EventItemBag23.txt");
 
+//--------------------------------------------------------------------------------
 	if ( PinkChocolateBoxEventItemBag != NULL )
 		delete PinkChocolateBoxEventItemBag;
 
@@ -1942,6 +1950,7 @@ void LoadItemBag()
 
 	PinkChocolateBoxEventItemBag->Init("\\EventItemBags\\EventItemBag24.txt");
 
+//--------------------------------------------------------------------------------
 	if ( RedChocolateBoxEventItemBag != NULL )
 		delete RedChocolateBoxEventItemBag;
 
@@ -1955,6 +1964,7 @@ void LoadItemBag()
 
 	RedChocolateBoxEventItemBag->Init("\\EventItemBags\\EventItemBag25.txt");
 
+//--------------------------------------------------------------------------------
 	if ( BlueChocolateBoxEventItemBag != NULL )
 		delete BlueChocolateBoxEventItemBag;
 
@@ -1968,6 +1978,7 @@ void LoadItemBag()
 
 	BlueChocolateBoxEventItemBag->Init("\\EventItemBags\\EventItemBag26.txt");
 
+//--------------------------------------------------------------------------------
 	if ( LightPurpleCandyBoxEventItemBag != NULL )
 		delete LightPurpleCandyBoxEventItemBag;
 
@@ -1981,6 +1992,7 @@ void LoadItemBag()
 
 	LightPurpleCandyBoxEventItemBag->Init("\\EventItemBags\\EventItemBag27.txt");
 
+//--------------------------------------------------------------------------------
 	if ( VermilionCandyBoxEventItemBag != NULL )
 		delete VermilionCandyBoxEventItemBag;
 
@@ -1994,6 +2006,7 @@ void LoadItemBag()
 
 	VermilionCandyBoxEventItemBag->Init("\\EventItemBags\\EventItemBag28.txt");
 
+//--------------------------------------------------------------------------------
 	if ( DeepBlueCandyBoxEventItemBag != NULL )
 		delete DeepBlueCandyBoxEventItemBag;
 
@@ -2007,6 +2020,7 @@ void LoadItemBag()
 
 	DeepBlueCandyBoxEventItemBag->Init("\\EventItemBags\\EventItemBag29.txt");
 
+//--------------------------------------------------------------------------------
 	if ( CrywolfDarkElfItemBag != NULL )
 		delete CrywolfDarkElfItemBag;
 
@@ -2020,6 +2034,7 @@ void LoadItemBag()
 
 	CrywolfDarkElfItemBag->Init("\\EventItemBags\\EventItemBag30.txt");
 
+//--------------------------------------------------------------------------------
 	if ( CrywolfBossMonsterItemBag != NULL )
 		delete CrywolfBossMonsterItemBag;
 
@@ -2032,7 +2047,8 @@ void LoadItemBag()
 	}
 
 	CrywolfBossMonsterItemBag->Init("\\EventItemBags\\EventItemBag31.txt");
-	 
+
+//--------------------------------------------------------------------------------
 	if ( KanturuMayaHandItemBag != NULL )
 		delete KanturuMayaHandItemBag;
 
@@ -2044,9 +2060,9 @@ void LoadItemBag()
 		return;
 	}
 
-
 	KanturuMayaHandItemBag->Init("\\EventItemBags\\EventItemBag32.txt");
 
+//--------------------------------------------------------------------------------
 	if ( KanturuNightmareItemBag != NULL )
 		delete KanturuNightmareItemBag;
 
@@ -2060,6 +2076,7 @@ void LoadItemBag()
 
 	KanturuNightmareItemBag->Init("\\EventItemBags\\EventItemBag33.txt"); 
 
+//--------------------------------------------------------------------------------
 	if ( HallowinDayEventItemBag != NULL )
 		delete HallowinDayEventItemBag;
 
@@ -2071,8 +2088,126 @@ void LoadItemBag()
 		return;
 	}
 
-
 	HallowinDayEventItemBag->Init("\\EventItemBags\\EventItemBag34.txt");
+
+//--------------------------------------------------------------------------------
+	if (RingOfHeroBoxItemBag != NULL)
+		delete RingOfHeroBoxItemBag;
+
+	RingOfHeroBoxItemBag = new CItemBag;
+	if (RingOfHeroBoxItemBag == NULL)
+	{
+		// Memory allocation error
+		MsgBox("CItemBag %s", lMsg.Get(MSGGET(0, 110)));
+		return;
+	}
+
+	RingOfHeroBoxItemBag->Init("\\EventItemBags\\EventItemBag35.txt");
+
+//--------------------------------------------------------------------------------
+	if (NewYearLuckyPouchItemBag != NULL)
+		delete NewYearLuckyPouchItemBag;
+
+	NewYearLuckyPouchItemBag = new CProbabilityItemBag;
+	if (NewYearLuckyPouchItemBag == NULL)
+	{
+		// Memory allocation error
+		MsgBox("CItemBag %s", lMsg.Get(MSGGET(0, 110)));
+		return;
+	}
+
+	NewYearLuckyPouchItemBag->Init("\\EventItemBags\\EventItemBag36.txt");
+
+//--------------------------------------------------------------------------------
+	if (GMPresentBoxItemBag != NULL)
+		delete GMPresentBoxItemBag;
+
+	GMPresentBoxItemBag = new CProbabilityItemBag;
+	if (GMPresentBoxItemBag == NULL)
+	{
+		// Memory allocation error
+		MsgBox("CItemBag %s", lMsg.Get(MSGGET(0, 110)));
+		return;
+	}
+
+	GMPresentBoxItemBag->Init("\\EventItemBags\\EventItemBag37.txt");
+
+//--------------------------------------------------------------------------------
+	if (IllusionTemple1ItemBag != NULL)
+		delete IllusionTemple1ItemBag;
+
+	IllusionTemple1ItemBag = new CProbabilityItemBag;
+	if (IllusionTemple1ItemBag == NULL)
+	{
+		// Memory allocation error
+		MsgBox("CItemBag %s", lMsg.Get(MSGGET(0, 110)));
+		return;
+	}
+
+	IllusionTemple1ItemBag->Init("\\EventItemBags\\EventItemBag38.txt");
+
+//--------------------------------------------------------------------------------
+	if (IllusionTemple2ItemBag != NULL)
+		delete IllusionTemple2ItemBag;
+
+	IllusionTemple2ItemBag = new CProbabilityItemBag;
+	if (IllusionTemple2ItemBag == NULL)
+	{
+		// Memory allocation error
+		MsgBox("CItemBag %s", lMsg.Get(MSGGET(0, 110)));
+		return;
+	}
+
+	IllusionTemple2ItemBag->Init("\\EventItemBags\\EventItemBag39.txt");
+
+//--------------------------------------------------------------------------------
+	if (IllusionTemple3ItemBag != NULL)
+		delete IllusionTemple3ItemBag;
+
+	IllusionTemple3ItemBag = new CProbabilityItemBag;
+
+	if (IllusionTemple3ItemBag == NULL)
+	{
+		// Memory allocation error
+		MsgBox("CItemBag %s", lMsg.Get(MSGGET(0, 110)));
+		return;
+	}
+
+	IllusionTemple3ItemBag->Init("\\EventItemBags\\EventItemBag40.txt");
+
+//--------------------------------------------------------------------------------
+	if (LeoItemBag != FALSE)
+	{
+		delete LeoItemBag;
+	}
+
+	LeoItemBag = new CItemBagEx;
+
+	if (LeoItemBag == NULL)
+	{
+		MsgBox("CItemBag %s", lMsg.Get(MSGGET(0, 110)));
+		return;
+	}
+
+	LeoItemBag->Init("\\EventItemBags\\EventItemBag41.txt");
+
+//--------------------------------------------------------------------------------
+	if (LukeItemBag != FALSE)
+	{
+		delete LukeItemBag;
+	}
+
+	LukeItemBag = new CItemBagEx;
+
+	if (LukeItemBag == NULL)
+	{
+		MsgBox("CItemBag %s", lMsg.Get(MSGGET(0, 110)));
+		return;
+	}
+
+	LukeItemBag->Init("\\EventItemBags\\EventItemBag42.txt");
+
+//--------------------------------------------------------------------------------
 }
 
 
@@ -2552,7 +2687,12 @@ void ReadEventInfo(MU_EVENT_TYPE eEventType)
 				Configs.g_iDeepBlueCandyBoxDropZenRate = GetPrivateProfileInt("GameServerInfo","DeepBlueCandyBoxDropZenRate",0, gDirPath.GetNewPath("commonserver.cfg"));
 				Configs.g_iDeepBlueCandyBoxDropZen = GetPrivateProfileInt("GameServerInfo","DeepBlueCandyBoxDropZen",0, gDirPath.GetNewPath("commonserver.cfg"));
 				break;
-	}
+		case 17:
+
+			g_IllusionTempleEvent.ReadCommonServerInfo();
+			break;
+
+}
 }
 
 void ReadGameEtcInfo(MU_ETC_TYPE eGameEtcType)

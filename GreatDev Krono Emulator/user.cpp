@@ -82,11 +82,6 @@
 //||7|9|3|
 //||8|1|2|
 //|------- X
-
-
-
-
-
 int ChangeCount; 
 int lOfsChange;
 int GuildUserCount;
@@ -104,12 +99,7 @@ int gObjCSFlag;
 
 #include "ChaosCastle.h"
 #include "readscript.h"
-
-
 CViewportGuild ViewGuildMng;	// line : 130
-
-
-
 OBJECTSTRUCT gObj[OBJMAX];	// line : 180
 int gObjCount;
 int gObjMonCount;
@@ -1005,6 +995,13 @@ void gObjCloseSet(int aIndex, int Flag)
 			g_BloodCastle.SearchUserDropQuestItem(aIndex);
 		}
 
+		if (IT_MAP_RANGE(lpObj->MapNumber))
+		{
+			g_IllusionTempleEvent.SearchUserDropQuestItem(lpObj->MapNumber, lpObj->m_Index);
+			g_IllusionTempleEvent.BattleDeleteUser(lpObj->m_Index, lpObj->MapNumber);
+		}
+
+
 		if ( (GetTickCount() - lpObj->MySelfDefenseTime )< 30000)
 		{
 			GCServerMsgStringSend(lMsg.Get(MSGGET(4, 109)), lpObj->m_Index, 1);
@@ -1305,6 +1302,8 @@ void gObjCharZeroSet(int aIndex)
 	lpObj->m_LastTeleportTime = 0;
 	lpObj->m_ClientHackLogCount = 0;
 	lpObj->UseEventServer = FALSE;
+	lpObj->m_iSoulBarrierDefense = 0; //S3 Addition
+	lpObj->m_sSoulBarrierDuration = 0; //S3 Addition
 
 	if ( lpObj->Type == OBJ_USER )
 	{
@@ -1453,6 +1452,7 @@ void gObjCharZeroSet(int aIndex)
 	//Season 2.5 add-on
 	lpObj->m_i3rdQuestState = 0;
 	lpObj->m_i3rdQuestIndex = -1;
+	lpObj->m_iIllusionTempleIndex = -1;
 
 	for ( i =0; i<5;i++)
 	{
@@ -1460,6 +1460,7 @@ void gObjCharZeroSet(int aIndex)
 		lpObj->MonsterKillInfo[i].KillCount = -1;
 	}
 
+	lpObj->m_bSkillKeyRecv = 0; //season 2.5 add-on
 
 	::gObjClearViewport(&gObj[aIndex]);
 }
@@ -2319,6 +2320,19 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 			return FALSE;
 		}
 	}
+
+	if ((lpMsg->CtlCode & 32) != 32 && lpObj->MapNumber == MAP_INDEX_GM_SUMMONZONE) //Season 2.5 add-on
+	{
+		lpObj->MapNumber = MAP_INDEX_DEVIAS;
+		MapC[lpObj->MapNumber].GetMapPos(lpObj->MapNumber, lpObj->X, lpObj->Y);
+	}
+
+	else if (IT_MAP_RANGE(lpObj->MapNumber)) //season2.5 add-on
+	{
+		lpObj->MapNumber = MAP_INDEX_DEVIAS; //season3 changed
+		MapC[lpObj->MapNumber].GetMapPos(lpObj->MapNumber, lpObj->X, lpObj->Y);
+	}
+
 	if ( lpObj->MapNumber == MAP_INDEX_KANTURU_BOSS )
 	{
 		short sX;
@@ -2696,7 +2710,7 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 		::DbItemSetInByte(lpObj, lpMsg, 16, &bAllItemExist);
 	}
 
-	if ( lpObj->Level <=5 )
+/*	if ( lpObj->Level <=5 )
 	{
 		for ( int i=MAIN_INVENTORY_SIZE;i<INVENTORY_SIZE;i++)
 		{
@@ -2749,10 +2763,10 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 
 			lpObj->Inventory1[i].Clear();
 		}
-
+									 
 		memset(lpObj->InventoryMap1+64, (BYTE)-1, PSHOP_MAP_SIZE);
 	}
-
+		 */
 	lpObj->Live = TRUE;
 	lpObj->Type = OBJ_USER;
 	lpObj->TargetNumber = -1;
@@ -2804,10 +2818,12 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 		lpObj->Authority = 1;
 	}
 
-	if ( (lpMsg->CtlCode & 0x20 ) == 0x20 )
+	if ((lpMsg->CtlCode & 0x20) == 0x20)
 	{
 		lpObj->Authority = 0x20;
 		LogAddC(2, "(%s)(%s) Set Event GM", lpObj->AccountID, lpObj->Name);
+		gObjApplyBuffEffectDuration(lpObj, AT_GAMEMASTER_LOGO, 0, 0, 0, 0, -10);
+		cManager.ManagerAdd(lpObj->Name, lpObj->m_Index); //Season 2.5 add-on
 	}
 
 	lpObj->Penalty = 0;
@@ -2877,8 +2893,16 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 	g_CashShop.CGCashPoint(lpObj);
 	g_CashItemPeriodSystem.GDReqPeriodItemList(lpObj);
 
+	if ((lpObj->Authority & 32) == 32 && lpObj->MapNumber != MAP_INDEX_GM_SUMMONZONE)
+	{
+		gObjMoveGate(aIndex, 79);
+		LogAddTD("[GAMEMASTER] [%s][%s] Moved to Summon Zone",
+			lpObj->AccountID, lpObj->Name);
+	}
+
 	return TRUE;
 } 
+
 BOOL gObjCanItemTouch(LPOBJ lpObj, int type )
 {
 	if ( (lpObj->Penalty &4) == 4 )
@@ -2967,7 +2991,7 @@ void gObjItemTextSave(LPOBJ lpObj)
 	{
 		if ( lpObj->pInventory[n].IsItem() == TRUE )
 		{
-			if ( lpObj->pInventory[n].m_serial != 0 )
+			//if ( lpObj->pInventory[n].m_serial != 0 )
 			{
 				ItemIsBufExOption(NewOption, &lpObj->pInventory[n]);
 				LogAddTD(lMsg.Get(MSGGET(1, 248)), lpObj->AccountID, lpObj->Name, n, lpObj->pInventory[n].GetName(),
@@ -2992,7 +3016,7 @@ void gObjWarehouseTextSave(LPOBJ lpObj)
 	{
 		if ( lpObj->pWarehouse[n].IsItem() == TRUE )
 		{
-			if ( lpObj->pWarehouse[n].m_serial != 0 )
+			//if ( lpObj->pWarehouse[n].m_serial != 0 )
 			{
 				ItemIsBufExOption(NewOption, &lpObj->pWarehouse[n]);
 				LogAddTD(lMsg.Get(MSGGET(1, 250)), lpObj->AccountID, lpObj->Name, n, lpObj->pWarehouse[n].GetName(),
@@ -3259,6 +3283,25 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 		lpObj->Type = OBJ_MONSTER;
 	}
 
+	if (MonsterClass == 385) //Season 2.5 add-on
+	{
+		g_IllusionTempleEvent.SetEntranceNpcIndex(aIndex);
+	}
+
+	/*if (MonsterClass == 365) //Season 2.5 add-on
+	{
+		if (g_bNewYearLuckyBagMonsterEventOn != FALSE)
+		{
+			lpObj->Live = TRUE;
+			lpObj->m_State = 1;
+		}
+		else
+		{
+			lpObj->Live = FALSE;
+			lpObj->m_State = 0;
+		}
+	}	 */
+
 	if ( MonsterClass == 77 )
 	{
 		int iSL = gObjAddMonster(MAP_INDEX_ICARUS);
@@ -3433,16 +3476,6 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 	return true;
 }
 
-
-
-
-
-
-
-
-
-
-
 void gObjDestroy(unsigned int aSocket,int client)
 {
 	if ( client < 0 || client > OBJMAX-1)
@@ -3452,12 +3485,6 @@ void gObjDestroy(unsigned int aSocket,int client)
 
 	gObj[client].Connected = PLAYER_EMPTY;
 }
-
-
-
-
-
-
 
 short gObjAddSearch(SOCKET aSocket, char* ip)
 {
@@ -3951,6 +3978,9 @@ short gObjDel(int index)
 	}
 
 	lpObj->Connected = PLAYER_EMPTY;
+
+	lpObj->m_bSkillKeyRecv = 0; //Season 2.5 add-on
+
 	return 1;
 }
 
@@ -14193,6 +14223,14 @@ void gObjSetState()
 						CreateFrustrum(lpObj->X,lpObj->Y,n);
 					}
 
+					if (IT_MAP_RANGE(lpObj->MapNumber)) //season 2.5 add-on
+					{
+						if (lpObj->Class == 380)
+						{
+							LogAddTD("[Illusion Temple] (%d) Status Regen OK (%d: %d/%d)", lpObj->MapNumber - 44, lpObj->MapNumber, lpObj->X, lpObj->Y);
+						}
+					}
+
 					lpObj->DieRegen = 0;
 					lpObj->m_State = 1;
 				}
@@ -14841,10 +14879,47 @@ void gObjUseDrink(LPOBJ lpObj, int level)
 
 
 
-int  gObjCurMoveMake(BYTE * const path , LPOBJ lpObj)	// Func not used
+int  gObjCurMoveMake(BYTE * const path, LPOBJ lpObj) //Original Source Obtained from GS 0.78.02T WEBZEN
 {
-	// Lacking Full Code Here
-	return 0;
+	int cur = lpObj->PathCur;
+	int total = lpObj->PathCount;
+	int sendbyte = 1;
+
+	//	memset(path, 0, 8);
+
+	path[0] = (lpObj->Dir << 4);			// 방향
+	path[0] |= (BYTE)((total - cur) & 0x0f);		// 자신의 위치 포함 개수
+
+	if ((total - cur) < 0) {
+		MsgBox("error : %s %d", __FILE__, __LINE__);
+		path[0] &= 0xF0;
+		return sendbyte;
+	}
+
+	if (total == 0) {
+		path[0] &= 0xF0;
+		return sendbyte;	// 이동을 안했다면
+	}
+	if (total == cur) {
+		path[0] &= 0xF0;
+		return sendbyte;	// 이동이 끝났다면
+	}
+
+	for (int n = cur, i = 1; n<total; n++, i++)
+	{
+		if (i % 2 == 1) {
+			path[(i + 1) / 2] = (lpObj->PathOri[n] << 4);
+		}
+		else {
+			path[(i + 1) / 2] |= (lpObj->PathOri[n] & 0x0f);
+		}
+	}
+
+	sendbyte += ((path[0] & 0x0f) + 1) / 2;
+
+	//	LogAddHeadHex(1,(char*)path, 8);
+	//	LogAdd("path[0] : %x sendbyte:%d ",path[0], sendbyte);	
+	return sendbyte;
 }
 
 void gObjViewportListProtocolDestroy(LPOBJ lpObj)
@@ -14918,6 +14993,13 @@ void gObjViewportListProtocolCreate(LPOBJ lpObj)
 			pViewportCreateChange.SkinL = SET_NUMBERL((lpObj->m_Change & 0xFFFF) & 0xFFFF);
 
 			pViewportCreateChange.ViewSkillState = lpObj->m_ViewSkillState;
+
+			//Season 2.5 add-on
+			if (gObjSearchActiveEffect(lpObj, AT_GAMEMASTER_LOGO) == 1) //Season3 update
+			{
+				gObjApplyBuffEffectDuration(lpObj, AT_GAMEMASTER_LOGO, 0, 0, 0, 0, -10); //Season3 update
+			}
+
 			pViewportCreateChange.DirAndPkLevel = lpObj->Dir << 4;
 			pViewportCreateChange.DirAndPkLevel |= lpObj->m_PK_Level & 0x0F;
 
@@ -15327,7 +15409,14 @@ void gObjViewportListProtocol(short aIndex)
 								pViewportCreateChange.TX = lpTargetObj->TX;
 								pViewportCreateChange.TY = lpTargetObj->TY;
 								pViewportCreateChange.SkinH = SET_NUMBERH((lpTargetObj->m_Change & 0xFFFF) & 0xFFFF);
-								pViewportCreateChange.SkinL = SET_NUMBERL((lpTargetObj->m_Change & 0xFFFF) & 0xFFFF);									pViewportCreateChange.ViewSkillState = lpTargetObj->m_ViewSkillState;
+								pViewportCreateChange.SkinL = SET_NUMBERL((lpTargetObj->m_Change & 0xFFFF) & 0xFFFF);
+
+								if ((lpTargetObj->Authority & 32) == 32) //Season 2.5 add-on
+								{
+									gObjApplyBuffEffectDuration(lpTargetObj, AT_GAMEMASTER_LOGO, 0, 0, 0, 0, -10); //Season3 update
+								}
+
+								pViewportCreateChange.ViewSkillState = lpTargetObj->m_ViewSkillState;
 								pViewportCreateChange.DirAndPkLevel = lpTargetObj->Dir << 4;
 								pViewportCreateChange.DirAndPkLevel |= lpTargetObj->m_PK_Level & 0x0F;
 								if(CC_MAP_RANGE(lpTargetObj->MapNumber))
@@ -16076,6 +16165,14 @@ void gObjSkillUseProc(LPOBJ lpObj)
 
 			GCReFillSend(lpObj->m_Index,lpObj->MaxLife+lpObj->AddLife,0xFE,0,lpObj->iMaxShield+lpObj->iAddShield);
 			GCManaSend(lpObj->m_Index,lpObj->MaxMana+lpObj->AddMana,0xFE,0,lpObj->MaxBP);
+		}
+	}
+
+	if (IT_MAP_RANGE(lpObj->MapNumber)) //season 2.5 add-on
+	{
+		if (lpObj->m_iIllusionTempleIndex != -1)
+		{
+			g_IllusionTempleEvent.SkillProc(lpObj);
 		}
 	}
 

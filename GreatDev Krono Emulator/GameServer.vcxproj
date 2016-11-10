@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugRelease|Win32">
+      <Configuration>DebugRelease</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
@@ -26,6 +30,11 @@
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugRelease|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -37,8 +46,18 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugRelease|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\Release\</OutDir>
+    <IntDir>..\Release\Temp\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <GenerateManifest>true</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugRelease|Win32'">
     <OutDir>..\Release\</OutDir>
     <IntDir>..\Release\Temp\</IntDir>
     <LinkIncremental>false</LinkIncremental>
@@ -51,6 +70,45 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>..\Release\ASM\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>..\Release\GameServer.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>..\Release\OBJ\</ObjectFileName>
+      <ProgramDataBaseFileName>..\Release\PDB\</ProgramDataBaseFileName>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Release\GameServer.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release\GameServer.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugRelease|Win32'">
     <ClCompile>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
@@ -145,6 +203,8 @@
     <ClCompile Include="BattleSoccer.cpp" />
     <ClCompile Include="BattleSoccerManager.cpp" />
     <ClCompile Include="BloodCastle.cpp" />
+    <ClCompile Include="BuffEffect.cpp" />
+    <ClCompile Include="BuffManager.cpp" />
     <ClCompile Include="CallStackTrace.cpp" />
     <ClCompile Include="CannonTower.cpp" />
     <ClCompile Include="CashItemPeriodSystem.cpp" />
@@ -198,7 +258,8 @@
     <ClCompile Include="Guardian.cpp" />
     <ClCompile Include="GuardianStatue.cpp" />
     <ClCompile Include="GuildClass.cpp" />
-    <ClCompile Include="IllusionTemple.cpp" />
+    <ClCompile Include="IllusionTempleEvent.cpp" />
+    <ClCompile Include="IllusionTempleProcess.cpp" />
     <ClCompile Include="IpCache.cpp" />
     <ClCompile Include="ItemAddOption.cpp" />
     <ClCompile Include="ItemBag.cpp" />
@@ -248,6 +309,7 @@
     <ClCompile Include="ObjUseSkill.cpp" />
     <ClCompile Include="PacketCheckSum.cpp" />
     <ClCompile Include="PartyClass.cpp" />
+    <ClCompile Include="ProbabilityItemBag.cpp" />
     <ClCompile Include="protocol.cpp" />
     <ClCompile Include="QuestInfo.cpp" />
     <ClCompile Include="QuestUtil.cpp" />
@@ -264,7 +326,9 @@
     <ClCompile Include="StatMng.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugRelease|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='DebugRelease|Win32'">stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -294,6 +358,7 @@
     <ClCompile Include="TUnionInfo.cpp" />
     <ClCompile Include="user.cpp" />
     <ClCompile Include="ViewportGuild.cpp" />
+    <ClCompile Include="ViewportSkillState.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="WhisperCash.cpp" />
     <ClCompile Include="winutil.cpp">
@@ -320,6 +385,8 @@
     <ClInclude Include="BattleSoccer.h" />
     <ClInclude Include="BattleSoccerManager.h" />
     <ClInclude Include="BloodCastle.h" />
+    <ClInclude Include="BuffEffect.h" />
+    <ClInclude Include="BuffManager.h" />
     <ClInclude Include="CallStackTrace.h" />
     <ClInclude Include="CannonTower.h" />
     <ClInclude Include="CashItemPeriodSystem.h" />
@@ -374,7 +441,8 @@
     <ClInclude Include="Guardian.h" />
     <ClInclude Include="GuardianStatue.h" />
     <ClInclude Include="GuildClass.h" />
-    <ClInclude Include="IllusionTemple.h" />
+    <ClInclude Include="IllusionTempleEvent.h" />
+    <ClInclude Include="IllusionTempleProcess.h" />
     <ClInclude Include="IpCache.h" />
     <ClInclude Include="ItemAddOption.h" />
     <ClInclude Include="ItemBag.h" />
@@ -427,6 +495,7 @@
     <ClInclude Include="PacketCheckSum.h" />
     <ClInclude Include="PartyClass.h" />
     <ClInclude Include="PCSProtocol.h" />
+    <ClInclude Include="ProbabilityItemBag.h" />
     <ClInclude Include="prodef.h" />
     <ClInclude Include="protocol.h" />
     <ClInclude Include="QuestInfo.h" />
@@ -474,6 +543,7 @@
     <ClInclude Include="TUnionInfo.h" />
     <ClInclude Include="user.h" />
     <ClInclude Include="ViewportGuild.h" />
+    <ClInclude Include="ViewportSkillState.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="WhisperCash.h" />
     <ClInclude Include="winutil.h" />

@@ -775,6 +775,16 @@ void StarOfXMasOpenEven(LPOBJ lpObj)
 	StarOfXMasItemBag->DropItem(lpObj->m_Index);
 }
 
+void LeoTheHelplerBag(LPOBJ lpObj)
+{
+	LeoItemBag->DropItem(lpObj->m_Index);
+}
+
+void LukeTheHelplerBag(LPOBJ lpObj)
+{
+	LukeItemBag->DropItem(lpObj->m_Index);
+}
+
 void FireworksOpenEven(LPOBJ lpObj)
 {
 			PMSG_SERVERCMD ServerCmd;
@@ -1205,6 +1215,88 @@ void KanturuNightmareItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY
 	KanturuNightmareItemBag->DropKanturuNightmareItem(lpObj->m_Index, btMapNumber, cX, cY);
 } 
  
+
+void RingOfHeroBoxOpen(LPOBJ lpObj)
+{
+	float dur; //loc1
+	int type; //loc2
+	int level; //loc3
+	int x; //loc4
+	int y; //loc5
+	int Option1 = 0; //loc6
+	int Option2 = 0; //loc7
+	int Option3 = 0; //loc8
+	int DropItemNum; //loc9
+
+	if (RingOfHeroBoxItemBag->GetBagCount() > 0 && (rand() % 10) < 9)
+	{
+		DropItemNum = rand() % RingOfHeroBoxItemBag->GetBagCount();
+		dur = 0;
+		x = lpObj->X;
+		y = lpObj->Y;
+
+		level = RingOfHeroBoxItemBag->GetLevel(DropItemNum) + rand() % 3;
+		type = ItemGetNumberMake(RingOfHeroBoxItemBag->GetType(DropItemNum), RingOfHeroBoxItemBag->GetIndex(DropItemNum));
+
+		Option1 = 1;
+
+		Option2 = rand() % 2;
+
+		if ((rand() % 5) < 1)
+		{
+			Option3 = 3;
+		}
+		else
+		{
+			Option3 = rand() % 3;
+		}
+
+		if (type == ITEMGET(12, 15) || type == ITEMGET(14, 13) || type == ITEMGET(14, 14))
+		{
+			Option1 = 0;
+			Option2 = 0;
+			Option3 = 0;
+			level = 0;
+		}
+
+		if (type == ITEMGET(13, 0) ||
+			type == ITEMGET(13, 1) ||
+			type == ITEMGET(13, 2) ||
+			type == ITEMGET(13, 8) ||
+			type == ITEMGET(13, 9) ||
+			type == ITEMGET(13, 12) ||
+			type == ITEMGET(13, 13))
+		{
+			level = 0;
+		}
+
+		ItemSerialCreateSend(lpObj->m_Index, lpObj->MapNumber, x, y, type, level, dur, Option1, Option2, Option3, lpObj->m_Index, 0, 0);
+
+		CItem NewItem;
+		NewItem.Convert(type, Option1, Option2, Option3, 0, 1, 0, CURRENT_DB_VERSION);
+
+		LogAddTD("[%s][%s][RingOfHero Event](%d,%d,%d) ItemDrop : Item:%s %d Level:%d op1:%d op2:%d op3:%d", lpObj->AccountID, lpObj->Name, lpObj->MapNumber, lpObj->X, lpObj->Y, NewItem.GetName(), type, level, Option1, Option2, Option3);
+	}
+	else
+	{
+		x = lpObj->X;
+		y = lpObj->Y;
+		MapC[lpObj->MapNumber].MoneyItemDrop(100000, x, y);
+	}
+}
+
+void NewYearLuckMonsterItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY)
+{
+	NewYearLuckyPouchItemBag->DropNewYearLuckMonsterReward(lpObj->m_Index, btMapNumber, cX, cY);
+}
+
+
+
+void GMPresentBoxItemBagOpen(LPOBJ lpObj) //season 3.0 changed (arguments)
+{
+	GMPresentBoxItemBag->DropGMPresentBoxReward(lpObj->m_Index, lpObj->MapNumber, 0, 0);
+}
+
 void LuckyBoxOpenEven(LPOBJ lpObj)
 {
 	float dur;
@@ -2402,15 +2494,6 @@ void EGReqBloodCastleEnterCount(int iIndex)
 	}
 }
 
-
-struct PMSG_ANS_CL_ENTERCOUNT
-{
-	PBMSG_HEAD h;	// C1:9F
-	BYTE btEventType;	// 3
-	BYTE btLeftEnterCount;	// 4
-};
-
-
 void EGAnsBloodCastleEnterCount( PMSG_ANS_BLOODCASTLE_ENTERCOUNT* lpMsg)
 {
 	if ( !lpMsg)
@@ -2563,7 +2646,7 @@ void EGAnsRegDLOfflineGift( PMSG_ANS_REG_DL_OFFLINE_GIFT* lpMsg)
 	szGIFT_NAME[49] = 0;
 	char szText[256] = {0};
 
-	wsprintf(szText, "[다크로드 기념 이벤트] %s 님께서 %s 경품에 당첨되셨습니다.", szName, szGIFT_NAME);
+	wsprintf(szText, "[DarkLord Heart Event] %s Success to Register OffLine Gift (GIFT:%s)", szName, szGIFT_NAME);
 	AllSendServerMsg(szText);
 
 	LogAddTD("[DarkLord Heart Event] [%s][%s] Success to Register OffLine Gift (GIFT:%s)",
@@ -2634,17 +2717,12 @@ void EGAnsRegHTOfflineGift( PMSG_ANS_REG_HT_OFFLINE_GIFT* lpMsg)
 	szGIFT_NAME[49] = 0;
 	char szText[256] = {0};
 
-#pragma message ("Translate this!")
-
-	wsprintf(szText, "[숨겨진 보물상자 이벤트] %s 님께서 %s 경품에 당첨되셨습니다.", szName, szGIFT_NAME);
+	wsprintf(szText, "[Hidden TreasureBox Event] %s Success to Register OffLine Gift (GIFT:%s).", szName, szGIFT_NAME);
 	AllSendServerMsg(szText);
 
 	LogAddTD("[Hidden TreasureBox Event] [%s][%s] Success to Register OffLine Gift (GIFT:%s)",
 		szAccountID, szName, szGIFT_NAME);
 }
-
-
-
 
 void Japan1StAnivBoxOpen(LPOBJ lpObj, int iBoxLevel)
 {
@@ -2773,7 +2851,15 @@ void Japan1StAnivBoxOpen(LPOBJ lpObj, int iBoxLevel)
 	}
 }
 
+//Season2.5 New Function -> 0x00488F00
+void ChristmasStarDrop(LPOBJ lpObj)
+{
+	PMSG_SERVERCMD ServerCmd;
 
-
-
-
+	PHeadSubSetB((LPBYTE)&ServerCmd, 0xF3, 0x40, sizeof(ServerCmd));
+	ServerCmd.CmdType = 0;
+	ServerCmd.X = lpObj->X;
+	ServerCmd.Y = lpObj->Y;
+	MsgSendV2(lpObj, (LPBYTE)&ServerCmd, sizeof(ServerCmd));
+	DataSend(lpObj->m_Index, (LPBYTE)&ServerCmd, sizeof(ServerCmd));
+}

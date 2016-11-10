@@ -15,6 +15,7 @@
 //#include "..\ggsvr\ggsvr.h"
 #include "MagicInf.h"
 #include "zzzitem.h"
+#include "BuffEffect.h"
 #include "classdef.h"
 #include "define.h"
 #include "GuildClass.h"
@@ -474,6 +475,18 @@ struct MONSTERKILLINFO
 	int KillCount;
 };
 
+struct BUFF_MANAGER
+{
+	BYTE btBuffIndex; //210
+	BYTE btVpIndex; //211
+	BYTE btEffectType1; //212
+	BYTE btEffectType2; //213
+	int iValue1; //214
+	int iValue2; //218
+	DWORD dwBuffTickCount; //21C
+	int iDuration; //220
+};
+
 
 struct OBJECTSTRUCT
 {
@@ -787,7 +800,15 @@ struct OBJECTSTRUCT
 	int		m_i3rdQuestIndex;
 	MONSTERKILLINFO MonsterKillInfo[5];
 
+
+
 	//end new
+	BYTE	m_btViewStateCount;
+	struct	BUFF_MANAGER m_BuffEffectState[MAX_STATE_COUNT];
+
+	int		m_iSoulBarrierDefense; //Season 3 BuffEffect for Soul Barrier Skill
+	short	m_sSoulBarrierDuration; //Season 3 BuffEffect for Soul Barrier Skill
+
 	BYTE m_Quest[50];	// EE0
 	bool m_SendQuestInfo;	// F12
 	int m_SkyBossMonSheildLinkIndex;	// F14
@@ -925,6 +946,11 @@ struct OBJECTSTRUCT
 	WORD m_wExprienceRate;	// 1960
 	WORD m_wItemDropRate;	// 1962
 	BYTE m_btMoveMapBound;	// 1964
+	int		m_iIllusionTempleIndex; //20FC
+	BOOL	m_bSkillKeyRecv; //0x2100
+
+
+
 };
 
 typedef OBJECTSTRUCT * LPOBJ;

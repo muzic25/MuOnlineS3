@@ -323,6 +323,7 @@ struct PMSG_TALKRESULT
 	BYTE level4;	// 7
 	BYTE level5;	// 8
 	BYTE level6;	// 9
+	BYTE level7;	// A
 };
 
 /* * * * * * * * * * * * * * * * * * * * * 
@@ -1408,6 +1409,34 @@ struct PMSG_REQ_GATEKEEPER_MOVE
 	PBMSG_HEAD2 h;
 };
 
+struct PMSG_ANS_ILLUSIONTEMPLE_ENTER
+{
+	PBMSG_HEAD2 h;
+	BYTE btFloorIndex;	// 
+	BYTE TicketPos;
+};
+
+struct PMSG_USE_ILLUSIONTEMPLE_KILLCOUNT_SKILL
+{
+	PBMSG_HEAD2 h;
+	BYTE	btSkillIdH;
+	BYTE	btSkillIdL;
+	BYTE	btTargetH;
+	BYTE	btTargetL;
+	BYTE	btDis;
+};
+
+struct PMSG_ILLUSIONTEMPLE_DROP_REWARD
+{
+	PBMSG_HEAD2 h;
+};
+
+struct PMSG_SEND_ILLUSIONTEMPLE_KILLCOUNT
+{
+	PBMSG_HEAD2 h;
+	BYTE btKillCount;
+};
+
 void ProtocolCore(BYTE protoNum, LPBYTE aRecv, int aLen, int aIndex, BOOL Encrypt, int serial);
 void TestSend();
 void MsgSendV2(LPOBJ lpObj, unsigned char* Msg, int size);
@@ -1664,5 +1693,8 @@ void CGReqKanturuStateInfo(PMSG_REQ_KANTURU_STATE_INFO* lpMsg, int iIndex);
 void GCReqEnterKanturuBossMap(PMSG_REQ_ENTER_KANTURU_BOSS_MAP* lpMsg, int iIndex);
 
 //void CGReqCastleHuntZoneEntrance(PMSG_REQ_MOVE_TO_CASTLE_HUNTZONE* aRecv, int iIndex);
-
+void CGReqEnterIllusionTemple(PMSG_ANS_ILLUSIONTEMPLE_ENTER* lpMsg, int iIndex);
+void CGReqUseIllusionTempleKillCntSkill(PMSG_USE_ILLUSIONTEMPLE_KILLCOUNT_SKILL* lpMsg, int iIndex);
+void CGReqIllusionTempleDropReward(PMSG_ILLUSIONTEMPLE_DROP_REWARD* lpMsg, int iIndex);
+void GCSendIllusionTempleKillCount(int aIndex, BYTE KillCount);
 #endif

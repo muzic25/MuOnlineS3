@@ -127,6 +127,8 @@ void gObjCalCharacter(int aIndex)
 			  Right->m_Type == ITEMGET(4,16) ||
 			  Left->m_Type == ITEMGET(4,20) ||
 			  Left->m_Type == ITEMGET(4,21) ||
+			  Left->m_Type == ITEMGET(4, 21) || 
+			  Left->m_Type == ITEMGET(4, 22) || //loc7 Item 4,22 Add-on Season 2.5 GS-CS 56 (Albatross Fix)
 			  Right->m_Type == ITEMGET(4,18) ||
 			  Right->m_Type == ITEMGET(4,19) ||
 			  Left->m_Type == ITEMGET(4,17) )
@@ -775,13 +777,6 @@ if ( lpObj->pInventory[7].m_Type >= ITEMGET(12,0) && lpObj->pInventory[7].m_Type
 	GCManaSend(lpObj->m_Index, lpObj->MaxMana + lpObj->AddMana, 0xFE, 0, lpObj->MaxBP + lpObj->AddBP);
 }
 
-
-
-
-
-
-
-
 void GObjExtItemApply(LPOBJ lpObj)
 {
 
@@ -1112,15 +1107,12 @@ void gObjCalcSetItemOption(LPOBJ lpObj)
 	}
 }
 
-
-
-
 void gObjSetItemStatPlusSpecial(LPOBJ lpObj, int option, int ivalue)
 {
 	if ( option == -1 )
 		return;
 
-	switch ( option )	// #warning Add AT_SET_OPTION_IMPROVE_LEADERSHIP
+	switch ( option )	// #warning Add AT_SET_OPTION_IMPROVE_LEADERSHIP -> Added
 	{
 		case AT_SET_OPTION_IMPROVE_STRENGTH:
 			lpObj->AddStrength += ivalue;
@@ -1133,6 +1125,9 @@ void gObjSetItemStatPlusSpecial(LPOBJ lpObj, int option, int ivalue)
 			break;
 		case AT_SET_OPTION_IMPROVE_VITALITY:
 			lpObj->AddVitality += ivalue;
+			break;
+		case AT_SET_OPTION_IMPROVE_LEADERSHIP:
+			lpObj->AddLeadership += ivalue;
 			break;
 	}
 }

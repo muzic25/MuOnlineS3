@@ -2871,6 +2871,15 @@ void gObjMonsterDieGiveItem(LPOBJ lpObj, LPOBJ lpTargetObj)
 		}
 	}
 	
+	//IT CHECKS
+	if (IT_MAP_RANGE(lpObj->MapNumber))
+	{
+		int iMaxHitUser = gObjMonsterTopHitDamageUser(lpObj);
+		g_IllusionTempleEvent.SearchNDropMonsterItem(lpTargetObj);
+
+		return;
+	}
+
 	int itemrate = lpObj->m_ItemRate;
 	int moneyrate = lpObj->m_MoneyRate;
 

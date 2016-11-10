@@ -862,29 +862,47 @@ BOOL CDarkSpirit::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf * lpMagic, in
 	{
 		CItem * Wing = &lpTargetObj->pInventory[7];
 
-		if ( AttackDamage > 1 )
+		if (AttackDamage > 1)
 		{
-			if ( Wing->m_Type > ITEMGET(12,2) && Wing->m_Type < ITEMGET(12, 7) || lpObj->pInventory[7].m_Type == ITEMGET(13,30) )
+			if (Wing->m_Type == ITEMGET(12, 36) || //season 2.5 add-on
+				Wing->m_Type == ITEMGET(12, 37) ||
+				Wing->m_Type == ITEMGET(12, 38) ||
+				Wing->m_Type == ITEMGET(12, 39))
 			{
-				float lc15 = float((int)AttackDamage *  (int)(75 - Wing->m_Level * 2) ) / 100.0f;
-				AttackDamage = (int )lc15;
+				float damage = (float)(AttackDamage * (61 - (Wing->m_Level * 2))) / 100.0f;
+				AttackDamage = (int)(damage);	//  #formula
 			}
-			else if ( Wing->m_Type > ITEMGET(12,35) && Wing->m_Type < ITEMGET(12, 40) ) //Third Wings
+			else if (Wing->m_Type == ITEMGET(12, 40))
 			{
-				float lc15 = float((int)AttackDamage *  (int)(61 - Wing->m_Level * 2) ) / 100.0f;
-				AttackDamage = (int )lc15;
+				float damage = (float)(AttackDamage * (76 - (Wing->m_Level * 2))) / 100.0f;
+				AttackDamage = (int)(damage);	//  #formula
 			}
-			else if ( Wing->m_Type == ITEMGET(12, 40) ) //Third Wings
+			else if (Wing->m_Type == ITEMGET(12, 41))
 			{
-				float lc15 = float((int)AttackDamage *  (int)(76 - Wing->m_Level * 2) ) / 100.0f;
-				AttackDamage = (int )lc15;
+				float damage = (float)(AttackDamage * (88 - (Wing->m_Level * 2))) / 100.0f;
+				AttackDamage = (int)(damage);	//  #formula
+			}
+			else if (Wing->m_Type == ITEMGET(12, 42))
+			{
+				float damage = (float)(AttackDamage * (75 - (Wing->m_Level * 2))) / 100.0f;
+				AttackDamage = (int)(damage);	//  #formula
+			}
+			else if (Wing->m_Type == ITEMGET(12, 43))
+			{
+				float damage = (float)(AttackDamage * (61 - (Wing->m_Level * 2))) / 100.0f;
+				AttackDamage = (int)(damage);	//  #formula
+			}
+			else if (Wing->m_Type > ITEMGET(12, 2))
+			{
+				float damage = (float)(AttackDamage * (75 - (Wing->m_Level * 2))) / 100.0f;
+				AttackDamage = (int)(damage);	//  #formula
 			}
 			else
 			{
-				float lc16 = float((int)AttackDamage *  (int)(88 - Wing->m_Level * 2) ) / 100.0f;
-				AttackDamage = (int)lc16;
+				float damage = (float)(AttackDamage * (88 - (Wing->m_Level * 2))) / 100.0f;
+				AttackDamage = (int)(damage);	//  #formula
 			}
-
+		
 		}
 	}
 
@@ -1092,7 +1110,10 @@ BOOL CDarkSpirit::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf * lpMagic, in
 					selfdefense = FALSE;
 				}
 			}
-
+			else if (IT_MAP_RANGE(lpObj->MapNumber) || IT_MAP_RANGE(lpTargetObj->MapNumber)) //season 2.5 add-on
+			{
+				selfdefense = 0;
+			}
 		}
 		else if ( lpTargetObj->Type == OBJ_MONSTER && lpObj->Type == OBJ_USER )
 		{
@@ -1275,6 +1296,27 @@ BOOL CDarkSpirit::MissCheck(LPOBJ lpObj, LPOBJ lpTargetObj, int skill,  int skil
 		bAllMiss = TRUE;
 	}
 
+
+	if (IT_MAP_RANGE(lpTargetObj->MapNumber) != FALSE) //Season2.5 add-on Illusion
+	{
+		if (g_IllusionTempleEvent.GetState(lpTargetObj->MapNumber) == 2)
+		{
+			if (lpTargetObj->Type == OBJ_USER)
+			{
+				if (g_IllusionTempleEvent.GetShieldSpellStatus(lpTargetObj->m_iIllusionTempleIndex, lpTargetObj->MapNumber) != FALSE)
+				{
+					GCDamageSend(lpObj->m_Index, lpTargetObj->m_Index, 0, 0, 0, 0);
+					return FALSE;
+				}
+			}
+			if (lpObj->PartyNumber == lpTargetObj->PartyNumber)
+			{
+				GCDamageSend(lpObj->m_Index, lpTargetObj->m_Index, 0, 0, 0, 0);
+				return FALSE;
+			}
+		}
+	}
+
 	if ( bAllMiss != FALSE )
 	{
 		if ( (rand()%100) >= 5 )
@@ -1302,6 +1344,29 @@ BOOL CDarkSpirit::MissCheckPvP(LPOBJ lpObj, LPOBJ lpTargetObj, int skill,  int s
 	float iAttackRate = 0;
 	float iDefenseRate = 0;
 	int iAttackSuccessRate = 0;
+
+
+
+	if (IT_MAP_RANGE(lpTargetObj->MapNumber) != FALSE) //Season2.5 add-on Illusion
+	{
+		if (g_IllusionTempleEvent.GetState(lpTargetObj->MapNumber) == 2)
+		{
+			if (lpTargetObj->Type == OBJ_USER)
+			{
+				if (g_IllusionTempleEvent.GetShieldSpellStatus(lpTargetObj->m_iIllusionTempleIndex, lpTargetObj->MapNumber) != FALSE)
+				{
+					GCDamageSend(lpObj->m_Index, lpTargetObj->m_Index, 0, 0, 0, 0);
+					return FALSE;
+				}
+			}
+			if (lpObj->PartyNumber == lpTargetObj->PartyNumber)
+			{
+				GCDamageSend(lpObj->m_Index, lpTargetObj->m_Index, 0, 0, 0, 0);
+				return FALSE;
+			}
+		}
+	}
+
 
 	if ( lpObj->Class == CLASS_KNIGHT )
 	{

@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "protocol.h"
-#include "IllusionTemple.h"
 
 int ltesttime;
 int logincounttest;
@@ -485,9 +484,9 @@ void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOO
 		case GUILD_ASIGN_STATUS: //0xBE:
 			CGGuildAssignStatus((PMSG_GUILD_ASSIGN_STATUS_REQ *)aRecv, aIndex);
 			break;
-		case ILLUSION_TEMPLE_PROTOCOL_ID: //0xBF:
+	/*	case ILLUSION_TEMPLE_PROTOCOL_ID: //0xBF:
 			ILPROTO_ProtocolCore(aIndex, aRecv, aLen);
-			break;
+			break;	*/
 		case GUILD_ASIGN_TYPE: //0xE2:
 			CGGuildAssignType((PMSG_GUILD_ASSIGN_TYPE_REQ *)aRecv, aIndex);
 			break;
@@ -1240,6 +1239,11 @@ void PChatProc(PMSG_CHATDATA * lpChat, short aIndex)
 	}
 	else
 	{
+
+		if (((lpObj->Authority & 32) == 32) && gObjSearchActiveEffect(lpObj, AT_INVISIBILITY) != FALSE) //season 2.5 add-on
+		{
+			return;
+		}
 
 		DataSend(aIndex, (LPBYTE)lpChat, lpChat->h.size);
 		MsgSendV2(lpObj, (LPBYTE)lpChat, lpChat->h.size);
@@ -2293,6 +2297,13 @@ void GCSkillKeyRecv(PMSG_SKILLKEY * lpMsg, int aIndex)
 	if ( !gObjIsGamePlaing(&gObj[aIndex]))
 		return;
 
+	if (gObj[aIndex].m_bSkillKeyRecv == 1) //season 2.5 add-on
+	{
+		return;
+	}
+
+	gObj[aIndex].m_bSkillKeyRecv = 1; //season 2.5 add-on
+
 	DGOptionDataSend(aIndex, gObj[aIndex].Name,
 		lpMsg->SKillKey, lpMsg->GameOption,
 		lpMsg->QkeyDefine,  lpMsg->WkeyDefine, lpMsg->EkeyDefine, lpMsg->ChatWindow);
@@ -2814,6 +2825,15 @@ void CGItemGetRequest(PMSG_ITEMGETREQUEST * lpMsg, int aIndex)
 									map_num-MAP_INDEX_BLOODCASTLE1+1, gObj[aIndex].AccountID, gObj[aIndex].Name, lpItem->m_Level);
 							}
 						}
+						if (IT_MAP_RANGE(map_num)) //Season 2.5 add-on
+						{
+							if (lpItem->m_Type == ITEMGET(14, 64))
+							{
+								g_IllusionTempleEvent.SetRegPedestal(gObj[aIndex].MapNumber, aIndex, NewOption[8]); //check
+								g_IllusionTempleEvent.SetRelicsCarrierViewState(&gObj[aIndex]);
+								LogAddTD("[Illusion Temple] (%d) (Account:%s, Name:%s) picked up Relics Item(serial:%d)", map_num - (MAP_INDEX_ILLUSIONTEMPLE_MIN - 1), gObj[aIndex].AccountID, gObj[aIndex].Name, lpItem->m_Number);
+							}
+						}
 					}
 				}
 				else
@@ -2929,24 +2949,66 @@ BOOL CGItemDropRequest(PMSG_ITEMTHROW * lpMsg, int aIndex, BOOL drop_type)
 	{
 		pResult.Result = false;
 	}
+	if (lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(13, 42)) //Season 2.5 add-on
+	{
+		pResult.Result = false;
+	}
 
-	if ( (lpObj->pInventory[lpMsg->Ipos].m_Type >= ITEMGET(13,0) && lpObj->pInventory[lpMsg->Ipos].m_Type <= ITEMGET(13,3))
-		||  lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(14,13) ||
-		lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(14,14) ||
-		lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(14,16) ||
-		(lpObj->pInventory[lpMsg->Ipos].m_Type >= ITEMGET(12,0)
-		&& lpObj->pInventory[lpMsg->Ipos].m_Type <= ITEMGET(12,6)) 
-		|| lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(12,15) 
-		|| (lpObj->pInventory[lpMsg->Ipos].m_Level > 4 
-		&& lpObj->pInventory[lpMsg->Ipos].m_Type < ITEMGET(12,0)) 
-		||  lpObj->pInventory[lpMsg->Ipos].IsSetItem() != FALSE 
-		||  lpObj->pInventory[lpMsg->Ipos].IsExtItem() != FALSE )
+	if (IT_MAP_RANGE(lpObj->MapNumber) != FALSE) //Season 2.5 add-on
+	{
+		if (lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(13, 51))
+		{
+			pResult.Result = false;
+		}
+	}
+
+	if (lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(14, 64))
+	{
+		pResult.Result = false;
+	}
+
+	if (lpObj->pInventory[lpMsg->Ipos].m_Type >= ITEMGET(12, 36) && //Season 2.5 add-on
+		lpObj->pInventory[lpMsg->Ipos].m_Type <= ITEMGET(12, 40) &&
+		Configs.gPkLimitFree == 0) //season 4.5 add-on
+	{
+		pResult.Result = false;
+	}
+
+	if (lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(13, 52) || //Season 2.5 add-on
+		lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(13, 53))
+	{
+		pResult.Result = false;
+	}
+
+	if (lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(14, 13) ||
+		lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(14, 14) ||
+		lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(14, 16) ||
+		(lpObj->pInventory[lpMsg->Ipos].m_Type >= ITEMGET(12, 0)
+		&& lpObj->pInventory[lpMsg->Ipos].m_Type <= ITEMGET(12, 6))
+		|| lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(12, 15)
+		|| (lpObj->pInventory[lpMsg->Ipos].m_Level >= 7 //season 2.5 changed 
+		&& lpObj->pInventory[lpMsg->Ipos].m_Type < ITEMGET(12, 0))
+		|| lpObj->pInventory[lpMsg->Ipos].IsSetItem() != FALSE
+		|| lpObj->pInventory[lpMsg->Ipos].IsExtItem() != FALSE
+		|| lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(13, 14) //season 2.5 add-on
+		|| lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(13, 19)
+		|| lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(13, 15)
+		|| lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(13, 34)
+		|| lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(14, 31)
+		|| lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(14, 41)
+		|| lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(14, 42)
+		|| lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(14, 43)
+		|| lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(14, 44)
+		|| lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(12, 41) //season 3 add-on
+		|| lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(12, 42)
+		|| lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(12, 43))
 	{
 		if (Configs.gPkLimitFree == FALSE)
 		{
 			pResult.Result = false;
 		}
 	}
+
 
 	if ( g_kJewelOfHarmonySystem.IsStrengthenByJewelOfHarmony(&lpObj->pInventory[lpMsg->Ipos]) == TRUE )
 	{
@@ -2975,6 +3037,7 @@ BOOL CGItemDropRequest(PMSG_ITEMTHROW * lpMsg, int aIndex, BOOL drop_type)
 	{
 		return 0xFF;
 	}
+
 	if ( pResult.Result == 1 )
 	{
 		::ItemIsBufExOption(NewOption, &lpObj->pInventory[lpMsg->Ipos]);
@@ -3213,6 +3276,12 @@ BOOL CGItemDropRequest(PMSG_ITEMTHROW * lpMsg, int aIndex, BOOL drop_type)
 					lpObj->AccountID, lpObj->Name, lpObj->MapNumber, lpObj->X, lpObj->Y,
 					serial, szItemName, type, level, Option1, Option2, Option3);
 			}
+			else if (type == ITEMGET(14, 51)) //Season 2.5 add-on Christmas Star identical
+			{
+				gObjInventoryDeleteItem(aIndex, lpMsg->Ipos);
+				ChristmasStarDrop(lpObj);
+				LogAddTD("[%s][%s][%d]%d/%d Used Christmas-Star Serial:%u (%s:%d/level:%d/skill:%d/op2:%d/op3:%d)", lpObj->AccountID, lpObj->Name, lpObj->MapNumber, lpObj->X, lpObj->Y, serial, szItemName, type, level, Option1, Option2, Option3);
+			}
 			else if ( type == ITEMGET(14,63) )
 			{
 				gObjInventoryDeleteItem(aIndex, lpMsg->Ipos);
@@ -3403,6 +3472,12 @@ BOOL CGItemDropRequest(PMSG_ITEMTHROW * lpMsg, int aIndex, BOOL drop_type)
 
 					return FALSE;
 				}
+			}
+			else if (type == ITEMGET(14, 52)) //Season 2.5 add-on GM Box identical
+			{
+				gObjInventoryDeleteItem(aIndex, lpMsg->Ipos);
+				GMPresentBoxItemBagOpen(lpObj); //season 3.0 changed arguments
+				LogAddTD("[%s][%s][%d]%d/%d Used GM Present Box Serial:%u (%s:%d/level:%d/skill:%d/op2:%d/op3:%d)", lpObj->AccountID, lpObj->Name, lpObj->MapNumber, lpObj->X, lpObj->Y, serial, szItemName, type, level, Option1, Option2, Option3);
 			}
 			else
 			{
@@ -3767,6 +3842,17 @@ void CGInventoryItemMove(PMSG_INVENTORYITEMMOVE * lpMsg, int aIndex)
 		if ( DurTSend != FALSE )
 			::GCItemDurSend(aIndex, target, lpObj->pInventory[target].m_Durability, FALSE);
 
+		int loc77 = (lpMsg->sItemInfo[0] + ((lpMsg->sItemInfo[3] & 0x80) * 2)) + ((lpMsg->sItemInfo[5] & 0xF0) << 5);
+
+		if (loc77 == ITEMGET(14, 29)) //season 2.5 add-on
+		{
+			if (lpObj->pInventory[target].m_Durability == 0.0f && (lpMsg->sFlag == FALSE) && (lpMsg->tFlag == FALSE))
+			{
+				GCInventoryItemDeleteSend(aIndex, target, 0);
+			}
+		}
+
+
 		if ( result != 0xFF && lpMsg->sFlag == 2 && lpMsg->tFlag == 0)
 		{
 			int money = ::GetWarehouseUsedHowMuch(lpObj->Level, lpObj->WarehousePW);
@@ -3925,26 +4011,6 @@ void CGTalkRequestRecv(PMSG_TALKREQUEST * lpMsg, int aIndex)
 	} 
 	//
 	int ShopNum = gObj[DealerNumber].ShopNumber;
-	
-	if(gObj[DealerNumber].Class == 385)
-	{
-		unsigned char TempleLvl = ILAPI_GetTempleLevel(gObj[aIndex].Level);
-		unsigned char MummyMsg[6] = {0xc3, 0x06, 0x30, 0x14, 0x00, (unsigned char)ILAPI_GetBattleMembersCount(&Battle[TempleLvl - 1])}; // last byte is users count.
-		DataSend(aIndex, MummyMsg, 6);
-		return;
-	}
-
-	if(gObj[DealerNumber].Class == 380)
-	{
-		ILAPI_GiftUserTake(aIndex);
-		return;
-	}
-
-	if(gObj[DealerNumber].Class == 384 || gObj[DealerNumber].Class == 383)
-	{
-		ILAPI_GiftUserGive(aIndex);
-		return;
-	}
 
 	if ( gObj[DealerNumber].Type == OBJ_NPC )
 	{
@@ -4068,7 +4134,7 @@ void CGTalkRequestRecv(PMSG_TALKREQUEST * lpMsg, int aIndex)
 			pResult.level4 = Configs.gDQChaosSuccessRateLevel4;
 			pResult.level5 = Configs.gDQChaosSuccessRateLevel5;
 			pResult.level6 = Configs.gDQChaosSuccessRateLevel6;
-//			pResult.level7 = gDQChaosSuccessRateLevel7; //season 3.0 add-on
+			pResult.level7 = Configs.gDQChaosSuccessRateLevel7; //season 3.0 add-on
 
 			DataSend(aIndex, (LPBYTE)&pResult, pResult.h.size);
 			gObjInventoryTrans(lpObj->m_Index);
@@ -4491,7 +4557,9 @@ void CGSellRequestRecv(PMSG_SELLREQUEST * lpMsg, int aIndex)
 			lpObj->pInventory[lpMsg->Pos].m_Option2, lpObj->pInventory[lpMsg->Pos].m_Option3,
 			lpObj->pInventory[lpMsg->Pos].m_Number, (int)lpObj->pInventory[lpMsg->Pos].m_Durability,
 			NewOption[0], NewOption[1], NewOption[2], NewOption[3], NewOption[4], NewOption[5], NewOption[6], 
-			lpObj->pInventory[lpMsg->Pos].m_SetOption);
+			lpObj->pInventory[lpMsg->Pos].m_SetOption, lpObj->pInventory[lpMsg->Pos].m_ItemOptionEx >> 7, //season 2.5 add-on 
+			g_kJewelOfHarmonySystem.GetItemStrengthenOption(&lpObj->pInventory[lpMsg->Pos]),
+			g_kJewelOfHarmonySystem.GetItemOptionLevel(&lpObj->pInventory[lpMsg->Pos]));
 
 		::gObjInventoryDeleteItem(aIndex, lpMsg->Pos);
 
@@ -4623,6 +4691,28 @@ void ItemDurRepaire(LPOBJ lpObj, CItem * DurItem, int pos, int RequestPos)
 		return;
 	}
 
+	if (itemtype == ITEMGET(13, 40)) //Second Edition
+	{
+		pResult.Money = 0;
+		DataSend(lpObj->m_Index, (LPBYTE)&pResult, pResult.h.size);
+		return;
+	}
+
+	if (itemtype == ITEMGET(13, 41)) //season 2.5 add-on
+	{
+		pResult.Money = 0;
+		DataSend(lpObj->m_Index, (LPBYTE)&pResult, pResult.h.size);
+		return;
+	}
+
+	if (itemtype == ITEMGET(13, 42)) //season 2.5 add-on
+	{
+		pResult.Money = 0;
+		DataSend(lpObj->m_Index, (LPBYTE)&pResult, pResult.h.size);
+		return;
+	}
+
+
 	pResult.Money = GetNeedMoneyItemDurRepaire(DurItem, RequestPos);
 
 	if ( pResult.Money <= 0 )
@@ -4710,7 +4800,20 @@ void CGModifyRequestItem(PMSG_ITEMDURREPAIR * lpMsg, int aIndex)
 					 lpObj->pInventory[n].m_Level == 4 || 
 					 lpObj->pInventory[n].m_Level == 5 ))
 					 continue;
-					
+
+				if (lpObj->pInventory[n].m_Type == ITEMGET(13, 40)) //Second Edition
+					continue;
+
+				if (lpObj->pInventory[n].m_Type == ITEMGET(13, 41)) //season 2.5 add-on
+					continue;
+
+				if (lpObj->pInventory[n].m_Type == ITEMGET(13, 42)) //season 2.5 add-on
+					continue;
+
+				if (lpObj->pInventory[n].m_Type == ITEMGET(13, 51)) //season 2.5 add-on
+					continue;
+
+
 				ItemDurRepaire(lpObj,&lpObj->pInventory[n] , n, lpMsg->Requestpos);
 			}
 		}
@@ -4739,6 +4842,18 @@ void CGModifyRequestItem(PMSG_ITEMDURREPAIR * lpMsg, int aIndex)
 		return;
 
 	if ( lpObj->pInventory[lpMsg->Position].m_Type == ITEMGET(13,38) )
+		return;
+
+	if (lpObj->pInventory[lpMsg->Position].m_Type == ITEMGET(13, 40)) //Second Edition
+		return;
+
+	if (lpObj->pInventory[lpMsg->Position].m_Type == ITEMGET(13, 41)) //season 2.5 add-on
+		return;
+
+	if (lpObj->pInventory[lpMsg->Position].m_Type == ITEMGET(13, 42)) //season 2.5 add-on
+		return;
+
+	if (lpObj->pInventory[lpMsg->Position].m_Type == ITEMGET(13, 51)) //season 2.5 add-on
 		return;
 
 	ItemDurRepaire(lpObj, &lpObj->pInventory[lpMsg->Position], lpMsg->Position, lpMsg->Requestpos);
@@ -4790,6 +4905,15 @@ void CGTradeRequestSend(PMSG_TRADE_REQUEST * lpMsg, int aIndex)
 	if ( gObj[number].CloseCount >= 0 )
 		return;
 
+	if (gObj[number].Type != OBJ_USER) //season4 add-on
+	{
+		LogAddC(2, "[HACKTOOL]: NPC-TradeRequest NPC:%d IP:%s Account:%s Name:%s State:%d",
+			gObj[number].Class, gObj[aIndex].Ip_addr, gObj[aIndex].AccountID,
+			gObj[aIndex].Name, gObj[aIndex].Connected);
+		CloseClient(aIndex);
+		return;
+	}
+
 	if ( DS_MAP_RANGE(gObj[number].MapNumber) != FALSE )
 	{
 		::GCServerMsgStringSend(lMsg.Get(MSGGET(2, 199)), aIndex, 1);
@@ -4815,6 +4939,13 @@ void CGTradeRequestSend(PMSG_TRADE_REQUEST * lpMsg, int aIndex)
 			::GCServerMsgStringSend(lMsg.Get(MSGGET(4, 188)), aIndex, 1);
 			return;
 		}	
+	}
+
+	if (IT_MAP_RANGE(gObj[aIndex].MapNumber) != FALSE)
+	{
+
+		::GCServerMsgStringSend(lMsg.Get(3396), aIndex, 1);
+		return;
 	}
 
 	if ( (gObj[number].m_Option &1) != 1 )
@@ -5448,7 +5579,7 @@ void CGPShopReqOpen(PMSG_REQ_PSHOP_OPEN * lpMsg, int aIndex)
 		LogAddTD("[PShop] ERROR : Index is not CHARACTER : %d", aIndex);
 		return;
 	}
-
+	/*
 	if ( gObj[aIndex].Level <= 5 )
 	{
 		LogAddTD("[PShop] [%s][%s] ERROR : Level is Under 6 : %d",
@@ -5457,7 +5588,7 @@ void CGPShopReqOpen(PMSG_REQ_PSHOP_OPEN * lpMsg, int aIndex)
 
 		return;
 	}
-
+		  */
 	if ( (gObj[aIndex].Penalty&4) == 4 || (gObj[aIndex].Penalty&8) == 8 )
 	{
 		LogAddTD("[PShop] [%s][%s] ERROR : Cant't Open Shop - Item Block" ,gObj[aIndex].AccountID, gObj[aIndex].Name);
@@ -6204,16 +6335,26 @@ void CGPartyRequestRecv(PMSG_PARTYREQUEST * lpMsg, int aIndex)
 		return;
 	}
 
-	if ( CC_MAP_RANGE(gObj[aIndex].MapNumber) )
+	if (gObj[number].Type != OBJ_USER) //season4 add-on
+	{
+		LogAddC(2, "[HACKTOOL] : NPC-PartyRequest NPC:%d IP:%s Account:%s Name:%s State:%d",
+			gObj[number].Class, gObj[aIndex].Ip_addr, gObj[aIndex].AccountID,
+			gObj[aIndex].Name, gObj[aIndex].Connected);
+		CloseClient(aIndex);
+		return;
+	}
+
+	if (CC_MAP_RANGE(gObj[aIndex].MapNumber))
 	{
 		::GCServerMsgStringSend(lMsg.Get(MSGGET(4, 198)), aIndex, 1);
 		return;
 	}
 
-#if (FOREIGN_GAMESERVER==1)
-	if ( szAuthKey[4] != AUTHKEY4 )
-		DestroyGIocp();
-#endif
+	if (IT_MAP_RANGE(gObj[aIndex].MapNumber)) //season 2.5 add-on
+	{
+		::GCServerMsgStringSend(lMsg.Get(3397), aIndex, 1);
+		return;
+	}
 
 	LogAddL("Party result : %d %d %d %d", gObj[aIndex].CloseCount, gObj[number].CloseCount, gObj[aIndex].Connected, gObj[number].Connected);
 	LogAddL("%s %s", gObj[aIndex].Name, gObj[number].Name);
@@ -6391,6 +6532,16 @@ void CGPartyRequestResultRecv(PMSG_PARTYREQUESTRESULT * lpMsg, int aIndex)
 		result = true;
 	}
 
+
+	if (gObj[number].Type != OBJ_USER) //season4 add-on
+	{
+		LogAddC(2, "[HACKTOOL] : NPC-TradeRequest(result) npc:%d ip:%s account:%s name:%s State:%d",
+			gObj[number].Class, gObj[aIndex].Ip_addr, gObj[aIndex].AccountID,
+			gObj[aIndex].Name, gObj[aIndex].Connected);
+		CloseClient(aIndex);
+		return;
+	}
+
 	if ( gObj[number].MapNumber != gObj[aIndex].MapNumber )
 	{
 		result = false;
@@ -6400,6 +6551,12 @@ void CGPartyRequestResultRecv(PMSG_PARTYREQUESTRESULT * lpMsg, int aIndex)
 	if ( CC_MAP_RANGE(gObj[aIndex].MapNumber) )
 	{
 		GCServerMsgStringSend(lMsg.Get(MSGGET(4, 198)), aIndex, 1);
+		result = false;
+		::GCResultSend(number, 0x41, 0x00);
+	}
+
+	if (IT_MAP_RANGE(gObj[aIndex].MapNumber)) //season 2.5 add-on
+	{
 		result = false;
 		::GCResultSend(number, 0x41, 0x00);
 	}
@@ -6667,6 +6824,50 @@ void CGPartyDelUser(PMSG_PARTYDELUSER * lpMsg, int aIndex)
 
 	if ( lpMsg->Number == 0 || count <= 2 )
 	{
+		if (IT_MAP_RANGE(gObj[usernumber].MapNumber) != FALSE) //season 2.5 add-on
+		{
+			if (lpMsg->Number == 0 && count > 2)
+			{
+				gParty.Delete(pnumber, lpMsg->Number);
+				count = gParty.GetCount(gObj[aIndex].PartyNumber);
+
+				gObj[usernumber].PartyNumber = -1;
+				gObj[usernumber].PartyTargetUser = -1;
+
+				//gParty.SetPkCount(pnumber);
+				//gParty.ResetPkLevel(pnumber);
+				GCPartyDelUserSend(usernumber);
+				CGPartyListAll(pnumber);
+
+				if (count == 0)
+				{
+					gParty.Destroy(pnumber);
+				}
+				return;
+			}
+		}
+		if (IT_MAP_RANGE(gObj[usernumber].MapNumber) != FALSE) //season 2.5 add-on
+		{
+			if (count <= 2)
+			{
+				gParty.Delete(pnumber, lpMsg->Number);
+				count = gParty.GetCount(gObj[aIndex].PartyNumber);
+
+				gObj[usernumber].PartyNumber = -1;
+				gObj[usernumber].PartyTargetUser = -1;
+
+				/*gParty.SetPkCount(pnumber);
+
+				if (lpMsg == NULL)
+				{
+					gParty.ResetPkLevel(pnumber);
+				}
+					  */
+				GCPartyDelUserSend(usernumber);
+				CGPartyListAll(pnumber);
+				return;
+			}
+		}
 		for ( int n=0;n<MAX_USER_IN_PARTY;n++)
 		{
 			number = gParty.m_PartyS[pnumber].Number[n];
@@ -6743,6 +6944,12 @@ void CGGuildRequestRecv(PMSG_GUILDJOINQ * lpMsg, int aIndex)
 		return;
 	}
 
+	if (IT_MAP_RANGE(gObj[aIndex].MapNumber) != FALSE) //season 2.5 add-on
+	{
+		MsgOutput(aIndex, (lMsg.Get(3398)));
+		return;
+	}
+
 	if ( gObj[aIndex].m_IfState.use > 0 )
 	{
 		GCResultSend(aIndex, 0x51, 0x06);
@@ -6772,6 +6979,16 @@ void CGGuildRequestRecv(PMSG_GUILDJOINQ * lpMsg, int aIndex)
 		GCResultSend(aIndex, 0x51, 0x00);
 		return;
 	}
+
+	if (gObj[number].Type != OBJ_USER) //season4 add-on
+	{
+		LogAddC(2, "[HACKTOOL] : NPC-GuildRequest npc:%d ip:%s account:%s name:%s State:%d",
+			gObj[number].Class, gObj[aIndex].Ip_addr, gObj[aIndex].AccountID,
+			gObj[aIndex].Name, gObj[aIndex].Connected);
+		CloseClient(aIndex);
+		return;
+	}
+
 
 	if ( gObj[number].GuildNumber > 0 )
 	{
@@ -9530,6 +9747,81 @@ void CGTeleportRecv(PMSG_TELEPORT* lpMsg, int aIndex)
 	BYTE y;
 	PMSG_MAGICATTACK_RESULT pAttack;
 
+	if (IT_MAP_RANGE(gObj[aIndex].MapNumber) != FALSE) //season 2.5 add-on
+	{
+		if (g_IllusionTempleEvent.GetState(gObj[aIndex].MapNumber) == 2)
+		{
+			if (g_IllusionTempleEvent.CheckTeleport(aIndex) != FALSE)
+			{
+				PMSG_TELEPORT_RESULT pTeleportResult;
+
+				pTeleportResult.h.c = 0xC3;
+				pTeleportResult.h.size = sizeof(pTeleportResult);
+				pTeleportResult.h.headcode = 0x1C;
+				pTeleportResult.MoveNumber = 0;
+				pTeleportResult.MapNumber = gObj[aIndex].MapNumber;
+				pTeleportResult.MapX = gObj[aIndex].X;
+				pTeleportResult.MapY = gObj[aIndex].Y;
+				pTeleportResult.Dir = gObj[aIndex].Dir;
+				DataSend(aIndex, (LPBYTE)&pTeleportResult, pTeleportResult.h.size);
+				return;
+			}
+			if (g_IllusionTempleEvent.GetRestrictionSpellStatus(gObj[aIndex].m_iIllusionTempleIndex, gObj[aIndex].MapNumber) != FALSE)
+			{
+				PMSG_TELEPORT_RESULT pTeleportResult;
+
+				pTeleportResult.h.c = 0xC3;
+				pTeleportResult.h.size = sizeof(pTeleportResult);
+				pTeleportResult.h.headcode = 0x1C;
+				pTeleportResult.MoveNumber = 0;
+				pTeleportResult.MapNumber = gObj[aIndex].MapNumber;
+				pTeleportResult.MapX = gObj[aIndex].X;
+				pTeleportResult.MapY = gObj[aIndex].Y;
+				pTeleportResult.Dir = gObj[aIndex].Dir;
+				DataSend(aIndex, (LPBYTE)&pTeleportResult, pTeleportResult.h.size);
+				return;
+			}
+		}
+	}
+
+	if (IT_MAP_RANGE(gObj[aIndex].MapNumber) != FALSE) //season 2.5 add-on
+	{
+		if (g_IllusionTempleEvent.GetState(gObj[aIndex].MapNumber) == 1)
+		{
+			PMSG_TELEPORT_RESULT pTeleportResult;
+
+			pTeleportResult.h.c = 0xC3;
+			pTeleportResult.h.size = sizeof(pTeleportResult);
+			pTeleportResult.h.headcode = 0x1C;
+			pTeleportResult.MoveNumber = 0;
+			pTeleportResult.MapNumber = gObj[aIndex].MapNumber;
+			pTeleportResult.MapX = gObj[aIndex].X;
+			pTeleportResult.MapY = gObj[aIndex].Y;
+			pTeleportResult.Dir = gObj[aIndex].Dir;
+			DataSend(aIndex, (LPBYTE)&pTeleportResult, pTeleportResult.h.size);
+			return;
+		}
+	}
+
+	if (CC_MAP_RANGE(gObj[aIndex].MapNumber) != FALSE) //season 4.0 add-on (fix)
+	{
+		if (g_ChaosCastle.GetCurrentState(gObj[aIndex].m_cChaosCastleIndex) == 3)
+		{
+			PMSG_TELEPORT_RESULT pTeleportResult;
+
+			pTeleportResult.h.c = 0xC3;
+			pTeleportResult.h.size = sizeof(pTeleportResult);
+			pTeleportResult.h.headcode = 0x1C;
+			pTeleportResult.MoveNumber = 0;
+			pTeleportResult.MapNumber = gObj[aIndex].MapNumber;
+			pTeleportResult.MapX = gObj[aIndex].X;
+			pTeleportResult.MapY = gObj[aIndex].Y;
+			pTeleportResult.Dir = gObj[aIndex].Dir;
+			DataSend(aIndex, (LPBYTE)&pTeleportResult, pTeleportResult.h.size);
+			return;
+		}
+	}
+
 	if ( lpMsg->MoveNumber == 0 )
 	{
 
@@ -9549,9 +9841,6 @@ void CGTeleportRecv(PMSG_TELEPORT* lpMsg, int aIndex)
 			LogAddC(2, "[%s][%s] Try Teleport Not Move Area [%d,%d]",
 				gObj[aIndex].AccountID, gObj[aIndex].Name,
 				x, y);
-
-			if ( szAuthKey[5] != AUTHKEY5 )
-				DestroyGIocp();
 
 			PMSG_TELEPORT_RESULT pTeleportResult;
 
@@ -9668,6 +9957,15 @@ void CGTargetTeleportRecv(PMSG_TARGET_TELEPORT * lpMsg, int aIndex)
 		return;
 	}
 
+	if (IT_MAP_RANGE(gObj[iTargetIndex].MapNumber) != FALSE) //season 2.5 add-on
+	{
+		if (g_IllusionTempleEvent.CheckTeleport(gObj[iTargetIndex].m_Index) != FALSE)
+		{
+			return;
+		}
+	}
+
+
 	if ( lpMagic )
 	{
 		int usemana = gObjMagicManaUse(&gObj[aIndex], lpMagic);
@@ -9704,6 +10002,11 @@ void GCTeleportSend(LPOBJ lpObj, BYTE MoveNumber, BYTE MapNumber, BYTE MapX, BYT
 
 	if ( lpObj->Type != OBJ_USER )
 		return;
+
+	if (MoveNumber > 0) //Season 2.5 add-on
+	{
+		MoveNumber = 1;
+	}
 
 	pMsg.h.c = 0xC3;
 	pMsg.h.size = sizeof(pMsg);
@@ -12347,6 +12650,14 @@ void CGRequestEnterChaosCastle(PMSG_REQ_MOVECHAOSCASTLE* lpMsg, int iIndex)
 		return;
 	}
 
+	//season 2.5 add-on
+	BYTE attr = MapC[gObj[iIndex].MapNumber].GetAttr(gObj[iIndex].X, gObj[iIndex].Y);
+
+	if ((attr & 1) != 1)
+	{
+		return;
+	}
+
 	int iBC_INDEX = -1;
 
 	if ( g_ChaosCastle.CheckUserEnterMoney(iIndex, iENTER_LEVEL) )
@@ -13608,6 +13919,12 @@ void CGRelationShipReqJoinBreakOff(PMSG_RELATIONSHIP_JOIN_BREAKOFF_REQ * aRecv, 
 	if ( g_CastleSiegeSync.GetCastleState() >= 5 && g_CastleSiegeSync.GetCastleState() <= 7 )
 	{
 		MsgOutput(aIndex, lMsg.Get(MSGGET(6, 196)));
+		return;
+	}
+
+	if (IT_MAP_RANGE(gObj[aIndex].MapNumber) != FALSE) //season 2.5 add-on
+	{
+		MsgOutput(aIndex, lMsg.Get(3399));
 		return;
 	}
 
@@ -15638,7 +15955,7 @@ struct PMSG_ANS_CSATTKGUILDLIST
 void CGReqCsAttkGuildList(PMSG_REQ_CSATTKGUILDLIST * lpMsg, int iIndex)
 {
 	if ( lpMsg == NULL)	return;
-	char cBUFFER[1022];
+	char cBUFFER[1625];
 	PMSG_ANS_CSATTKGUILDLIST * lpMsgSend = (PMSG_ANS_CSATTKGUILDLIST *)cBUFFER;
 	PMSG_CSATTKGUILDLIST * lpMsgSendBody = (PMSG_CSATTKGUILDLIST *)(cBUFFER + sizeof(PMSG_ANS_CSATTKGUILDLIST));
 	int iCount = 0;
@@ -16020,4 +16337,48 @@ void GCReqEnterKanturuBossMap(PMSG_REQ_ENTER_KANTURU_BOSS_MAP* lpMsg, int iIndex
 	if (OBJMAX_RANGE(iIndex) == FALSE)
 		return;
 	g_KanturuEntranceNPC.NotifyResultEnterKanturuBossMap(iIndex); 
+}
+
+void CGReqEnterIllusionTemple(PMSG_ANS_ILLUSIONTEMPLE_ENTER* lpMsg, int iIndex) //case 0 
+{
+	if (OBJMAX_RANGE(iIndex) == FALSE)
+	{
+		LogAdd("return %s %d", __FILE__, __LINE__);
+		return;
+	}
+
+	g_IllusionTempleEvent.IllusionTempleAddUser(iIndex, lpMsg->btFloorIndex - 1, lpMsg->TicketPos);
+}
+
+void CGReqUseIllusionTempleKillCntSkill(PMSG_USE_ILLUSIONTEMPLE_KILLCOUNT_SKILL* lpMsg, int iIndex) //case 2 
+{
+	if (OBJMAX_RANGE(iIndex) == FALSE)
+	{
+		LogAdd("return %s %d", __FILE__, __LINE__);
+		return;
+	}
+
+	WORD TargetIndex = MAKE_NUMBERW(lpMsg->btTargetH, lpMsg->btTargetL);
+
+	g_IllusionTempleEvent.RunningSkill(iIndex, MAKE_NUMBERW(lpMsg->btSkillIdH, lpMsg->btSkillIdL), TargetIndex, lpMsg->btDis);
+}
+
+void CGReqIllusionTempleDropReward(PMSG_ILLUSIONTEMPLE_DROP_REWARD* lpMsg, int iIndex) //case 5 
+{
+	if (OBJMAX_RANGE(iIndex) == FALSE)
+	{
+		LogAdd("return %s %d", __FILE__, __LINE__);
+		return;
+	}
+
+	g_IllusionTempleEvent.GiveItemReward(iIndex);
+}
+
+void GCSendIllusionTempleKillCount(int aIndex, BYTE KillCount)
+{
+	PMSG_SEND_ILLUSIONTEMPLE_KILLCOUNT pMsg;
+
+	PHeadSubSetB((LPBYTE)&pMsg, 0xBF, 0x06, sizeof(pMsg));
+	pMsg.btKillCount = KillCount;
+	DataSend(aIndex, (LPBYTE)&pMsg, pMsg.h.size);
 }

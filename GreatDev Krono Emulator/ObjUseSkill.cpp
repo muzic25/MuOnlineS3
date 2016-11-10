@@ -1089,6 +1089,22 @@ BOOL CObjUseSkill::SkillChangeUse(int aIndex)
 		}
 	}
 
+	if (IT_MAP_RANGE(lpObj->MapNumber) != FALSE) //Season2.5 add-on (illusion temple checks)
+	{
+		if (g_IllusionTempleEvent.GetState(lpObj->MapNumber) != 0)
+		{
+			int ebp10 = g_IllusionTempleEvent.GetUserJoinSide(lpObj->MapNumber, lpObj->m_Index);
+			if (ebp10 == 0)
+			{
+				skill_level = 404;
+			}
+			else if (ebp10 == 1)
+			{
+				skill_level = 405;
+			}
+		}
+	}
+
 	int change = -1;
 
 	switch(skill_level)
@@ -1100,9 +1116,11 @@ BOOL CObjUseSkill::SkillChangeUse(int aIndex)
 	case 4:	change = 9;	break;
 	case 5:	change = 41;	break;
 	case 372:	change = skill_level;	break;
-			case 373:	change = skill_level;	break;
+	case 373:	change = skill_level;	break;
 	case 374:	change = skill_level;	break;
 	case 378:	change = skill_level;	break;
+	case 404:	change = skill_level;	break;//season 2.5
+	case 405:   change = skill_level;	break;
 
 	default: change = -1;	break;
 	}
@@ -1128,6 +1146,20 @@ BOOL CObjUseSkill::SkillChangeUse(int aIndex)
 		GCReFillSend(lpObj->m_Index,lpObj->Life,0xFF,0,lpObj->iShield);
 		GCReFillSend(lpObj->m_Index,lpObj->MaxLife + lpObj->AddLife,0xFE,0,lpObj->iMaxShield + lpObj->iAddShield);
 	}
+
+	if (lpObj->m_Change == 374) //Season 2.5 add-on
+	{
+		if (change != 374)
+		{
+			lpObj->m_AttackDamageMaxLeft -= 20;
+			lpObj->m_AttackDamageMinLeft -= 20;
+			lpObj->m_AttackDamageMaxRight -= 20;
+			lpObj->m_AttackDamageMinRight -= 20;
+			lpObj->m_MagicDamageMin -= 20;
+			lpObj->m_MagicDamageMax -= 20;
+		}
+	}
+
 	if(lpObj->m_Change >= 0 && lpObj->m_iPeriodItemEffectIndex != -1)
 	{
 		GCStateInfoSend(lpObj, 0, 0x8000000);
@@ -3511,6 +3543,16 @@ BOOL CObjUseSkill::SkillRemoveCloaking(int aIndex, int aTargetIndex, CMagicInf *
 	if(lpObj->MapNumber != MAP_INDEX_CASTLESIEGE && lpObj->MapNumber != MAP_INDEX_CASTLEHUNTZONE)
 	{
 		return false;
+	}
+
+	LPOBJ lpTargetObj = &gObj[aTargetIndex]; //loc3
+
+	if ((lpTargetObj->Authority & 32) == 32) //Season 2.5 add-on
+	{
+		if (gObjSearchActiveEffect(lpTargetObj, AT_INVISIBILITY) != FALSE) //season3 add-on
+		{
+			return false;
+		}
 	}
 
 	int tObjNum;

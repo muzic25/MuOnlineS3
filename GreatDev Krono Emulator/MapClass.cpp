@@ -567,6 +567,14 @@ BOOL MapClass::ItemGive(int aIndex, int item_num, bool bFailNotSend)
 								{
 									lootresult = 1;
 								}
+							
+								if (IT_MAP_RANGE(gObj[aIndex].MapNumber)) //season 2.5 add-on
+								{
+									if (this->m_cItem[item_num].m_Type == ITEMGET(12, 15))
+									{
+										lootresult = 0;
+									}
+								}
 							}
 						}
 					}

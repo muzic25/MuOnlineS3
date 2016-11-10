@@ -1834,13 +1834,6 @@ void GJSetCharacterInfo(LPOBJ lpObj, int aIndex, BOOL bMapServerMove)
 		GDSetWarehouseList(aIndex);
 	}
 
-#if (FOREIGN_GAMESERVER==1)
-	if ( szAuthKey[1] != AUTHKEY1 )
-	{
-		DestroyGIocp();
-	}
-#endif
-
 	SDHP_DBCHAR_INFOSAVE pCSave;	// Packet Character Save
  
 	pCSave.h.c = 0xC2;
@@ -2654,6 +2647,21 @@ void ItemSerialCreateRecv(SDHP_ITEMCREATERECV * lpMsg)
 			}
 		}
 
+
+		if (((mapnumber) < MAP_INDEX_ILLUSION_TEMPLE1) ? FALSE : ((mapnumber) > MAP_INDEX_ILLUSION_TEMPLE5) ? FALSE : TRUE) //Season 2.5 add-on
+		{
+			if (lpMsg->Type == ITEMGET(14, 64))
+			{
+				MapC[mapnumber].m_cItem[iItemCount].m_Time = GetTickCount() + 15000;
+				MapC[mapnumber].m_cItem[iItemCount].m_LootTime = GetTickCount() + 5000;
+			}
+
+			if (lpMsg->Type == ITEMGET(12, 15))
+			{
+				MapC[mapnumber].m_cItem[iItemCount].m_Time = GetTickCount() + 300000;
+				MapC[mapnumber].m_cItem[iItemCount].m_LootTime = GetTickCount() + 10000;
+			}
+		}
 		//int iItemCount;
 		BYTE NewOption[MAX_EXOPTION_SIZE];
 

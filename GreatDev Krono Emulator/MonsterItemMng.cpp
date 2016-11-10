@@ -195,6 +195,23 @@ void CMonsterItemMng::gObjGiveItemSearch(int monsterlevel, int maxlevel)
 		{
 			continue;
 		}
+
+		//season 3.0 add-on
+		if ((type == 14 && index == 45) ||
+			(type == 14 && index == 46) ||
+			(type == 14 && index == 47) ||
+			(type == 14 && index == 48) ||
+			(type == 14 && index == 49) ||
+			(type == 14 && index == 50))
+		{
+			continue;
+		}
+
+		//season 2.5 add-on
+		if ((type == 13 && index == 41))
+		{
+			continue;
+		}
         
 		if ( (type == 13 && index < 8) || 
 			( (type == 14) && (index == 9 || index == 10 ||	index == 13 || index == 14 || index ==16 || index == 17 || index == 18 || index == 22 ) ) ||

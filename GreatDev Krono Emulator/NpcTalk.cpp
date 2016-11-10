@@ -303,18 +303,32 @@ BOOL NpcTalk(LPOBJ lpNpc, LPOBJ lpObj)
 				return TRUE;
 			}
 			break;
+		case 385:
+			if (NpcIllusionMirage(lpNpc, lpObj) == TRUE)
+			{
+				return TRUE;
+			}
+			break;
 		case 380:
-			return TRUE;
+			if (NpcIllusionStatue(lpNpc, lpObj) == TRUE)
+			{
+				return TRUE;
+			}
 			break;
 		case 383:
-			return TRUE;
+			if (NpcIllusionYellowPedestal(lpNpc, lpObj) == TRUE)
+			{
+				return TRUE;
+			}
 			break;
 		case 384:
-			return TRUE;
+			if (NpcIllusionBluePedestal(lpNpc, lpObj) == TRUE)
+			{
+				return TRUE;
+			}
 			break;
-		case 385:
-			return TRUE;
-			break;
+
+
 		default: break;		
 	}
 
@@ -1479,6 +1493,56 @@ BOOL NpcAngelaSupplier(LPOBJ lpNpc, LPOBJ lpObj)
 	return FALSE;
 }
 
+//Illusion Maybe Comes Now
+
+BOOL NpcIllusionStatue(LPOBJ lpNpc, LPOBJ lpObj) //identical gs-cs 56
+{
+	if (gObjIsConnected(lpObj->m_Index) == FALSE)
+	{
+		return TRUE;
+	}
+
+	g_IllusionTempleEvent.SetNpcStatueUser(lpObj->MapNumber, lpNpc, lpObj);
+
+	return TRUE;
+}
+
+BOOL NpcIllusionYellowPedestal(LPOBJ lpNpc, LPOBJ lpObj)
+{
+	if (gObjIsConnected(lpObj->m_Index) == FALSE)
+	{
+		return TRUE;
+	}
+
+	g_IllusionTempleEvent.SetNpcAlliedUser(lpObj->MapNumber, lpNpc, lpObj);
+
+	return TRUE;
+}
+
+BOOL NpcIllusionBluePedestal(LPOBJ lpNpc, LPOBJ lpObj)
+{
+	if (gObjIsConnected(lpObj->m_Index) == FALSE)
+	{
+		return TRUE;
+	}
+
+	g_IllusionTempleEvent.SetNpcRelicsUser(lpObj->MapNumber, lpNpc, lpObj);
+
+	return TRUE;
+}
+
+BOOL NpcIllusionMirage(LPOBJ lpNpc, LPOBJ lpObj)
+{
+	if (gObjIsConnected(lpObj->m_Index) == FALSE)
+	{
+		return TRUE;
+	}
+
+	g_IllusionTempleEvent.SetNpcMirageUser(lpNpc, lpObj);
+
+	return TRUE;
+}
+
 
 BOOL NpcLukeTheHelper(LPOBJ lpNpc, LPOBJ lpObj) // OK
 {
@@ -1529,13 +1593,11 @@ void DGNpcLeoTheHelperRecv(SDHP_NPC_LEO_THE_HELPER_RECV* lpMsg) // OK
 
 	if (lpMsg->status >= 1)
 	{
-		ChatSend(lpObj, "I will gived you a reward item!");
 		GCServerCmd(lpObj->m_Index,15,0,0);
 		return;
 	}
-		  
-	//gItemBagManager.DropItemBySpecialValue(ITEM_BAG_LEO_THE_HELPER,lpObj,lpObj->Map,lpObj->X,lpObj->Y);
-	//NewYearLuckMonsterItemBagOpen(lpObj, lpObj->MapNumber, lpObj->X, lpObj->Y);
+
+	LeoTheHelplerBag(lpObj);
 
 	GDNpcLeoTheHelperSaveSend(lpObj->m_Index, 1);
 }
@@ -1582,13 +1644,11 @@ void DGNpcLukeTheHelperRecv(SDHP_NPC_LUKE_THE_HELPER_RECV* lpMsg) // OK
 
 	if (lpMsg->status >= 1)
 	{
-		ChatSend(lpObj, "I will gived you a reward item!");
 		GCServerCmd(lpObj->m_Index, 14, 1, 0);
 		return;
 	}
 
-	//gItemBagManager.DropItemBySpecialValue(ITEM_BAG_LEO_THE_HELPER,lpObj,lpObj->Map,lpObj->X,lpObj->Y);
-	//NewYearLuckMonsterItemBagOpen(lpObj, lpObj->MapNumber, lpObj->X, lpObj->Y);
+	LukeTheHelplerBag(lpObj);
 
 	GDNpcLukeTheHelperSaveSend(lpObj->m_Index, 1);
 }

@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by GameServer.rc
 //
 #define IDV_GAMESERVER                  1
@@ -22,7 +22,9 @@
 #define IDP_PROGRESS_BAR                1000
 #define IDS_CURRENT_GUILD_NAME          1001
 #define IDE_EDIT_LOG                    1003
+#define IDM_EVENTLOAD_RELOADILLUSIONTEMPLE 32771
 #define IDM_MONSTER_POSITION_RELOAD     32772
+
 #define IDM_MAP1                        32773
 #define IDM_MAP2                        32774
 #define IDM_SHOP_RELOAD                 32775
@@ -79,7 +81,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        153
-#define _APS_NEXT_COMMAND_VALUE         32771
+#define _APS_NEXT_COMMAND_VALUE         32773
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           110
 #endif

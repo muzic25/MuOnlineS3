@@ -403,6 +403,27 @@ BOOL CObjBaseAttack::MissCheck(LPOBJ lpObj, LPOBJ lpTargetObj, int skill, int sk
 		int iDefenseRate = lpTargetObj->m_SuccessfulBlocking;	// lc24
 		int iMSBDamage = 0;	// MonsterSetBasse Damage
 
+		if (IT_MAP_RANGE(lpTargetObj->MapNumber) != FALSE) //Season2.5 add-on Illusion
+		{
+			if (g_IllusionTempleEvent.GetState(lpTargetObj->MapNumber) == 2)
+			{
+				if (lpTargetObj->Type == OBJ_USER)
+				{
+					if (g_IllusionTempleEvent.GetShieldSpellStatus(lpTargetObj->m_iIllusionTempleIndex, lpTargetObj->MapNumber) != FALSE)
+					{
+						GCDamageSend(lpObj->m_Index, lpTargetObj->m_Index, 0, 0, 0, 0);
+						return FALSE;
+					}
+				}
+				if (lpObj->PartyNumber == lpTargetObj->PartyNumber)
+				{
+					GCDamageSend(lpObj->m_Index, lpTargetObj->m_Index, 0, 0, 0, 0);
+					return FALSE;
+				}
+			}
+		}
+
+
 		if ( lpObj->Type == OBJ_USER )	// Miss for Uses
 		{
 			if ( lpObj->Class == CLASS_DARKLORD ) // DL
@@ -472,6 +493,28 @@ BOOL CObjBaseAttack::MissCheckPvP(LPOBJ lpObj , LPOBJ lpTargetObj, int skill, in
 	float iAttackRate = 0;
 	float iDefenseRate = 0;
 	int iAttackSuccessRate = 0;
+
+
+	if (IT_MAP_RANGE(lpTargetObj->MapNumber) != FALSE) //Season2.5 add-on Illusion
+	{
+		if (g_IllusionTempleEvent.GetState(lpTargetObj->MapNumber) == 2)
+		{
+			if (lpTargetObj->Type == OBJ_USER)
+			{
+				if (g_IllusionTempleEvent.GetShieldSpellStatus(lpTargetObj->m_iIllusionTempleIndex, lpTargetObj->MapNumber) != FALSE)
+				{
+					GCDamageSend(lpObj->m_Index, lpTargetObj->m_Index, 0, 0, 0, 0);
+					return FALSE;
+				}
+			}
+			if (lpObj->PartyNumber == lpTargetObj->PartyNumber)
+			{
+				GCDamageSend(lpObj->m_Index, lpTargetObj->m_Index, 0, 0, 0, 0);
+				return FALSE;
+			}
+		}
+	}
+
 
 	if ( lpObj->Class == CLASS_KNIGHT )
 	{

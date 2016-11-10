@@ -394,6 +394,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				case IDM_RELOAD_CHAOSCASTLE:
 					ReadEventInfo(MU_EVENT_CHAOSCASTLE );
 					break;
+
+				case IDM_EVENTLOAD_RELOADILLUSIONTEMPLE:
+					ReadEventInfo(MU_EVENT_ILLUSION );
+					break;
+
 				case IDM_RELOAD_CHRISTMAS_RIBBONBOX:
 					ReadEventInfo(MU_EVENT_CHRISTMAS_RIBBONBOX );
 					break;
@@ -488,8 +493,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						FillRect(hdc, &rect, (HBRUSH)GetStockObject(0));
 						ReleaseDC(hWnd, hdc);
 
-						if(!gCurPaintType && LogTextPaint != NULL)LogTextPaint(hWnd);
-						Log.LogPaint(hWnd);
+						if (gCurPaintType == 0)
+						{
+							if (LogTextPaint != NULL)
+							{
+								LogTextPaint(hWnd);
+							}
+						}
 
 						gObjViewportPaint(hWnd, gCurPaintPlayer);
 						g_ServerInfoDisplayer.Run(hWnd);
@@ -513,6 +523,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					g_Crywolf.Run(); 
 					g_Kanturu.Run(); 
 					g_CashShop.CheckShopServerConnectState();
+					//gs-cs 56 one new??
+					g_IllusionTempleEvent.Run();
 					break;
 				case WM_AI_MONSTER_MOVE_PROC:
 					TMonsterAI::MonsterMoveProc();
@@ -598,9 +610,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						}
 					}
 					gObjSecondProc(); 
-					if ( cDBSMng.GetActiveDS() > -1 && g_CastleSiege.GetDataLoadState() == 2)
+					if (cDBSMng.GetActiveDS() > DS_UNINITIALIZED && g_CastleSiege.GetDataLoadState() == 2)
+					{
 						g_CastleSiege.DataRequest();
-
+					}
 					g_CastleSiege.SendCastleStateSync(); 
 					g_CastleSiegeSync.AdjustTributeMoney(); 
 					g_Crywolf.CrywolfSecondAct(); 

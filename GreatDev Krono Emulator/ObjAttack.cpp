@@ -508,11 +508,15 @@ BOOL CObjAttack::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf* lpMagic,  int
 			}
 		}
 
-		if ( gObjWingSprite(lpObj) == TRUE )
+		if (gObjWingSprite(lpObj) == TRUE)
 		{
 			CItem * Wing = &lpObj->pInventory[7];
 
-			if ( lpObj->Class == CLASS_WIZARD || lpObj->Class == CLASS_ELF )
+			if (lpObj->Class == CLASS_WIZARD || lpObj->Class == CLASS_ELF)
+			{
+				lpObj->Life -= 1.0f;
+			}
+			else if (lpObj->Class == CLASS_SUMMONER) //summoner
 			{
 				lpObj->Life -= 1.0f;
 			}
@@ -521,19 +525,35 @@ BOOL CObjAttack::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf* lpMagic,  int
 				lpObj->Life -= 3.0f;
 			}
 
-			if ( lpObj->Life < 0.0f )
+			if (lpObj->Life < 0.0f)
 			{
 				lpObj->Life = 0.0f;
 			}
 			else
 			{
-				if ( Wing->m_Type == ITEMGET(13,30) )	// Cape Of Lord
+				if (Wing->m_Type >= ITEMGET(12, 36) && Wing->m_Type <= ITEMGET(12, 40)) //season 2.5 add-on
+				{
+					AttackDamage = AttackDamage * (Wing->m_Level * 2 + 139) / 100;	// #formula
+				}
+				else if (Wing->m_Type == ITEMGET(13, 30))	// Cape Of Lord
 				{
 					AttackDamage = AttackDamage * (Wing->m_Level * 2 + 120) / 100;	// #formula
 				}
-				else if ( Wing->m_Type > ITEMGET(12,2) )
+				else if (Wing->m_Type == ITEMGET(12, 41))	//
 				{
-					AttackDamage = AttackDamage * (Wing->m_Level + 132) / 100 ;	// #formula
+					AttackDamage = AttackDamage * (Wing->m_Level * 2 + 112) / 100;	// #formula
+				}
+				else if (Wing->m_Type == ITEMGET(12, 42))	//
+				{
+					AttackDamage = AttackDamage * (Wing->m_Level + 132) / 100;	// #formula
+				}
+				else if (Wing->m_Type == ITEMGET(12, 43))	//
+				{
+					AttackDamage = AttackDamage * (Wing->m_Level * 2 + 139) / 100;	// #formula
+				}
+				else if (Wing->m_Type > ITEMGET(12, 2))
+				{
+					AttackDamage = AttackDamage * (Wing->m_Level + 132) / 100;	// #formula
 				}
 				else
 				{
@@ -544,23 +564,53 @@ BOOL CObjAttack::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf* lpMagic,  int
 			GCReFillSend(lpObj->m_Index, lpObj->Life, 0xFF, 0, lpObj->iShield);
 		}
 
-		if ( gObjWingSprite(lpTargetObj) == TRUE )
+		if (gObjWingSprite(lpTargetObj) == TRUE)
 		{
 			CItem * Wing = &lpTargetObj->pInventory[7];
 
-			if ( Wing->m_Type != ITEMGET(13,30) ) // Cape Of Lord
+			if (Wing->m_Type != ITEMGET(13, 30)) // Cape Of Lord
 			{
-				if ( AttackDamage > 1 )
+				if (AttackDamage > 1)
 				{
-					if ( Wing->m_Type > ITEMGET(12, 2) )
+					if (Wing->m_Type >= ITEMGET(12, 36) && Wing->m_Type <= ITEMGET(12, 40) || Wing->m_Type == ITEMGET(12, 43)) //season 2.5 add-on
 					{
-						float damage = (float)(AttackDamage * (75 - (Wing->m_Level*2))) / 100.0f;
+						if (Wing->m_Type == ITEMGET(12, 40))
+						{
+							float damage = (float)(AttackDamage * (76 - (Wing->m_Level * 2))) / 100.0f;
+							AttackDamage = (int)(damage);	//  #formula
+						}
+						else
+						{
+							float damage = (float)(AttackDamage * (61 - (Wing->m_Level * 2))) / 100.0f;
+							AttackDamage = (int)(damage);	//  #formula
+						}
+
+						if ((rand() % 100)< 5)
+						{
+							BYTE WingOption = lpTargetObj->pInventory[7].m_NewOption;
+
+							if ((WingOption & 4) == 4) // 5% Chance of Recover Full Life
+							{
+								gObjAddMsgSendDelay(lpTargetObj, 13, lpObj->m_Index, 100, 0);
+							}
+							else
+							{
+								if ((WingOption & 8) == 8) // 5% Chance of Recover Full Mana
+								{
+									gObjAddMsgSendDelay(lpTargetObj, 14, lpObj->m_Index, 100, 0);
+								}
+							}
+						}
+					}
+					else if (Wing->m_Type > ITEMGET(12, 2))
+					{
+						float damage = (float)(AttackDamage * (75 - (Wing->m_Level * 2))) / 100.0f;
 						AttackDamage = (int)(damage);	//  #formula
-						
+
 					}
 					else
 					{
-						float damage = (float)(AttackDamage * (88 - (Wing->m_Level*2))) / 100.0f;
+						float damage = (float)(AttackDamage * (88 - (Wing->m_Level * 2))) / 100.0f;
 						AttackDamage = (int)(damage);	//  #formula
 					}
 				}
@@ -958,6 +1008,10 @@ BOOL CObjAttack::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf* lpMagic,  int
 			{
 				selfdefense = 0;
 			}
+			else if (IT_MAP_RANGE(lpObj->MapNumber) || IT_MAP_RANGE(lpTargetObj->MapNumber)) //season 2.5 add-on
+			{
+				selfdefense = 0;
+			}
 			else
 			{
 				selfdefense = 1;
@@ -1087,6 +1141,31 @@ BOOL CObjAttack::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf* lpMagic,  int
 		if ( (rand()%100) < lpObj->SetOpReflectionDamage )
 		{
 			gObjAddMsgSendDelay(lpTargetObj, 10, lpObj->m_Index, 10, AttackDamage);
+		}
+
+		if ((rand() % 100) < 5) //season 2.5 add-on
+		{
+			if (gObjWingSprite(lpTargetObj) == TRUE)
+			{
+				CItem * Wing = &lpTargetObj->pInventory[7];
+
+				if (Wing->m_Type >= ITEMGET(12, 36) && Wing->m_Type <= ITEMGET(12, 40) || Wing->m_Type == ITEMGET(12, 43))
+				{
+					BYTE WingOption = lpTargetObj->pInventory[7].m_NewOption;
+
+					if ((WingOption & 2) == 2) // 5% Chance of Return Damage
+					{
+						if (lpObj->Type == OBJ_MONSTER)
+						{
+							gObjAddMsgSendDelay(lpTargetObj, 12, lpObj->m_Index, 10, lpObj->m_AttackDamageMax);
+						}
+						else if (lpObj->Type == OBJ_USER)
+						{
+							gObjAddMsgSendDelay(lpTargetObj, 12, lpObj->m_Index, 10, AttackDamage);
+						}
+					}
+				}
+			}
 		}
 
 		if ( bCombo )
@@ -1288,12 +1367,22 @@ int  CObjAttack::GetAttackDamage(LPOBJ lpObj, int targetDefense, BYTE& effect, B
 
 			int SkillAttr = MagicDamageC.GetSkillAttr(lpMagic->m_Skill);
 
-			if ( SkillAttr != -1 )
+			if (SkillAttr != -1)
 			{
-				SkillRightMaxDamage += (BYTE)lpObj->m_AddResistance[SkillAttr];
-				SkillRightMinDamage += (BYTE)lpObj->m_AddResistance[SkillAttr];
-				SkillLeftMaxDamage  += (BYTE)lpObj->m_AddResistance[SkillAttr];
-				SkillLeftMinDamage  += (BYTE)lpObj->m_AddResistance[SkillAttr];
+				if ((lpObj->Authority & 32) == 32 && (lpObj->pInventory[10].m_Type == ITEMGET(13, 42) || lpObj->pInventory[11].m_Type == ITEMGET(13, 42))) //season 2.5 add-on
+				{
+					SkillRightMaxDamage += (BYTE)255;
+					SkillRightMinDamage += (BYTE)255;
+					SkillLeftMaxDamage += (BYTE)255;
+					SkillLeftMinDamage += (BYTE)255;
+				}
+				else
+				{
+					SkillRightMaxDamage += (BYTE)lpObj->m_AddResistance[SkillAttr];
+					SkillRightMinDamage += (BYTE)lpObj->m_AddResistance[SkillAttr];
+					SkillLeftMaxDamage += (BYTE)lpObj->m_AddResistance[SkillAttr];
+					SkillLeftMinDamage += (BYTE)lpObj->m_AddResistance[SkillAttr];
+				}
 			}
 
 			SkillRightMaxDamage += lpObj->m_JewelOfHarmonyEffect.HJOpAddSkillAttack;
@@ -1536,10 +1625,13 @@ int  CObjAttack::GetAttackDamageWizard(LPOBJ lpObj, int targetDefense, CMagicInf
 
 			int SkillAttr = MagicDamageC.GetSkillAttr(lpMagic->m_Skill);
 
-			if ( SkillAttr != -1 )
+			if (SkillAttr != -1)
 			{
-				damagemin += (BYTE)lpObj->m_AddResistance[SkillAttr];
-				damagemax += (BYTE)lpObj->m_AddResistance[SkillAttr];
+				if ((lpObj->Authority & 32) == 32 && (lpObj->pInventory[10].m_Type == ITEMGET(13, 42) || lpObj->pInventory[11].m_Type == ITEMGET(13, 42))) //season 2.5 add-on
+				{
+					damagemin += (BYTE)255;
+					damagemax += (BYTE)255;
+				}
 			}
 
 			damagemin += lpObj->m_JewelOfHarmonyEffect.HJOpAddSkillAttack;
@@ -1558,10 +1650,13 @@ int  CObjAttack::GetAttackDamageWizard(LPOBJ lpObj, int targetDefense, CMagicInf
 
 		int SkillAttr = MagicDamageC.GetSkillAttr(lpMagic->m_Skill);
 
-		if ( SkillAttr != -1 )
+		if (SkillAttr != -1)
 		{
-			damagemin += (BYTE)lpObj->m_AddResistance[SkillAttr];
-			damagemax += (BYTE)lpObj->m_AddResistance[SkillAttr];
+			if ((lpObj->Authority & 32) == 32 && (lpObj->pInventory[10].m_Type == ITEMGET(13, 42) || lpObj->pInventory[11].m_Type == ITEMGET(13, 42))) //season 2.5 add-on
+			{
+				damagemin += (BYTE)255;
+				damagemax += (BYTE)255;
+			}
 		}
 
 		damagemin += lpObj->m_JewelOfHarmonyEffect.HJOpAddSkillAttack;

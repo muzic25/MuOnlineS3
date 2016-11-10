@@ -121,6 +121,12 @@ BOOL NpcChaosCardMaster(LPOBJ lpNpc, LPOBJ lpObj);
 BOOL NpcPamelaSupplier(LPOBJ lpNpc, LPOBJ lpObj);
 BOOL NpcAngelaSupplier(LPOBJ lpNpc, LPOBJ lpObj);
 BOOL NpcFireworkGirl(LPOBJ lpNpc, LPOBJ lpObj);
+//Illusion Temple
+BOOL NpcIllusionStatue(LPOBJ lpNpc, LPOBJ lpObj);
+BOOL NpcIllusionYellowPedestal(LPOBJ lpNpc, LPOBJ lpObj);
+BOOL NpcIllusionBluePedestal(LPOBJ lpNpc, LPOBJ lpObj);
+BOOL NpcIllusionMirage(LPOBJ lpNpc, LPOBJ lpObj);
+
 BOOL NpcLukeTheHelper(LPOBJ lpNpc, LPOBJ lpObj); // OK
 BOOL NpcLeoTheHelper(LPOBJ lpNpc, LPOBJ lpObj); // OK
 void CGNpcLukeTheHelperRecv(int aIndex); // OK
@@ -131,5 +137,4 @@ void CGNpcLeoTheHelperRecv(int aIndex); // OK
 void GDNpcLeoTheHelperSend(int aIndex); // OK
 void DGNpcLeoTheHelperRecv(SDHP_NPC_LEO_THE_HELPER_RECV* lpMsg);
 void GDNpcLeoTheHelperSaveSend(int aIndex, BYTE status);
-
 #endif

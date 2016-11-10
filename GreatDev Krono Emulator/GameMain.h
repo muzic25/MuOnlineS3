@@ -9,8 +9,6 @@
 #ifndef GAMEMAIN_H
 #define	GAMEMAIN_H
 
-DWORD WINAPI MUNET_TasksManager();
-
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
@@ -32,6 +30,7 @@ DWORD WINAPI MUNET_TasksManager();
 #include "MonsterSetBase.h"
 #include "PartyClass.h"
 #include "ItemBagEx.h"
+#include "ProbabilityItemBag.h"
 
 #define FIRST_PATH "..\\Data\\"
 
@@ -63,6 +62,7 @@ enum MU_EVENT_TYPE {
 	MU_EVENT_CHRISTMAS_RIBBONBOX = 0xe,
 	MU_EVENT_VALENTINESDAY_CHOCOLATEBOX = 0xf,
 	MU_EVENT_WHITEDAY_CANDYBOX = 0x10,
+	MU_EVENT_ILLUSION = 0x11,
 };
 
 enum MU_ETC_TYPE {
@@ -124,6 +124,14 @@ extern CItemBagEx * CrywolfBossMonsterItemBag;
 extern CItemBagEx * KanturuMayaHandItemBag;
 extern CItemBagEx * KanturuNightmareItemBag;
 extern CItemBagEx * HallowinDayEventItemBag;
+extern CItemBag * RingOfHeroBoxItemBag;
+extern CProbabilityItemBag * NewYearLuckyPouchItemBag; //test
+extern CProbabilityItemBag * GMPresentBoxItemBag; //test
+extern CProbabilityItemBag * IllusionTemple1ItemBag; //test
+extern CProbabilityItemBag * IllusionTemple2ItemBag; //test
+extern CProbabilityItemBag * IllusionTemple3ItemBag; //test
+extern CItemBagEx  * LeoItemBag;
+extern CItemBagEx  * LukeItemBag;
 extern CwsGameServer wsGServer;	// line : 213GameServer
 extern wsJoinServerCli wsJServerCli;	// line : 214 Join Server
 extern wsJoinServerCli wsDataCli;	// line : 215 DataServer
@@ -451,6 +459,7 @@ public:
  int  gDQChaosSuccessRateLevel4;
  int  gDQChaosSuccessRateLevel5;
  int  gDQChaosSuccessRateLevel6;
+ int  gDQChaosSuccessRateLevel7;
  BOOL g_bBloodCastle;
  int  g_iBloodCastle_StartHour;
  int  g_iStoneDropRate;

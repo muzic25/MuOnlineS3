@@ -7,14 +7,8 @@
 
 #include "user.h"
 
-
 #define MAX_EVENTCHIP_TYPE	5
-
 #define EVENCHIP_TYPE_RANGE(x)  ( ((x)<0)?FALSE:((x)>MAX_EVENTCHIP_TYPE-1)?FALSE:TRUE )
-
-
-
-
 
 struct PMSG_REGEVENTCHIP_RESULT
 {
@@ -39,6 +33,12 @@ struct PMSG_EVENTCHIPINFO
 	short MutoNum[3];	// 6
 };
 
+struct PMSG_ANS_CL_ENTERCOUNT
+{
+	PBMSG_HEAD h;	// C1:9F
+	BYTE btEventType;	// 3
+	BYTE btLeftEnterCount;	// 4
+};
 
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -181,6 +181,7 @@ struct PMSG_ANS_REG_HT_OFFLINE_GIFT
 };
 
 
+
 extern LPOBJ pEventObj;
 
 void EventChipEventProtocolCore(BYTE protoNum, LPBYTE aRecv, int aLen);
@@ -237,7 +238,12 @@ void EGAnsRegDLOfflineGift( PMSG_ANS_REG_DL_OFFLINE_GIFT* lpMsg);
 void EGReqRegHTOfflineGift(int iIndex);
 void EGAnsRegHTOfflineGift( PMSG_ANS_REG_HT_OFFLINE_GIFT* lpMsg);
 void Japan1StAnivBoxOpen(LPOBJ lpObj, int iBoxLevel);
-
+void RingOfHeroBoxOpen(LPOBJ lpObj);
+void NewYearLuckMonsterItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY);
+void GMPresentBoxItemBagOpen(LPOBJ lpObj);
+void ChristmasStarDrop(LPOBJ lpObj); //season2.5 add-on
+void LukeTheHelplerBag(LPOBJ lpObj);
+void LeoTheHelplerBag(LPOBJ lpObj);
 
 extern LPOBJ pEventObj;
 

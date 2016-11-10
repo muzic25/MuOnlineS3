@@ -549,4 +549,17 @@ bool CItemAddOption::SearchItemEffectType(int iItemNumber, int * iEffectType1, i
 	return true;
 }
 
+BYTE CItemAddOption::SearchForClearItemEffect(int iItemNumber)
+{
+	if (this->_SearchItemEffect(iItemNumber) == NULL)
+	{
+		return 0;
+	}
 
+	return 1;
+}
+
+LPITEMEFFECT CItemAddOption::SearchItemEffectType1(int iItemNumber)
+{
+	return this->_SearchItemEffect(iItemNumber);
+}
