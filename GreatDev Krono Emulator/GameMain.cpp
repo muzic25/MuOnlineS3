@@ -1510,7 +1510,9 @@ void ReadCommonServerInfo()
 	g_CashItemPeriodSystem.Initialize();
 	g_CashLotterySystem.Load(gDirPath.GetNewPath("ChaosCardProbability.txt"));
 
-	g_BuffEffect.Load(gDirPath.GetNewPath("BuffEffect.txt"));
+	g_BuffEffect.Load(gDirPath.GetNewPath("\\BuffEffect\\BuffEffect.txt"));
+
+	LoadCustomJewel(gDirPath.GetNewPath("\\Customs\\Jewels.ini"));
 }
 
 void GameServerInfoSendStop()
@@ -2210,6 +2212,14 @@ void LoadItemBag()
 //--------------------------------------------------------------------------------
 }
 
+void LoadCustomJewel(char *filename)
+{
+	Configs.g_iRateJewelOfLuck = GetPrivateProfileInt("JewelOfLuck", "SuccessRate", 0, filename);
+
+	Configs.g_iRateJewelOfExc = GetPrivateProfileInt("JewelOfExcelent", "SuccessRate", 0, filename);
+
+	Configs.g_iRateJewelOfMyst = GetPrivateProfileInt("JewelOfMystical", "SuccessRate", 0, filename);
+}
 
 
 void SetMapName()

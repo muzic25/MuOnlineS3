@@ -200,6 +200,11 @@ public:
 	void Load(LPSTR filename);
 	void LoadItemDropRate();
 	void SetState(int iBridgeIndex, int iBC_STATE);
+	//Season3 add-on
+	int GetBridgeMapNumber(int iBridgeIndex);
+	int GetBridgeIndex(int iMAP_NUM);
+	int GetItemMapNumberFirst(int iMAP_NUM);
+	int GetItemMapNumberSecond(int iMAP_NUM);
 
 
 	CBloodCastle();

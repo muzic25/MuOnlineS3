@@ -45,3 +45,5 @@
 ipch/
 Release/
 ReleaseDS/
+*.opendb
+*.db

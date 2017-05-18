@@ -259,15 +259,6 @@ BOOL CGate::IsInGate(int aIndex, int GateNumber)
 		}
 	}
 
-#if (FOREIGN_GAMESERVER==1)
-
-	if (szAuthKey[15] != AUTHKEY15 )
-	{
-		DestroyGIocp();
-	}
-
-#endif
-
 	if ( lpObj->Level < level )
 	{
 		return FALSE;

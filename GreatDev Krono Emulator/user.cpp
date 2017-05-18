@@ -1134,6 +1134,9 @@ void gObjCharZeroSet(int aIndex)
 	lpObj->m_PoisonBeattackCount = 0;
 	lpObj->m_ColdBeattackCount = 0;
 	lpObj->m_Attribute = 0;
+
+	gObjClearStandardBuffEffect(lpObj, AT_GENERAL); //Season3 Addition
+
 	lpObj->m_ImmuneToMagicCount = 0;
 	lpObj->m_ImmuneToHarmCount = 0;
 	lpObj->m_iMonsterBattleDelay = 0;
@@ -3899,6 +3902,7 @@ BOOL gObjGameClose(int aIndex)
 	g_CashItemPeriodSystem.GDReqPeriodItemUpdate(lpObj);
 	g_CashItemPeriodSystem.ClearPeriodItemEffect(lpObj);
 
+	gObjClearStandardBuffEffect(lpObj, AT_GENERAL);
 
 	GJSetCharacterInfo(lpObj, aIndex, 0);
 	gObjViewportClose(lpObj);
@@ -5877,6 +5881,8 @@ void gObjUserDie(LPOBJ lpObj, LPOBJ lpTargetObj)
 		return;
 	}
 
+	gObjClearStandardBuffEffect(lpObj, AT_GENERAL_NOPERIOD_ITEM);
+
 	gObjSetKillCount(lpObj->m_Index,0);
 
 	gObjUseSkill.RemoveAllCharacterInvalidMagicAndSkillState(lpObj);
@@ -6843,15 +6849,20 @@ void gObjSecondDurDown(LPOBJ lpObj)
 					GCItemDurSend2(lpObj->m_Index,10,lpObj->pInventory[10].m_Durability,0);
 				}
 			}
-			else if(lpObj->pInventory[10].m_Type != ITEMGET(13,10))
+			else if (lpObj->pInventory[10].m_Type != ITEMGET(13, 10) &&
+				//season4.5 add-on
+				lpObj->pInventory[10].m_Type != ITEMGET(13, 39) &&
+				lpObj->pInventory[10].m_Type != ITEMGET(13, 40) &&
+				lpObj->pInventory[10].m_Type != ITEMGET(13, 41) &&
+				lpObj->pInventory[10].m_Type != ITEMGET(13, 42))
 			{
-				ret = lpObj->pInventory[10].DurabilityDown(1,lpObj->m_Index);
-				if(ret != 0)
+				ret = lpObj->pInventory[10].DurabilityDown(1, lpObj->m_Index);
+				if (ret != 0)
 				{
-					GCItemDurSend2(lpObj->m_Index,10,lpObj->pInventory[10].m_Durability,0);
+					GCItemDurSend2(lpObj->m_Index, 10, lpObj->pInventory[10].m_Durability, 0);
 				}
 
-				if(ret == 2)
+				if (ret == 2)
 				{
 					reCalCharacter = 1;
 				}
@@ -6873,12 +6884,30 @@ void gObjSecondDurDown(LPOBJ lpObj)
 					reCalCharacter = 1;
 				}
 			}
-			else if(lpObj->pInventory[11].m_Type == ITEMGET(13,38))
+			else if (lpObj->pInventory[11].m_Type == ITEMGET(13, 38))
 			{
-				ret = lpObj->pInventory[11].DurabilityDown(63,lpObj->m_Index);
-				if(ret != 0)
+				ret = lpObj->pInventory[11].DurabilityDown(63, lpObj->m_Index);
+				if (ret != 0)
 				{
-					GCItemDurSend2(lpObj->m_Index,11,lpObj->pInventory[11].m_Durability,0);
+					GCItemDurSend2(lpObj->m_Index, 11, lpObj->pInventory[11].m_Durability, 0);
+				}
+			}
+			else if (lpObj->pInventory[11].m_Type != ITEMGET(13, 10) &&
+				//season4.5 add-on
+				lpObj->pInventory[11].m_Type != ITEMGET(13, 39) &&
+				lpObj->pInventory[11].m_Type != ITEMGET(13, 40) &&
+				lpObj->pInventory[11].m_Type != ITEMGET(13, 41) &&
+				lpObj->pInventory[11].m_Type != ITEMGET(13, 42))
+			{
+				ret = lpObj->pInventory[11].DurabilityDown(1, lpObj->m_Index);
+				if (ret != 0)
+				{
+					GCItemDurSend2(lpObj->m_Index, 11, lpObj->pInventory[11].m_Durability, 0);
+				}
+
+				if (ret == 2)
+				{
+					reCalCharacter = 1;
 				}
 			}
 			else if(lpObj->pInventory[11].m_Type != ITEMGET(13,10))
@@ -7085,7 +7114,7 @@ void gObjChangeDurProc(LPOBJ lpObj)
 	{
 		//wtf??
 	}
-	else if (lpObj->pInventory[11].IsItem() == 1 && lpObj->pInventory[10].m_Type == ITEMGET(13, 42)) //Season 4.5 add-on (fix) GameMaster Ring
+	else if (lpObj->pInventory[11].IsItem() == 1 && lpObj->pInventory[11].m_Type == ITEMGET(13, 42)) //Season 4.5 add-on (fix) GameMaster Ring
 	{
 		//wtf??
 	}
@@ -9703,6 +9732,23 @@ BOOL gObjIsItemPut(LPOBJ lpObj, CItem * lpItem, int pos )
 		}
 	}
 
+	if (lpItem->m_Type == ITEMGET(13, 42)) //Season 2.5 Santa Girl Ring Addition
+	{
+		if (CC_MAP_RANGE(lpObj->MapNumber))
+		{
+			return false;
+		}
+
+		int count = 0;
+
+		count = gObjGetItemCountInEquipment(lpObj->m_Index, 13, 41, 0);
+
+		if (count > 0)
+		{
+			return false;
+		}
+	}
+
 	else if(lpItem->m_Type >= ITEMGET(14,00))
 	{
 		return false;
@@ -11316,9 +11362,10 @@ BYTE gObjInventoryMoveItem(int aIndex, unsigned char source, unsigned char targe
 						gObjUseSkill.SkillChangeUse(aIndex);
 					}
 
-					if(lpObj->pInventory[target].m_Type == ITEMGET(13,42))
+					if (lpObj->pInventory[target].m_Type == ITEMGET(13, 42)) //Season 2.5 add-on
 					{
 						gObjUseSkill.SkillChangeUse(aIndex);
+						LogAdd(lMsg.Get(534), gObj[aIndex].Name, lpObj->pInventory[target].m_Level);
 					}
 
 				}
@@ -11534,6 +11581,11 @@ BYTE gObjTradeInventoryMove(LPOBJ lpObj, BYTE source, BYTE target)
 				LogAdd(lMsg.Get(534), lpObj->Name, lpObj->pInventory[target].m_Level);
 			}
 			if (lpObj->pInventory[target].m_Type == ITEMGET(13, 41)) //Season 2.5 add-on
+			{
+				gObjUseSkill.SkillChangeUse(lpObj->m_Index);
+				LogAdd(lMsg.Get(534), lpObj->Name, lpObj->pInventory[target].m_Level);
+			}
+			if (lpObj->pInventory[target].m_Type == ITEMGET(13, 42)) //Season 2.5 add-on
 			{
 				gObjUseSkill.SkillChangeUse(lpObj->m_Index);
 				LogAdd(lMsg.Get(534), lpObj->Name, lpObj->pInventory[target].m_Level);
@@ -12502,7 +12554,7 @@ void gObjMakePreviewCharSet(int aIndex)
 
 	lpObj->CharSet[16] |= btNewValue;
 }
-
+ /*
 void gObjViewportPaint(HWND hWnd, short aIndex)
 {
 
@@ -12716,7 +12768,218 @@ void gObjViewportPaint(HWND hWnd, short aIndex)
 	TextOut(hdc, 200, 0, szTemp, strlen(szTemp));
 	ReleaseDC(hWnd, hdc);
 }
+*/
+
+void gObjViewportPaint(HWND hWnd, short aIndex)
+{
+
+	int n;
+	HDC hdc;
+	char szTemp[256];
+	int count = 0;
+	int count2 = 0;
+	int count3 = 0;
+	int playerc = 0;
+	int totalplayer = 0;
+	int gamemasters = 0;
+
+	if (!OBJMAX_RANGE(aIndex))
+		return;
+
+	hdc = GetDC(hWnd);
+
+	for (n = 0; n<OBJMAX; n++)
+	{
+		if (gObj[n].Live != FALSE)
+		{
+			if (gObj[n].Connected != PLAYER_EMPTY)
+			{
+				if (gCurPaintMapNumber == gObj[n].MapNumber)
+				{
+					if (gObj[n].Type == OBJ_USER)
+					{
+						playerc++;
+					}
+				}
+			}
+		}
+
+		if (gObj[n].Type == OBJ_USER && gObj[n].Connected != PLAYER_EMPTY)
+		{
+			totalplayer++;
+
+			if ((gObj[n].Authority & 32) == 32)
+			{
+				gamemasters++;
+			}
 		
+		}
+		else if (gObj[n].Connected != PLAYER_EMPTY)
+		{
+			count++;
+		}
+	}
+
+	if (gCurPaintType == 1)
+	{
+		RECT rect;
+		int iStartX = 100;
+		int iStartY = 50;
+		int iWidth = 1;
+		int iHeight = 1;
+		int iMagnifying = 3;
+		int x;
+		int y;
+
+		hdc = GetDC(hWnd);
+
+		HBRUSH hCharacterBrush = CreateSolidBrush(RGB(255, 0, 0));
+		HBRUSH hMonsterBrush = CreateSolidBrush(RGB(128, 128, 128));
+		HBRUSH hNpcBrush = CreateSolidBrush(RGB(0, 255, 255));
+		HBRUSH hItemBrush = CreateSolidBrush(RGB(0, 0, 255));
+		HBRUSH hCrywolfMovePath = CreateSolidBrush(RGB(0, 255, 0));
+		int iOldBkMode = SetBkMode(hdc, TRANSPARENT);
+
+		// Set a Gray backgraound on non-walkable areas
+		if (MapC[gCurPaintMapNumber].m_attrbuf != NULL)
+		{
+			for (y = 0; y<255; y++)
+			{
+				for (x = 0; x<255; x++)
+				{
+					if ((MapC[gCurPaintMapNumber].m_attrbuf[y * 256 + x] & 4) == 4 || (MapC[gCurPaintMapNumber].m_attrbuf[y * 256 + x] & 8) == 8)
+					{
+						rect.left = iStartX + y*iWidth*iMagnifying;
+						rect.right = (iStartX + y*iWidth*iMagnifying) + (iWidth*iMagnifying);
+						rect.top = iStartY + x*iHeight*iMagnifying;
+						rect.bottom = (iStartY + x*iHeight*iMagnifying) + (iHeight*iMagnifying);
+
+						FillRect(hdc, &rect, (HBRUSH)GetStockObject(LTGRAY_BRUSH));
+					}
+				}
+			}
+		}
+
+		if (TMonsterAIElement::s_MonsterAIMovePath[MAP_INDEX_CRYWOLF_FIRSTZONE].m_bDataLoad != FALSE)
+		{
+			TMonsterAIMovePath & MovePath = TMonsterAIElement::s_MonsterAIMovePath[MAP_INDEX_CRYWOLF_FIRSTZONE];
+
+			for (int i = 0; i<MovePath.m_iMovePathSpotCount; i++)
+			{
+				rect.left = iStartX + MovePath.m_MovePathInfo[i].m_iPathY*iWidth*iMagnifying;
+				rect.right = (iStartX + MovePath.m_MovePathInfo[i].m_iPathY*iWidth*iMagnifying) + (iWidth*iMagnifying);
+				rect.top = iStartY + MovePath.m_MovePathInfo[i].m_iPathX*iHeight*iMagnifying;
+				rect.bottom = (iStartY + MovePath.m_MovePathInfo[i].m_iPathX*iHeight*iMagnifying) + (iHeight*iMagnifying);
+
+				FillRect(hdc, &rect, hCrywolfMovePath);
+
+				CString szDesc;
+				szDesc.Format("(%d,%d)", MovePath.m_MovePathInfo[i].m_iPathX, MovePath.m_MovePathInfo[i].m_iPathY);
+			}
+		}
+
+		for (n = 0; n<OBJMAX; n++)
+		{
+			if (gObj[n].Live != FALSE)
+			{
+				if (gObj[n].Connected != PLAYER_EMPTY)
+				{
+					if (gCurPaintMapNumber == gObj[n].MapNumber)
+					{
+						if (gObj[n].Type == OBJ_USER)
+						{
+							rect.left = iStartX + gObj[n].Y*iWidth*iMagnifying;
+							rect.right = (iStartX + gObj[n].Y*iWidth*iMagnifying) + ((iWidth + 2)*iMagnifying);
+							rect.top = iStartY + gObj[n].X*iHeight*iMagnifying;
+							rect.bottom = (iStartY + gObj[n].X*iHeight*iMagnifying) + ((iHeight + 2)*iMagnifying);
+
+							FillRect(hdc, &rect, hCharacterBrush);
+
+							CString szName;
+							szName.Format("%s (%d,%d)", gObj[n].Name, gObj[n].X, gObj[n].Y);
+							TextOut(hdc, rect.left, rect.bottom, szName, szName.GetLength());
+						}
+						else if (gObj[n].Type == OBJ_MONSTER)
+						{
+							rect.left = iStartX + gObj[n].Y*iWidth*iMagnifying;
+							rect.right = (iStartX + gObj[n].Y*iWidth*iMagnifying) + ((iWidth)*iMagnifying);
+							rect.top = iStartY + gObj[n].X*iHeight*iMagnifying;
+							rect.bottom = (iStartY + gObj[n].X*iHeight*iMagnifying) + ((iHeight)*iMagnifying);
+
+							FillRect(hdc, &rect, hMonsterBrush);
+
+							if (gObj[n].m_iCurrentAI != 0)
+							{
+								if (gObj[n].m_iGroupMemberGuid == 0)
+								{
+									FillRect(hdc, &rect, hCharacterBrush);
+
+									CString szDesc;
+									szDesc.Format("G(%d,%d)", gObj[n].m_iGroupNumber, gObj[n].m_iGroupMemberGuid);
+									TextOut(hdc, rect.left, rect.bottom, szDesc, szDesc.GetLength());
+								}
+							}
+						}
+						else if (gObj[n].Type == OBJ_NPC)
+						{
+							rect.left = iStartX + gObj[n].Y*iWidth*iMagnifying;
+							rect.right = (iStartX + gObj[n].Y*iWidth*iMagnifying) + ((iWidth)*iMagnifying);
+							rect.top = iStartY + gObj[n].X*iHeight*iMagnifying;
+							rect.bottom = (iStartY + gObj[n].X*iHeight*iMagnifying) + ((iHeight)*iMagnifying);
+
+							FillRect(hdc, &rect, hNpcBrush);
+						}
+					}
+				}
+			}
+		}
+
+		for (int n = 0; n<MAX_MAPITEM; n++)
+		{
+			if (MapC[gCurPaintMapNumber].m_cItem[n].IsItem())
+			{
+				rect.left = iStartX + MapC[gCurPaintMapNumber].m_cItem[n].py*iWidth*iMagnifying;
+				rect.right = (iStartX + MapC[gCurPaintMapNumber].m_cItem[n].py*iWidth*iMagnifying) + (iWidth*iMagnifying);
+				rect.top = iStartY + MapC[gCurPaintMapNumber].m_cItem[n].px*iHeight*iMagnifying;
+				rect.bottom = (iStartY + MapC[gCurPaintMapNumber].m_cItem[n].px*iHeight*iMagnifying) + (iHeight*iMagnifying);
+
+				FillRect(hdc, &rect, hItemBrush);
+
+				CString szDesc;
+				szDesc.Format("%s (%d,%d)", MapC[gCurPaintMapNumber].m_cItem[n].GetName(),
+					MapC[gCurPaintMapNumber].m_cItem[n].px, MapC[gCurPaintMapNumber].m_cItem[n].py);
+			}
+		}
+
+		DeleteObject((HGDIOBJ)hCharacterBrush);
+		DeleteObject((HGDIOBJ)hMonsterBrush);
+		DeleteObject((HGDIOBJ)hNpcBrush);
+		DeleteObject((HGDIOBJ)hItemBrush);
+		DeleteObject((HGDIOBJ)hCrywolfMovePath);
+		SetBkMode(hdc, iOldBkMode);
+	}
+
+	gObjTotalUser = totalplayer;
+
+	wsprintf(szTemp, "Monsters: [%d/%d] Players: [%d/%d] GameMasters:[%d] Player(%d):%d VpCount:%d(%d/%d) : item count:%d ",
+		count, OBJ_MAXMONSTER, totalplayer, gServerMaxUser, gamemasters, aIndex, playerc, gObj[aIndex].VPCount, count3, count2, gItemLoop);
+	
+	if (Configs.gXMasEvent)
+		strcat(szTemp, ":StarOfXMas");
+
+	if (Configs.gFireCrackerEvent)
+		strcat(szTemp, ":FireCracker");
+
+	if (Configs.gHeartOfLoveEvent)
+		strcat(szTemp, ":HeartOfLove");
+
+	if (Configs.gMedalEvent)
+		strcat(szTemp, ":MedalEvent");
+
+	TextOut(hdc, 200, 0, szTemp, strlen(szTemp));
+	ReleaseDC(hWnd, hdc);
+}
+
 static int FrustrumX[MAX_ARRAY_FRUSTRUM];
 static int FrustrumY[MAX_ARRAY_FRUSTRUM];
 
@@ -13508,6 +13771,7 @@ void gObjStateSetCreate(int aIndex)
 	{
 		if(dwNowTick - lpObj->RegenTime > lpObj->MaxRegenTime + 1000)
 		{
+			gObjClearStandardBuffEffect(lpObj, AT_GENERAL_NOPERIOD_ITEM);
 			lpObj->DieRegen = 2;
 			lpObj->m_State = 8;
 		}
@@ -13918,6 +14182,8 @@ void gObjSetState()
 					lpObj->m_ViewSkillState &= 0xFFFFFFFE;
 					lpObj->m_ViewSkillState &= 0xFFFFFFFD;
 
+					gObjClearStandardBuffEffect(lpObj, AT_GENERAL_NOPERIOD_ITEM);
+
 					gObjClearViewport(lpObj);
 
 					if(lpObj->Type == OBJ_USER)
@@ -14195,6 +14461,11 @@ void gObjSetState()
 
 						gEledoradoEvent.CheckGoldDercon(lpObj->MapNumber);
 
+						if (lpObj->Authority == 32) //season4 add-on
+						{
+							gObjApplyBuffEffectDuration(lpObj, AT_GAMEMASTER_LOGO, 0, 0, 0, 0, -10);
+						}
+
 						if ( lpObj->MapNumber == MAP_INDEX_CASTLESIEGE )
 						{
 							GCAnsCsNotifyStart(lpObj->m_Index, CHECK_CLASS(g_CastleSiege.GetCastleState(), CASTLESIEGE_STATE_STARTSIEGE));
@@ -14267,6 +14538,7 @@ void gObjSecondProc()
 				}
 			}
 
+			gObjBuffEffectUseProc(lpObj);
 			gObjSkillUseProc(lpObj);
 			gObjSkillBeAttackProc(lpObj);
 
@@ -15386,6 +15658,14 @@ void gObjViewportListProtocol(short aIndex)
 				{
 					tObjNum = lpObj->VpPlayer[n].number;
 		
+					if ((gObj[tObjNum].Authority & 32) == 32) //Season 2.5 add-on
+					{
+						if (gObjSearchActiveEffect(&gObj[tObjNum], AT_INVISIBILITY) == 1)
+						{
+							continue;
+						}
+					}
+
 					if(tObjNum >= 0)
 					{
 						switch(lpObj->VpPlayer[n].type)
@@ -15398,7 +15678,7 @@ void gObjViewportListProtocol(short aIndex)
 								pViewportCreateChange.NumberH = SET_NUMBERH(tObjNum);
 								pViewportCreateChange.NumberL = SET_NUMBERL(tObjNum);
 		
-								//lpTargetObj->CharSet[0] &= 0xF0;
+								lpTargetObj->CharSet[0] &= 0xF8;
 	
 								if(lpTargetObj->m_State == 1 && lpTargetObj->Teleport == 0)
 								{
@@ -15419,6 +15699,11 @@ void gObjViewportListProtocol(short aIndex)
 								pViewportCreateChange.ViewSkillState = lpTargetObj->m_ViewSkillState;
 								pViewportCreateChange.DirAndPkLevel = lpTargetObj->Dir << 4;
 								pViewportCreateChange.DirAndPkLevel |= lpTargetObj->m_PK_Level & 0x0F;
+								
+								lpObj->CharSet[0] &= 0xF8; //Season 2.5 add-on
+								lpObj->CharSet[0] |= lpObj->m_ViewState & 0x07; //Season 2.5 add-on
+
+
 								if(CC_MAP_RANGE(lpTargetObj->MapNumber))
 								{
 									pViewportCreateChange.ViewSkillState = 0;

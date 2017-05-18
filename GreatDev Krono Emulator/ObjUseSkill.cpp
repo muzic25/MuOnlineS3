@@ -685,14 +685,6 @@ void CObjUseSkill::KnightSkillAddLife(int aIndex, int skill_level)
 	int skillSuccess = true;
 	LPOBJ lpObj = &gObj[aIndex];
 
-
-#if (FOREIGN_GAMESERVER==1)
-	if (szAuthKey[14] != AUTHKEY14 )
-	{
-		DestroyGIocp();
-	}
-#endif
-
 	if(lpObj->Type != OBJ_USER && lpObj->m_RecallMon == -1)
 	{
 		return;
@@ -1065,28 +1057,25 @@ BOOL CObjUseSkill::SkillChangeUse(int aIndex)
 		}
 	}
 
-	if(lpObj->pInventory[10].IsItem()==1 && lpObj->pInventory[10].m_Type == ITEMGET(13,42))
+	if (lpObj->pInventory[10].IsItem() == 1 && lpObj->pInventory[10].m_Type == ITEMGET(13, 42)) //Season 2.5 add-on
 	{
-		if(lpObj->pInventory[10].m_Durability < 1.0f)
+		if ((lpObj->Authority & 32) != 32)
 		{
-			skill_level = -1;
+			return FALSE;
 		}
-		else
-		{
-			skill_level = 378;
-		}
+
+		skill_level = 378;
+
 	}
 
-	if(lpObj->pInventory[11].IsItem()==1 && skill_level == -1 && lpObj->pInventory[11].m_Type == ITEMGET(13,42))
+	if (lpObj->pInventory[11].IsItem() == 1 && lpObj->pInventory[11].m_Type == ITEMGET(13, 42)) //Season 2.5 add-on
 	{
-		if(lpObj->pInventory[11].m_Durability < 1.0f)
+		if ((lpObj->Authority & 32) != 32)
 		{
-			skill_level = -1;
+			return FALSE;
 		}
-		else
-		{
-			skill_level = 378;
-		}
+
+		skill_level = 378;
 	}
 
 	if (IT_MAP_RANGE(lpObj->MapNumber) != FALSE) //Season2.5 add-on (illusion temple checks)
@@ -2620,13 +2609,6 @@ void CObjUseSkill::SkillAddCriticalDamage(int aIndex, int skill_level)
 	int skillSuccess = true;
 	LPOBJ lpObj = &gObj[aIndex];
 	int number;
-
-#if (FOREIGN_GAMESERVER==1)
-	if (szAuthKey[14] != AUTHKEY14 )
-	{
-		DestroyGIocp();
-	}
-#endif
 
 	if(lpObj->Type != OBJ_USER && lpObj->m_RecallMon == -1)
 	{

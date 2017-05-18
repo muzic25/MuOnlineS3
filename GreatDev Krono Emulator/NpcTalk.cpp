@@ -1464,13 +1464,16 @@ BOOL NpcShadowPhantom(LPOBJ lpNpc, LPOBJ lpObj)
 		return TRUE;
 	}
 
+	
 	lpObj->m_iSkillNPCHelpTime = GetTickCount();
 	lpObj->m_iSkillNPCDefense = lpObj->Level / 5 + 50;	// FORMULA
 	lpObj->m_iSkillNPCAttack = lpObj->Level / 3 + 45;	// FORMULA
-
+								  
 	lpObj->m_ViewSkillState |= 0x2000000;
 
-	GCStateInfoSend(lpObj, 1, 0x2000000);
+	GCStateInfoSend(lpObj, 1, 0x2000000);	 
+
+//	gObjApplyBuffEffectDuration(lpObj, AT_NPC_HELP, 2, iAttack, 3, iDefense, iDuration);
 
 	return TRUE;
 }
@@ -1593,7 +1596,7 @@ void DGNpcLeoTheHelperRecv(SDHP_NPC_LEO_THE_HELPER_RECV* lpMsg) // OK
 
 	if (lpMsg->status >= 1)
 	{
-		GCServerCmd(lpObj->m_Index,15,0,0);
+		GCServerCmd(lpObj->m_Index,15,5,0);
 		return;
 	}
 

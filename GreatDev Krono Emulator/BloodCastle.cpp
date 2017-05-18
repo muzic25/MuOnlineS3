@@ -478,13 +478,6 @@ void CBloodCastle::Run()
 					break;
 			}
 		}
-
-#if (FOREIGN_GAMESERVER==1)
-		if ( szAuthKey[13] != AUTHKEY13 )
-		{
-			DestroyGIocp();
-		}
-#endif
 	}
 }
 
@@ -1953,7 +1946,11 @@ void CBloodCastle::ReleaseCastleBridge(int iBridgeIndex)
 	{
 		for ( int j= ::g_btCastleBridgeMapXY[iBridgeIndex].btStartY;j<= ::g_btCastleBridgeMapXY[iBridgeIndex].btEndY;j++)
 		{
-			MapC[iBridgeIndex + MAP_INDEX_BLOODCASTLE1].m_attrbuf[j * 256 + i] &= ~8;
+			int iMapNumber = this->GetBridgeMapNumber(iBridgeIndex); //season3 add-on
+
+			MapC[iMapNumber].m_attrbuf[j * 256 + i] &= ~8; //season3 changed
+
+			LogAddTD("[Blood Castle] (%d) Castle Door Subsist", iBridgeIndex + 1); //season 2.5 add-on
 
 			LogAddTD("[Blood Castle][Bug Tracer] ReleaseCastleBridge-> %d", iBridgeIndex+1);
 		}
@@ -1977,7 +1974,9 @@ void CBloodCastle::BlockCastleDoor(int iBridgeIndex)
 		{
 			for ( int z = ::g_btCastleDoorMapXY[iBridgeIndex][x].btStartY; z <= ::g_btCastleDoorMapXY[iBridgeIndex][x].btEndY ; z++)
 			{
-				MapC[iBridgeIndex + MAP_INDEX_BLOODCASTLE1].m_attrbuf[z * 256 + y] |= 4;
+				int iMapNumber = this->GetBridgeMapNumber(iBridgeIndex); //season3 add-on
+
+				MapC[iMapNumber].m_attrbuf[z * 256 + y] |= 4; //season3 changed
 			}
 		}
 	}
@@ -2001,7 +2000,9 @@ void CBloodCastle::ReleaseCastleDoor(int iBridgeIndex)
 		{
 			for ( int z = ::g_btCastleDoorMapXY[iBridgeIndex][x].btStartY; z <= ::g_btCastleDoorMapXY[iBridgeIndex][x].btEndY ; z++)
 			{
-				MapC[iBridgeIndex + MAP_INDEX_BLOODCASTLE1].m_attrbuf[z * 256 + y] &= ~4;
+				int iMapNumber = this->GetBridgeMapNumber(iBridgeIndex); //season3 add-on
+
+				MapC[iMapNumber].m_attrbuf[z * 256 + y] &= ~4; //season3 changed
 			}
 		}
 	}
@@ -2080,13 +2081,15 @@ void CBloodCastle::SendCastleEntranceBlockInfo(int iBridgeIndex, bool bLive)
 	lpMsgBody[1].btX   = ::g_btCastleEntranceMapXY[iBridgeIndex].btEndX;
 	lpMsgBody[1].btY   = ::g_btCastleEntranceMapXY[iBridgeIndex].btEndY;
 
-	for (int i=OBJ_MAXMONSTER;i<OBJMAX;i++)
+	for (int i = OBJ_MAXMONSTER; i<OBJMAX; i++)
 	{
-		if ( gObj[i].MapNumber == (iBridgeIndex + MAP_INDEX_BLOODCASTLE1) )
+		int iMapNumber = this->GetBridgeMapNumber(iBridgeIndex); //season3 add-on
+
+		if (gObj[i].MapNumber == iMapNumber) //season3 changed
 		{
-			if ( gObj[i].Connected > PLAYER_LOGGED )
+			if (gObj[i].Connected > PLAYER_LOGGED)
 			{
-				DataSend(i, (unsigned char *)lpMsg, lpMsg->h.size);
+				DataSend(i, (LPBYTE)lpMsg, lpMsg->h.size);
 			}
 		}
 	}
@@ -2120,16 +2123,17 @@ void CBloodCastle::SendCastleBridgeBlockInfo(int iBridgeIndex, bool bLive)
 	lpMsgBody[1].btX   = ::g_btCastleEntranceMapXY[iBridgeIndex].btEndX;
 	lpMsgBody[1].btY   = ::g_btCastleEntranceMapXY[iBridgeIndex].btEndY;
 
-	for ( int i=OBJ_MAXMONSTER;i<OBJMAX;i++)
+	for (int i = OBJ_MAXMONSTER; i<OBJMAX; i++)
 	{
-		if ( gObj[i].MapNumber == (iBridgeIndex + MAP_INDEX_BLOODCASTLE1) )
-		{
-			if ( gObj[i].Connected > PLAYER_LOGGED )
-			{
-				DataSend(i, (UCHAR *)lpMsg, lpMsg->h.size);
+		int iMapNumber = this->GetBridgeMapNumber(iBridgeIndex); //season3 add-on
 
-				LogAddTD("[Blood Castle][Bug Tracer] SendCastleBridgeBlockInfo-> Bridge:%d/Live:%d, (%d,%d,%d,%d)",
-					iBridgeIndex+1, bLive, lpMsgBody[0].btX, lpMsgBody[0].btY, lpMsgBody[1].btX, lpMsgBody[1].btY);
+		if (gObj[i].MapNumber == iMapNumber) //season3 changed
+		{
+			if (gObj[i].Connected > PLAYER_LOGGED)
+			{
+				DataSend(i, (LPBYTE)lpMsg, lpMsg->h.size);
+
+				LogAddTD("[Blood Castle][Bug Tracer] SendCastleBridgeBlockInfo-> Bridge:%d/Live:%d, (%d,%d,%d,%d)", iBridgeIndex + 1, bLive, lpMsgBody[0].btX, lpMsgBody[0].btY, lpMsgBody[1].btX, lpMsgBody[1].btY);
 			}
 		}
 	}
@@ -2171,13 +2175,15 @@ void CBloodCastle::SendCastleDoorBlockInfo(int iBridgeIndex, bool bLive)
 	lpMsgBody[5].btX   = ::g_btCastleDoorMapXY[iBridgeIndex][2].btEndX;
 	lpMsgBody[5].btY   = ::g_btCastleDoorMapXY[iBridgeIndex][2].btEndY;
 
-	for ( int i=OBJ_MAXMONSTER;i<OBJMAX;i++)
+	for (int i = OBJ_MAXMONSTER; i<OBJMAX; i++)
 	{
-		if ( gObj[i].MapNumber == (iBridgeIndex + MAP_INDEX_BLOODCASTLE1) )
+		int iMapNumber = this->GetBridgeMapNumber(iBridgeIndex); //season3 add-on
+
+		if (gObj[i].MapNumber == iMapNumber) //season3 changed
 		{
-			if ( gObj[i].Connected > PLAYER_LOGGED )
+			if (gObj[i].Connected > PLAYER_LOGGED)
 			{
-				DataSend(i, (UCHAR *)lpMsg, lpMsg->h.size);
+				DataSend(i, (LPBYTE)lpMsg, lpMsg->h.size);
 			}
 		}
 	}
@@ -3942,3 +3948,147 @@ void CBloodCastle::FixUsersPlayStateFail(int iBridgeIndex)
 	}
 }
 
+
+//Identical
+int CBloodCastle::GetBridgeMapNumber(int iBridgeIndex) //00555F10
+{
+	int iMapNumber = 0;
+
+	switch (iBridgeIndex)
+	{
+	case 0:
+		iMapNumber = MAP_INDEX_BLOODCASTLE1;
+		break;
+	case 1:
+		iMapNumber = MAP_INDEX_BLOODCASTLE2;
+		break;
+	case 2:
+		iMapNumber = MAP_INDEX_BLOODCASTLE3;
+		break;
+	case 3:
+		iMapNumber = MAP_INDEX_BLOODCASTLE4;
+		break;
+	case 4:
+		iMapNumber = MAP_INDEX_BLOODCASTLE5;
+		break;
+	case 5:
+		iMapNumber = MAP_INDEX_BLOODCASTLE6;
+		break;
+	case 6:
+		iMapNumber = MAP_INDEX_BLOODCASTLE7;
+		break;
+	case 7:
+		iMapNumber = MAP_INDEX_BLOODCASTLE8;
+		break;
+	}
+
+	return iMapNumber;
+}
+
+//Identical
+int CBloodCastle::GetBridgeIndex(int iMAP_NUM) //00555FE0
+{
+	int iBridgeIndex = -1;
+
+	switch (iMAP_NUM)
+	{
+	case MAP_INDEX_BLOODCASTLE1:
+		iBridgeIndex = 0;
+		break;
+	case MAP_INDEX_BLOODCASTLE2:
+		iBridgeIndex = 1;
+		break;
+	case MAP_INDEX_BLOODCASTLE3:
+		iBridgeIndex = 2;
+		break;
+	case MAP_INDEX_BLOODCASTLE4:
+		iBridgeIndex = 3;
+		break;
+	case MAP_INDEX_BLOODCASTLE5:
+		iBridgeIndex = 4;
+		break;
+	case MAP_INDEX_BLOODCASTLE6:
+		iBridgeIndex = 5;
+		break;
+	case MAP_INDEX_BLOODCASTLE7:
+		iBridgeIndex = 6;
+		break;
+	case MAP_INDEX_BLOODCASTLE8:
+		iBridgeIndex = 7;
+		break;
+	}
+
+	return iBridgeIndex;
+}
+
+//Identical
+int CBloodCastle::GetItemMapNumberFirst(int iMAP_NUM) //005560F0
+{
+	int iMapNumber = iMAP_NUM;
+
+	switch (iMAP_NUM)
+	{
+	case 238:
+		iMapNumber = MAP_INDEX_BLOODCASTLE1;
+		break;
+	case 239:
+		iMapNumber = MAP_INDEX_BLOODCASTLE2;
+		break;
+	case 240:
+		iMapNumber = MAP_INDEX_BLOODCASTLE3;
+		break;
+	case 241:
+		iMapNumber = MAP_INDEX_BLOODCASTLE4;
+		break;
+	case 242:
+		iMapNumber = MAP_INDEX_BLOODCASTLE5;
+		break;
+	case 243:
+		iMapNumber = MAP_INDEX_BLOODCASTLE6;
+		break;
+	case 244:
+		iMapNumber = MAP_INDEX_BLOODCASTLE7;
+		break;
+	case 245:
+		iMapNumber = MAP_INDEX_BLOODCASTLE8;
+		break;
+	}
+
+	return iMapNumber;
+}
+
+//Identical
+int CBloodCastle::GetItemMapNumberSecond(int iMAP_NUM) //005561C0
+{
+	int iMapNumber = iMAP_NUM;
+
+	switch (iMAP_NUM)
+	{
+	case 246:
+		iMapNumber = MAP_INDEX_BLOODCASTLE1;
+		break;
+	case 247:
+		iMapNumber = MAP_INDEX_BLOODCASTLE2;
+		break;
+	case 248:
+		iMapNumber = MAP_INDEX_BLOODCASTLE3;
+		break;
+	case 249:
+		iMapNumber = MAP_INDEX_BLOODCASTLE4;
+		break;
+	case 250:
+		iMapNumber = MAP_INDEX_BLOODCASTLE5;
+		break;
+	case 251:
+		iMapNumber = MAP_INDEX_BLOODCASTLE6;
+		break;
+	case 252:
+		iMapNumber = MAP_INDEX_BLOODCASTLE7;
+		break;
+	case 253:
+		iMapNumber = MAP_INDEX_BLOODCASTLE8;
+		break;
+	}
+
+	return iMapNumber;
+}

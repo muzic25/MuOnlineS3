@@ -462,11 +462,6 @@ BOOL CDevilSquare::Run()
 		{
 			this->SendLiveCall();
 			count = 0;
-
-			if ( szAuthKey[12] != AUTHKEY12 )
-			{
-				DestroyGIocp();
-			}
 		}
 	}
 

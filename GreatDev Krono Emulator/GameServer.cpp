@@ -557,6 +557,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 						gObjSetState();
 						GameServerInfoSend();
+						SYNFlood.Tick(); //CUSTOM
 					}
 					break;
 				case WM_SECOND_MSG_PROCESS:

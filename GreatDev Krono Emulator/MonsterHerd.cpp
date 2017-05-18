@@ -58,10 +58,6 @@ BOOL MonsterHerd::SetTotalInfo(int iMapNumber, int iRadius, int iStartX, int iSt
 	return TRUE;
 }
 
-
-
-
-
 BOOL MonsterHerd::AddMonster(int iMonsterType, BOOL bRegen, BOOL bAttackFirst)
 {
 	if ( this->m_bHasInfo == 0 )
@@ -132,9 +128,6 @@ BOOL MonsterHerd::AddMonster(int iMonsterType, BOOL bRegen, BOOL bAttackFirst)
 
 }
 
-
-
-
 void MonsterHerd::SetRadius(int iRadius)
 {
 	if ( ((iRadius<0)?FALSE:(iRadius>15)?FALSE:TRUE) != FALSE )
@@ -144,10 +137,6 @@ void MonsterHerd::SetRadius(int iRadius)
 
 	this->m_iRADIUS = iRadius;
 }
-
-
-
-
 
 void MonsterHerd::SetPosition(BYTE iTX, BYTE iTY)
 {
@@ -166,10 +155,6 @@ void MonsterHerd::SetPosition(BYTE iTX, BYTE iTY)
 	this->m_iCUR_X = iTX;
 	this->m_iCUR_Y = iTY;
 }
-
-
-
-
 
 BOOL MonsterHerd::Start()
 {
@@ -746,6 +731,9 @@ BOOL MonsterHerd::MonsterRegenAction(LPOBJ lpObj)
 	lpObj->Life = lpObj->AddLife + lpObj->MaxLife;
 	lpObj->Mana = lpObj->AddMana + lpObj->MaxMana;
 	lpObj->Live = TRUE;
+
+	gObjClearStandardBuffEffect(lpObj, AT_MONSTER_GENERAL);
+
 	lpObj->m_PoisonBeattackCount = 0;
 	lpObj->m_ColdBeattackCount = 0;
 	lpObj->m_ViewState = 0;
@@ -757,6 +745,10 @@ BOOL MonsterHerd::MonsterRegenAction(LPOBJ lpObj)
 	}
 
 	gObjTimeCheckSelfDefense(lpObj);
+
+	gObjRemoveBuffEffect(lpObj, AT_POISON); //S3 Addition -> Poison
+	gObjRemoveBuffEffect(lpObj, AT_ICE); //S3 Addition -> Ice
+
 	lpObj->m_ViewSkillState &= 0xFFFFFFFE;
 	lpObj->m_ViewSkillState &= 0xFFFFFFFD;
 

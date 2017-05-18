@@ -62,15 +62,6 @@ void CChaosCastle::Run()
 					break;
 			}
 		}
-
-#if (FOREIGN_GAMESERVER==1)
-
-		if ( szAuthKey[13] != AUTHKEY13 )
-		{
-			DestroyGIocp();
-		}
-
-#endif
 	}
 }
 

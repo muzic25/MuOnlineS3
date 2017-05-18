@@ -490,6 +490,10 @@ public:
  int gSetItemInCastleHuntZoneDropRate;
  int gSetItemInCastleHuntZoneDropLevel;
  BOOL g_bDoCastleDeepEvent;
+ int g_iRateJewelOfLuck;
+ int g_iRateJewelOfExc;
+ int g_iRateJewelOfMyst;
+
 };
 extern CConfigs Configs;
 
@@ -529,5 +533,5 @@ void SetMapName();
 int GetEventFlag();
 void ReadEventInfo(MU_EVENT_TYPE eEventType);
 void ReadGameEtcInfo(MU_ETC_TYPE eGameEtcType);
-
+void LoadCustomJewel(char *filename);
 #endif

@@ -10446,6 +10446,8 @@ void CGUseItemRecv(PMSG_USEITEM* lpMsg, int aIndex)
 	CItem * citem;
 	int iItemUseType = lpMsg->btItemUseType;
 
+	int SucessRate = rand() % 100;
+	int ExclenteRand = rand() % Configs.g_iRateJewelOfExc;
 
 	// Check User States
 	if ( gObj[aIndex].m_IfState.use && gObj[aIndex].m_IfState.type != 3 )
@@ -11313,6 +11315,75 @@ void CGUseItemRecv(PMSG_USEITEM* lpMsg, int aIndex)
 				}
 			}
 		}
+		else if (citem->m_Type == ITEMGET(14, 99))//jewel of Mystical
+		{
+			if (gObj[aIndex].pInventory[11].IsItem() == 1 || gObj[aIndex].pInventory[10].IsItem() == 1 || gObj[aIndex].pInventory[9].IsItem() == 1)
+			{
+				citem->m_Level += 1;
+				gObj[aIndex].pInventory[pos].Clear();
+				GCInventoryItemDeleteSend(aIndex, pos, 1);
+				GCServerMsgStringSend("[Jewel of Mystical] Sucessfully Strengten!", aIndex, 1);
+			}
+			if (citem->m_Level == 13)
+			{
+				GCServerMsgStringSend("[Jewel of Mystical] The item has maximum level!", aIndex, 1);
+				return;
+			}
+			else if (SucessRate < Configs.g_iRateJewelOfMyst)
+			{
+				citem->m_Level += 1;
+				gObj[aIndex].pInventory[pos].Clear();
+				GCInventoryItemDeleteSend(aIndex, pos, 1);
+				GCServerMsgStringSend("[Jewel of Mystical] Sucessfully Strengten!", aIndex, 1);
+				return;
+			}
+			else
+			{
+				gObj[aIndex].pInventory[pos].Clear();
+				GCInventoryItemDeleteSend(aIndex, pos, 1);
+				GCServerMsgStringSend("[Jewel of Mystical] Fail to strengthening!", aIndex, 1);
+				return;
+			}
+		}
+		else if (citem->m_Type == ITEMGET(14,101)) //jewel of luck
+		{
+
+			if (citem->m_Option2 != 0)
+			{
+				GCServerMsgStringSend("[Jewel of Luck] This item have that option", aIndex, 1);
+				return;
+			}
+			else if (SucessRate < Configs.g_iRateJewelOfLuck)
+			{
+				citem->m_Option2 = 1;
+				gObj[aIndex].pInventory[pos].Clear();
+				GCInventoryItemDeleteSend(aIndex, pos, 1);
+				GCServerMsgStringSend("[Jewel of Luck] Sucessfully Strengten", aIndex, 1);
+				return;
+			}
+			else
+			{
+				GCServerMsgStringSend("[Jewel of Luck] Fail to strengthening!", aIndex, 1);
+				gObj[aIndex].pInventory[pos].Clear();
+				GCInventoryItemDeleteSend(aIndex, pos, 1);
+			}
+		}
+		else if (citem->m_Type == ITEMGET(14, 100)) //jewel of excelente
+		{
+			if (citem->m_NewOption > 0 || citem->m_SetOption > 0)
+			{
+				GCServerMsgStringSend("[Jewel of Excelent] This item have that option!", aIndex, 1);
+				return;
+			}
+			else
+			{
+				citem->m_NewOption = 1 + ExclenteRand;
+				gObj[aIndex].pInventory[pos].Clear();
+				GCInventoryItemDeleteSend(aIndex, pos, 1);
+				GCServerMsgStringSend("[Jewel of Excelent] Sucessfully Strengten!", aIndex, 1);
+				return;
+			}
+		}
 		else
 		{
 			//LogAdd("error-L3 : %s return %s %d %d %s",
@@ -11691,11 +11762,6 @@ void GCReqmoveDevilSquare(PMSG_REQ_MOVEDEVILSQUARE* lpMsg, int aIndex)
 
 		return;
 	}
-
-#if (FOREIGN_GAMESERVER==1)
-	if ( szAuthKey[6] != AUTHKEY6 )
-		DestroyGIocp();
-#endif
 
 	LogAddTD("[DevilSquare] [%s][%s] Move DevilSquare success [%d][%d] RemoveItem[%s][%d][%d][%d]",
 		lpObj->AccountID, lpObj->Name, lpObj->Level, cSquareNumber, lpObj->pInventory[cInvitationItemPos].GetName(),
@@ -12325,11 +12391,6 @@ void CGCloseWindow(int aIndex)
 		gObj[aIndex].m_IfState.state = 0;
 		gObj[aIndex].m_IfState.type = 0;
 		gObj[aIndex].m_IfState.use = 0;
-
-#if (FOREIGN_GAMESERVER==1)
-		if ( szAuthKey[7] != AUTHKEY7)
-			DestroyGIocp();
-#endif
 	}
 }
 

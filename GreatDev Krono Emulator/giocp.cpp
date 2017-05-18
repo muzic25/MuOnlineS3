@@ -12,6 +12,18 @@ unsigned char* ExSendBuf;
 
 SOCKET g_Listen = INVALID_SOCKET;	// THIS IS NOT THE PLACE OF TTHIS VARIABLE
 
+cSYNFlood SYNFlood; //Custom
+
+cSYNFlood::cSYNFlood()
+{
+	NumIps = 0;
+}
+
+cSYNFlood::~cSYNFlood()
+{
+}
+
+
 void GiocpInit()
 {
 	ExSendBuf=new unsigned char[MAX_EXSENDBUF_SIZE];
@@ -52,6 +64,7 @@ void DestroyGIocp()
 	LogAddTD("Error-L10");
 //#endif
 	return; // DESTROY FIX
+
 	closesocket(g_Listen);
 
 	for (DWORD dwCPU=0; dwCPU < g_dwThreadCount;dwCPU++ )
@@ -110,6 +123,66 @@ int CreateListenSocket()
 		}
 	} 
 }
+
+void cSYNFlood::Tick()
+{
+	for (UINT x = 0; x < NumIps; x++)
+	{
+		if (IPBlockInfo[x].Time > 0)
+		{
+			IPBlockInfo[x].Time--;
+			continue;
+		}
+
+		if (IPBlockInfo[x].Time == 0)
+		{
+			for (UINT j = x; j < NumIps - 1; j++)
+			{
+				strcpy(IPBlockInfo[x].IP, IPBlockInfo[x + 1].IP);
+				IPBlockInfo[x].Count = IPBlockInfo[x + 1].Count;
+				IPBlockInfo[x].Time = IPBlockInfo[x + 1].Time;
+			}
+
+			IPBlockInfo[NumIps - 1].Count = 0;
+			IPBlockInfo[NumIps - 1].IP[0] = NULL;
+			IPBlockInfo[NumIps - 1].Time = -1;
+			NumIps--;
+		}
+	}
+}
+
+bool cSYNFlood::CheckIp(char INPUT_IP[16])
+{
+	if (NumIps == 0)
+	{
+		strcpy(IPBlockInfo[NumIps].IP, INPUT_IP);
+		IPBlockInfo[NumIps].Count = 0;
+		IPBlockInfo[NumIps].Time = 1;
+		NumIps++;
+	}
+	else if (NumIps > 0)
+	{
+		for (UINT x = 0; x < NumIps; x++)
+		{
+			if (!strcmp(IPBlockInfo[x].IP, INPUT_IP))
+			{
+				IPBlockInfo[x].Count++;
+				if (IPBlockInfo[x].Count > 400000000)
+					IPBlockInfo[x].Count = 400000000;
+				IPBlockInfo[x].Time = 1 * IPBlockInfo[x].Count;
+				return false;
+			}
+		}
+
+		strcpy(IPBlockInfo[NumIps].IP, INPUT_IP);
+		IPBlockInfo[NumIps].Count = 0;
+		IPBlockInfo[NumIps].Time = 1;
+		NumIps++;
+	}
+
+	return true;
+}
+
 
 
 unsigned long __stdcall IocpServerWorker(void * p)
@@ -203,6 +276,17 @@ unsigned long __stdcall IocpServerWorker(void * p)
 					LeaveCriticalSection(&criti);
 					continue;
 				}
+
+				//---
+				if(!SYNFlood.CheckIp(inet_ntoa(cInAddr)))
+				{
+				LogAdd("error-L1 : %d %d SYNFlood detected %d", Accept, ClientIndex, GetLastError() );
+				LeaveCriticalSection(&criti);
+				closesocket(Accept);
+				continue;
+				}
+				//---
+
 
 				if (gObjAdd(Accept, inet_ntoa(cInAddr), ClientIndex) == -1 )
 				{

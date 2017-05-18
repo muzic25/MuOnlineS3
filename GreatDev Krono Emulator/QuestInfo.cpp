@@ -1091,11 +1091,6 @@ BOOL CQuestInfo::QuestClear(LPOBJ lpObj, int QuestIndex)
 {
 	LPQUEST_INFO lpQuestInfo = this->GetQuestInfo(QuestIndex);
 
-	if ( szAuthKey[18] != AUTHKEY18 )
-	{
-		DestroyGIocp();
-	}
-
 	if ( lpQuestInfo == NULL )
 	{
 		return 0xFF;

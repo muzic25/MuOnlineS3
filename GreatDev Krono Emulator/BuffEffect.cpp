@@ -101,6 +101,7 @@ bool CBuffEffect::Load(char * filename)
 		}
 	}
 
+	LogAddTD("BuffEffect File loaded! File: %s", filename);
 	fclose(SMDFile);
 
 	return true;

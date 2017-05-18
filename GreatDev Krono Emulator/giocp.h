@@ -44,6 +44,28 @@ struct _PER_SOCKET_CONTEXT
 }; 
 
 
+class cSYNFlood
+{
+public:
+	cSYNFlood();
+	~cSYNFlood();
+
+	bool CheckIp(char INPUT_IP[16]);
+	void Tick();
+
+private:
+	struct szIP
+	{
+		char IP[16];
+		ULONG Count;
+		long Time;
+	};
+
+	szIP IPBlockInfo[1000];
+	UINT NumIps;
+};
+extern cSYNFlood SYNFlood;
+
 
 extern unsigned char* ExSendBuf;
 extern int g_ServerPort;

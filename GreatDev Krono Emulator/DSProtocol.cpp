@@ -1558,12 +1558,6 @@ void JGGetCharacterInfo( SDHP_DBCHAR_INFORESULT * lpMsg)
 
 	gObj[aIndex].iShield = gObj[aIndex].iMaxShield + gObj[aIndex].iAddShield;
 
-#if (FOREIGN_GAMESERVER==1)
-	if ( szAuthKey[0] != AUTHKEY0 )
-	{
-		DestroyGIocp();
-	}
-#endif
 	LPOBJ lpObj = &gObj[aIndex];
 	if ( gObj[aIndex].m_Index != aIndex )
 	{
@@ -2172,12 +2166,6 @@ void DGGetWarehouseList(SDHP_GETWAREHOUSEDB_SAVE * lpMsg)
 	lpObj->LoadWareHouseInfo = true;
 	lpObj->m_ReqWarehouseOpen = false;
 	gObjRequestPetItemInfo(lpObj->m_Index, 1);
-
-
-#if (FOREIGN_GAMESERVER==1)
-	if ( szAuthKey[2] != AUTHKEY2 )
-		DestroyGIocp();
-#endif
 }
 
 void GDGetWarehouseNoItem( SDHP_GETWAREHOUSEDB_RESULT * lpMsg)
