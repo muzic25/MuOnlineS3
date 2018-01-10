@@ -4,6 +4,8 @@
 *.o
 *.obj
 *.suo
+*.v12.suo
+.suo
 
 # Precompiled Headers
 *.gch
@@ -47,5 +49,4 @@
 ipch/
 Release/
 ReleaseDS/
-
 .vs/
