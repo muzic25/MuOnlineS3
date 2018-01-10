@@ -83,7 +83,7 @@ UINT PCPointShop::ReadFile(char * file)
 					Items[HowManyItems].SlotX=CalcItemXY(Items[HowManyItems].X,Items[HowManyItems].Y);
 					this->HowManyItems++;
 
-					LogAddC(2,"[PCPoint]: item:[%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d][%d] Cost: [%d]",ItemIndex,ItemID,Level,Opt,Luck,Skill,Dur,Exc,Anci,Cost);
+					LogAddC(2,"[PCPoint]: item:[%d][%d][%d][%d][%d][%d][%d][%d][%d] Cost: [%d]",ItemIndex,ItemID,Level,Opt,Luck,Skill,Dur,Exc,Anci,Cost);
 				}
 			}
 		}
@@ -281,6 +281,17 @@ DWORD WINAPI Timer(LPVOID lpParam)
 
 void PCPointShop::Init()
 {
+	//PC Points
+	this->IsPCPointSystem = GetPrivateProfileInt("PCPoints", "Enabled", 1, gDirPath.GetNewPath("commonserver.cfg"));
+	this->OnlyForGM = GetPrivateProfileInt("PCPoints", "OnlyForGM", 1, gDirPath.GetNewPath("commonserver.cfg"));
+	this->MaxPlayerPoints = GetPrivateProfileInt("PCPoints", "PCBangMaxPoint", 10000, gDirPath.GetNewPath("commonserver.cfg"));
+	this->EnabledMobGivePCPoint = GetPrivateProfileInt("PCPoints", "PCBangPointKillMob", 1, gDirPath.GetNewPath("commonserver.cfg"));
+
+	if (!IsPCPointSystem)
+	{
+		return;
+	}
+
 	for (int i = 0; i < MaxPCPointItems; i++)
 	{
 		PC_Shop[i] = 0x00;
@@ -296,8 +307,24 @@ void PCPointShop::Init()
 
 void PCPointShop::OpenShop(DWORD PlayerID)
 {
+	if (!IsPCPointSystem)
+	{
+		return;
+	}
+
 	LPOBJ lpObj = &gObj[PlayerID];
-	
+
+	if (lpObj->CloseType != -1)
+	{
+		return;
+	}
+
+	if (gObjIsConnectedGP(PlayerID) == 0)
+	{
+		LogAddTD("[ANTI-HACK][PCBangPointShopOpen] Couldn't Open.. (%s)(%s)", lpObj->AccountID, lpObj->Name);
+		return;
+	}
+
 	if(lpObj->Level < 6)
 	{
 		GCServerMsgStringSend("You must level 6 and above to open Pc Point shop.", lpObj->m_Index, 1);
@@ -315,53 +342,64 @@ void PCPointShop::OpenShop(DWORD PlayerID)
 	
 }
 
-void PCPointShop::BuyItem(DWORD PlayerID,int Position)
+void PCPointShop::BuyItem(int aIndex,int Position)
 {
-	LPOBJ lpObjEx = &gObj[PlayerID];
-	LPOBJ pObj    = &gObj[PlayerID];
+	if (!IsPCPointSystem)
+	{
+		return;
+	}
+
+	LPOBJ lpObjEx = &gObj[aIndex];
+	LPOBJ pObj    = &gObj[aIndex];
 
 	int IndexItem = 0; //SearchIndex(Position);
 	//int i=SearchIndex(Position);
 	BOOL IfBuy = FALSE;
 	DWORD SealAscencion = ITEMGET(13,43);
 	DWORD SealWealt = ITEMGET(13,44);
-	DWORD SealSustenance = ITEMGET (13,45);
+	DWORD SealSustenance = ITEMGET(13,45);
 	char pMsg[MAX_CHAT_LEN];
 
-    for(int i = 0; i < HowManyItems; i++)
-    if (Position == Items[i].SlotX ) IndexItem = i;
+	for (int i = 0; i < HowManyItems; i++)
+	{
+		if (Position == Items[i].SlotX)
+		{
+			IndexItem = i;
+		}
+	}
 
 	if(IndexItem != -1)
 	{
 		if(Items[IndexItem].Cost <= lpObjEx->PCPoint )
 		{
-			DecreasePoints(PlayerID, Items[IndexItem].Cost);
+			IfBuy = TRUE;
+			DWORD RewardItem = ITEMGET(Items[IndexItem].ItemIndex, Items[IndexItem].ItemID);
 
-			BYTE RewardItem = ITEMGET(Items[IndexItem].ItemIndex, Items[IndexItem].ItemID);
-
-			if (RewardItem == SealAscencion || RewardItem == SealWealt|| RewardItem == SealSustenance)
+			if (RewardItem == SealAscencion || RewardItem == SealWealt || RewardItem == SealSustenance)
 			{
 				if (RewardItem == SealWealt)
 				{
-					g_ItemAddOption.SetItemEffect(&gObj[PlayerID], SealWealt, 0);
+					g_ItemAddOption.SetItemEffect(&gObj[aIndex], ITEMGET(13, 44), 600);
 				}
 				if (RewardItem == SealAscencion)
 				{
-					g_ItemAddOption.SetItemEffect(&gObj[PlayerID], SealAscencion, 0);
+					g_ItemAddOption.SetItemEffect(&gObj[aIndex], ITEMGET(13, 43), 600);
 				}
 				if (RewardItem == SealSustenance)
 				{
-					g_ItemAddOption.SetItemEffect(&gObj[PlayerID], SealSustenance, 0);
+					g_ItemAddOption.SetItemEffect(&gObj[aIndex], ITEMGET(13, 45), 600);
 				}
+				sprintf(pMsg, "[PCPoint] You spend %d points.", Items[IndexItem].Cost);
+				GCServerMsgStringSend(pMsg, lpObjEx->m_Index, 1);
 			}
 			else
 			{
-				ItemSerialCreateSend(gObj->m_Index, 236, pObj->X, pObj->Y, RewardItem, Items[IndexItem].Level, Items[IndexItem].Dur, Items[IndexItem].Skill, Items[IndexItem].Luck, Items[IndexItem].Opt, -1, Items[IndexItem].Exc, Items[IndexItem].Ancient);
+				ItemSerialCreateSend(pObj->m_Index, 236, pObj->X, pObj->Y, RewardItem, Items[IndexItem].Level, Items[IndexItem].Dur, Items[IndexItem].Skill, Items[IndexItem].Luck, Items[IndexItem].Opt, -1, Items[IndexItem].Exc, Items[IndexItem].Ancient);
 				IfBuy = TRUE;
-				sprintf(pMsg, "[PCPoint] You spend %d points.", Cost);
+				sprintf(pMsg, "[PCPoint] You spend %d points.", Items[IndexItem].Cost);
 				GCServerMsgStringSend(pMsg, lpObjEx->m_Index, 1);
 			}
-				
+			DecreasePoints(aIndex, Items[IndexItem].Cost);
 		}
 		else
 		{
@@ -391,6 +429,7 @@ void PCPointShop::SendPoints(DWORD PlayerID,int Points)
 	{
 		MaxPlayerPoints = Points;
 	}
+
 	BYTE Packet[8] = {0xC1, 0x08 , 0xD0 , 0x04 , LOBYTE(lpObjEx->PCPoint) , HIBYTE(lpObjEx->PCPoint) , LOBYTE(MaxPlayerPoints) , HIBYTE(MaxPlayerPoints)};
 	DataSend(PlayerID,(PBYTE)Packet,Packet[1]);
 
@@ -413,4 +452,24 @@ void PCPointShop::DecreasePoints(DWORD PlayerID,int Points)
 
 	BYTE Packet[8] = {0xC1, 0x08 , 0xD0 , 0x04 , LOBYTE(lpObjEx->PCPoint) , HIBYTE(lpObjEx->PCPoint) , LOBYTE(MaxPlayerPoints) , HIBYTE(MaxPlayerPoints)};
 	DataSend(PlayerID,(PBYTE)Packet,Packet[1]);
+}
+
+void PCPointShop::GCSendPcBangUserPoint(int aIndex) //0049A1E0 (identical)
+{
+	if (!IsPCPointSystem)
+	{
+		return;
+	}
+
+	LPOBJ pObj = &gObj[aIndex];
+	PMSG_ANS_PCBANG_POINT_INFO pMsg = { 0 };
+
+	PHeadSubSetB((LPBYTE)&pMsg, 0xD0, 0x04, sizeof(pMsg));
+
+	pMsg.m_sPoint = pObj->PCPoint;
+	pMsg.m_sMaxPoint = MaxPlayerPoints;
+	pMsg.m_btType = this->IsPCPointSystem;
+
+	DataSend(aIndex, (LPBYTE)&pMsg, sizeof(pMsg));
+	LogAddC(2, "[PCPointShopConnect] SendPoints [%s] Points: %d", pObj->AccountID, pObj->PCPoint);
 }

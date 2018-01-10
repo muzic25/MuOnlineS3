@@ -1646,7 +1646,6 @@ void JGGetCharacterInfo( SDHP_DBCHAR_INFORESULT * lpMsg)
 			lpObj->AccountID, lpObj->Name, MinusPoint, AddPoint, MaxMinusPoint, MaxAddPoint);
 	}
 
-	pjMsg.iPcPoints = lpObj->PCPoint;
 
 	g_QuestInfo.QuestInfoSave(lpObj);
 	
@@ -1790,6 +1789,7 @@ struct SDHP_DBCHAR_INFOSAVE
 	WORD Leadership;	// 7EC
 	WORD ChatLitmitTime;	// 7EE
 	int iFruitPoint;	// 7F0
+	int iPcPoint;
 };
 
 
@@ -1851,6 +1851,7 @@ void GJSetCharacterInfo(LPOBJ lpObj, int aIndex, BOOL bMapServerMove)
 	pCSave.Leadership = lpObj->Leadership;
 	pCSave.ChatLitmitTime = lpObj->ChatLimitTime;
 	pCSave.iFruitPoint = lpObj->iFruitPoint;
+	pCSave.iPcPoint = lpObj->PCPoint;
 	pCSave.CharInfoSave = 0;
 	memcpy(pCSave.dbQuest, lpObj->m_Quest, sizeof(pCSave.dbQuest));
 

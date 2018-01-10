@@ -1613,20 +1613,6 @@ void gObjMonsterAttack(LPOBJ lpObj, LPOBJ lpTargetObj)
 
 		CGMagicAttack(&pAttackMsg, lpObj->m_Index);
 	}
-
-#pragma message("Delete this unuseful Code with ADDON gObjMonsterAttack")
-
-	else if ( lpObj->Class == 66 || lpObj->Class == 73 || lpObj->Class == 77 )
-	{
-		PMSG_MAGICATTACK pAttackMsg;
-
-		pAttackMsg.MagicNumber = 1;
-		pAttackMsg.NumberH = SET_NUMBERH(lpObj->TargetNumber);
-		pAttackMsg.NumberL = SET_NUMBERL(lpObj->TargetNumber);
-		pAttackMsg.Dis = 0;
-
-		CGMagicAttack(&pAttackMsg, lpObj->m_Index);
-	}
 	else
 	{
 		switch ( AttackType ) 
@@ -1883,7 +1869,7 @@ void gObjMonsterBaseAct(LPOBJ lpObj)
 					{
 						if ( lpObj->m_PK_Count == 0 )
 						{
-							ChatSend(lpObj, "하트 아이템을 상점에 주세요. 푸짐한 경품 이벤트 중");	// Need Translation
+							ChatSend(lpObj, "Please give the heart item to the store. Lots of rewards for you.");	// Need Translation
 							lpObj->m_PK_Count = 0;
 						}
 					}

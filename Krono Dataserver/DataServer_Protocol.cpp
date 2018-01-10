@@ -922,7 +922,7 @@ void DataServer_Protocol::JGGetCharacterInfo(DataServer_Manager * Service, int a
         return;
     }
 
-    bool bRet = gDataBase.ExecFormat("SELECT AccountID, cLevel, Class, LevelUpPoint, Experience, Strength, Dexterity, Vitality, Energy, Money, Life, MaxLife, Mana, MaxMana, MapNumber, MapPosX, MapPosY, MapDir, PkCount, PkLevel, PkTime, CtlCode, DbVersion, Leadership, ChatLimitTime, FruitPoint FROM Character WHERE Name = '%s'", szName);
+    bool bRet = gDataBase.ExecFormat("SELECT AccountID, cLevel, Class, LevelUpPoint, Experience, Strength, Dexterity, Vitality, Energy, Money, Life, MaxLife, Mana, MaxMana, MapNumber, MapPosX, MapPosY, MapDir, PkCount, PkLevel, PkTime, CtlCode, DbVersion, Leadership, ChatLimitTime, FruitPoint, PCPoints FROM Character WHERE Name = '%s'", szName);
     if (bRet == true && gDataBase.Fetch() != SQL_NO_DATA)
     {
         gDataBase.GetStr("AccountID", szAccountID2);
@@ -1075,16 +1075,16 @@ void DataServer_Protocol::GJSetCharacterInfo(DataServer_Manager * Service, int a
 
     gDataBase.Clear();
 
-    gDataBase.ExecFormat("UPDATE Character SET cLevel = %d, Class = %d, LevelUpPoint = %d, Experience = %d, Strength = %d, Dexterity = %d, Vitality = %d, Energy = %d, Money = %d, Life = %d, MaxLife = %d, Mana = %d, MaxMana = %d, MapNumber = %d, PCPoints = %d WHERE Name = '%s'",
-                         aRecv->Level, aRecv->Class, aRecv->LevelUpPoint, aRecv->Exp, aRecv->Str, aRecv->Dex, aRecv->Vit, aRecv->Energy, aRecv->Money, aRecv->Life, aRecv->MaxLife, aRecv->Mana, aRecv->MaxMana, aRecv->MapNumber, aRecv->iPCPoints, szName);
+    gDataBase.ExecFormat("UPDATE Character SET cLevel = %d, Class = %d, LevelUpPoint = %d, Experience = %d, Strength = %d, Dexterity = %d, Vitality = %d, Energy = %d, Money = %d, Life = %d, MaxLife = %d, Mana = %d, MaxMana = %d, MapNumber = %d WHERE Name = '%s'",
+                         aRecv->Level, aRecv->Class, aRecv->LevelUpPoint, aRecv->Exp, aRecv->Str, aRecv->Dex, aRecv->Vit, aRecv->Energy, aRecv->Money, aRecv->Life, aRecv->MaxLife, aRecv->Mana, aRecv->MaxMana, aRecv->MapNumber, szName);
     gDataBase.Clear();
 
 #if (SEASON > 5)
     gDataBase.ExecFormat("UPDATE Character SET MapPosX = %d, MapPosY = %d, MapDir = %d, PkCount = %d, PkLevel = %d, PkTime = %d, DbVersion = 3, Leadership = %d, ChatLimitTime = %d, FruitPoint = %d, ExGameServerCode = %d WHERE Name = '%s'",
                          aRecv->MapX, aRecv->MapY, aRecv->Dir, aRecv->PkCount, aRecv->PkLevel, aRecv->PkTime, aRecv->Leadership, aRecv->ChatLitmitTime, aRecv->iFruitPoint, aRecv->sExGameServerCode, szName);
 #else
-    gDataBase.ExecFormat("UPDATE Character SET MapPosX = %d, MapPosY = %d, MapDir = %d, PkCount = %d, PkLevel = %d, PkTime = %d, DbVersion = 3, Leadership = %d, ChatLimitTime = %d, FruitPoint = %d WHERE Name = '%s'",
-                         aRecv->MapX, aRecv->MapY, aRecv->Dir, aRecv->PkCount, aRecv->PkLevel, aRecv->PkTime, aRecv->Leadership, aRecv->ChatLitmitTime, aRecv->iFruitPoint, szName);
+    gDataBase.ExecFormat("UPDATE Character SET MapPosX = %d, MapPosY = %d, MapDir = %d, PkCount = %d, PkLevel = %d, PkTime = %d, DbVersion = 3, Leadership = %d, ChatLimitTime = %d, FruitPoint = %d , PCPoints = %d WHERE Name = '%s'",
+                         aRecv->MapX, aRecv->MapY, aRecv->Dir, aRecv->PkCount, aRecv->PkLevel, aRecv->PkTime, aRecv->Leadership, aRecv->ChatLitmitTime, aRecv->iFruitPoint, aRecv->iPCPoints, szName);
 #endif
     gDataBase.Clear();
 

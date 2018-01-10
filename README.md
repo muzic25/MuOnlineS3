@@ -20,6 +20,12 @@ Chaos Castle: OK
 -GameServer Interface: Logger bugged -> Fixed -> OK -> Bugged (WhiteScreen)    
 -3rd wings: Fixed -> OK  
 -Other bugs  
+- PCPoint Shop : 98% (Seals don't show but the effects are working)
+
+Some Pic:
+http://i1155.photobucket.com/albums/p550/muzic25/Screen11_10-19_57-0000_zpspvxjtrt8.jpg
+http://i1155.photobucket.com/albums/p550/muzic25/Screen01_11-00_25-0002_zps7qs3gos0.jpg
+http://i1155.photobucket.com/albums/p550/muzic25/Screen01_10-21_49-0000_zps0uoay8pn.jpg
 
 Used Client: 1.04J (1.04.10) Korean  
 Client link: http://dfiles.eu/files/4tmc1jve5  
@@ -34,5 +40,6 @@ Visual Studio 2010 With Sp1 or VS2012 + VS2010SP1
 Credits:  
 Deathway  
 RMST Team  
-NanoGuy  
+NanoGuy
+muzic25 (Me) (Knight)
   

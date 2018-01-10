@@ -93,6 +93,9 @@ int  MapMinUserLevel[MAX_NUMBER_MAP] = { 0, 20, 15, 10, 80, 0, 0, 60, 130, 0, 16
 										310, 15, 30, 100, 160, 220, 280, 15, 50, 120, 180, 240, 300, 10, 10, 0};
 char gCountryName[20]="Kor";
 char szAuthKey[20];
+char connectserverip[20];
+int  connectserverport;
+char szCommonlocIniFileName[256];
 BOOL GSInfoSendFlag;
 //void CheckSumFileLoad(char *szCheckSum);
 
@@ -908,6 +911,7 @@ void ReadCommonServerInfo()
 	}
 	strcpy(Configs.szKorItemTextFileName, gDirPath.GetNewPath("\\Items\\item.txt"));
 	strcpy(Configs.szKorSkillTextFileName, gDirPath.GetNewPath("\\Skills\\skill.txt"));
+	strcpy(szCommonlocIniFileName, gDirPath.GetNewPath("\\commonloc.cfg"));
 	strcpy(szlMsgName, gDirPath.GetNewPath("Messages.ini"));
 	strcpy(Configs.szItemTextFileName, gDirPath.GetNewPath("\\Items\\item.txt"));
 	strcpy(Configs.szSkillTextFileName, gDirPath.GetNewPath("\\Skills\\skill.txt"));
@@ -1396,13 +1400,21 @@ void ReadCommonServerInfo()
 
 	g_IllusionTempleEvent.ReadCommonServerInfo();
 
+
+	GetPrivateProfileString("ConnectServerInfo", "IP", "", connectserverip, 20, szCommonlocIniFileName);
+	GetPrivateProfileString("ConnectServerInfo", "PORT", "", szTemp, 10, szCommonlocIniFileName);
+	connectserverport = atoi(szTemp);
+	LogAddTD(lMsg.Get(MSGGET(1, 158)), connectserverip, connectserverport);
+
+	gUdpSoc.SendSet(connectserverip, connectserverport);
+
 	// Servers
-	GetPrivateProfileString("ConnectServerInfo", "IP", "", Configs.connectserverip, 20, gDirPath.GetNewPath("commonserver.cfg"));
+	/*GetPrivateProfileString("ConnectServerInfo", "IP", "", Configs.connectserverip, 20, gDirPath.GetNewPath("commonserver.cfg"));
 	GetPrivateProfileString("ConnectServerInfo", "PORT", "", szTemp, 10, gDirPath.GetNewPath("commonserver.cfg"));
 	Configs.connectserverport = atoi(szTemp);
 	// (Option) Connect Server IP(%s) / PORT(%d)
 	LogAddTD(lMsg.Get(MSGGET(1, 158)), Configs.connectserverip, Configs.connectserverport);
-	gUdpSoc.SendSet(Configs.connectserverip, Configs.connectserverport);
+	gUdpSoc.SendSet(Configs.connectserverip, Configs.connectserverport);*/
 	gUdpSocCE.SendSet(Configs.gChaosEventServerIp, 60005);
 	DevilSquareEventConnect = GetPrivateProfileInt("GameServerInfo","DevilSquareEventConnect", 1, gDirPath.GetNewPath("commonserver.cfg"));
 	EventChipServerConnect = GetPrivateProfileInt("GameServerInfo","EventChipServerConnect", 0, gDirPath.GetNewPath("commonserver.cfg"));
@@ -1508,9 +1520,12 @@ void ReadCommonServerInfo()
 
 	Configs.g_iPCBangCouponEvent = GetPrivateProfileInt("GameServerInfo", "PCBangCouponEvent", 1, gDirPath.GetNewPath("commonserver.cfg"));
 
+
 	g_CashShop.CashShopOptioNReload();
 	g_CashItemPeriodSystem.Initialize();
 	g_CashLotterySystem.Load(gDirPath.GetNewPath("ChaosCardProbability.txt"));
+
+	PCPoint.Init();
 
 	LoadCustomJewel(gDirPath.GetNewPath("\\Customs\\Jewels.ini"));
 }

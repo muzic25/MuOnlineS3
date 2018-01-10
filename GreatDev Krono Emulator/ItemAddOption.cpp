@@ -260,7 +260,6 @@ bool CItemAddOption::SetItemEffect(LPOBJ lpObj, int iItemNumber, int iItemUseTim
 
 	if ( lpObj->Type != OBJ_USER )
 		return false;
-
 	lpItemEffect = this->_SearchItemEffect(iItemNumber);
 
 	if ( lpItemEffect ==NULL )
@@ -307,7 +306,6 @@ bool CItemAddOption::SetItemEffect(LPOBJ lpObj, int iItemNumber, int iItemUseTim
 		lpObj->m_wItemEffectType = lpItemEffect->iItemNumber;
 		lpObj->m_iItemEffectValidTime = lpItemEffect->iEffectValidTime;
 	}
-
 	return true;
 }
 

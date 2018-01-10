@@ -162,8 +162,11 @@ extern char gMapName[MAX_NUMBER_MAP][255];
 extern char g_szMapName[MAX_NUMBER_MAP][32];
 extern char szAuthKey[20];
 extern BOOL GSInfoSendFlag;
-
-struct CConfigs {
+extern char connectserverip[20];
+extern int  connectserverport;
+extern char szCommonlocIniFileName[256];
+struct CConfigs 
+{
 
 public:
  BOOL SpeedHackPlayerBlock;
@@ -361,8 +364,6 @@ public:
 
 //extern DWORD dwgCheckSum[MAX_CHECKSUM_KEY];
 
- char connectserverip[20];
- int  connectserverport;
  short gGameServerCode;
  int  gPkTime;
  BOOL g_bCastleGuildDestoyLimit;

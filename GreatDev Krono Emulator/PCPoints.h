@@ -8,6 +8,15 @@
 
 #include "StdAfx.h"
 
+
+struct PMSG_ANS_PCBANG_POINT_INFO
+{
+	PBMSG_HEAD2 h;
+	short m_sPoint;
+	short m_sMaxPoint;
+	BYTE m_btType;
+};
+
 struct PCShopItemConfig
 {	
 	BYTE ItemIndex;
@@ -44,9 +53,10 @@ public:
 	int MakePacket();
 	void Init();
 	void OpenShop(DWORD PlayerID);
-	void BuyItem(DWORD PlayerID,int Position);
+	void BuyItem(int aIndex, int Position);
 	void SendPoints(DWORD PlayerID,int Points);
 	void DecreasePoints(DWORD PlayerID,int Points);
+	void GCSendPcBangUserPoint(int aIndex);
 	void IncresePointMonster(int aIndex,int MobIndex);
 	
 

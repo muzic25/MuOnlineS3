@@ -3,6 +3,7 @@
 *.lo
 *.o
 *.obj
+*.suo
 
 # Precompiled Headers
 *.gch
@@ -34,7 +35,8 @@
 *.manifest
 *.pdb
 *.lastbuildstate
-
+*.opendb
+*.db
 
 # fcktlog
 *.tlog
@@ -45,5 +47,5 @@
 ipch/
 Release/
 ReleaseDS/
-*.opendb
-*.db
+
+.vs/

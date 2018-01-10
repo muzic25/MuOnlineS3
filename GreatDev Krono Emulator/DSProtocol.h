@@ -113,6 +113,7 @@ struct SDHP_DBCHAR_INFORESULT
 	WORD Leadership;	// 7FA
 	WORD ChatLitmitTime;	// 7FC
 	int iFruitPoint;	// 800
+	int iPcPoints;
 };
 
 
