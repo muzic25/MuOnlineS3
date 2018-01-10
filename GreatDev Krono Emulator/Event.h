@@ -180,6 +180,82 @@ struct PMSG_ANS_REG_HT_OFFLINE_GIFT
 
 };
 
+struct PMSG_REQ_USE_PCBANG_COUPON
+{
+	PBMSG_HEAD h;
+	short nINDEX;
+	char szUID[11];
+	WORD wServerCode;
+};
+
+struct PMSG_ANS_USE_PCBANG_COUPON
+{
+	PBMSG_HEAD h;
+	short nINDEX;
+	char szUID[11];
+	WORD wServerCode;
+	int iResultCode;
+};
+
+struct PMSG_ANS_PCBANG_COUPON_ITEM
+{
+	PBMSG_HEAD2 h;
+};
+
+struct PMSG_REQ_POSSIBLE_PCBANG_COUPON
+{
+	PBMSG_HEAD h;
+	short nINDEX;
+	char szUID[11];
+	WORD wServerCode;
+};
+
+
+struct PMSG_ANS_POSSIBLE_PCBANG_COUPON
+{
+	PBMSG_HEAD h;
+	short nINDEX;
+	char szUID[11];
+	WORD wServerCode;
+	int iResultCode;
+};
+
+
+
+struct PMSG_REQ_CHECK_WHITEANGEL_GET_ITEM
+{
+	PBMSG_HEAD h;
+	short nINDEX;
+	char szUID[11];
+	WORD wServerCode;
+};
+
+
+struct  PMSG_ANS_CHECK_WHITEANGEL_GET_ITEM
+{
+	PBMSG_HEAD h;
+	short nINDEX;
+	char szUID[11];
+	WORD wServerCode;
+	int iResultCode;
+};
+
+struct  PMSG_ANS_WHITEANGEL_GET_ITEM
+{
+	PBMSG_HEAD h;
+	short nINDEX;
+	char szUID[11];
+	WORD wServerCode;
+	int iResultCode;
+};
+
+struct PMSG_REQ_WHITEANGEL_GET_ITEM
+{
+	PBMSG_HEAD h;
+	short nINDEX;
+	char szUID[11];
+	WORD wServerCode;
+};
 
 
 extern LPOBJ pEventObj;
@@ -242,9 +318,14 @@ void RingOfHeroBoxOpen(LPOBJ lpObj);
 void NewYearLuckMonsterItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY);
 void GMPresentBoxItemBagOpen(LPOBJ lpObj);
 void ChristmasStarDrop(LPOBJ lpObj); //season2.5 add-on
-void LukeTheHelplerBag(LPOBJ lpObj);
-void LeoTheHelplerBag(LPOBJ lpObj);
-
+void EGReqUsePCBangCoupon(int iIndex);
+void EGReqPossiblePCBangCouponEvent(int iIndex);
+void EGAnsPossiblePCBangCouponEvent(PMSG_ANS_POSSIBLE_PCBANG_COUPON * lpMsg);
+void EGAnsUsePCBangCoupon(PMSG_ANS_USE_PCBANG_COUPON * lpMsg);
+void GEReqWhiteAngelGetItem(int iIndex);
+void GEReqCheckWhiteAngelGetItem(int iIndex);
+void EGAnsCheckWhiteAngelGetItem(PMSG_ANS_CHECK_WHITEANGEL_GET_ITEM *lpMsg);
+void EGAnsWhiteAngelGetItem(PMSG_ANS_WHITEANGEL_GET_ITEM *lpMsg);
 extern LPOBJ pEventObj;
 
 #endif

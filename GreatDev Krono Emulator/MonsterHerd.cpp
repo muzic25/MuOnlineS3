@@ -732,7 +732,6 @@ BOOL MonsterHerd::MonsterRegenAction(LPOBJ lpObj)
 	lpObj->Mana = lpObj->AddMana + lpObj->MaxMana;
 	lpObj->Live = TRUE;
 
-	gObjClearStandardBuffEffect(lpObj, AT_MONSTER_GENERAL);
 
 	lpObj->m_PoisonBeattackCount = 0;
 	lpObj->m_ColdBeattackCount = 0;
@@ -745,9 +744,6 @@ BOOL MonsterHerd::MonsterRegenAction(LPOBJ lpObj)
 	}
 
 	gObjTimeCheckSelfDefense(lpObj);
-
-	gObjRemoveBuffEffect(lpObj, AT_POISON); //S3 Addition -> Poison
-	gObjRemoveBuffEffect(lpObj, AT_ICE); //S3 Addition -> Ice
 
 	lpObj->m_ViewSkillState &= 0xFFFFFFFE;
 	lpObj->m_ViewSkillState &= 0xFFFFFFFD;

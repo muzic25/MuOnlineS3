@@ -604,7 +604,6 @@ BOOL TMonsterSkillElement::ApplyElementSummon(int iIndex, int iTargetIndex)
 	lpTargetObj->Teleport = 0;
 	lpTargetObj->m_ViewSkillState = 0;
 
-	gObjClearStandardBuffEffect(lpTargetObj, AT_GENERAL);
 
 	for ( int i=0;i<MAX_SELF_DEFENSE;i++)
 		lpTargetObj->SelfDefenseTime[i] = 0;

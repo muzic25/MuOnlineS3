@@ -3529,14 +3529,6 @@ BOOL CObjUseSkill::SkillRemoveCloaking(int aIndex, int aTargetIndex, CMagicInf *
 
 	LPOBJ lpTargetObj = &gObj[aTargetIndex]; //loc3
 
-	if ((lpTargetObj->Authority & 32) == 32) //Season 2.5 add-on
-	{
-		if (gObjSearchActiveEffect(lpTargetObj, AT_INVISIBILITY) != FALSE) //season3 add-on
-		{
-			return false;
-		}
-	}
-
 	int tObjNum;
 	int count = 0;
 

@@ -1135,8 +1135,6 @@ void gObjCharZeroSet(int aIndex)
 	lpObj->m_ColdBeattackCount = 0;
 	lpObj->m_Attribute = 0;
 
-	gObjClearStandardBuffEffect(lpObj, AT_GENERAL); //Season3 Addition
-
 	lpObj->m_ImmuneToMagicCount = 0;
 	lpObj->m_ImmuneToHarmCount = 0;
 	lpObj->m_iMonsterBattleDelay = 0;
@@ -1464,6 +1462,7 @@ void gObjCharZeroSet(int aIndex)
 	}
 
 	lpObj->m_bSkillKeyRecv = 0; //season 2.5 add-on
+	lpObj->PCPoint = 0;
 
 	::gObjClearViewport(&gObj[aIndex]);
 }
@@ -2825,7 +2824,6 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 	{
 		lpObj->Authority = 0x20;
 		LogAddC(2, "(%s)(%s) Set Event GM", lpObj->AccountID, lpObj->Name);
-		gObjApplyBuffEffectDuration(lpObj, AT_GAMEMASTER_LOGO, 0, 0, 0, 0, -10);
 		cManager.ManagerAdd(lpObj->Name, lpObj->m_Index); //Season 2.5 add-on
 	}
 
@@ -3265,19 +3263,7 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 	} 
 
 	if (MonsterClass >= 204 && MonsterClass <= 259
-		|| MonsterClass >= 368 && MonsterClass <= 385
-		|| MonsterClass == 367
-		|| MonsterClass == 375
-		|| (MonsterClass >= 406 && MonsterClass <= 408)
-		|| (MonsterClass >= 415 && MonsterClass <= 417)
-		|| (MonsterClass >= 450 && MonsterClass <= 453)
-		|| MonsterClass == 464
-		|| MonsterClass == 465
-		|| MonsterClass == 479 // 1.05P+
-		|| MonsterClass == 472 // 1.05P+
-		|| (MonsterClass >= 467 && MonsterClass <= 475)
-		|| MonsterClass == 450
-		|| MonsterClass == 479)
+		|| MonsterClass >= 367 && MonsterClass <= 385)
 	{
 		lpObj->Type = OBJ_NPC;
 	}
@@ -3901,8 +3887,6 @@ BOOL gObjGameClose(int aIndex)
 
 	g_CashItemPeriodSystem.GDReqPeriodItemUpdate(lpObj);
 	g_CashItemPeriodSystem.ClearPeriodItemEffect(lpObj);
-
-	gObjClearStandardBuffEffect(lpObj, AT_GENERAL);
 
 	GJSetCharacterInfo(lpObj, aIndex, 0);
 	gObjViewportClose(lpObj);
@@ -5880,8 +5864,6 @@ void gObjUserDie(LPOBJ lpObj, LPOBJ lpTargetObj)
 	{
 		return;
 	}
-
-	gObjClearStandardBuffEffect(lpObj, AT_GENERAL_NOPERIOD_ITEM);
 
 	gObjSetKillCount(lpObj->m_Index,0);
 
@@ -13771,7 +13753,6 @@ void gObjStateSetCreate(int aIndex)
 	{
 		if(dwNowTick - lpObj->RegenTime > lpObj->MaxRegenTime + 1000)
 		{
-			gObjClearStandardBuffEffect(lpObj, AT_GENERAL_NOPERIOD_ITEM);
 			lpObj->DieRegen = 2;
 			lpObj->m_State = 8;
 		}
@@ -13956,12 +13937,9 @@ struct PMSG_CHARREGEN {
 
 void gObjSetState()
 {
-	int n;
-	LPOBJ lpObj;
-
-	for(n = 0; n < OBJMAX; n++)
+	for(int n = 0; n < OBJMAX; n++)
 	{
-		lpObj = &gObj[n];
+		LPOBJ lpObj = &gObj[n];
 
 		if(lpObj->Connected > PLAYER_LOGGED)
 		{
@@ -14181,8 +14159,6 @@ void gObjSetState()
 
 					lpObj->m_ViewSkillState &= 0xFFFFFFFE;
 					lpObj->m_ViewSkillState &= 0xFFFFFFFD;
-
-					gObjClearStandardBuffEffect(lpObj, AT_GENERAL_NOPERIOD_ITEM);
 
 					gObjClearViewport(lpObj);
 
@@ -14461,11 +14437,6 @@ void gObjSetState()
 
 						gEledoradoEvent.CheckGoldDercon(lpObj->MapNumber);
 
-						if (lpObj->Authority == 32) //season4 add-on
-						{
-							gObjApplyBuffEffectDuration(lpObj, AT_GAMEMASTER_LOGO, 0, 0, 0, 0, -10);
-						}
-
 						if ( lpObj->MapNumber == MAP_INDEX_CASTLESIEGE )
 						{
 							GCAnsCsNotifyStart(lpObj->m_Index, CHECK_CLASS(g_CastleSiege.GetCastleState(), CASTLESIEGE_STATE_STARTSIEGE));
@@ -14509,7 +14480,7 @@ void gObjSetState()
 		}
 	}
 
-	for(n = 0; n < MAX_NUMBER_MAP; n++)
+	for(int n = 0; n < MAX_NUMBER_MAP; n++)
 	{
 		MapC[n].StateSetDestroy();
 	}
@@ -14538,7 +14509,6 @@ void gObjSecondProc()
 				}
 			}
 
-			gObjBuffEffectUseProc(lpObj);
 			gObjSkillUseProc(lpObj);
 			gObjSkillBeAttackProc(lpObj);
 
@@ -15266,12 +15236,6 @@ void gObjViewportListProtocolCreate(LPOBJ lpObj)
 
 			pViewportCreateChange.ViewSkillState = lpObj->m_ViewSkillState;
 
-			//Season 2.5 add-on
-			if (gObjSearchActiveEffect(lpObj, AT_GAMEMASTER_LOGO) == 1) //Season3 update
-			{
-				gObjApplyBuffEffectDuration(lpObj, AT_GAMEMASTER_LOGO, 0, 0, 0, 0, -10); //Season3 update
-			}
-
 			pViewportCreateChange.DirAndPkLevel = lpObj->Dir << 4;
 			pViewportCreateChange.DirAndPkLevel |= lpObj->m_PK_Level & 0x0F;
 
@@ -15657,14 +15621,6 @@ void gObjViewportListProtocol(short aIndex)
 				if(lpObj->VpPlayer[n].state == 1)
 				{
 					tObjNum = lpObj->VpPlayer[n].number;
-		
-					if ((gObj[tObjNum].Authority & 32) == 32) //Season 2.5 add-on
-					{
-						if (gObjSearchActiveEffect(&gObj[tObjNum], AT_INVISIBILITY) == 1)
-						{
-							continue;
-						}
-					}
 
 					if(tObjNum >= 0)
 					{
@@ -15690,11 +15646,6 @@ void gObjViewportListProtocol(short aIndex)
 								pViewportCreateChange.TY = lpTargetObj->TY;
 								pViewportCreateChange.SkinH = SET_NUMBERH((lpTargetObj->m_Change & 0xFFFF) & 0xFFFF);
 								pViewportCreateChange.SkinL = SET_NUMBERL((lpTargetObj->m_Change & 0xFFFF) & 0xFFFF);
-
-								if ((lpTargetObj->Authority & 32) == 32) //Season 2.5 add-on
-								{
-									gObjApplyBuffEffectDuration(lpTargetObj, AT_GAMEMASTER_LOGO, 0, 0, 0, 0, -10); //Season3 update
-								}
 
 								pViewportCreateChange.ViewSkillState = lpTargetObj->m_ViewSkillState;
 								pViewportCreateChange.DirAndPkLevel = lpTargetObj->Dir << 4;

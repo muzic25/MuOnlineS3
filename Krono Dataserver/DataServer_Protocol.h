@@ -259,6 +259,7 @@ struct SDHP_DBCHAR_INFORESULT
     WORD Leadership;
     WORD ChatLitmitTime;
     int iFruitPoint;
+	int iPCPoint;
 #if(SEASON > 5)
     BYTE btExtendedInvenCount;
     BYTE btExtendedWarehouseCount;
@@ -419,6 +420,7 @@ struct SDHP_DBCHAR_INFOSAVE
     WORD Leadership;
     WORD ChatLitmitTime;
     int iFruitPoint;
+	int iPCPoints;
 #if(SEASON > 5)
     BYTE btExtendedInvenCount;
     BYTE btExtendedWarehouseCount;
@@ -1954,64 +1956,6 @@ struct SDHP_ANS_SET_EXTENDEDINVEN_COUNT
     BYTE IsReplace;
 };
 
-struct SDHP_NPC_LEO_THE_HELPER_RECV
-{
-	PBMSG_HEAD header; // C1:0E:00
-	WORD index;
-	char account[11];
-	char name[11];
-};
-
-
-struct SDHP_NPC_LEO_THE_HELPER_SAVE_RECV
-{
-	PBMSG_HEAD header; // C1:0E:30
-	WORD index;
-	char account[11];
-	char name[11];
-	BYTE status;
-};
-
-
-struct SDHP_NPC_LEO_THE_HELPER_SEND
-{
-	PBMSG_HEAD header; // C1:0E:00
-	WORD index;
-	char account[11];
-	char name[11];
-	BYTE status;
-};
-
-
-struct SDHP_NPC_LUKE_THE_HELPER_RECV
-{
-	PBMSG_HEAD header; // C1:0E:01
-	WORD index;
-	char account[11];
-	char name[11];
-};
-
-
-struct SDHP_NPC_LUKE_THE_HELPER_SAVE_RECV
-{
-	PBMSG_HEAD header; // C1:0E:31
-	WORD index;
-	char account[11];
-	char name[11];
-	BYTE status;
-};
-
-
-struct SDHP_NPC_LUKE_THE_HELPER_SEND
-{
-	PBMSG_HEAD header; // C1:0E:01
-	WORD index;
-	char account[11];
-	char name[11];
-	BYTE status;
-};
-
-
 class DataServer_Protocol
 {
 public:
@@ -2100,9 +2044,5 @@ public:
     void GDReqQuestExpInfoSave(DataServer_Manager * Service, int  aIndex, _PMSG_QUESTEXP_INFO * aRecv);
     void GDReqQuestExpInfoLoad(DataServer_Manager * Service, int aIndex, PMSG_REQ_QUESTEXP_INFO * aRecv);
     void GDSetExGameServerCode(DataServer_Manager * Service, int aIndex, SDHP_REQ_SET_EXGAMESERVERCODE * aRecv);
-	void GDNpcLeoTheHelperRecv(DataServer_Manager * Service, SDHP_NPC_LEO_THE_HELPER_RECV* lpMsg, int index);
-	void GDNpcLeoTheHelperSaveRecv(DataServer_Manager * Service, SDHP_NPC_LEO_THE_HELPER_SAVE_RECV* lpMsg);
-	void GDNpcLukeTheHelperRecv(DataServer_Manager * Service, SDHP_NPC_LUKE_THE_HELPER_RECV* lpMsg, int index);
-	void GDNpcLukeTheHelperSaveRecv(DataServer_Manager * Service, SDHP_NPC_LUKE_THE_HELPER_SAVE_RECV* lpMsg);
 };
 extern DataServer_Protocol gDataServer_Protocol;

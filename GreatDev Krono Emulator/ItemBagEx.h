@@ -89,6 +89,7 @@ public:
 	int DropCrywolfBossMonsterItem(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY);
 	int DropKanturuMayaHandItem(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY);
 	int DropKanturuNightmareItem(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY);
+	int DropPCBangRevitalizationEventItem(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY);
 	int DropHallowinEventItem(LPOBJ lpObj); 
 	int DropCastleHuntZoneBossReward(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY); 
 	BYTE GetMinLevel(int n);

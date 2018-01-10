@@ -815,14 +815,14 @@ void CIllusionTempleProcess::SetState_END()
 				if(this->m_FloorData[i].m_dwShieldSpellTime > 0)
 				{
 					this->m_FloorData[i].m_dwShieldSpellTime = 0;
-					gObjRemoveBuffEffect(&gObj[this->m_FloorData[i].m_iTeamPlayerIndex], AT_ILLUSION_SHIELD_SPELL); //season 3.0 add-on
+					//gObjRemoveBuffEffect(&gObj[this->m_FloorData[i].m_iTeamPlayerIndex], AT_ILLUSION_SHIELD_SPELL); //season 3.0 add-on
 					this->GCIllusionTempleSkillCancel(&gObj[this->m_FloorData[i].m_iTeamPlayerIndex], 210);
 				}
 
 				if(this->m_FloorData[i].m_dwRestrictionSpellTime > 0)
 				{
 					this->m_FloorData[i].m_dwRestrictionSpellTime = 0;
-					gObjRemoveBuffEffect(&gObj[this->m_FloorData[i].m_iTeamPlayerIndex], AT_ILLUSION_RESTRICTION_SPELL); //season 3.0 add-on
+					//gObjRemoveBuffEffect(&gObj[this->m_FloorData[i].m_iTeamPlayerIndex], AT_ILLUSION_RESTRICTION_SPELL); //season 3.0 add-on
 					this->GCIllusionTempleSkillCancel(&gObj[this->m_FloorData[i].m_iTeamPlayerIndex], 211);
 				}
 #if(DEBUG_IT == 1)
@@ -925,13 +925,11 @@ BOOL CIllusionTempleProcess::LeaveBattleUser(int aIndex)
 
 			if(this->m_FloorData[gObj[aIndex].m_iIllusionTempleIndex].m_dwShieldSpellTime > 0)
 			{
-				gObjRemoveBuffEffect(&gObj[aIndex], AT_ILLUSION_SHIELD_SPELL); //season 3.0 add-on
 				this->GCIllusionTempleSkillCancel(&gObj[aIndex], 210);
 			}
 
 			if(this->m_FloorData[gObj[aIndex].m_iIllusionTempleIndex].m_dwRestrictionSpellTime > 0)
 			{
-				gObjRemoveBuffEffect(&gObj[aIndex], AT_ILLUSION_RESTRICTION_SPELL); //season 3.0 add-on
 				this->GCIllusionTempleSkillCancel(&gObj[aIndex], 211);
 			}
 
@@ -977,8 +975,6 @@ BOOL CIllusionTempleProcess::LeaveBattleUser(int aIndex)
 
 int CIllusionTempleProcess::GetFloorIndex(int aIndex) //Identical (Unused)
 {
-	int loc2 = 0; //?? weird
-
 	LPOBJ lpObj = &gObj[aIndex];
 
 	if( OBJMAX_RANGE(aIndex) == FALSE )
@@ -2143,7 +2139,6 @@ void CIllusionTempleProcess::SkillSecondProc(LPOBJ lpObj)
 		if(this->m_FloorData[lpObj->m_iIllusionTempleIndex].m_dwShieldSpellTime <= 0)
 		{
 			this->m_FloorData[lpObj->m_iIllusionTempleIndex].m_dwShieldSpellTime = 0;
-			gObjRemoveBuffEffect(lpObj, AT_ILLUSION_SHIELD_SPELL); //season 3.0 add-on
 			this->GCIllusionTempleSkillCancel(lpObj, 210);
 		}
 	}
@@ -2155,7 +2150,6 @@ void CIllusionTempleProcess::SkillSecondProc(LPOBJ lpObj)
 		if(this->m_FloorData[lpObj->m_iIllusionTempleIndex].m_dwRestrictionSpellTime <= 0)
 		{
 			this->m_FloorData[lpObj->m_iIllusionTempleIndex].m_dwRestrictionSpellTime = 0;
-			gObjRemoveBuffEffect(lpObj, AT_ILLUSION_RESTRICTION_SPELL); //season 3.0 add-on
 			this->GCIllusionTempleSkillCancel(lpObj, 211);
 		}
 	}
@@ -2179,7 +2173,6 @@ void CIllusionTempleProcess::GCIllusionTempleSkillCancel(LPOBJ lpObj, WORD skill
 BOOL CIllusionTempleProcess::ShieldSpell(LPOBJ lpObj) 
 {
 	this->m_FloorData[lpObj->m_iIllusionTempleIndex].m_dwShieldSpellTime = 15;
-	gObjApplyBuffEffectDuration(lpObj, AT_ILLUSION_SHIELD_SPELL, 0, 0, 0, 0, -10); //season 3.0 add-on
 	return TRUE;
 }
 
@@ -2193,7 +2186,6 @@ BOOL CIllusionTempleProcess::RestrictionSpell(LPOBJ lpObj, LPOBJ lpTargetObj)
 	this->m_FloorData[lpTargetObj->m_iIllusionTempleIndex].m_dwRestrictionSpellTime = 15;
 
 	lpTargetObj->lpAttackObj = lpObj;
-	gObjApplyBuffEffectDuration(lpTargetObj, AT_ILLUSION_RESTRICTION_SPELL, 0, 0, 0, 0, -10); //season 3.0 add-on
 	lpTargetObj->PathCount = 0;
 	lpTargetObj->PathStartEnd = 0;
 
@@ -2203,21 +2195,7 @@ BOOL CIllusionTempleProcess::RestrictionSpell(LPOBJ lpObj, LPOBJ lpTargetObj)
 
 BOOL CIllusionTempleProcess::PursuitSpell(LPOBJ lpObj) 
 {
-	int loc2;
-
-	if(gObjSearchActiveEffect(lpObj, AT_STUN) == TRUE) //season 3.0 add-on
-	{
-		this->GCIllusionTempleSkillApply(lpObj->m_Index, lpObj->m_Index, 212, 0);
-		return FALSE;
-	}
-
-	if(gObjSearchActiveEffect(lpObj, AT_SLEEP) == TRUE) //season 3.0 add-on
-	{
-		this->GCIllusionTempleSkillApply(lpObj->m_Index, lpObj->m_Index, 212, 0);
-		return FALSE;
-	}
-
-	loc2 = this->m_iBallPlayerIndex;
+	int loc2 = this->m_iBallPlayerIndex;
 
 	if(loc2 == -1)
 	{
@@ -2321,14 +2299,12 @@ void CIllusionTempleProcess::ResetAndClearSkills(LPOBJ lpObj)
 	if(this->m_FloorData[lpObj->m_iIllusionTempleIndex].m_dwShieldSpellTime > 0) //Cancel Shield Skill
 	{
 		this->m_FloorData[lpObj->m_iIllusionTempleIndex].m_dwShieldSpellTime = 0;
-		gObjRemoveBuffEffect(lpObj, AT_ILLUSION_SHIELD_SPELL); //season 3.0 add-on
 		this->GCIllusionTempleSkillCancel(lpObj, 210);
 	}
 
 	if(this->m_FloorData[lpObj->m_iIllusionTempleIndex].m_dwRestrictionSpellTime > 0) //Cancel Stern Skill
 	{
 		this->m_FloorData[lpObj->m_iIllusionTempleIndex].m_dwRestrictionSpellTime = 0;
-		gObjRemoveBuffEffect(lpObj, AT_ILLUSION_RESTRICTION_SPELL); //season 3.0 add-on
 		this->GCIllusionTempleSkillCancel(lpObj, 211);
 	}
 }

@@ -45,14 +45,14 @@ CItemBagEx * CrywolfBossMonsterItemBag;
 CItemBagEx * KanturuMayaHandItemBag;
 CItemBagEx * KanturuNightmareItemBag;
 CItemBagEx * HallowinDayEventItemBag;
+CItemBagEx * PCBangEventNPCItemBag;
 CItemBag   * RingOfHeroBoxItemBag;
 CProbabilityItemBag * NewYearLuckyPouchItemBag; //test
 CProbabilityItemBag * GMPresentBoxItemBag; //test
 CProbabilityItemBag * IllusionTemple1ItemBag; //test
 CProbabilityItemBag * IllusionTemple2ItemBag; //test
 CProbabilityItemBag * IllusionTemple3ItemBag; //test
-CItemBagEx * LeoItemBag;
-CItemBagEx  * LukeItemBag;
+CProbabilityItemBag * ItemGiveReoEventItemBag;
 ///////////////////////////////////////////////////////////////////////////////
 CwsGameServer wsGServer;	// line : 213GameServer
 wsJoinServerCli wsJServerCli;	// line : 214 Join Server
@@ -1506,11 +1506,11 @@ void ReadCommonServerInfo()
 	Configs.g_iSkillDistanceKickCount = GetPrivateProfileInt("GameServerInfo", "SkillDistanceKickCount", 5, gDirPath.GetNewPath("commonserver.cfg"));
 	Configs.g_iSkillDiatanceKickCheckTime = GetPrivateProfileInt("GameServerInfo", "SkillDistanceKickCheckTime", 10, gDirPath.GetNewPath("commonserver.cfg"));
 
+	Configs.g_iPCBangCouponEvent = GetPrivateProfileInt("GameServerInfo", "PCBangCouponEvent", 1, gDirPath.GetNewPath("commonserver.cfg"));
+
 	g_CashShop.CashShopOptioNReload();
 	g_CashItemPeriodSystem.Initialize();
 	g_CashLotterySystem.Load(gDirPath.GetNewPath("ChaosCardProbability.txt"));
-
-	g_BuffEffect.Load(gDirPath.GetNewPath("\\BuffEffect\\BuffEffect.txt"));
 
 	LoadCustomJewel(gDirPath.GetNewPath("\\Customs\\Jewels.ini"));
 }
@@ -2178,47 +2178,47 @@ void LoadItemBag()
 	IllusionTemple3ItemBag->Init("\\EventItemBags\\EventItemBag40.txt");
 
 //--------------------------------------------------------------------------------
-	if (LeoItemBag != FALSE)
-	{
-		delete LeoItemBag;
-	}
+	if (ItemGiveReoEventItemBag != NULL)
+		delete ItemGiveReoEventItemBag;
 
-	LeoItemBag = new CItemBagEx;
-
-	if (LeoItemBag == NULL)
+	ItemGiveReoEventItemBag = new CProbabilityItemBag;
+	if (ItemGiveReoEventItemBag == NULL)
 	{
-		MsgBox("CItemBag %s", lMsg.Get(MSGGET(0, 110)));
+		// Memory allocation error
+		MsgBox("CProbabilityItemBag1000 %s", lMsg.Get(MSGGET(0, 110)));
 		return;
 	}
-
-	LeoItemBag->Init("\\EventItemBags\\EventItemBag41.txt");
+	ItemGiveReoEventItemBag->Init("EventItemBags\\EventItemBag41.txt");
 
 //--------------------------------------------------------------------------------
-	if (LukeItemBag != FALSE)
-	{
-		delete LukeItemBag;
-	}
+	if (PCBangEventNPCItemBag != NULL)
+		delete PCBangEventNPCItemBag;
 
-	LukeItemBag = new CItemBagEx;
-
-	if (LukeItemBag == NULL)
+	PCBangEventNPCItemBag = new CItemBagEx;
+	if (PCBangEventNPCItemBag == NULL)
 	{
-		MsgBox("CItemBag %s", lMsg.Get(MSGGET(0, 110)));
+		// Memory allocation error
+		MsgBox("CItemBagEx %s", lMsg.Get(MSGGET(0, 110)));
 		return;
 	}
+	PCBangEventNPCItemBag->Init("EventItemBags\\EventItemBag42.txt");
 
-	LukeItemBag->Init("\\EventItemBags\\EventItemBag42.txt");
-
-//--------------------------------------------------------------------------------
+	//--------------------------------------------------------------------------------
 }
 
 void LoadCustomJewel(char *filename)
 {
 	Configs.g_iRateJewelOfLuck = GetPrivateProfileInt("JewelOfLuck", "SuccessRate", 0, filename);
+	Configs.g_iJewelOfLuckID = GetPrivateProfileInt("JewelOfLuck", "JewelOfLuckID", 14, filename);
+	Configs.g_iJewelOfLuckType = GetPrivateProfileInt("JewelOfLuck", "JewelOfLuckType", 101, filename);
 
 	Configs.g_iRateJewelOfExc = GetPrivateProfileInt("JewelOfExcelent", "SuccessRate", 0, filename);
+	Configs.g_iJewelOfExcID = GetPrivateProfileInt("JewelOfExcelent", "JewelOfExcelentID", 14, filename);
+	Configs.g_iJewelOfExcType = GetPrivateProfileInt("JewelOfExcelent", "JewelOfExcelentType", 100, filename);
 
 	Configs.g_iRateJewelOfMyst = GetPrivateProfileInt("JewelOfMystical", "SuccessRate", 0, filename);
+	Configs.g_iJewelOfMystID = GetPrivateProfileInt("JewelOfMystical", "JewelOfMysticalID", 14, filename);
+	Configs.g_iJewelOfMystType = GetPrivateProfileInt("JewelOfMystical", "JewelOfMysticalType",99, filename);
 }
 
 

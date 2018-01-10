@@ -1,103 +1,83 @@
 // Leo the Helpler
 
-//--------------------------------------//
-// Map Drop                             //
-//--------------------------------------//
+
+//============================
+//Map Drop
+//Map	Drop	MinDrop	MaxDrop
+//============================
 0
-//  MapNumber  Drop   MinLvl   MaxLvl
-	0	0	0	1000	// Lorencia
-	1	0	0	1000	// Dungeon
-	2	0	0	1000	// Devias
-	3	0	0	1000	// Noria
-	4	0	0	1000	// LostTower
-	5	0	0	1000	// Exile
-	6	0	0	1000	// Arena
-	7	0	0	1000	// Atlans
-	8	0	0	1000	// Tarkan
-	9	0	0	1000	// DevilSquare
-	10	0	0	1000	// Icarus
+0	0	0	1000	//Lorencia
+1	0	0	1000	//Dungeon
+2	0	0	1000	//Devias
+3	0	0	1000	//Noria
+4	0	0	1000	//LostTower
+5	0	0	1000	//Exile
+6	0	0	1000	//Arena
+7	0	0	1000	//Atlans
+8	0	0	1000	//Tarkan
+9	0	0	1000	//DevilSquare
+10	0	0	1000	//Icarus
 end
 
-//--------------------------------------//
-// Drop Options                         //
-//--------------------------------------//
+//=========================================================================
+//Drop Options
+//Name			ZenAmount	ItemType	Index	ItemLvl	DropRate NormDrop	ExcDrop
+//=========================================================================
 1
-//	 Name		ZenAmount     Index    Type    Lvl   DropRate  Drop  ExcDrop
-       "LeoHelpler"	 50000	       14       11	1	2	90	 0
+"Leo the Helpler"		100000		0	0	 0	 0	 100	  	1
 end
 
-//--------------------------------------//
-// Item Drops                           //
-//--------------------------------------//
+//==================================================================
+//Item Drops
+//Type	Item	MinLvl	MaxLvl	Skill	Luck	Option	Exc	Name
+//==================================================================
 2
-//	Type	Index	MinLvl	MaxLvl	Skill	Luck	Opt	Exc
-
-	0	0	3	7	1	1	1	0 // Kris
-	0	2	3	7	1	1	1	0 // Rapier
-	0	4	3	7	1	1	1	0 // Sword of Assassin
-	0	3	3	7	1	1	1	0 // Katana
-	0	10	3	7	1	1	1	0 // Light Saber
-	0	11	3	7	1	1	1	0 // Legendary Sword
-	0	13	3	7	1	1	1	0 // Double Blade
-	1	1	3	7	1	1	1	0 // Hand Axe
-	1	2	3	7	1	1	1	0 // Double Axe
-	1	5	3	7	1	1	1	0 // Battle Axe
-	1	6	3	7	1	1	1	0 // Nikea Axe
-	1	7	3	7	1	1	1	0 // Larkan Axe
-	2	0	3	7	1	1	1	0 // Mace
-	2	1	3	7	1	1	1	0 // Morning Star
-	2	3	3	7	1	1	1	0 // Great Hammer
-	3	7	3	7	1	1	1	0 // Berdysh
-	3	4	3	7	1	1	1	0 // Serpent Spear
-	4	8	3	7	1	1	1	0 // Crossbow
-	4	9	3	7	1	1	1	0 // Golden Crossbow
-	4	11	3	7	1	1	1	0 // Light Crossbow
-	4	4	3	7	1	1	1	0 // Tiger Bow
-	4	12	3	7	1	1	1	0 // Serpent Crossbow
-	5	0	3	7	1	1	1	0 // Skull Staff
-	5	3	3	7	1	1	1	0 // Thunder Staff
-	6	4	3	7	1	1	1	0 // Buckler
-	6	1	3	7	1	1	1	0 // Horn Shield
-	6	2	3	7	1	1	1	0 // Kite Shield
-	6	5	3	7	1	1	1	0 // Dragon Slayer Shield
-	6	8	3	7	1	1	1	0 // Tower Shield
-	6	11	3	7	1	1	1	0 // Serpent Shield
-	7	5	3	7	0	1	1	0 // Leather Helm
-	8	5	3	7	0	1	1	0 // Leather Armor
-	9	5	3	7	0	1	1	0 // Leather Pants
-	10	5	3	7	0	1	1	0 // Leather Gloves
-	11	5	3	7	0	1	1	0 // Leather Boots
-	7	2	3	7	0	1	1	0 // Pad Helm
-	8	2	3	7	0	1	1	0 // Pad Armor
-	9	2	3	7	0	1	1	0 // Pad Pants
-	10	2	3	7	0	1	1	0 // Pad Gloves
-	11	2	3	7	0	1	1	0 // Pad Boots
-	7	0	3	7	0	1	1	0 // Bronze Helm
-	8	0	3	7	0	1	1	0 // Bronze Armor
-	9	0	3	7	0	1	1	0 // Bronze Pants
-	10	0	3	7	0	1	1	0 // Bronze Gloves
-	11	0	3	7	0	1	1	0 // Bronze Boots
-	7	12	3	7	0	1	1	0 // Wind Helm
-	8	12	3	7	0	1	1	0 // Wind Armor
-	9	12	3	7	0	1	1	0 // Wind Pants
-	10	12	3	7	0	1	1	0 // Wind Gloves
-	11	12	3	7	0	1	1	0 // Wind Boots
-	7	13	3	7	0	1	1	0 // Spirit Helm
-	8	13	3	7	0	1	1	0 // Spirit Armor
-	9	13	3	7	0	1	1	0 // Spirit Pants
-	10	13	3	7	0	1	1	0 // Spirit Gloves
-	11	13	3	7	0	1	1	0 // Spirit Boots
-	7	7	3	7	0	1	1	0 // Sphinx Helm
-	8	7	3	7	0	1	1	0 // Sphinx Armor
-	9	7	3	7	0	1	1	0 // Sphinx Pants
-	10	7	3	7	0	1	1	0 // Sphinx Gloves
-	11	7	3	7	0	1	1	0 // Sphinx Boots
-	13	2	0	0	0	0	0	0 // Horn of Uniria
-	13	8	0	0	0	0	0	0 // Ring of Ice
-	13	9	0	0	0	0	0	0 // Ring of Poison
-	13	12	0	0	0	0	0	0 // Pendant of Lightning
-	13	13	0	0	0	0	0	0 // Pendant of Fire
-	14	13	0	0	0	0	0	0 // Jewel of Bless
-	14	14	0	0	0	0	0	0 // Jewel of Soul
-	12	15	0	0	0	0	0	0 // Jewel of Chaos
+1800
+	7	16	0	5	1	1	1	0
+	8	16	0	5	1	1	1	0
+	9	16	0	5	1	1	1	0
+	10	16	0	5	1	1	1	0
+	11	16	0	5	1	1	1	0
+	7	18	0	5	1	1	1	0
+	8	18	0	5	1	1	1	0
+	9	18	0	5	1	1	1	0
+	10	18	0	5	1	1	1	0
+	11	18	0	5	1	1	1	0
+	7	19	0	5	1	1	1	0
+	8	19	0	5	1	1	1	0
+	9	19	0	5	1	1	1	0
+	10	19	0	5	1	1	1	0
+	11	19	0	5	1	1	1	0
+	7	27	0	5	1	1	1	0
+	8	27	0	5	1	1	1	0
+	9	27	0	5	1	1	1	0
+	10	27	0	5	1	1	1	0
+	11	27	0	5	1	1	1	0
+	7	15	0	5	1	1	1	0
+	8	15	0	5	1	1	1	0
+	9	15	0	5	1	1	1	0
+	10	15	0	5	1	1	1	0
+	11	15	0	5	1	1	1	0
+	7	24	0	5	1	1	1	0
+	8	24	0	5	1	1	1	0
+	9	24	0	5	1	1	1	0
+	10	24	0	5	1	1	1	0
+	11	24	0	5	1	1	1	0
+	0	16	0	5	1	1	1	0
+	3	10	0	5	1	1	1	0
+	5	9	0	5	1	1	1	0
+	0	31	0	5	1	1	1	0
+	4	17	0	5	1	1	1	0
+	2	11	0	5	1	1	1	0
+	5	20	0	5	1	1	1	0
+	5	23	0	5	1	1	1	0
+	13	80	0	0	0	0	0	0
+	13	123	0	0	0	0	0	0
+	14	14	0	0	0	0	0	0
+	14	13	0	0	0	0	0	0
+	12	15	0	0	0	0	0	0
+	14	16	0	0	0	0	0	0
+	14	101	0	0	0	0	0	0
+	14	110	0	0	0	0	0	0
+end
 end

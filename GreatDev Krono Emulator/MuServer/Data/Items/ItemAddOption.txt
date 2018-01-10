@@ -1,34 +1,71 @@
 //---------------------------------------------------------------//
-//     Type    Index   Opt1    Value1  Opt2    Value2   Time     //
-//---------------------------------------------------------------//
-0
-	0	22	2	200	1	10	0
-	0	23	2	200	1	10	0
-	2	14	2	200	1	10	0
-	4	21	2	200	1	10	0
-	5	12	2	200	1	10	0
-	7	29	8	20	3	10	0
-	7	30	8	20	3	10	0
-	7	31	8	20	3	10	0
-	7	33	8	20	3	10	0
-	8	29	7	0	3	10	0
-	8	30	7	0	3	10	0
-	8	31	7	0	3	10	0
-	8	32	7	0	3	10	0
-	8	33	7	0	3	10	0
-	9	29	4	200	3	10	0
-	9	30	4	200	3	10	0
-	9	31	4	200	3	10	0
-	9	32	4	200	3	10	0
-	9	33	4	200	3	10	0
-	10	29	5	200	3	10	0
-	10	30	5	200	3	10	0
-	10	31	5	200	3	10	0
-	10	32	5	200	3	10	0
-	10	33	5	200	3	10	0
-	11	29	6	700	3	10	0
-	11	30	6	700	3	10	0
-	11	31	6	700	3	10	0
-	11	32	6	700	3	10	0
-	11	33	6	700	3	10	0
-end
+//The event item additional option is activated only one effect only and it uses in the head of a family last the item which in standard it puts on.
+//#define 0 Option nil
+//#define 1 Adult attack success rate rise
+//#define 2  Adult attack additional place unknown +%d
+//#define 3  Adult defense success rate rise
+//#define 4  Adult defensive strength +%d
+//#define 5  The maximum HP rise
+//#define 6  The maximum SD rise
+//#define 7  SD automatic recovery
+//#define 8  SD recovery quantity increase						
+// 380Lv Item additional option						
+0						
+//Type	Index Option 1 Value 1 Option 2	Value 2	Time
+0	22	2	200	1	10	0
+0	23	2	200	1	10	0
+4	21	2	200	1	10	0
+5	12	2	200	1	10	0
+2	14	2	200	1	10	0
+7	29	8	20	3	10	0
+7	30	8	20	3	10	0
+7	31	8	20	3	10	0
+7	33	8	20	3	10	0
+8	29	7	0	3	10	0
+8	30	7	0	3	10	0
+8	31	7	0	3	10	0
+8	32	7	0	3	10	0
+8	33	7	0	3	10	0
+9	29	4	200	3	10	0
+9	30	4	200	3	10	0
+9	31	4	200	3	10	0
+9	32	4	200	3	10	0
+9	33	4	200	3	10	0
+10	29	5	200	3	10	0
+10	30	5	200	3	10	0
+10	31	5	200	3	10	0
+10	32	5	200	3	10	0
+10	33	5	200	3	10	0
+11	29	6	700	3	10	0
+11	30	6	700	3	10	0
+11	31	6	700	3	10	0
+11	32	6	700	3	10	0
+11	33	6	700	3	10	0
+end						
+//-----------------------------------------------------------						
+// At percentage Win event use option						
+//#define 0 Option nil						
+//#define 1 Attack speed rise +%d						
+//#define 2 Attack power +%d					
+//#define 3 Defensive strength +%d					
+//#define 4 The maximum HP rise +%d					
+//#define 5 The maximum it rolls up quantity but rise +%d						
+1						
+//Type	Index Option 1 Value 1 Option 2	Value 2	Time
+14	46	1	10	0	10	1800
+14	47	2	25	0	10	1800
+14	48	3	100	0	10	1800
+14	49	4	500	0	10	1800
+14	50	5	500	0	10	1800
+end						
+//-----------------------------------------------------------						
+// Portion paid anger use option					
+2						
+//#define 6  Experience additional acquisition +%d%						
+//#define 7  Item additional acquisition probability increase +%d%						
+//#define 8  Experience acquisition being not right						
+//Type	Index Option 1 Value 1 Option 2	Value 2	Time
+13	43	6	150	0	0	0
+13	44	6	200	7	150	0
+13	45	8	0	0	0	0
+end						

@@ -127,14 +127,7 @@ BOOL NpcIllusionYellowPedestal(LPOBJ lpNpc, LPOBJ lpObj);
 BOOL NpcIllusionBluePedestal(LPOBJ lpNpc, LPOBJ lpObj);
 BOOL NpcIllusionMirage(LPOBJ lpNpc, LPOBJ lpObj);
 
-BOOL NpcLukeTheHelper(LPOBJ lpNpc, LPOBJ lpObj); // OK
-BOOL NpcLeoTheHelper(LPOBJ lpNpc, LPOBJ lpObj); // OK
-void CGNpcLukeTheHelperRecv(int aIndex); // OK
-void GDNpcLukeTheHelperSend(int aIndex); // OK
-void DGNpcLukeTheHelperRecv(SDHP_NPC_LUKE_THE_HELPER_RECV* lpMsg);
-void GDNpcLukeTheHelperSaveSend(int aIndex, BYTE status);
-void CGNpcLeoTheHelperRecv(int aIndex); // OK
-void GDNpcLeoTheHelperSend(int aIndex); // OK
-void DGNpcLeoTheHelperRecv(SDHP_NPC_LEO_THE_HELPER_RECV* lpMsg);
-void GDNpcLeoTheHelperSaveSend(int aIndex, BYTE status);
+BOOL NpcCouponEvent(LPOBJ lpNpc, LPOBJ lpObj); //OK
+
+BOOL NpcWhiteAngelEvent(LPOBJ lpNpc, LPOBJ lpObj); //OK
 #endif

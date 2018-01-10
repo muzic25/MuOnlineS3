@@ -48,6 +48,18 @@ void EventChipEventProtocolCore(BYTE protoNum, LPBYTE aRecv, int aLen)
 		case 0x17:
 			EGAnsRegHTOfflineGift((PMSG_ANS_REG_HT_OFFLINE_GIFT *)aRecv);
 			break;
+		case 0x18:
+			EGAnsPossiblePCBangCouponEvent((PMSG_ANS_POSSIBLE_PCBANG_COUPON *)aRecv);
+			break;
+		case 0x19:
+			EGAnsUsePCBangCoupon((PMSG_ANS_USE_PCBANG_COUPON *)aRecv);
+			break;
+		case 0x20:
+			EGAnsCheckWhiteAngelGetItem((PMSG_ANS_CHECK_WHITEANGEL_GET_ITEM *)aRecv);
+			break;
+		case 0x21:
+			EGAnsWhiteAngelGetItem((PMSG_ANS_WHITEANGEL_GET_ITEM *)aRecv);
+			break;
 	}
 }
 
@@ -773,16 +785,6 @@ void FireCrackerOpenEven(LPOBJ lpObj)
 void StarOfXMasOpenEven(LPOBJ lpObj)
 {
 	StarOfXMasItemBag->DropItem(lpObj->m_Index);
-}
-
-void LeoTheHelplerBag(LPOBJ lpObj)
-{
-	LeoItemBag->DropItem(lpObj->m_Index);
-}
-
-void LukeTheHelplerBag(LPOBJ lpObj)
-{
-	LukeItemBag->DropItem(lpObj->m_Index);
 }
 
 void FireworksOpenEven(LPOBJ lpObj)
@@ -2862,4 +2864,213 @@ void ChristmasStarDrop(LPOBJ lpObj)
 	ServerCmd.Y = lpObj->Y;
 	MsgSendV2(lpObj, (LPBYTE)&ServerCmd, sizeof(ServerCmd));
 	DataSend(lpObj->m_Index, (LPBYTE)&ServerCmd, sizeof(ServerCmd));
+}
+
+void EGReqUsePCBangCoupon(int iIndex)
+{
+	PMSG_REQ_USE_PCBANG_COUPON pMsg; // [sp+4Ch] [bp-1Ch]@2
+
+	if (!gObjIsConnected(iIndex))
+	{
+		return;
+	}
+
+	LPOBJ lpObj = &gObj[iIndex];
+	pMsg.h.c = 0;
+	pMsg.h.headcode = 0x00;
+	pMsg.szUID[0] = 0;
+	pMsg.szUID[4] = 0;
+	pMsg.szUID[8] = 0;
+	pMsg.wServerCode = 0;
+	PHeadSubSetB((LPBYTE)&pMsg, 0x19, 0, sizeof(pMsg));
+	memcpy(pMsg.szUID, lpObj->AccountID, sizeof(pMsg.szUID));
+	pMsg.wServerCode = Configs.gGameServerCode / 20;
+	pMsg.nINDEX = iIndex;
+	DataSendEventChip((char*)&pMsg, pMsg.h.size);
+}
+
+
+void EGReqPossiblePCBangCouponEvent(int iIndex)
+{
+	if (!gObjIsConnected(iIndex))
+	{
+		return;
+	}
+
+	LPOBJ lpObj = &gObj[iIndex];
+
+	if (!Configs.g_iPCBangCouponEvent)
+	{
+		GCServerCmd(lpObj->m_Index, 7, 4, 0);
+		return;
+	}
+
+	PMSG_REQ_POSSIBLE_PCBANG_COUPON pMsg; // [sp+4Ch] [bp-1Ch]@4
+	pMsg.h.c = 0;
+	pMsg.h.headcode = 0x00;
+	pMsg.szUID[0] = 0;
+	pMsg.szUID[4] = 0;
+	pMsg.szUID[8] = 0;
+	pMsg.wServerCode = 0;
+	PHeadSubSetB((LPBYTE)&pMsg, 0x18, 0, sizeof(pMsg));
+
+	memcpy(pMsg.szUID, lpObj->AccountID, sizeof(pMsg.szUID));
+	pMsg.wServerCode = Configs.gGameServerCode / 20;
+	pMsg.nINDEX = iIndex;
+	pMsg.szUID[10] = 0;
+	DataSendEventChip((char*)&pMsg, sizeof(pMsg));
+}
+
+void EGAnsPossiblePCBangCouponEvent(PMSG_ANS_POSSIBLE_PCBANG_COUPON *lpMsg)
+{
+	int iIndex = lpMsg->nINDEX;
+	LPOBJ lpObj = &gObj[iIndex];
+
+	if (OBJMAX_RANGE(iIndex) == FALSE)
+	{
+		return;
+	}
+
+	PMSG_ANS_PCBANG_COUPON_ITEM pMsg;
+
+	PHeadSubSetB((LPBYTE)&pMsg, 0xD0, 0x01, sizeof(pMsg));
+	switch (lpMsg->iResultCode)
+	{
+	case 0:
+		GCServerCmd(lpObj->m_Index, 7, 0, 0);
+		break;
+	case 1:
+		GCServerCmd(lpObj->m_Index, 7, 1, 0);
+		break;
+	case 2:
+		GCServerCmd(lpObj->m_Index, 7, 2, 0);
+		break;
+	case 3:
+		GCServerCmd(lpObj->m_Index, 7, 3, 0);
+		break;
+	default:
+		break;
+	}
+	DataSend(iIndex, (LPBYTE)&pMsg, pMsg.h.size);
+}
+
+void EGAnsUsePCBangCoupon(PMSG_ANS_USE_PCBANG_COUPON *lpMsg)
+{
+	int iIndex = lpMsg->nINDEX;
+	LPOBJ lpObj = &gObj[iIndex];
+
+	if (gObjIsConnected(iIndex) == FALSE)
+	{
+		return;
+	}
+	
+	if (lpMsg->iResultCode == 1)
+	{
+		GCServerMsgStringSend(lMsg.Get(MSGGET(13,27)), lpObj->m_Index, 1);
+		return;
+	}
+
+	PCBangEventNPCItemBag->DropPCBangRevitalizationEventItem(iIndex, lpObj->MapNumber, lpObj->X, lpObj->Y);
+}
+
+
+void GEReqWhiteAngelGetItem(int iIndex)
+{
+	PMSG_REQ_WHITEANGEL_GET_ITEM pMsg; // [sp+4Ch] [bp-1Ch]@2
+	LPOBJ lpObj = &gObj[iIndex];
+
+	if (gObjIsConnected(iIndex) == FALSE)
+	{
+		return;
+	}
+
+	pMsg.h.c = 0;
+	pMsg.h.headcode = 0x00;
+	pMsg.szUID[0] = 0;
+	pMsg.szUID[4] = 0;
+	pMsg.szUID[8] = 0;
+	pMsg.wServerCode = 0;
+	PHeadSubSetB((LPBYTE)&pMsg, 0x21, 0, sizeof(pMsg));
+
+	memcpy(pMsg.szUID, lpObj->AccountID, sizeof(pMsg.szUID));
+	pMsg.wServerCode = Configs.gGameServerCode / 20;
+	pMsg.nINDEX = iIndex;
+	pMsg.szUID[10] = 0;
+	DataSendEventChip((char*)&pMsg, sizeof(pMsg));
+
+}
+
+
+void GEReqCheckWhiteAngelGetItem(int iIndex)
+{
+	if (gObjIsConnected(iIndex) == FALSE)
+	{
+		return;
+	}
+
+	LPOBJ lpObj = &gObj[iIndex];
+
+	PMSG_REQ_CHECK_WHITEANGEL_GET_ITEM pMsg;
+	pMsg.h.c = 0;
+	pMsg.h.headcode = 0;
+	pMsg.szUID[0] = 0;
+	pMsg.szUID[4] = 0;
+	pMsg.szUID[8] = 0;
+	pMsg.wServerCode = 0;
+	PHeadSubSetB((LPBYTE)&pMsg, 0x20, 0, sizeof(pMsg));
+
+	memcpy(pMsg.szUID, lpObj->AccountID, sizeof(pMsg.szUID));
+	pMsg.wServerCode = Configs.gGameServerCode / 20;
+	pMsg.nINDEX = iIndex;
+	pMsg.szUID[10] = 0;
+	DataSendEventChip((char*)&pMsg, sizeof(pMsg));
+}
+
+
+void EGAnsCheckWhiteAngelGetItem(PMSG_ANS_CHECK_WHITEANGEL_GET_ITEM *lpMsg)
+{
+	int iIndex = lpMsg->nINDEX;
+	LPOBJ lpObj = &gObj[iIndex];
+
+	if (OBJMAX_RANGE(iIndex) == FALSE)
+	{
+		return;
+	}
+
+	switch (lpMsg->iResultCode)
+	{
+	case 0:
+		GCServerCmd(lpObj->m_Index, 14, 0, 0);
+		break;
+	case 1:
+		GCServerCmd(lpObj->m_Index, 14, 1, 0);
+		break;
+	case 2:
+		GCServerCmd(lpObj->m_Index, 14, 2, 0);
+		break;
+	case 3:
+		GCServerCmd(lpObj->m_Index, 14, 3, 0);
+		break;
+	default:
+		return;
+	}
+}
+
+void EGAnsWhiteAngelGetItem(PMSG_ANS_WHITEANGEL_GET_ITEM *lpMsg)
+{
+	int iIndex = lpMsg->nINDEX;
+	LPOBJ lpObj = &gObj[iIndex];
+
+	if (gObjIsConnected(iIndex))
+	{
+		if (lpMsg->iResultCode == 1)
+		{
+			ItemGiveReoEventItemBag->DropItem(iIndex, lpObj->MapNumber, lpObj->X, lpObj->Y);
+		}
+		else
+		{
+			GCServerCmd(lpObj->m_Index, 14, 5, 0);
+			LogAddTD("[ %s ] Fail [%s][%s]", ItemGiveReoEventItemBag->GetEventName(), lpObj->AccountID, lpObj->Name);
+		}
+	}
 }

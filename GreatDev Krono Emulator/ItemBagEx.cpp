@@ -2271,3 +2271,58 @@ BOOL CItemBagEx::DropKanturuNightmareItem(int aIndex, BYTE btMapNumber, BYTE cX,
 	return TRUE;
 }
 
+int CItemBagEx::DropPCBangRevitalizationEventItem(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY)
+{
+	if (this->m_bLoad == FALSE)
+	{
+		return false;
+	}
+
+	int iOption1 = 0;
+	int iOption2 = 0;
+	int iOption3 = 0;
+	if (this->GetBagCount() <= 0)
+	{
+		return false;
+	}
+
+	int iDropItemNum = rand() % this->GetBagCount();
+
+	float fDur = 0.0;
+
+	int iLevel = this->GetLevel(iDropItemNum);
+
+	int iType = ItemGetNumberMake(this->BagObject[iDropItemNum].m_type, this->BagObject[iDropItemNum].m_index);
+	
+	if (iType == -1)
+	{
+		return false;
+	}
+
+	if (iType == 6159 || iType == 7181 || iType == 7182)
+	{
+		iOption1 = 0;
+		iOption2 = 0;
+		iOption3 = 0;
+		iLevel = 0;
+	}
+	if (iType == 6656
+		|| iType == 6657
+		|| iType == 6658
+		|| iType == 6664
+		|| iType == 6665
+		|| iType == 6668
+		|| iType == 6669
+		|| iType == 6694
+		|| iType == 6695
+		|| iType == 6696
+		|| iType == 6697)
+	{
+		iLevel = 0;
+		fDur = 255.0;
+	}
+
+	ItemSerialCreateSend(aIndex, btMapNumber, cX, cY, iType, iLevel, fDur,iOption1, iOption2, iOption3, aIndex, 0, 0);
+	LogAddTD("[ PCBangRevitalizationEvent ] [%s][%s][%s] ItemDrop : Item:%d Dur:%d",gObj[aIndex].AccountID,gObj[aIndex].Name,gObj[aIndex].Ip_addr,iType,&fDur);
+	return true;
+}

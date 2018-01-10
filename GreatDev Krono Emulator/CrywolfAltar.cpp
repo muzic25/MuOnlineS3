@@ -306,7 +306,6 @@ void CCrywolfAltar::ResetAltar(int iClass)
 
 	gObj[AltarInfo->m_iAltarIndex].m_ViewSkillState = 0;
 	GCStateInfoSend(&gObj[AltarInfo->m_iAltarIndex], 1, gObj[AltarInfo->m_iAltarIndex].m_ViewSkillState);
-	gObjClearStandardBuffEffect(&gObj[AltarInfo->m_iAltarIndex], AT_GENERAL);
 	AltarInfo->Reset();
 }
 

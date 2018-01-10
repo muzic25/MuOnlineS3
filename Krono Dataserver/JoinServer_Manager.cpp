@@ -168,7 +168,7 @@ int JoinServer_Manager::AddUser(int ServerIndex, char * szAccountID, char * szIP
 
                 bReturn = lpUser->iUserNumber;
 
-                gDataBase.ExecFormat("EXEC WZ_CONNECT_MEMB '%s','%s','%s','%d','%d'", szAccountID, m_ServObj[ServerIndex].m_szServerName, szIP, lpUser->m_ServerCode, MembGUID);
+                gDataBase.ExecFormat("EXEC WZ_CONNECT_MEMB '%s','%s','%s'", szAccountID, m_ServObj[ServerIndex].m_szServerName, szIP);
 
                 LogAddC(eConnect, "[JoinServer] User [%s] [%s] connected to Server [%d]", szAccountID, szIP, ServerIndex);
 
@@ -230,10 +230,10 @@ void JoinServer_Manager::DelUserByIndex(int nIndex, int MembGUID)
 
         m_ServObj[lpUser->m_ServerIndex].m_ConnectedCount--;
 
-        gDataBase.ExecFormat("EXEC WZ_DISCONNECT_MEMB '%s','%d','%d'", lpUser->m_szAccountID, lpUser->m_ServerCode, MembGUID);
+        gDataBase.ExecFormat("EXEC WZ_DISCONNECT_MEMB '%s'", lpUser->m_szAccountID);
         gDataBase.Clear();
-        gDataBase.ExecFormat("UPDATE MEMB_STAT SET ConnectStat='0' WHERE memb___id='%s'", lpUser->m_szAccountID);
-        gDataBase.Clear();
+     //   gDataBase.ExecFormat("UPDATE MEMB_STAT SET ConnectStat='0' WHERE memb___id='%s'", lpUser->m_szAccountID);
+      //  gDataBase.Clear();
 
         JS_USER_DISCONNECT pMsg = { 0 };
         pMsg.h.Set(0x09, sizeof(pMsg));

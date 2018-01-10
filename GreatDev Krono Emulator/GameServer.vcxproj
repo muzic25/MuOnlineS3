@@ -105,7 +105,8 @@
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateMapFile>true</GenerateMapFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugRelease|Win32'">
@@ -203,8 +204,6 @@
     <ClCompile Include="BattleSoccer.cpp" />
     <ClCompile Include="BattleSoccerManager.cpp" />
     <ClCompile Include="BloodCastle.cpp" />
-    <ClCompile Include="BuffEffect.cpp" />
-    <ClCompile Include="BuffManager.cpp" />
     <ClCompile Include="CallStackTrace.cpp" />
     <ClCompile Include="CannonTower.cpp" />
     <ClCompile Include="CashItemPeriodSystem.cpp" />
@@ -309,6 +308,7 @@
     <ClCompile Include="ObjUseSkill.cpp" />
     <ClCompile Include="PacketCheckSum.cpp" />
     <ClCompile Include="PartyClass.cpp" />
+    <ClCompile Include="PCPoints.cpp" />
     <ClCompile Include="ProbabilityItemBag.cpp" />
     <ClCompile Include="protocol.cpp" />
     <ClCompile Include="QuestInfo.cpp" />
@@ -358,7 +358,6 @@
     <ClCompile Include="TUnionInfo.cpp" />
     <ClCompile Include="user.cpp" />
     <ClCompile Include="ViewportGuild.cpp" />
-    <ClCompile Include="ViewportSkillState.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="WhisperCash.cpp" />
     <ClCompile Include="winutil.cpp">
@@ -385,8 +384,6 @@
     <ClInclude Include="BattleSoccer.h" />
     <ClInclude Include="BattleSoccerManager.h" />
     <ClInclude Include="BloodCastle.h" />
-    <ClInclude Include="BuffEffect.h" />
-    <ClInclude Include="BuffManager.h" />
     <ClInclude Include="CallStackTrace.h" />
     <ClInclude Include="CannonTower.h" />
     <ClInclude Include="CashItemPeriodSystem.h" />
@@ -494,6 +491,7 @@
     <ClInclude Include="ObjUseSkill.h" />
     <ClInclude Include="PacketCheckSum.h" />
     <ClInclude Include="PartyClass.h" />
+    <ClInclude Include="PCPoints.h" />
     <ClInclude Include="PCSProtocol.h" />
     <ClInclude Include="ProbabilityItemBag.h" />
     <ClInclude Include="prodef.h" />
@@ -543,7 +541,6 @@
     <ClInclude Include="TUnionInfo.h" />
     <ClInclude Include="user.h" />
     <ClInclude Include="ViewportGuild.h" />
-    <ClInclude Include="ViewportSkillState.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="WhisperCash.h" />
     <ClInclude Include="winutil.h" />

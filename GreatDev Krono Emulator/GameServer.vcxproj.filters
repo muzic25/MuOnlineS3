@@ -66,11 +66,8 @@
     <Filter Include="Source Files\ProbabilityItemBag">
       <UniqueIdentifier>{7d8e54f2-e6d7-492f-ab77-c1602587cb0d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Buffs">
-      <UniqueIdentifier>{56fffd90-7eed-4c05-b299-6f66f0391a6c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ViewPortSkillState">
-      <UniqueIdentifier>{75a60335-653a-4e58-9ac9-7bd7802c2e1e}</UniqueIdentifier>
+    <Filter Include="Source Files\PCPOINT">
+      <UniqueIdentifier>{7e12d2b4-4689-456c-b7e4-049b1391e2ab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -569,14 +566,8 @@
     <ClCompile Include="ProbabilityItemBag.cpp">
       <Filter>Source Files\ProbabilityItemBag</Filter>
     </ClCompile>
-    <ClCompile Include="BuffEffect.cpp">
-      <Filter>Source Files\Buffs</Filter>
-    </ClCompile>
-    <ClCompile Include="BuffManager.cpp">
-      <Filter>Source Files\Buffs</Filter>
-    </ClCompile>
-    <ClCompile Include="ViewportSkillState.cpp">
-      <Filter>Source Files\ViewPortSkillState</Filter>
+    <ClCompile Include="PCPoints.cpp">
+      <Filter>Source Files\PCPOINT</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1108,14 +1099,8 @@
     <ClInclude Include="ProbabilityItemBag.h">
       <Filter>Source Files\ProbabilityItemBag</Filter>
     </ClInclude>
-    <ClInclude Include="BuffEffect.h">
-      <Filter>Source Files\Buffs</Filter>
-    </ClInclude>
-    <ClInclude Include="BuffManager.h">
-      <Filter>Source Files\Buffs</Filter>
-    </ClInclude>
-    <ClInclude Include="ViewportSkillState.h">
-      <Filter>Source Files\ViewPortSkillState</Filter>
+    <ClInclude Include="PCPoints.h">
+      <Filter>Source Files\PCPOINT</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,6 @@
 //#include "..\ggsvr\ggsvr.h"
 #include "MagicInf.h"
 #include "zzzitem.h"
-#include "BuffEffect.h"
 #include "classdef.h"
 #include "define.h"
 #include "GuildClass.h"
@@ -803,9 +802,6 @@ struct OBJECTSTRUCT
 
 
 	//end new
-	BYTE	m_btViewStateCount;
-	struct	BUFF_MANAGER m_BuffEffectState[MAX_STATE_COUNT];
-
 	int		m_iSoulBarrierDefense; //Season 3 BuffEffect for Soul Barrier Skill
 	short	m_sSoulBarrierDuration; //Season 3 BuffEffect for Soul Barrier Skill
 
@@ -949,8 +945,8 @@ struct OBJECTSTRUCT
 	int		m_iIllusionTempleIndex; //20FC
 	BOOL	m_bSkillKeyRecv; //0x2100
 
-
-
+	//PC Point System
+	int PCPoint;
 };
 
 typedef OBJECTSTRUCT * LPOBJ;

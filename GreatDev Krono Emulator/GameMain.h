@@ -124,14 +124,14 @@ extern CItemBagEx * CrywolfBossMonsterItemBag;
 extern CItemBagEx * KanturuMayaHandItemBag;
 extern CItemBagEx * KanturuNightmareItemBag;
 extern CItemBagEx * HallowinDayEventItemBag;
+extern CItemBagEx * PCBangEventNPCItemBag;
 extern CItemBag * RingOfHeroBoxItemBag;
 extern CProbabilityItemBag * NewYearLuckyPouchItemBag; //test
 extern CProbabilityItemBag * GMPresentBoxItemBag; //test
 extern CProbabilityItemBag * IllusionTemple1ItemBag; //test
 extern CProbabilityItemBag * IllusionTemple2ItemBag; //test
 extern CProbabilityItemBag * IllusionTemple3ItemBag; //test
-extern CItemBagEx  * LeoItemBag;
-extern CItemBagEx  * LukeItemBag;
+extern CProbabilityItemBag * ItemGiveReoEventItemBag;
 extern CwsGameServer wsGServer;	// line : 213GameServer
 extern wsJoinServerCli wsJServerCli;	// line : 214 Join Server
 extern wsJoinServerCli wsDataCli;	// line : 215 DataServer
@@ -337,6 +337,7 @@ public:
  int g_iSkillDistanceKick;
  int g_iSkillDistanceKickCount;
  int g_iSkillDiatanceKickCheckTime;
+ int g_iPCBangCouponEvent;
  BOOL g_bKanturuMayaHandItemDrop;
  int g_iKanturuMayaHandItemDropRate;
  int g_iKanturuMayaHandDropZenRate;
@@ -491,8 +492,14 @@ public:
  int gSetItemInCastleHuntZoneDropLevel;
  BOOL g_bDoCastleDeepEvent;
  int g_iRateJewelOfLuck;
+ int g_iJewelOfLuckID;
+ int g_iJewelOfLuckType;
  int g_iRateJewelOfExc;
- int g_iRateJewelOfMyst;
+ int g_iJewelOfExcID;
+ int g_iJewelOfExcType;
+ int g_iRateJewelOfMyst; 
+ int g_iJewelOfMystID;
+ int g_iJewelOfMystType;
 
 };
 extern CConfigs Configs;

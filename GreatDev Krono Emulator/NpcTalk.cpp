@@ -21,6 +21,11 @@ BOOL NpcTalk(LPOBJ lpNpc, LPOBJ lpObj)
 		lpObj->TargetShopNumber = npcnum;
 	}
 
+	if (npcnum == 258 && NpcCouponEvent(lpNpc, lpObj))
+	{
+		return TRUE;
+	}
+
 	if ( NpcQuestCheck(lpNpc, lpObj) != FALSE )
 	{
 		return TRUE;
@@ -252,15 +257,8 @@ BOOL NpcTalk(LPOBJ lpNpc, LPOBJ lpObj)
 				return TRUE;
 			}
 			break;
-
 		case 257:
 			if ( NpcShadowPhantom( lpNpc, lpObj ) == TRUE )
-			{
-				return TRUE;
-			}
-			break;
-		case 258:
-			if (NpcLukeTheHelper(lpNpc, lpObj) == TRUE)
 			{
 				return TRUE;
 			}
@@ -274,7 +272,7 @@ BOOL NpcTalk(LPOBJ lpNpc, LPOBJ lpObj)
 			}
 			break;
 		case 371:
-			if (NpcLeoTheHelper(lpNpc, lpObj) == TRUE)
+			if (NpcWhiteAngelEvent(lpNpc, lpObj) == TRUE)
 			{
 				return TRUE;
 			}
@@ -1473,8 +1471,6 @@ BOOL NpcShadowPhantom(LPOBJ lpNpc, LPOBJ lpObj)
 
 	GCStateInfoSend(lpObj, 1, 0x2000000);	 
 
-//	gObjApplyBuffEffectDuration(lpObj, AT_NPC_HELP, 2, iAttack, 3, iDefense, iDuration);
-
 	return TRUE;
 }
 
@@ -1547,140 +1543,25 @@ BOOL NpcIllusionMirage(LPOBJ lpNpc, LPOBJ lpObj)
 }
 
 
-BOOL NpcLukeTheHelper(LPOBJ lpNpc, LPOBJ lpObj) // OK
+BOOL NpcCouponEvent(LPOBJ lpNpc, LPOBJ lpObj)
 {
-	GCServerCmd(lpObj->m_Index, 0x0E, 0, 0);
+	if ((lpObj->m_IfState.use) > 0)
+	{
+		return TRUE;
+	}
+
+	EGReqPossiblePCBangCouponEvent(lpObj->m_Index);
 	return TRUE;
 }
 
-BOOL NpcLeoTheHelper(LPOBJ lpNpc, LPOBJ lpObj) // OK
+BOOL NpcWhiteAngelEvent(LPOBJ lpNpc, LPOBJ lpObj)
 {
-	GCServerCmd(lpObj->m_Index, 0x0F, 1, 0);
+	if ((lpObj->m_IfState.use) > 0)
+	{
+		return TRUE;
+	}
+
+	GEReqCheckWhiteAngelGetItem(lpObj->m_Index);
+	
 	return TRUE;
-}
-
-void CGNpcLukeTheHelperRecv(int aIndex) // OK
-{
-	LPOBJ lpObj = &gObj[aIndex];
-
-	if (gObjIsConnectedGP(aIndex) == 0)
-	{
-		return;
-	}
-
-	GDNpcLukeTheHelperSend(aIndex);
-}
-
-void CGNpcLeoTheHelperRecv(int aIndex) // OK
-{
-	LPOBJ lpObj = &gObj[aIndex];
-
-	if (gObjIsConnectedGP(aIndex) == 0)
-	{
-		return;
-	}
-
-	GDNpcLeoTheHelperSend(aIndex);
-}
-
-void DGNpcLeoTheHelperRecv(SDHP_NPC_LEO_THE_HELPER_RECV* lpMsg) // OK
-{
-	if (gObjIsAccontConnect(lpMsg->index, lpMsg->account) == 0)
-	{
-		LogAdd("[DGNpcLeoTheHelperRecv] Invalid Account [%d](%s)", lpMsg->index, lpMsg->account);
-		CloseClient(lpMsg->index);
-		return;
-	}
-
-	LPOBJ lpObj = &gObj[lpMsg->index];
-
-	if (lpMsg->status >= 1)
-	{
-		GCServerCmd(lpObj->m_Index,15,5,0);
-		return;
-	}
-
-	LeoTheHelplerBag(lpObj);
-
-	GDNpcLeoTheHelperSaveSend(lpObj->m_Index, 1);
-}
-
-void GDNpcLeoTheHelperSend(int aIndex) // OK
-{
-	if (gObjIsAccontConnect(aIndex, gObj[aIndex].AccountID) == 0)
-	{
-		return;
-	}
-
-	SDHP_NPC_LEO_THE_HELPER_SEND pMsg;
-
-	PHeadSubSetB((LPBYTE)&pMsg, 0x0E, 0x00, sizeof(SDHP_NPC_LEO_THE_HELPER_SEND));
-	pMsg.index = aIndex;
-	memcpy(pMsg.account, gObj[aIndex].AccountID, sizeof(pMsg.account));
-	memcpy(pMsg.name, gObj[aIndex].Name, sizeof(pMsg.name));
-	cDBSMng.Send((char*)&pMsg, sizeof(SDHP_NPC_LEO_THE_HELPER_SEND));
-}
-
-void GDNpcLeoTheHelperSaveSend(int aIndex, BYTE status) // OK
-{
-	LPOBJ lpObj = &gObj[aIndex];
-	SDHP_NPC_LEO_THE_HELPER_SAVE_SEND pMsg;
-
-	PHeadSubSetB((LPBYTE)&pMsg, 0x0E, 0x30, sizeof(SDHP_NPC_LEO_THE_HELPER_SAVE_SEND));
-	pMsg.index = aIndex;
-	memcpy(pMsg.account, lpObj->AccountID, sizeof(pMsg.account));
-	memcpy(pMsg.name, lpObj->Name, sizeof(pMsg.name));
-	pMsg.status = status;
-	cDBSMng.Send((char*)&pMsg, sizeof(SDHP_NPC_LEO_THE_HELPER_SAVE_SEND));
-}
-
-void DGNpcLukeTheHelperRecv(SDHP_NPC_LUKE_THE_HELPER_RECV* lpMsg) // OK
-{
-	if (gObjIsAccontConnect(lpMsg->index, lpMsg->account) == 0)
-	{
-		LogAdd("[DGNpcLukeTheHelperRecv] Invalid Account [%d](%s)", lpMsg->index, lpMsg->account);
-		CloseClient(lpMsg->index);
-		return;
-	}
-
-	LPOBJ lpObj = &gObj[lpMsg->index];
-
-	if (lpMsg->status >= 1)
-	{
-		GCServerCmd(lpObj->m_Index, 14, 1, 0);
-		return;
-	}
-
-	LukeTheHelplerBag(lpObj);
-
-	GDNpcLukeTheHelperSaveSend(lpObj->m_Index, 1);
-}
-
-void GDNpcLukeTheHelperSend(int aIndex) // OK
-{
-	if (gObjIsAccontConnect(aIndex, gObj[aIndex].AccountID) == 0)
-	{
-		return;
-	}
-
-	SDHP_NPC_LUKE_THE_HELPER_SEND pMsg;
-
-	PHeadSubSetB((LPBYTE)&pMsg, 0x0E, 0x01, sizeof(SDHP_NPC_LUKE_THE_HELPER_SEND));
-	pMsg.index = aIndex;
-	memcpy(pMsg.account, gObj[aIndex].AccountID, sizeof(pMsg.account));
-	memcpy(pMsg.name, gObj[aIndex].Name, sizeof(pMsg.name));
-	cDBSMng.Send((char*)&pMsg, sizeof(SDHP_NPC_LUKE_THE_HELPER_SEND));
-}
-
-void GDNpcLukeTheHelperSaveSend(int aIndex, BYTE status) // OK
-{
-	LPOBJ lpObj = &gObj[aIndex];
-	SDHP_NPC_LUKE_THE_HELPER_SAVE_SEND pMsg;
-
-	PHeadSubSetB((LPBYTE)&pMsg, 0x0E, 0x31, sizeof(SDHP_NPC_LUKE_THE_HELPER_SAVE_SEND));
-	pMsg.index = aIndex;
-	memcpy(pMsg.account, lpObj->AccountID, sizeof(pMsg.account));
-	memcpy(pMsg.name, lpObj->Name, sizeof(pMsg.name));
-	pMsg.status = status;
-	cDBSMng.Send((char*)&pMsg, sizeof(SDHP_NPC_LUKE_THE_HELPER_SAVE_SEND));
 }

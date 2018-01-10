@@ -240,21 +240,6 @@ void DataServerProtocolCore(BYTE protoNum, unsigned char* aRecv, int aLen)
 			}
 			break;
 
-		case 0x0E:
-		{
-			PMSG_DEFAULT2 * lpMsg = (PMSG_DEFAULT2 *)aRecv;
-			switch (lpMsg->subcode)
-			{
-			case 0x00:
-				DGNpcLeoTheHelperRecv((SDHP_NPC_LEO_THE_HELPER_RECV*)lpMsg);
-				break;
-			case 0x01:
-				DGNpcLukeTheHelperRecv((SDHP_NPC_LUKE_THE_HELPER_RECV*)lpMsg);
-				break;
-			}
-		}
-		break;
-
 		case 0xFF:	// Test Packet
 			{
 				PMSG_TEST * pMsg = (PMSG_TEST *)aRecv;
@@ -1488,6 +1473,7 @@ struct PMSG_CHARMAPJOINRESULT
 	WORD Leadership;	// 36
 	WORD wMinusPoint;	// 38
 	WORD wMaxMinusPoint;	// 3A
+	int iPcPoints;	// 2C
 };
 
 
@@ -1650,6 +1636,7 @@ void JGGetCharacterInfo( SDHP_DBCHAR_INFORESULT * lpMsg)
 	pjMsg.wMinusPoint = MinusPoint;
 	pjMsg.wMaxMinusPoint = MaxMinusPoint;
 
+
 	LogAddTD("[FRUIT System] [%s][%s] (MinusPoint:%d/PlusPoint:%d) (MaxMinus:%d/MaxPlus:%d)",
 		lpObj->AccountID, lpObj->Name, MinusPoint, AddPoint, MaxMinusPoint, MaxAddPoint);
 
@@ -1658,6 +1645,8 @@ void JGGetCharacterInfo( SDHP_DBCHAR_INFORESULT * lpMsg)
 		LogAddTD("[FRUIT System] Character Stat Error [%s][%s] (MinusPoint:%d/PlusPoint:%d) (MaxMinus:%d/MaxPlus:%d)",
 			lpObj->AccountID, lpObj->Name, MinusPoint, AddPoint, MaxMinusPoint, MaxAddPoint);
 	}
+
+	pjMsg.iPcPoints = lpObj->PCPoint;
 
 	g_QuestInfo.QuestInfoSave(lpObj);
 	

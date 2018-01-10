@@ -651,6 +651,7 @@ void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOO
 			{
 			case 0x00:
 				LogAdd("C1 D0 00 packet found!");
+				CGReqPCBangCouponItem((PMSG_REQ_PCBANG_COUPON_ITEM *)aRecv, aIndex);
 				break; 
 			case 0x01:
 				LogAdd("C1 D0 01 packet found!");
@@ -660,19 +661,32 @@ void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOO
 				break;
 			case LUKEHELPLERNPC: //0x03
 				//Luke The Helpler Packet
-				CGNpcLukeTheHelperRecv(aIndex);
+				CGReqWhiteAngelGetItem((PMSG_REQ_WHITEANGEL_ITEM *)aRecv, aIndex);
 				break;
 			case 0x04:
 				LogAdd("C1 D0 04 packet found!");
 				break;
+			case 0x05: //buy
+				PCPoint.BuyItem(aIndex, aRecv[4]);
+				break;
+			case 0x06: //open
+			{
+				if (gObj->MapNumber == 0 || gObj->MapNumber == 2 || gObj->MapNumber == 3 || gObj->MapNumber == 51)
+				{
+					PCPoint.OpenShop(aIndex);
+				}
+				else
+				{
+					GCServerMsgStringSend("[PointShop] Allow Only in Lorencia,Devias,Noria,Elbeland", gObj->m_Index, 1);
+					return;
+				}
+			}
+			break;
 			case THIRDQUESTWEREWOLF:  //0x07
 				CGReqWerewolfMove((PMSG_REQ_WEREWOLF_MOVE *)aRecv, aIndex);
 				break;
 			case THIRDQUESTGATEKEEPER: //0x08
 				CGReqGatekeeperMove((PMSG_REQ_GATEKEEPER_MOVE *)aRecv, aIndex);
-				break;
-			case LEOHELPLERNPC:	  //0x09
-				CGNpcLeoTheHelperRecv(aIndex);
 				break;
 			} 	
 		}
@@ -1239,12 +1253,6 @@ void PChatProc(PMSG_CHATDATA * lpChat, short aIndex)
 	}
 	else
 	{
-
-		if (((lpObj->Authority & 32) == 32) && gObjSearchActiveEffect(lpObj, AT_INVISIBILITY) != FALSE) //season 2.5 add-on
-		{
-			return;
-		}
-
 		DataSend(aIndex, (LPBYTE)lpChat, lpChat->h.size);
 		MsgSendV2(lpObj, (LPBYTE)lpChat, lpChat->h.size);
 
@@ -10446,8 +10454,7 @@ void CGUseItemRecv(PMSG_USEITEM* lpMsg, int aIndex)
 	CItem * citem;
 	int iItemUseType = lpMsg->btItemUseType;
 
-	int SucessRate = rand() % 100;
-	int ExclenteRand = rand() % Configs.g_iRateJewelOfExc;
+	
 
 	// Check User States
 	if ( gObj[aIndex].m_IfState.use && gObj[aIndex].m_IfState.type != 3 )
@@ -11315,8 +11322,10 @@ void CGUseItemRecv(PMSG_USEITEM* lpMsg, int aIndex)
 				}
 			}
 		}
-		else if (citem->m_Type == ITEMGET(14, 99))//jewel of Mystical
+		else if (citem->m_Type == ITEMGET(Configs.g_iJewelOfMystID, Configs.g_iJewelOfMystType))//jewel of Mystical
 		{
+			int SucessRate = rand() % 100;
+
 			if (gObj[aIndex].pInventory[11].IsItem() == 1 || gObj[aIndex].pInventory[10].IsItem() == 1 || gObj[aIndex].pInventory[9].IsItem() == 1)
 			{
 				citem->m_Level += 1;
@@ -11345,9 +11354,9 @@ void CGUseItemRecv(PMSG_USEITEM* lpMsg, int aIndex)
 				return;
 			}
 		}
-		else if (citem->m_Type == ITEMGET(14,101)) //jewel of luck
+		else if (citem->m_Type == ITEMGET(Configs.g_iJewelOfLuckID, Configs.g_iJewelOfLuckType)) //jewel of luck
 		{
-
+			int SucessRate = rand() % 100;
 			if (citem->m_Option2 != 0)
 			{
 				GCServerMsgStringSend("[Jewel of Luck] This item have that option", aIndex, 1);
@@ -11368,7 +11377,7 @@ void CGUseItemRecv(PMSG_USEITEM* lpMsg, int aIndex)
 				GCInventoryItemDeleteSend(aIndex, pos, 1);
 			}
 		}
-		else if (citem->m_Type == ITEMGET(14, 100)) //jewel of excelente
+		else if (citem->m_Type == ITEMGET(Configs.g_iJewelOfExcID, Configs.g_iJewelOfExcType)) //jewel of excelente
 		{
 			if (citem->m_NewOption > 0 || citem->m_SetOption > 0)
 			{
@@ -11377,7 +11386,7 @@ void CGUseItemRecv(PMSG_USEITEM* lpMsg, int aIndex)
 			}
 			else
 			{
-				citem->m_NewOption = 1 + ExclenteRand;
+				citem->m_NewOption = 1 + rand() % Configs.g_iRateJewelOfExc;
 				gObj[aIndex].pInventory[pos].Clear();
 				GCInventoryItemDeleteSend(aIndex, pos, 1);
 				GCServerMsgStringSend("[Jewel of Excelent] Sucessfully Strengten!", aIndex, 1);
@@ -16442,4 +16451,25 @@ void GCSendIllusionTempleKillCount(int aIndex, BYTE KillCount)
 	PHeadSubSetB((LPBYTE)&pMsg, 0xBF, 0x06, sizeof(pMsg));
 	pMsg.btKillCount = KillCount;
 	DataSend(aIndex, (LPBYTE)&pMsg, pMsg.h.size);
+}
+
+void CGReqWhiteAngelGetItem(PMSG_REQ_WHITEANGEL_ITEM *lpMsg, int iIndex)
+{
+	if (OBJMAX_RANGE(iIndex) == FALSE)
+	{
+		return;
+	}
+
+	GEReqWhiteAngelGetItem(iIndex);
+}
+
+
+void CGReqPCBangCouponItem(PMSG_REQ_PCBANG_COUPON_ITEM *lpMsg, int iIndex)
+{
+	if (!OBJMAX_RANGE(iIndex))
+	{
+		return;
+	}
+
+	EGReqUsePCBangCoupon(iIndex);
 }

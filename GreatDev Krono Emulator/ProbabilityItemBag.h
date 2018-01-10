@@ -42,11 +42,10 @@ public:
 	BOOL DropItem(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY);
 	void DropSetItem(int aIndex, int itemnum, BYTE btMapNumber, int cX, int cY);
 	int DropItem(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY, int * iDropZen);
-
+	char * GetEventName();
 
 private:
 	int GetBagCount(){return this->m_iBagObjectCount;}
-	char * GetEventName();
 	int IsEnableEventItemDrop(int aIndex);
 	BYTE GetLevel(int n);
 private:

@@ -270,7 +270,6 @@ enum MUPROTOCOL_DECL
 	PCBANGSHOPOPEN				 = 0x06,
 	THIRDQUESTWEREWOLF			 = 0x07,
 	THIRDQUESTGATEKEEPER		 = 0x08,
-	LEOHELPLERNPC				 = 0x09,
 	// ----------
 	KANTURU_PROTOCOL_ID          = 0xD1,
 	// SubCode
@@ -1437,6 +1436,18 @@ struct PMSG_SEND_ILLUSIONTEMPLE_KILLCOUNT
 	BYTE btKillCount;
 };
 
+struct PMSG_REQ_PCBANG_COUPON_ITEM
+{
+	PBMSG_HEAD2 h;
+};
+
+
+struct PMSG_REQ_WHITEANGEL_ITEM
+{
+	PBMSG_HEAD2 h;
+};
+
+
 void ProtocolCore(BYTE protoNum, LPBYTE aRecv, int aLen, int aIndex, BOOL Encrypt, int serial);
 void TestSend();
 void MsgSendV2(LPOBJ lpObj, unsigned char* Msg, int size);
@@ -1697,4 +1708,6 @@ void CGReqEnterIllusionTemple(PMSG_ANS_ILLUSIONTEMPLE_ENTER* lpMsg, int iIndex);
 void CGReqUseIllusionTempleKillCntSkill(PMSG_USE_ILLUSIONTEMPLE_KILLCOUNT_SKILL* lpMsg, int iIndex);
 void CGReqIllusionTempleDropReward(PMSG_ILLUSIONTEMPLE_DROP_REWARD* lpMsg, int iIndex);
 void GCSendIllusionTempleKillCount(int aIndex, BYTE KillCount);
+void CGReqWhiteAngelGetItem(PMSG_REQ_WHITEANGEL_ITEM * lpMsg, int iIndex);
+void CGReqPCBangCouponItem(PMSG_REQ_PCBANG_COUPON_ITEM * lpMsg, int iIndex);
 #endif

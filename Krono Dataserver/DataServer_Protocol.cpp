@@ -503,28 +503,6 @@ void DataServer_Protocol::ProtocolCore(DataServer_Manager * Service, int aIndex,
     case 0xA6:
         GDSetExGameServerCode(Service, aIndex, reinterpret_cast<SDHP_REQ_SET_EXGAMESERVERCODE *>(aRecv));
         break;
-
-	case 0x0E:
-	{
-		PMSG_DEFAULT2* lpDef = (PMSG_DEFAULT2*)aRecv;
-		switch (lpDef->subcode)
-		{
-		case 0x00:
-			GDNpcLeoTheHelperRecv(Service, reinterpret_cast<SDHP_NPC_LEO_THE_HELPER_RECV *>(aRecv), aIndex);
-			break;
-		case 0x01:
-			GDNpcLukeTheHelperRecv(Service, reinterpret_cast<SDHP_NPC_LUKE_THE_HELPER_RECV *>(aRecv), aIndex);
-			break;
-		case 0x30:
-			GDNpcLeoTheHelperSaveRecv(Service, reinterpret_cast<SDHP_NPC_LEO_THE_HELPER_SAVE_RECV *>(aRecv));
-			break;
-		case 0x31:
-			GDNpcLukeTheHelperSaveRecv(Service, reinterpret_cast<SDHP_NPC_LUKE_THE_HELPER_SAVE_RECV *>(aRecv));
-			break;
-		}
-	}
-	break;
-
     default:
     {
         LogAddC(eDebug, "[Debug] DataServer Recv: 0x%02x", HeadCode);
@@ -973,6 +951,7 @@ void DataServer_Protocol::JGGetCharacterInfo(DataServer_Manager * Service, int a
         pResult.Leadership = (WORD)gDataBase.GetInt("Leadership");
         pResult.ChatLitmitTime = (WORD)gDataBase.GetInt("ChatLimitTime");
         pResult.iFruitPoint = gDataBase.GetInt("FruitPoint");
+		pResult.iPCPoint = gDataBase.GetInt("PCPoints");
 #if (SEASON > 5)
         pResult.btExtendedInvenCount = gDataBase.GetInt("ExtendedInvenCount");
         pResult.btExtendedWarehouseCount = gDataBase.GetInt("ExtendedWarehouseCount");
@@ -1096,8 +1075,8 @@ void DataServer_Protocol::GJSetCharacterInfo(DataServer_Manager * Service, int a
 
     gDataBase.Clear();
 
-    gDataBase.ExecFormat("UPDATE Character SET cLevel = %d, Class = %d, LevelUpPoint = %d, Experience = %d, Strength = %d, Dexterity = %d, Vitality = %d, Energy = %d, Money = %d, Life = %d, MaxLife = %d, Mana = %d, MaxMana = %d, MapNumber = %d WHERE Name = '%s'",
-                         aRecv->Level, aRecv->Class, aRecv->LevelUpPoint, aRecv->Exp, aRecv->Str, aRecv->Dex, aRecv->Vit, aRecv->Energy, aRecv->Money, aRecv->Life, aRecv->MaxLife, aRecv->Mana, aRecv->MaxMana, aRecv->MapNumber, szName);
+    gDataBase.ExecFormat("UPDATE Character SET cLevel = %d, Class = %d, LevelUpPoint = %d, Experience = %d, Strength = %d, Dexterity = %d, Vitality = %d, Energy = %d, Money = %d, Life = %d, MaxLife = %d, Mana = %d, MaxMana = %d, MapNumber = %d, PCPoints = %d WHERE Name = '%s'",
+                         aRecv->Level, aRecv->Class, aRecv->LevelUpPoint, aRecv->Exp, aRecv->Str, aRecv->Dex, aRecv->Vit, aRecv->Energy, aRecv->Money, aRecv->Life, aRecv->MaxLife, aRecv->Mana, aRecv->MaxMana, aRecv->MapNumber, aRecv->iPCPoints, szName);
     gDataBase.Clear();
 
 #if (SEASON > 5)
@@ -4311,85 +4290,4 @@ void DataServer_Protocol::GDSetExGameServerCode(DataServer_Manager * Service, in
         gDataBase.Clear();
         gDataBase.ExecFormat("UPDATE Character SET ExGameServerCode = %d WHERE Name = '%s'", aRecv->sExGameServerCode, aRecv->szCharName);
     }
-}
-
-void DataServer_Protocol::GDNpcLeoTheHelperRecv(DataServer_Manager * Service, SDHP_NPC_LEO_THE_HELPER_RECV* lpMsg, int index) // OK
-{
-	SDHP_NPC_LEO_THE_HELPER_SEND pMsg;
-
-	gFunc.PHeadSubSetB((LPBYTE)&pMsg, 0x0E, 0x00, sizeof(SDHP_NPC_LEO_THE_HELPER_SEND));
-	pMsg.index = lpMsg->index;
-	memcpy(pMsg.account, lpMsg->account, sizeof(pMsg.account));
-	memcpy(pMsg.name, lpMsg->name, sizeof(pMsg.name));
-	if (gDataBase.ExecFormat("SELECT Status FROM LeoTheHelper WHERE Name='%s'", lpMsg->name) == 0 || (gDataBase.Fetch() == SQL_NO_DATA))
-	{
-		gDataBase.Clear();
-		gDataBase.ExecFormat("INSERT INTO LeoTheHelper (Name,Status) VALUES ('%s',0)", lpMsg->name);
-		gDataBase.Clear();
-
-		pMsg.status = 0;
-	}
-	else
-	{
-		pMsg.status = (BYTE)gDataBase.GetInt("Status");
-
-		gDataBase.Clear();
-	}
-	Service->DataSend(index, (BYTE*)&pMsg, pMsg.header.Size);
-}
-
-void DataServer_Protocol::GDNpcLeoTheHelperSaveRecv(DataServer_Manager * Service, SDHP_NPC_LEO_THE_HELPER_SAVE_RECV* lpMsg) // OK
-{
-	if (gDataBase.ExecFormat("SELECT Name FROM LeoTheHelper WHERE Name='%s'", lpMsg->name) == 0 || gDataBase.Fetch() == SQL_NO_DATA)
-	{
-		gDataBase.Clear();
-		gDataBase.ExecFormat("INSERT INTO LeoTheHelper (Name,Status) VALUES ('%s',%d)", lpMsg->name, lpMsg->status);
-		gDataBase.Clear();
-	}
-	else
-	{
-		gDataBase.Clear();
-		gDataBase.ExecFormat("UPDATE LeoTheHelper SET Status=%d WHERE Name='%s'", lpMsg->status, lpMsg->name);
-		gDataBase.Clear();
-	}
-}
-
-void DataServer_Protocol::GDNpcLukeTheHelperRecv(DataServer_Manager * Service, SDHP_NPC_LUKE_THE_HELPER_RECV* lpMsg, int index) // OK
-{
-
-	SDHP_NPC_LUKE_THE_HELPER_SEND pMsg;
-
-	gFunc.PHeadSubSetB((LPBYTE)&pMsg, 0x0E, 0x01, sizeof(SDHP_NPC_LUKE_THE_HELPER_SEND));
-	pMsg.index = lpMsg->index;
-	memcpy(pMsg.account, lpMsg->account, sizeof(pMsg.account));
-	memcpy(pMsg.name, lpMsg->name, sizeof(pMsg.name));
-	if (gDataBase.ExecFormat("SELECT Status FROM LukeTheHelper WHERE Name='%s'", lpMsg->name) == 0 || (gDataBase.Fetch() == SQL_NO_DATA))
-	{
-		gDataBase.Clear();
-		gDataBase.ExecFormat("INSERT INTO LukeTheHelper (Name,Status) VALUES ('%s',0)", lpMsg->name);
-		gDataBase.Clear();
-		pMsg.status = 0;
-	}
-	else
-	{
-		pMsg.status = (BYTE)gDataBase.GetInt("Status");
-		gDataBase.Clear();
-	}
-	Service->DataSend(index, (BYTE*)&pMsg, pMsg.header.Size);
-}
-
-void DataServer_Protocol::GDNpcLukeTheHelperSaveRecv(DataServer_Manager * Service, SDHP_NPC_LUKE_THE_HELPER_SAVE_RECV* lpMsg) // OK
-{
-	if (gDataBase.ExecFormat("SELECT Name FROM LukeTheHelper WHERE Name='%s'", lpMsg->name) == 0 || gDataBase.Fetch() == SQL_NO_DATA)
-	{
-		gDataBase.Clear();
-		gDataBase.ExecFormat("INSERT INTO LukeTheHelper (Name,Status) VALUES ('%s',%d)", lpMsg->name, lpMsg->status);
-		gDataBase.Clear();
-	}
-	else
-	{
-		gDataBase.Clear();
-		gDataBase.ExecFormat("UPDATE LukeTheHelper SET Status=%d WHERE Name='%s'", lpMsg->status, lpMsg->name);
-		gDataBase.Clear();
-	}
 }
