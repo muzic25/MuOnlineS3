@@ -3265,7 +3265,7 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 	} 
 
 	if (MonsterClass >= 204 && MonsterClass <= 259
-		|| MonsterClass >= 368 && MonsterClass <= 370
+		|| MonsterClass >= 368 && MonsterClass <= 371
 		|| MonsterClass == 367
 		|| MonsterClass == 375 || MonsterClass == 406 || MonsterClass == 407 || MonsterClass == 408 || MonsterClass == 380 || MonsterClass == 383 || MonsterClass == 384 || MonsterClass == 385)
 	{
@@ -3274,6 +3274,11 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 	else
 	{
 		lpObj->Type = OBJ_MONSTER;
+	}
+
+	if (MonsterClass == 258)
+	{
+		lpObj->Type = OBJ_NPC;
 	}
 
 	if (MonsterClass == 376 || MonsterClass == 377) //Season 2.5 add-on
@@ -3301,9 +3306,9 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 		g_IllusionTempleEvent.SetEntranceNpcIndex(aIndex);
 	}
 
-	/*if (MonsterClass == 365) //Season 2.5 add-on
+	if (MonsterClass == 365) //Season 2.5 add-on
 	{
-		if (g_bNewYearLuckyBagMonsterEventOn != FALSE)
+		if (Configs.g_bNewYearLuckyBagMonsterEventOn != FALSE)
 		{
 			lpObj->Live = TRUE;
 			lpObj->m_State = 1;
@@ -3313,7 +3318,7 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 			lpObj->Live = FALSE;
 			lpObj->m_State = 0;
 		}
-	}	 */
+	}	 
 
 	if ( MonsterClass == 77 )
 	{

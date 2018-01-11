@@ -2270,7 +2270,7 @@ void InventoryDropItem(LPOBJ lpObj, int DropItem)
 
 
 
-#pragma message("Apply this to create SkyLandShielkds -> gObjSkylandBossSheildAttack ")
+//#pragma message("Apply this to create SkyLandShielkds -> gObjSkylandBossSheildAttack ")
 
 
 void gObjSkylandBossSheildAttack(LPOBJ lpObj)
@@ -2436,7 +2436,7 @@ void gObjRefillMonsterHP(LPOBJ lpMonsterObj, int iRefillHPSec)
 }
 
 
-#pragma message("gObjMonsterDieRewardItems Can be activate with the gObjMonsterItemDropLoadScript")
+//#pragma message("gObjMonsterDieRewardItems Can be activate with the gObjMonsterItemDropLoadScript")
 
 void gObjMonsterDieRewardItems(LPOBJ lpObj, LPOBJ lpTargetObj,
 						  int iCount,
@@ -2596,6 +2596,14 @@ void gObjMonsterDieGiveItem(LPOBJ lpObj, LPOBJ lpTargetObj)
 	BOOL item_drop=0;
 	int n;
 	CItem * DropItem=NULL;
+
+	if (lpObj->Class == 365)
+	{
+		int iMaxHitUser = gObjMonsterTopHitDamageUser(lpObj);
+		NewYearLuckyBagItemBagOpen(lpTargetObj, lpObj->MapNumber, lpObj->X, lpObj->Y);
+		return;
+	}
+
 
 	if ( lpObj->Class == 340 )	// Dark Elf
 	{
@@ -2863,6 +2871,12 @@ void gObjMonsterDieGiveItem(LPOBJ lpObj, LPOBJ lpTargetObj)
 		int iMaxHitUser = gObjMonsterTopHitDamageUser(lpObj);
 		g_IllusionTempleEvent.SearchNDropMonsterItem(lpTargetObj);
 
+		return;
+	}
+
+	if (lpObj->Class == 413)
+	{
+		ChuseokMonsterEventItemBagOpen(lpTargetObj, lpObj->MapNumber, lpObj->X, lpObj->Y);
 		return;
 	}
 

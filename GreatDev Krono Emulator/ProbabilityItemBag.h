@@ -47,6 +47,7 @@ public:
 	BOOL DropItem(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY);
 	void DropSetItem(int aIndex, int itemnum, BYTE btMapNumber, int cX, int cY);
 	int DropItem(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY, int * iDropZen);
+	BOOL DropNewYearLuckyBagEventItem(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY);
 	char * GetEventName();
 
 private:

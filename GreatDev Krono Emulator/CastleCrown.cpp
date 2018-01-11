@@ -1,6 +1,13 @@
-#include "StdAfx.h"
-#include "CastleCrown.h"
+// CastleCrown.cpp: implementation of the CCastleCrown class.
+// GS-CS	1.00.90	JPN	-	Completed
+//////////////////////////////////////////////////////////////////////
+
+#include "stdafx.h"
+
 CCastleCrown g_CsNPC_CastleCrown;
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
 
 CCastleCrown::CCastleCrown()
 {
@@ -35,19 +42,13 @@ void CCastleCrown::CastleCrownAct(int iIndex)
 	LPOBJ lpObj = &gObj[iIndex];
 	LPOBJ lpUserObj = &gObj[g_CastleSiege.GetCrownUserIndex()];
 
-	if ( lpUserObj->MapNumber == MAP_INDEX_CASTLESIEGE &&
-		 lpUserObj->m_btCsJoinSide >= 2 &&
-		 lpUserObj->m_bCsGuildInvolved == 1 )
+	if ( lpUserObj->MapNumber == MAP_INDEX_CASTLESIEGE && lpUserObj->m_btCsJoinSide >= 2 && lpUserObj->m_bCsGuildInvolved == 1 )
 	{
-		if ( lpUserObj->Y == g_CastleSiege.GetCrownAccessUserY() &&
-			 lpUserObj->X == g_CastleSiege.GetCrownAccessUserX() )
+		if ( lpUserObj->Y == g_CastleSiege.GetCrownAccessUserY() &&	lpUserObj->X == g_CastleSiege.GetCrownAccessUserX() )
 		{
-			if ( gObjIsConnected(g_CastleSiege.GetCrownUserIndex()) &&
-				 gObjIsConnected(g_CastleSiege.GetCrownSwitchUserIndex(217)) &&
-				 gObjIsConnected(g_CastleSiege.GetCrownSwitchUserIndex(218)) )
+			if ( gObjIsConnected(g_CastleSiege.GetCrownUserIndex()) && gObjIsConnected(g_CastleSiege.GetCrownSwitchUserIndex(217)) && gObjIsConnected(g_CastleSiege.GetCrownSwitchUserIndex(218)) )
 			{
-				if ( gObj[g_CastleSiege.GetCrownUserIndex()].m_btCsJoinSide == gObj[g_CastleSiege.GetCrownSwitchUserIndex(217)].m_btCsJoinSide &&
-					 gObj[g_CastleSiege.GetCrownUserIndex()].m_btCsJoinSide == gObj[g_CastleSiege.GetCrownSwitchUserIndex(217)].m_btCsJoinSide )	// #warning ??? maybe is 218??? 
+				if ( gObj[g_CastleSiege.GetCrownUserIndex()].m_btCsJoinSide == gObj[g_CastleSiege.GetCrownSwitchUserIndex(217)].m_btCsJoinSide && gObj[g_CastleSiege.GetCrownUserIndex()].m_btCsJoinSide == gObj[g_CastleSiege.GetCrownSwitchUserIndex(217)].m_btCsJoinSide )
 				{
 					DWORD dwTime = GetTickCount() - g_CastleSiege.GetCrownAccessTickCount();
 		

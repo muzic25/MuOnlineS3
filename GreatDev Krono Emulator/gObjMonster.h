@@ -52,7 +52,7 @@ public:
 		this->m_QuestNPCTeleportPos[2].dir = 2;
 		this->m_QuestNPCTeleportPos[3].mapnum = MAP_INDEX_ATHLANSE;
 		this->m_QuestNPCTeleportPos[3].x = 17;
-		this->m_QuestNPCTeleportPos[3].y = 0x19;
+		this->m_QuestNPCTeleportPos[3].y = 25;
 		this->m_QuestNPCTeleportPos[3].dir = 2;
 	};	// line : 114
 

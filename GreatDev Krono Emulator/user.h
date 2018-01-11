@@ -880,20 +880,25 @@ struct OBJECTSTRUCT
 	{
 		struct
 		{
-			/* this+0x1534 */ unsigned char m_btCsNpcExistVal1;	// 1528
-	  /* this+0x1535 */ unsigned char m_btCsNpcExistVal2;	// 1529
-  	/* this+0x1536 */ unsigned char m_btCsNpcExistVal3;	// 152A
-  	/* this+0x1537 */ unsigned char m_btCsNpcExistVal4;	// 152B
- 	};
-  /* this+0x1534 */ int m_iCsNpcExistVal;	// 1528
- };
- /* this+0x1538 */ unsigned char m_btCsNpcType;	// 152C
- /* this+0x1539 */ unsigned char m_btCsGateOpen;	// 152D
- /* this+0x153C */ int m_iCsGateLeverLinkIndex;	//	1530
- /* this+0x1540 */ unsigned char m_btCsNpcDfLevel;	// 1534
- /* this+0x1541 */ unsigned char m_btCsNpcRgLevel;	// 1535
- /* this+0x1542 */ unsigned char m_btCsJoinSide;	// 1536
- /* this+0x1543 */ bool m_bCsGuildInvolved;	// 1537 
+			BYTE	m_btCsNpcExistVal1;
+			BYTE	m_btCsNpcExistVal2;
+			BYTE	m_btCsNpcExistVal3;
+			BYTE	m_btCsNpcExistVal4;
+		};
+		int		m_iCsNpcExistVal;
+	};
+
+	BYTE	m_btCsNpcType;
+
+	BYTE	m_btCsGateOpen;
+
+	int		m_iCsGateLeverLinkIndex;
+
+	BYTE	m_btCsNpcDfLevel;
+	BYTE	m_btCsNpcRgLevel;
+
+	BYTE	m_btCsJoinSide;
+	bool	m_bCsGuildInvolved;
 	
 	bool m_bIsCastleNPCUpgradeCompleted;	// 1526
 	BYTE m_btWeaponState;	// 1527

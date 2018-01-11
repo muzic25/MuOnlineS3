@@ -764,9 +764,9 @@ void DGGuildMemberInfo(SDHP_GUILDMEMBER_INFO * lpMsg)
 					gObj[n].m_ViewSkillState &= ~0xC0000;
 					gObj[n].m_ViewSkillState &= ~0x400000;
 					gObj[n].m_ViewSkillState &= ~0x800000;
-					szGuildName[MAX_GUILD_LEN] = 0;
-					g_CastleSiege.GetCsJoinSide(szGuildName, gObj[n].m_btCsJoinSide, gObj[n].m_bCsGuildInvolved);
-					g_CastleSiege.NotifySelfCsJoinSide(n); 
+					szGuildName[8] = NULL;
+					g_CastleSiege.GetCsJoinSide(szGuildName, &gObj[n].m_btCsJoinSide, &gObj[n].m_bCsGuildInvolved);
+					g_CastleSiege.NotifySelfCsJoinSide(n);
 					strcpy(gObj[n].GuildName, szGuildName);
 					gObj[n].lpGuild = Guild.SearchGuild(gObj[n].GuildName);
 

@@ -110,7 +110,7 @@
 #include "CrywolfSync.h"
 #include "CrywolfTanker.h"
 #include "CrywolfUtil.h"
-
+#include "CouponEventItem.h"
 //#include "CSAuth2.h"
 
 #include "CWhatsUpDummyServer.h"

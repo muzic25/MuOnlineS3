@@ -1331,3 +1331,91 @@ int CProbabilityItemBag::DropItem(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY
 	}
 	return 1;
 }
+
+
+BOOL CProbabilityItemBag::DropNewYearLuckyBagEventItem(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY)
+{
+	if (!this->m_bLoad)
+	{
+		return FALSE;
+	}
+
+	int iOption1 = 0;
+	int iOption2 = 0;
+	int iOption3 = 0;
+	int iExOption = 0;
+	int X = 0;
+	int Y = 0;
+	LPOBJ lpObj = &gObj[aIndex];
+
+	if (this->GetBagCount() > 0)
+	{
+		int nDropItemRate = rand() % 10000;
+		
+		if (this->m_iRateKindCount == 0 || nDropItemRate < 10000 - this->m_iEventItemDropRateEx[this->m_iRateKindCount - 1])
+		{
+			MapC[lpObj->MapNumber].MoneyItemDrop(this->m_iDropZen, cX, cY);
+			LogAddTD("[ NewYearLuckyBagMonsterEvent ] NewYearLuckyBagDrop [%s][%s] [%d Zen]", lpObj->AccountID, lpObj->Name, this->m_iDropZen);
+			return TRUE;
+		}
+
+		int nRateCnt = this->m_iRateKindCount;
+		int n = this->SortItem(nDropItemRate);
+
+		if (cX == 0 && cY == 0)
+		{
+			X = lpObj->X;
+			Y = lpObj->Y;
+		}
+		else
+		{
+			X = cX;
+			Y = cY;
+		}
+
+		int iLevel = this->GetLevel( n);
+		int iType = ItemGetNumberMake(this->BagObject[n].m_type, this->BagObject[n].m_index);
+		if (iType == -1)
+		{
+			return 0;
+		}
+		if (this->BagObject[n].m_isskill)
+		{
+			iOption1 = 1;
+		}
+		if (this->BagObject[n].m_isluck)
+		{
+			iOption2 = 0;
+			if (!(rand() % 2))
+				iOption2 = 1;
+		}
+		if (this->BagObject[n].m_isoption)
+		{
+			if (rand() % 5 >= 1)
+				iOption3 = rand() % 3;
+			else
+				iOption3 = 3;
+		}
+		if (this->BagObject[n].m_isexitem)
+		{
+			iExOption = NewOptionRand(0);
+			iOption2 = 0;
+			iOption1 = 1;
+			iLevel = 0;
+		}
+
+		if (iType == ITEMGET(12, 15) || iType == ITEMGET(14, 13) || iType == ITEMGET(14, 14))	// Chaos, Bless, Soul
+		{
+			iOption1 = 0;
+			iOption2 = 0;
+			iOption3 = 0;
+			iLevel = 0;
+		}
+
+		ItemSerialCreateSend(lpObj->m_Index,btMapNumber,X,Y,iType,iLevel,0.0,iOption1,iOption2,iOption3,lpObj->m_Index,iExOption,0);
+		LogAddTD(
+			"[ NewYearLuckyBagMonsterEvent ] NewYearLuckyBagDrop [%s][%s] : (%d)(%d/%d) Item:(%s)%d Level:%d op1:%d op2:%d op3:%d ExOp:%d",
+			lpObj->AccountID,lpObj->Name,btMapNumber,X,Y,ItemAttribute[iType].Name,iType,iLevel,iOption1,iOption2,iOption3,iExOption);
+	}
+	return TRUE;
+}

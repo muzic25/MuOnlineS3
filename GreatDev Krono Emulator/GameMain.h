@@ -135,6 +135,8 @@ extern CProbabilityItemBag * ItemGiveReoEventItemBag;
 extern CProbabilityItemBag * PCBangGageGreenBox; //test
 extern CProbabilityItemBag * PCBangGageRedBox; //test
 extern CProbabilityItemBag * PCBangGagePurpleBox; //test
+extern CProbabilityItemBag * NewYearLuckyBagItemBag;
+extern CProbabilityItemBag * ChuseokMonsterEventItemBag;
 extern CwsGameServer wsGServer;	// line : 213GameServer
 extern wsJoinServerCli wsJServerCli;	// line : 214 Join Server
 extern wsJoinServerCli wsDataCli;	// line : 215 DataServer
@@ -344,6 +346,7 @@ public:
  int g_iSkillDistanceKickCount;
  int g_iSkillDiatanceKickCheckTime;
  int g_iPCBangCouponEvent;
+ int g_bNewYearLuckyBagMonsterEventOn;
  BOOL g_bKanturuMayaHandItemDrop;
  int g_iKanturuMayaHandItemDropRate;
  int g_iKanturuMayaHandDropZenRate;

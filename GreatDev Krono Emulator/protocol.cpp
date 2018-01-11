@@ -12888,8 +12888,10 @@ void CGRequestLottoRegister(PMSG_REQ_2ANV_LOTTO_EVENT* lpMsg, int aIndex)
 
 	PHeadSetB((LPBYTE)&pMsg, 0x08, sizeof(pMsg));
 
-	if ( gObj[aIndex].UseEventServer )
+	if (gObj[aIndex].UseEventServer)
+	{
 		return;
+	}
 
 	gObj[aIndex].UseEventServer = TRUE;
 	pMsg.iINDEX = aIndex;
@@ -14509,34 +14511,35 @@ void CGReqCastleSiegeState(PMSG_REQ_CASTLESIEGESTATE * lpMsg, int iIndex)
 
 struct PMSG_ANS_CASTLESIEGESTATE
 {
-  /*<thisrel this+0x0>*/ /*|0x4|*/ PBMSG_HEAD2 h;
-  /*<thisrel this+0x4>*/ /*|0x1|*/ BYTE btResult;
-  /*<thisrel this+0x5>*/ /*|0x1|*/ char cCastleSiegeState;
-  /*<thisrel this+0x6>*/ /*|0x1|*/ unsigned char btStartYearH;
-  /*<thisrel this+0x7>*/ /*|0x1|*/ unsigned char btStartYearL;
-  /*<thisrel this+0x8>*/ /*|0x1|*/ unsigned char btStartMonth;
-  /*<thisrel this+0x9>*/ /*|0x1|*/ unsigned char btStartDay;
-  /*<thisrel this+0xa>*/ /*|0x1|*/ unsigned char btStartHour;
-  /*<thisrel this+0xb>*/ /*|0x1|*/ unsigned char btStartMinute;
-  /*<thisrel this+0xc>*/ /*|0x1|*/ unsigned char btEndYearH;
-  /*<thisrel this+0xd>*/ /*|0x1|*/ unsigned char btEndYearL;
-  /*<thisrel this+0xe>*/ /*|0x1|*/ unsigned char btEndMonth;
-  /*<thisrel this+0xf>*/ /*|0x1|*/ unsigned char btEndDay;
-  /*<thisrel this+0x10>*/ /*|0x1|*/ unsigned char btEndHour;
-  /*<thisrel this+0x11>*/ /*|0x1|*/ unsigned char btEndMinute;
-  /*<thisrel this+0x12>*/ /*|0x1|*/ unsigned char btSiegeStartYearH;
-  /*<thisrel this+0x13>*/ /*|0x1|*/ unsigned char btSiegeStartYearL;
-  /*<thisrel this+0x14>*/ /*|0x1|*/ unsigned char btSiegeStartMonth;
-  /*<thisrel this+0x15>*/ /*|0x1|*/ unsigned char btSiegeStartDay;
-  /*<thisrel this+0x16>*/ /*|0x1|*/ unsigned char btSiegeStartHour;
-  /*<thisrel this+0x17>*/ /*|0x1|*/ unsigned char btSiegeStartMinute;
-  /*<thisrel this+0x18>*/ /*|0x8|*/ char cOwnerGuild[8];
-  /*<thisrel this+0x20>*/ /*|0xa|*/ char cOwnerGuildMaster[10];
-  /*<thisrel this+0x2a>*/ /*|0x1|*/ char btStateLeftSec1;
-  /*<thisrel this+0x2b>*/ /*|0x1|*/ char btStateLeftSec2;
-  /*<thisrel this+0x2c>*/ /*|0x1|*/ char btStateLeftSec3;
-  /*<thisrel this+0x2d>*/ /*|0x1|*/ char btStateLeftSec4;
+	PBMSG_HEAD2 h;
+	BYTE btResult;
+	char cCastleSiegeState;
+	BYTE btStartYearH;
+	BYTE btStartYearL;
+	BYTE btStartMonth;
+	BYTE btStartDay;
+	BYTE btStartHour;
+	BYTE btStartMinute;
+	BYTE btEndYearH;
+	BYTE btEndYearL;
+	BYTE btEndMonth;
+	BYTE btEndDay;
+	BYTE btEndHour;
+	BYTE btEndMinute;
+	BYTE btSiegeStartYearH;
+	BYTE btSiegeStartYearL;
+	BYTE btSiegeStartMonth;
+	BYTE btSiegeStartDay;
+	BYTE btSiegeStartHour;
+	BYTE btSiegeStartMinute;
+	char cOwnerGuild[8];
+	char cOwnerGuildMaster[10];
+	BYTE btStateLeftSec1;
+	BYTE btStateLeftSec2;
+	BYTE btStateLeftSec3;
+	BYTE btStateLeftSec4;
 };
+
 void GCAnsCastleSiegeState(int iIndex, int iResult, LPSTR lpszGuildName, LPSTR lpszGuildMaster)
 { 
 	if ( lpszGuildName == NULL || lpszGuildMaster == NULL )
@@ -14552,7 +14555,7 @@ void GCAnsCastleSiegeState(int iIndex, int iResult, LPSTR lpszGuildName, LPSTR l
 	SYSTEMTIME tmStateEndDate={0};
 	SYSTEMTIME tmSiegeStartDate={0};
 	int iCastleState = g_CastleSiege.GetCastleState();;
-	BOOL bRETVAL = g_CastleSiege.GetCastleStateTerm(tmStateStartDate, tmStateEndDate);
+	int bRETVAL = g_CastleSiege.GetCastleStateTerm(&tmStateStartDate, &tmStateEndDate);
 	tmSiegeStartDate = g_CastleSiege.GetCastleLeftSiegeDate();
 
 	if ( bRETVAL == FALSE )	iCastleState = CASTLESIEGE_STATE_NONE;
@@ -15733,12 +15736,6 @@ void GCAnsCsAccessCrownState(int iIndex, BYTE btCrownState)
 }
 
 
-struct PMSG_ANS_NOTIFYCSSTART 
-{
-  /*<thisrel this+0x0>*/ /*|0x4|*/ struct PBMSG_HEAD2 h;
-  /*<thisrel this+0x4>*/ /*|0x1|*/ unsigned char btStartState;
-};
-
 void GCAnsCsNotifyStart(int iIndex, BYTE btStartState)
 {
 	PMSG_ANS_NOTIFYCSSTART  pMsgResult;
@@ -15748,16 +15745,6 @@ void GCAnsCsNotifyStart(int iIndex, BYTE btStartState)
 	
 	DataSend(iIndex, (LPBYTE)&pMsgResult, pMsgResult.h.size);
 }
-
-
-
-struct PMSG_ANS_NOTIFYCSPROGRESS
-{
-	PBMSG_HEAD2 h;	// C1:B2:18
-	BYTE btCastleSiegeState;	// 4
-	BYTE szGuildName[8];	// 5
-};
-
 
 void GCAnsCsNotifyProgress(int iIndex, BYTE btCastleSiegeState, LPSTR lpszGuildName)
 {

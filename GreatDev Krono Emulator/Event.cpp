@@ -1808,7 +1808,7 @@ struct PMSG_ANS_2ANV_LOTTO_EVENT
 
 BOOL g_bRingEventItemTextLoad = FALSE;
 char g_sz2ANV_GIFT_NAME[MAX_GIFT_2ANV][64];
-
+/*
 void EGRecv2AnvRegSerial( PMSG_ANS_2ANIV_SERIAL* aRecv)
 {
 	PMSG_ANS_2ANV_LOTTO_EVENT Result;
@@ -2393,6 +2393,96 @@ void EGRecv2AnvRegSerial( PMSG_ANS_2ANIV_SERIAL* aRecv)
 
 	gObj[aRecv->iINDEX].UseEventServer = FALSE;
 }
+*/
+
+void EGRecv2AnvRegSerial(PMSG_ANS_2ANIV_SERIAL *aRecv)
+{
+	int iItemNumber; // [sp+54h] [bp-5Ch]@18
+	BYTE btItemDur; // [sp+58h] [bp-58h]@18
+	BYTE btItemLevel; // [sp+5Ch] [bp-54h]@18
+	PMSG_SERVERCMD ServerCmd; // [sp+60h] [bp-50h]@15
+	PMSG_ANS_2ANV_LOTTO_EVENT Result; // [sp+68h] [bp-48h]@1
+	int nItemNumber; // [sp+ACh] [bp-4h]@1
+
+	if (!OBJMAX_RANGE(aRecv->iINDEX))
+	{
+		LogAddTD("[Mu_2Anv_Event] Error : Index is out of bound [%d]", aRecv->iINDEX);
+	}
+
+	nItemNumber = -1;
+	PHeadSetB(&Result.h.c, 0x9D, sizeof(Result));
+
+	if (gObj[aRecv->iINDEX].Connected <= PLAYER_LOGGED)
+	{
+		LogAddTD("[Mu_2Anv_Event] Error : Index is out of bound [%d]", aRecv->iINDEX);
+		return;
+	}
+
+
+	Result.szGIFT_NAME[0] = 0;
+	if (aRecv->btIsRegistered)
+	{
+		if (aRecv->btIsRegistered != 1
+			&& aRecv->btIsRegistered != 2
+			&& aRecv->btIsRegistered != 3
+			&& aRecv->btIsRegistered != 4
+			&& aRecv->btIsRegistered != 5)
+		{
+			Result.btIsRegistered = 4;
+			LogAddTD("[Mu_2Anv_Event] Error : Result Value is Wrong [%d]", aRecv->btIsRegistered);
+		}
+		else
+		{
+			Result.btIsRegistered = aRecv->btIsRegistered;
+		}
+	}
+	else
+	{
+		Result.btIsRegistered = 0;
+
+		if (!GIFT_2ANV_RANGE(aRecv->iGiftNumber - 1))
+		{
+			LogAddTD("[Mu_2Anv_Event] Error : Gift Index is out of bound [%d]", aRecv->iGiftNumber);
+			Result.btIsRegistered = 2;
+		}
+
+		if (gObj[aRecv->iINDEX].Connected > 2)
+		{
+			PHeadSubSetB((LPBYTE)&ServerCmd, 0xF3, 0x40, sizeof(ServerCmd));
+			ServerCmd.CmdType = 0;
+			ServerCmd.X = gObj[aRecv->iINDEX].X;
+			ServerCmd.Y = gObj[aRecv->iINDEX].Y;
+			MsgSendV2(&gObj[aRecv->iINDEX], (LPBYTE)&ServerCmd, ServerCmd.h.size);
+			DataSend(aRecv->iINDEX, &ServerCmd.h.c, ServerCmd.h.size);
+		}
+		if (g_bRingEventItemTextLoad)
+		{
+			strcpy(Result.szGIFT_NAME, g_sz2ANV_GIFT_NAME[aRecv->iGiftNumber - 1]);
+		}
+		btItemLevel = 0;
+		btItemDur = 0;
+		iItemNumber = g_CouponEventItemLIst.GetItemNum(aRecv->iGiftNumber, &btItemLevel, &btItemDur);
+		nItemNumber = iItemNumber;
+		if (iItemNumber && iItemNumber != -1)
+		{
+			ItemSerialCreateSend(gObj[aRecv->iINDEX].m_Index,235,gObj[aRecv->iINDEX].X,gObj[aRecv->iINDEX].Y,iItemNumber,btItemLevel,btItemDur,0,0,0,aRecv->iINDEX,0,0);
+			if (!g_bRingEventItemTextLoad)
+			{
+				strcpy(Result.szGIFT_NAME, (const char *)&ItemAttribute + 112 * iItemNumber);
+			}
+		}
+		else
+		{
+			LogAddTD("[Mu_2Anv_Event] Error : iGiftNumber is Out of Boud [%d]", aRecv->iGiftNumber);
+		}
+	}
+	LogAddTD("[Mu_2Anv_Event] Register Serial Result : %d [%s][%s] GiftNumber: %d Item : %d",aRecv->btIsRegistered,gObj[aRecv->iINDEX].AccountID,gObj[aRecv->iINDEX].Name,aRecv->iGiftNumber,nItemNumber);
+	DataSend(aRecv->iINDEX, &Result.h.c, (unsigned __int8)Result.h.size);
+	gObj[aRecv->iINDEX].UseEventServer = 0;
+
+
+}
+
 
 
 static const char g_szRingEventOfflineGift[4][32] = { "100µ· ¹Â¹ÝÁö",
@@ -3076,18 +3166,28 @@ void EGAnsWhiteAngelGetItem(PMSG_ANS_WHITEANGEL_GET_ITEM *lpMsg)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-void PCBangGreenChaosBoxItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY) //season 4.5 add-on
+void PCBangGreenChaosBoxItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY) //season 2.5 add-on
 {
 	PCBangGageGreenBox->DropPCBangGreenChaosBoxReward(lpObj->m_Index, btMapNumber, cX, cY);
 }
 
-void PCBangRedChaosBoxItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY) //season 4.5 add-on
+void PCBangRedChaosBoxItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY) //season 2.5 add-on
 {
 	PCBangGageRedBox->DropPCBangRedChaosBoxReward(lpObj->m_Index, btMapNumber, cX, cY);
 }
 
-void PCBangPurpleChaosBoxItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY) //season 4.5 add-on
+void PCBangPurpleChaosBoxItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY) //season 2.5 add-on
 {
 	PCBangGagePurpleBox->DropPCBangPurpleChaosBoxReward(lpObj->m_Index, btMapNumber, cX, cY);
+}
+
+void NewYearLuckyBagItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY) //season 2.5 add-on
+{
+	NewYearLuckyBagItemBag->DropNewYearLuckyBagEventItem(lpObj->m_Index, btMapNumber, cX, cY);
+}
+
+void ChuseokMonsterEventItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY)
+{
+	ChuseokMonsterEventItemBag->DropItem(lpObj->m_Index, btMapNumber, cX, cY);
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////

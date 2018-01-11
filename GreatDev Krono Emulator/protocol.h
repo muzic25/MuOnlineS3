@@ -1382,6 +1382,7 @@ struct CSP_CSLOADTOTALGUILDINFO
 
 	int iCsGuildID;	// 8
 	int iGuildInvolved;	// C
+	int iGuildScore; //A season 2.5 add-on
 };
 
 struct PMSG_CSATTKGUILDLIST
@@ -1389,6 +1390,7 @@ struct PMSG_CSATTKGUILDLIST
 	BYTE btCsJoinSide;
 	BYTE btGuildInvolved;
 	char szGuildName[8];
+	int iGuildScore; //A season 2.5 add-on
 };
 
 

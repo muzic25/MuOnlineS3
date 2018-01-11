@@ -56,6 +56,8 @@ CProbabilityItemBag * ItemGiveReoEventItemBag;
 CProbabilityItemBag * PCBangGageGreenBox; //test
 CProbabilityItemBag * PCBangGageRedBox; //test
 CProbabilityItemBag * PCBangGagePurpleBox; //test
+CProbabilityItemBag * NewYearLuckyBagItemBag;
+CProbabilityItemBag * ChuseokMonsterEventItemBag;
 ///////////////////////////////////////////////////////////////////////////////
 CwsGameServer wsGServer;	// line : 213GameServer
 wsJoinServerCli wsJServerCli;	// line : 214 Join Server
@@ -1522,11 +1524,13 @@ void ReadCommonServerInfo()
 	Configs.g_iSkillDiatanceKickCheckTime = GetPrivateProfileInt("GameServerInfo", "SkillDistanceKickCheckTime", 10, gDirPath.GetNewPath("commonserver.cfg"));
 
 	Configs.g_iPCBangCouponEvent = GetPrivateProfileInt("GameServerInfo", "PCBangCouponEvent", 1, gDirPath.GetNewPath("commonserver.cfg"));
-
+	Configs.g_bNewYearLuckyBagMonsterEventOn = GetPrivateProfileInt("GameServerInfo", "NewYearLuckyBagMonsterEventOn", 0, gDirPath.GetNewPath("commonserver.cfg"));
 
 	g_CashShop.CashShopOptioNReload();
 	g_CashItemPeriodSystem.Initialize();
 	g_CashLotterySystem.Load(gDirPath.GetNewPath("ChaosCardProbability.txt"));
+
+	g_CouponEventItemLIst.Load(gDirPath.GetNewPath("EventItemList.txt"));
 
 	PCPoint.Init();
 
@@ -2267,6 +2271,37 @@ void LoadItemBag()
 	PCBangGagePurpleBox->Init("EventItemBags\\EventItemBag45.txt");
 
 //--------------------------------------------------------------------------------
+	//NewYearLuckyBagItemBag
+	if (NewYearLuckyBagItemBag != NULL)
+		delete NewYearLuckyBagItemBag;
+
+	NewYearLuckyBagItemBag = new CProbabilityItemBag;
+	if (NewYearLuckyBagItemBag == NULL)
+	{
+		// Memory allocation error
+		MsgBox("CItemBag %s", lMsg.Get(MSGGET(0, 110)));
+		return;
+	}
+
+	NewYearLuckyBagItemBag->Init("EventItemBags\\EventItemBag46.txt");
+
+	//--------------------------------------------------------------------------------
+
+	//NewYearLuckyBagItemBag
+	if (ChuseokMonsterEventItemBag != NULL)
+		delete ChuseokMonsterEventItemBag;
+
+	ChuseokMonsterEventItemBag = new CProbabilityItemBag;
+	if (ChuseokMonsterEventItemBag == NULL)
+	{
+		// Memory allocation error
+		MsgBox("CItemBag %s", lMsg.Get(MSGGET(0, 110)));
+		return;
+	}
+
+	ChuseokMonsterEventItemBag->Init("EventItemBags\\EventItemBag47.txt");
+
+	//--------------------------------------------------------------------------------
 }
 
 void LoadCustomJewel(char *filename)

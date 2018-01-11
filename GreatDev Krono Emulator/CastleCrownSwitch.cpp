@@ -1,5 +1,7 @@
-#include "StdAfx.h"
-#include "CastleCrownSwitch.h"
+// CastleCrownSwitch.cpp: implementation of the CCastleCrownSwitch class.
+// GS-CS	1.00.90	JPN	-	Completed
+//////////////////////////////////////////////////////////////////////
+#include "stdafx.h"
 
 CCastleCrownSwitch g_CsNPC_CastleCrownSwitch;
 //////////////////////////////////////////////////////////////////////

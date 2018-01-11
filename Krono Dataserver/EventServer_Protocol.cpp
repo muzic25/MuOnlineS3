@@ -481,6 +481,11 @@ void EventServer_Protocol::RegisterLottoSerial(int aIndex, PMSG_REQ_2ANIV_SERIAL
         pMsg.btIsRegistered = (BYTE)gDataBase.GetInt("RegResult");
         pMsg.iGiftNumber = gDataBase.GetInt("F_Register_Section");
 
+		if (pMsg.btIsRegistered == -102 || pMsg.btIsRegistered == -100)
+		{
+			pMsg.btIsRegistered = 4;
+			
+		}
         if (pMsg.iGiftNumber == -1)
         {
             pMsg.btIsRegistered = 4;

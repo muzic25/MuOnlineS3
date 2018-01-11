@@ -1,5 +1,5 @@
-#include "StdAfx.h"
-#include "CastleSiegeSync.h"
+//GameServer 1.00.77 JPN - Completed
+#include "stdafx.h"
 
 CCastleSiegeSync::CCastleSiegeSync()
 {
@@ -11,8 +11,6 @@ CCastleSiegeSync::~CCastleSiegeSync()
 	return;
 }
 	
-
-
 void CCastleSiegeSync::Clear()
 {
 	this->m_iCurCastleState = -1;
@@ -22,10 +20,6 @@ void CCastleSiegeSync::Clear()
 	this->m_iCsTributeMoneyTimer = 0;
 	memset(this->m_szCastleOwnerGuild, 0, sizeof(this->m_szCastleOwnerGuild));
 }
-
-
-
-
 
 void CCastleSiegeSync::SetCastleOwnerGuild(char * lpszGuildName)
 {
@@ -37,9 +31,6 @@ void CCastleSiegeSync::SetCastleOwnerGuild(char * lpszGuildName)
 	memset(this->m_szCastleOwnerGuild, 0, sizeof(this->m_szCastleOwnerGuild));
 	memcpy(this->m_szCastleOwnerGuild, lpszGuildName, sizeof(this->m_szCastleOwnerGuild)/2);
 }
-
-
-
 
 int CCastleSiegeSync::GetTaxRateChaos(int iIndex)
 {
@@ -53,9 +44,6 @@ int CCastleSiegeSync::GetTaxRateChaos(int iIndex)
 	return iCurTaxRateChaos;
 }
 
-
-
-
 int CCastleSiegeSync::GetTaxRateStore(int iIndex)
 {
 	int iCurTaxRateStore = this->m_iCurTaxRateStore;
@@ -67,9 +55,6 @@ int CCastleSiegeSync::GetTaxRateStore(int iIndex)
 
 	return iCurTaxRateStore;
 }
-
-
-
 
 int CCastleSiegeSync::GetTaxHuntZone(int iIndex, BOOL bCheckOwnerGuild)
 {
@@ -85,9 +70,6 @@ int CCastleSiegeSync::GetTaxHuntZone(int iIndex, BOOL bCheckOwnerGuild)
 
 	return iCurTaxHuntZone;
 }
-
-
-
 
 void CCastleSiegeSync::AddTributeMoney(int iMoney)
 {
@@ -109,16 +91,10 @@ void CCastleSiegeSync::AddTributeMoney(int iMoney)
 	InterlockedExchangeAdd((LPLONG)&this->m_lCastleTributeMoney, iMoney);
 }
 
-
-
-
 void CCastleSiegeSync::ResetTributeMoney()
 {
 	InterlockedExchange((LPLONG)&this->m_lCastleTributeMoney, 0);
 }
-
-
-
 
 void CCastleSiegeSync::AdjustTributeMoney()
 {
@@ -144,10 +120,6 @@ void CCastleSiegeSync::AdjustTributeMoney()
 	GS_GDReqCastleTributeMoney(g_MapServerManager.GetMapSvrGroup(), this->m_lCastleTributeMoney);
 }
 
-
-
-
-
 BOOL CCastleSiegeSync::CheckCastleOwnerMember(int iIndex)
 {
 	if ( gObjIsConnected(iIndex) == FALSE )
@@ -167,10 +139,6 @@ BOOL CCastleSiegeSync::CheckCastleOwnerMember(int iIndex)
 
 	return TRUE;
 }
-
-
-
-
 
 BOOL CCastleSiegeSync::CheckCastleOwnerUnionMember(int iIndex)
 {
@@ -206,10 +174,6 @@ BOOL CCastleSiegeSync::CheckCastleOwnerUnionMember(int iIndex)
 	return FALSE;
 }
 
-
-
-
-
 int CCastleSiegeSync::CheckOverlapCsMarks(int iIndex)
 {
 	for ( int x=INVENTORY_BAG_START;x<MAIN_INVENTORY_SIZE;x++)
@@ -233,6 +197,5 @@ int CCastleSiegeSync::CheckOverlapCsMarks(int iIndex)
 
 	return -1;
 }
-
 
 CCastleSiegeSync g_CastleSiegeSync;

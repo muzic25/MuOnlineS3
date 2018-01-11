@@ -1586,6 +1586,9 @@ BOOL NpcThansgivingEvent(LPOBJ lpNpc, LPOBJ lpObj)
 		return TRUE;
 	}
 
+	BYTE Buff[4] = { 0xC3, 0x04, 0x30, 0x19 };
+	DataSend(lpObj->m_Index, Buff, Buff[1]);
+
 	/*PMSG_TALKRESULT pMsg;
 
 	pMsg.h.c = 0xC3;

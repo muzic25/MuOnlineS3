@@ -223,6 +223,7 @@
     <ClCompile Include="ClosePlayer.cpp" />
     <ClCompile Include="ComboAttack.cpp" />
     <ClCompile Include="ConMember.cpp" />
+    <ClCompile Include="CouponEventItem.cpp" />
     <ClCompile Include="Crywolf.cpp" />
     <ClCompile Include="CrywolfAltar.cpp" />
     <ClCompile Include="CrywolfDarkElf.cpp" />
@@ -403,6 +404,7 @@
     <ClInclude Include="ClosePlayer.h" />
     <ClInclude Include="ComboAttack.h" />
     <ClInclude Include="ConMember.h" />
+    <ClInclude Include="CouponEventItem.h" />
     <ClInclude Include="Crywolf.h" />
     <ClInclude Include="CrywolfAltar.h" />
     <ClInclude Include="CrywolfDarkElf.h" />

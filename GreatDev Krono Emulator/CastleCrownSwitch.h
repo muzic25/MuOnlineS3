@@ -9,12 +9,11 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#define CASTLE_CROWNSWITCH_CLASS_RANGE(x)  ( ((x)< 217 )?FALSE:((x) > 218 )?FALSE:TRUE   ) 
 
 class CCastleCrownSwitch  
 {
-
 public:
-
 	CCastleCrownSwitch();
 	virtual ~CCastleCrownSwitch();
 
@@ -22,6 +21,6 @@ public:
 
 };
 
-extern CCastleCrownSwitch g_CsNPC_CastleCrownSwitch;
 
-#endif // !defined(AFX_CASTLECROWNSWITCH_H__E1DF5DA3_E594_4900_AF02_A71558C39951__INCLUDED_)
+extern CCastleCrownSwitch g_CsNPC_CastleCrownSwitch;
+#endif
