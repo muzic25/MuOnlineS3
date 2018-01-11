@@ -8,7 +8,7 @@ Status: Fully Bugs With some events (Beta)
  
 - Events:  
 CryWolf: Continius Event -> Fixed -> OK  
-CastleSiege: Bugged  
+CastleSiege: Bugged  -> Replaced -> Test
 DevilSquare: OK  
 Blood Castle: Gate Bugged (First floor localation used~) -> Fixed -> OK  
 Kantru: OK  
@@ -21,7 +21,7 @@ Chaos Castle: OK
 -ChaosMachine: Bugged 
 -PCPoint Shop/System: 98% (Seals don't show but the effects are working) 
 
-- Items/Itembags/Maps/Others
+- Items/Itembags/Maps/Others:
 -ItemsBags: Fixed and Added new bags 
 -Maps: missing -> Added/Fixed -> OK  
 -GameServer Interface: Logger bugged -> Fixed -> OK -> Bugged (WhiteScreen)    
@@ -36,9 +36,9 @@ http://i1155.photobucket.com/albums/p550/muzic25/Screen01_10-21_49-0000_zps0uoay
 Used Client: 1.04J (1.04.10) Korean  
 Client link: http://dfiles.eu/files/4tmc1jve5  
   
-Requiments:   
-MSSQL 2012  
-Visual Studio 2010 With Sp1 or VS2012 + VS2010SP1 
+- Requiments:   
+-MSSQL 2012  
+-Visual Studio 2010 With Sp1 or VS2012 + VS2010SP1 
   
 # Krono Dataserver Season 3  
 -Based on NanoGuy's CougarEmu 0.0.0.1 source  
