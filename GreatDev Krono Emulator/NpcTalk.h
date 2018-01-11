@@ -130,4 +130,5 @@ BOOL NpcIllusionMirage(LPOBJ lpNpc, LPOBJ lpObj);
 BOOL NpcCouponEvent(LPOBJ lpNpc, LPOBJ lpObj); //OK
 
 BOOL NpcWhiteAngelEvent(LPOBJ lpNpc, LPOBJ lpObj); //OK
+BOOL NpcThansgivingEvent(LPOBJ lpNpc, LPOBJ lpObj);
 #endif

@@ -325,6 +325,12 @@ BOOL NpcTalk(LPOBJ lpNpc, LPOBJ lpObj)
 				return TRUE;
 			}
 			break;
+		case 414:
+			if (NpcThansgivingEvent(lpNpc, lpObj) == TRUE)
+			{
+				return TRUE;
+			}
+			break;
 
 
 		default: break;		
@@ -1564,4 +1570,31 @@ BOOL NpcWhiteAngelEvent(LPOBJ lpNpc, LPOBJ lpObj)
 	GEReqCheckWhiteAngelGetItem(lpObj->m_Index);
 	
 	return TRUE;
+}
+
+
+BOOL NpcThansgivingEvent(LPOBJ lpNpc, LPOBJ lpObj)
+{
+
+	if (gObjIsConnected(lpObj->m_Index) == FALSE)
+	{
+		return TRUE;
+	}
+
+	if (lpObj->m_IfState.use != 0)
+	{
+		return TRUE;
+	}
+
+	/*PMSG_TALKRESULT pMsg;
+
+	pMsg.h.c = 0xC3;
+	pMsg.h.headcode = 0x30;
+	pMsg.h.size = sizeof(pMsg);
+	pMsg.result = 0x19;
+
+	DataSend(lpObj->m_Index, (LPBYTE)&pMsg, pMsg.h.size);
+	*/
+	return TRUE;
+
 }

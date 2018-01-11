@@ -2897,12 +2897,10 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 	if ((lpObj->Authority & 32) == 32 && lpObj->MapNumber != MAP_INDEX_GM_SUMMONZONE)
 	{
 		gObjMoveGate(aIndex, 79);
-		LogAddTD("[GAMEMASTER] [%s][%s] Moved to Summon Zone",
-			lpObj->AccountID, lpObj->Name);
+		LogAddTD("[GAMEMASTER] [%s][%s] Moved to Summon Zone",lpObj->AccountID, lpObj->Name);
 	}
 
 	lpObj->PCPoint = lpMsg->iPcPoints;
-	LogAddC(2, "[PCPointShopConnect] SendPoints [%s] Database: %d Points: %d", lpObj->AccountID, lpMsg->iPcPoints, lpObj->PCPoint);
 	PCPoint.GCSendPcBangUserPoint(aIndex);
 
 	return TRUE;
@@ -3269,12 +3267,7 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 	if (MonsterClass >= 204 && MonsterClass <= 259
 		|| MonsterClass >= 368 && MonsterClass <= 370
 		|| MonsterClass == 367
-		|| MonsterClass == 375 || MonsterClass == 406 || MonsterClass == 407 || MonsterClass == 408 || MonsterClass == 465
-		|| MonsterClass == 467 || MonsterClass == 468 || MonsterClass == 469 || MonsterClass == 470 ||
-		MonsterClass == 471 || MonsterClass == 472 || MonsterClass == 473 || MonsterClass == 474 ||
-		MonsterClass == 475 || MonsterClass == 371 || MonsterClass == 479 || MonsterClass == 540 || MonsterClass == 492 ||
-		MonsterClass == 522 || MonsterClass == 464 || MonsterClass == 450 || MonsterClass == 451 || MonsterClass == 452 || MonsterClass == 453 ||
-		MonsterClass == 543 || MonsterClass == 544 || MonsterClass == 380 || MonsterClass == 383 || MonsterClass == 384 || MonsterClass == 385)
+		|| MonsterClass == 375 || MonsterClass == 406 || MonsterClass == 407 || MonsterClass == 408 || MonsterClass == 380 || MonsterClass == 383 || MonsterClass == 384 || MonsterClass == 385)
 	{
 		lpObj->Type = OBJ_NPC;
 	}
@@ -3298,7 +3291,7 @@ BOOL gObjSetMonster(int aIndex, int MonsterClass)
 		MonsterClass == 382 ||
 		MonsterClass == 383 ||
 		MonsterClass == 384 ||
-		MonsterClass == 479)//Season 4.6 addon
+		MonsterClass == 414)//Season 4.6 addon
 	{
 		lpObj->Type = OBJ_NPC;
 	}

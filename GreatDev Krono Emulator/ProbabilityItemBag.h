@@ -38,6 +38,11 @@ public:
 	BOOL SortItem(int n);
 	BOOL DropNewYearLuckMonsterReward(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY);
 	BOOL DropGMPresentBoxReward(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY);
+
+	BOOL DropPCBangGreenChaosBoxReward(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY);
+	BOOL DropPCBangRedChaosBoxReward(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY);
+	BOOL DropPCBangPurpleChaosBoxReward(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY);
+
 	BOOL DropIllusionTempleEventReward(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY);
 	BOOL DropItem(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY);
 	void DropSetItem(int aIndex, int itemnum, BYTE btMapNumber, int cX, int cY);

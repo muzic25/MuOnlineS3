@@ -603,6 +603,319 @@ BOOL CProbabilityItemBag::DropGMPresentBoxReward(int aIndex, BYTE btMapNumber, B
 	return 1;
 }
 
+BOOL CProbabilityItemBag::DropPCBangGreenChaosBoxReward(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY) //004B12C0
+{
+	if (this->m_bLoad == FALSE)
+		return FALSE;
+
+	float dur = 0;
+	int type = 0;
+	int level = 0;
+	int x = 0;
+	int y = 0;
+	int Option1 = 0;
+	int Option2 = 0;
+	int Option3 = 0;
+	int DropItemNum = 0;
+	int ExOption = 0;
+	int loc12 = 0;
+	LPOBJ lpObj = &gObj[aIndex];
+	int loc14;
+	int loc15;
+	int loc16;
+
+	if (this->GetBagCount() > 0)
+	{
+		loc14 = rand() % 10000;
+		if (this->m_iRateKindCount == 0 || loc14 < 10000 - this->m_iEventItemDropRateEx[this->m_iRateKindCount - 1])
+		{
+			MapC[lpObj->MapNumber].MoneyItemDrop(this->m_iDropZen, cX, cY);
+			LogAddTD("[PCBangPointSystem] DropBoxOfGreenChaosItem [%s][%s] [%d Zen]", lpObj->AccountID, lpObj->Name, this->m_iDropZen);
+			return 1;
+		}
+
+		loc15 = this->m_iRateKindCount;
+		loc16 = this->SortItem(loc14);
+
+		if (cX == 0 && cY == 0)
+		{
+			x = lpObj->X;
+			y = lpObj->Y;
+		}
+		else
+		{
+			x = cX;
+			y = cY;
+		}
+
+		level = this->GetLevel(loc16);
+		type = ItemGetNumberMake(this->BagObject[loc16].m_type, this->BagObject[loc16].m_index);
+
+		if (type == -1)
+		{
+			return FALSE;
+		}
+
+		if (this->BagObject[loc16].m_isskill != 0)
+		{
+			Option1 = 1;
+		}
+
+		if (this->BagObject[loc16].m_isluck != 0)
+		{
+			Option2 = 0;
+
+			if ((rand() % 2) == 0)
+			{
+				Option2 = 1;
+			}
+		}
+
+		if (this->BagObject[loc16].m_isoption != 0)
+		{
+			if (rand() % 5 < 1)
+			{
+				Option3 = 3;
+			}
+			else
+			{
+				Option3 = rand() % 3;
+			}
+		}
+
+		if (this->BagObject[loc16].m_isexitem != 0)
+		{
+			loc12 = NewOptionRand(0);
+			Option2 = 0;
+			Option1 = 1;
+			level = 0;
+		}
+
+		if (type == ITEMGET(12, 15) || type == ITEMGET(14, 13) || type == ITEMGET(14, 14))	// Chaos, Bless, Soul
+		{
+			Option1 = 0;
+			Option2 = 0;
+			Option3 = 0;
+			level = 0;
+		}
+
+		ItemSerialCreateSend(lpObj->m_Index, btMapNumber, x, y, type, level, dur, Option1, Option2, Option3, lpObj->m_Index, loc12, 0);
+		LogAddTD("[PCBangPointSystem] DropBoxOfGreenChaosItem [%s][%s] : (%d)(%d/%d) Item:(%s)%d Level:%d op1:%d op2:%d op3:%d ExOp:%d",
+			lpObj->AccountID, lpObj->Name, btMapNumber, x, y, ItemAttribute[type].Name, type, level, Option1, Option2, Option3, loc12);
+
+	}
+	return 1;
+}
+
+BOOL CProbabilityItemBag::DropPCBangRedChaosBoxReward(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY)
+{
+	if (this->m_bLoad == FALSE)
+		return FALSE;
+
+	float dur = 0;
+	int type = 0;
+	int level = 0;
+	int x = 0;
+	int y = 0;
+	int Option1 = 0;
+	int Option2 = 0;
+	int Option3 = 0;
+	int DropItemNum = 0;
+	int ExOption = 0;
+	int loc12 = 0;
+	LPOBJ lpObj = &gObj[aIndex];
+	int loc14;
+	int loc15;
+	int loc16;
+
+	if (this->GetBagCount() > 0)
+	{
+		loc14 = rand() % 10000;
+		if (this->m_iRateKindCount == 0 || loc14 < 10000 - this->m_iEventItemDropRateEx[this->m_iRateKindCount - 1])
+		{
+			MapC[lpObj->MapNumber].MoneyItemDrop(this->m_iDropZen, cX, cY);
+			LogAddTD("[PCBangPointSystem] DropBoxOfRedChaosItem [%s][%s] [%d Zen]", lpObj->AccountID, lpObj->Name, this->m_iDropZen);
+			return 1;
+		}
+
+		loc15 = this->m_iRateKindCount;
+		loc16 = this->SortItem(loc14);
+
+		if (cX == 0 && cY == 0)
+		{
+			x = lpObj->X;
+			y = lpObj->Y;
+		}
+		else
+		{
+			x = cX;
+			y = cY;
+		}
+
+		level = this->GetLevel(loc16);
+		type = ItemGetNumberMake(this->BagObject[loc16].m_type, this->BagObject[loc16].m_index);
+
+		if (type == -1)
+		{
+			return FALSE;
+		}
+
+		if (this->BagObject[loc16].m_isskill != 0)
+		{
+			Option1 = 1;
+		}
+
+		if (this->BagObject[loc16].m_isluck != 0)
+		{
+			Option2 = 0;
+
+			if ((rand() % 2) == 0)
+			{
+				Option2 = 1;
+			}
+		}
+
+		if (this->BagObject[loc16].m_isoption != 0)
+		{
+			if (rand() % 5 < 1)
+			{
+				Option3 = 3;
+			}
+			else
+			{
+				Option3 = rand() % 3;
+			}
+		}
+
+		if (this->BagObject[loc16].m_isexitem != 0)
+		{
+			loc12 = NewOptionRand(0);
+			Option2 = 0;
+			Option1 = 1;
+			level = 0;
+		}
+
+		if (type == ITEMGET(12, 15) || type == ITEMGET(14, 13) || type == ITEMGET(14, 14))	// Chaos, Bless, Soul
+		{
+			Option1 = 0;
+			Option2 = 0;
+			Option3 = 0;
+			level = 0;
+		}
+
+		ItemSerialCreateSend(lpObj->m_Index, btMapNumber, x, y, type, level, dur, Option1, Option2, Option3, lpObj->m_Index, loc12, 0);
+		LogAddTD("[PCBangPointSystem] DropBoxOfRedChaosItem [%s][%s] : (%d)(%d/%d) Item:(%s)%d Level:%d op1:%d op2:%d op3:%d ExOp:%d",
+			lpObj->AccountID, lpObj->Name, btMapNumber, x, y, ItemAttribute[type].Name, type, level, Option1, Option2, Option3, loc12);
+
+	}
+	return 1;
+}
+
+BOOL CProbabilityItemBag::DropPCBangPurpleChaosBoxReward(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY)
+{
+	if (this->m_bLoad == FALSE)
+		return FALSE;
+
+	float dur = 0;
+	int type = 0;
+	int level = 0;
+	int x = 0;
+	int y = 0;
+	int Option1 = 0;
+	int Option2 = 0;
+	int Option3 = 0;
+	int DropItemNum = 0;
+	int ExOption = 0;
+	int loc12 = 0;
+	LPOBJ lpObj = &gObj[aIndex];
+	int loc14;
+	int loc15;
+	int loc16;
+
+	if (this->GetBagCount() > 0)
+	{
+		loc14 = rand() % 10000;
+		if (this->m_iRateKindCount == 0 || loc14 < 10000 - this->m_iEventItemDropRateEx[this->m_iRateKindCount - 1])
+		{
+			MapC[lpObj->MapNumber].MoneyItemDrop(this->m_iDropZen, cX, cY);
+			LogAddTD("[PCBangPointSystem] DropBoxOfPurpleChaosItem [%s][%s] [%d Zen]", lpObj->AccountID, lpObj->Name, this->m_iDropZen);
+			return 1;
+		}
+
+		loc15 = this->m_iRateKindCount;
+		loc16 = this->SortItem(loc14);
+
+		if (cX == 0 && cY == 0)
+		{
+			x = lpObj->X;
+			y = lpObj->Y;
+		}
+		else
+		{
+			x = cX;
+			y = cY;
+		}
+
+		level = this->GetLevel(loc16);
+		type = ItemGetNumberMake(this->BagObject[loc16].m_type, this->BagObject[loc16].m_index);
+
+		if (type == -1)
+		{
+			return FALSE;
+		}
+
+		if (this->BagObject[loc16].m_isskill != 0)
+		{
+			Option1 = 1;
+		}
+
+		if (this->BagObject[loc16].m_isluck != 0)
+		{
+			Option2 = 0;
+
+			if ((rand() % 2) == 0)
+			{
+				Option2 = 1;
+			}
+		}
+
+		if (this->BagObject[loc16].m_isoption != 0)
+		{
+			if (rand() % 5 < 1)
+			{
+				Option3 = 3;
+			}
+			else
+			{
+				Option3 = rand() % 3;
+			}
+		}
+
+		if (this->BagObject[loc16].m_isexitem != 0)
+		{
+			loc12 = NewOptionRand(0);
+			Option2 = 0;
+			Option1 = 1;
+			level = 0;
+		}
+
+		if (type == ITEMGET(12, 15) || type == ITEMGET(14, 13) || type == ITEMGET(14, 14))	// Chaos, Bless, Soul
+		{
+			Option1 = 0;
+			Option2 = 0;
+			Option3 = 0;
+			level = 0;
+		}
+
+		ItemSerialCreateSend(lpObj->m_Index, btMapNumber, x, y, type, level, dur, Option1, Option2, Option3, lpObj->m_Index, loc12, 0);
+		LogAddTD("[PCBangPointSystem] DropBoxOfPurpleChaosItem [%s][%s] : (%d)(%d/%d) Item:(%s)%d Level:%d op1:%d op2:%d op3:%d ExOp:%d",
+			lpObj->AccountID, lpObj->Name, btMapNumber, x, y, ItemAttribute[type].Name, type, level, Option1, Option2, Option3, loc12);
+
+	}
+	return 1;
+}
+
+
 BOOL CProbabilityItemBag::DropIllusionTempleEventReward(int aIndex, BYTE btMapNumber, BYTE cX, BYTE cY)
 {
 	if ( this->m_bLoad == FALSE )

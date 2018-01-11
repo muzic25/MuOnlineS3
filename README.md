@@ -1,26 +1,32 @@
 # RMST GameServer Krono Emulator Season 3 
 
-Status: Fully Bugs With some events    
+Status: Fully Bugs With some events (Beta)   
   
--Login: OK  
--Playable: Yes  
--Events:  
+- Login: OK  
+
+- Playable: Yes (Only for Testing)
+ 
+- Events:  
 CryWolf: Continius Event -> Fixed -> OK  
 CastleSiege: Bugged  
 DevilSquare: OK  
-Blood Castle: Gate Bugged (Using first floor localation) -> Fixed -> OK  
+Blood Castle: Gate Bugged (First floor localation used~) -> Fixed -> OK  
 Kantru: OK  
 Golden Invasion: OK  
 White Wizard:  OK  
-Illusion Temple: Unknown -> Original Functions Added  -> Test  
+Illusion Temple: Unknown -> Original Functions Added  -> Test
 Chaos Castle: OK  
--ItemsBags: Fixed and Added new bags   
--ChaosMachine: Bugged  
+  
+- Systems
+-ChaosMachine: Bugged 
+-PCPoint Shop/System: 98% (Seals don't show but the effects are working) 
+
+- Items/Itembags/Maps/Others
+-ItemsBags: Fixed and Added new bags 
 -Maps: missing -> Added/Fixed -> OK  
 -GameServer Interface: Logger bugged -> Fixed -> OK -> Bugged (WhiteScreen)    
--3rd wings: Fixed -> OK  
--Other bugs  
-- PCPoint Shop : 98% (Seals don't show but the effects are working)
+-3rd wings: Fixed -> OK    
+-Other bugs
 
 Some Pic:
 http://i1155.photobucket.com/albums/p550/muzic25/Screen11_10-19_57-0000_zpspvxjtrt8.jpg

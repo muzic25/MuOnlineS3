@@ -132,6 +132,9 @@ extern CProbabilityItemBag * IllusionTemple1ItemBag; //test
 extern CProbabilityItemBag * IllusionTemple2ItemBag; //test
 extern CProbabilityItemBag * IllusionTemple3ItemBag; //test
 extern CProbabilityItemBag * ItemGiveReoEventItemBag;
+extern CProbabilityItemBag * PCBangGageGreenBox; //test
+extern CProbabilityItemBag * PCBangGageRedBox; //test
+extern CProbabilityItemBag * PCBangGagePurpleBox; //test
 extern CwsGameServer wsGServer;	// line : 213GameServer
 extern wsJoinServerCli wsJServerCli;	// line : 214 Join Server
 extern wsJoinServerCli wsDataCli;	// line : 215 DataServer

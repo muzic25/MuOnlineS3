@@ -3074,3 +3074,20 @@ void EGAnsWhiteAngelGetItem(PMSG_ANS_WHITEANGEL_GET_ITEM *lpMsg)
 		}
 	}
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+void PCBangGreenChaosBoxItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY) //season 4.5 add-on
+{
+	PCBangGageGreenBox->DropPCBangGreenChaosBoxReward(lpObj->m_Index, btMapNumber, cX, cY);
+}
+
+void PCBangRedChaosBoxItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY) //season 4.5 add-on
+{
+	PCBangGageRedBox->DropPCBangRedChaosBoxReward(lpObj->m_Index, btMapNumber, cX, cY);
+}
+
+void PCBangPurpleChaosBoxItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY) //season 4.5 add-on
+{
+	PCBangGagePurpleBox->DropPCBangPurpleChaosBoxReward(lpObj->m_Index, btMapNumber, cX, cY);
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////

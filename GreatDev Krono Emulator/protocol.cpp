@@ -3487,6 +3487,24 @@ BOOL CGItemDropRequest(PMSG_ITEMTHROW * lpMsg, int aIndex, BOOL drop_type)
 				GMPresentBoxItemBagOpen(lpObj); //season 3.0 changed arguments
 				LogAddTD("[%s][%s][%d]%d/%d Used GM Present Box Serial:%u (%s:%d/level:%d/skill:%d/op2:%d/op3:%d)", lpObj->AccountID, lpObj->Name, lpObj->MapNumber, lpObj->X, lpObj->Y, serial, szItemName, type, level, Option1, Option2, Option3);
 			}
+			else if (type == ITEMGET(14, 55) && level == 0) //Season 2.5 add-on PCBang Green Chaos Box identical
+			{
+				gObjInventoryDeleteItem(aIndex, lpMsg->Ipos);
+				PCBangGreenChaosBoxItemBagOpen(&gObj[aIndex], lpObj->MapNumber, lpObj->X, lpObj->Y);
+				LogAddTD("[%s][%s][%d]%d/%d Used Box Of Green Chaos Item Serial:%u (%s:%d/level:%d/skill:%d/op2:%d/op3:%d)", lpObj->AccountID, lpObj->Name, lpObj->MapNumber, lpObj->X, lpObj->Y, serial, szItemName, type, level, Option1, Option2, Option3);
+			}
+			else if (type == ITEMGET(14, 56) && level == 0) //Season 2.5 add-on PCBang Red Chaos Box identical
+			{
+				gObjInventoryDeleteItem(aIndex, lpMsg->Ipos);
+				PCBangRedChaosBoxItemBagOpen(&gObj[aIndex], lpObj->MapNumber, lpObj->X, lpObj->Y);
+				LogAddTD("[%s][%s][%d]%d/%d Used Box Of Red Chaos Item Serial:%u (%s:%d/level:%d/skill:%d/op2:%d/op3:%d)", lpObj->AccountID, lpObj->Name, lpObj->MapNumber, lpObj->X, lpObj->Y, serial, szItemName, type, level, Option1, Option2, Option3);
+			}
+			else if (type == ITEMGET(14, 57) && level == 0) //Season 2.5 add-on PCBang Purple Chaos Box identical
+			{
+				gObjInventoryDeleteItem(aIndex, lpMsg->Ipos);
+				PCBangPurpleChaosBoxItemBagOpen(&gObj[aIndex], lpObj->MapNumber, lpObj->X, lpObj->Y);
+				LogAddTD("[%s][%s][%d]%d/%d Used Box Of Purple Chaos Item Serial:%u (%s:%d/level:%d/skill:%d/op2:%d/op3:%d)", lpObj->AccountID, lpObj->Name, lpObj->MapNumber, lpObj->X, lpObj->Y, serial, szItemName, type, level, Option1, Option2, Option3);
+			}
 			else
 			{
 				int OwnerIndex = aIndex;

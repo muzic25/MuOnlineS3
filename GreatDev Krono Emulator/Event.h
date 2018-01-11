@@ -326,6 +326,9 @@ void GEReqWhiteAngelGetItem(int iIndex);
 void GEReqCheckWhiteAngelGetItem(int iIndex);
 void EGAnsCheckWhiteAngelGetItem(PMSG_ANS_CHECK_WHITEANGEL_GET_ITEM *lpMsg);
 void EGAnsWhiteAngelGetItem(PMSG_ANS_WHITEANGEL_GET_ITEM *lpMsg);
+void PCBangGreenChaosBoxItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY);
+void PCBangRedChaosBoxItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY);
+void PCBangPurpleChaosBoxItemBagOpen(LPOBJ lpObj, BYTE btMapNumber, BYTE cX, BYTE cY);
 extern LPOBJ pEventObj;
 
 #endif

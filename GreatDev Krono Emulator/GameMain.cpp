@@ -53,6 +53,9 @@ CProbabilityItemBag * IllusionTemple1ItemBag; //test
 CProbabilityItemBag * IllusionTemple2ItemBag; //test
 CProbabilityItemBag * IllusionTemple3ItemBag; //test
 CProbabilityItemBag * ItemGiveReoEventItemBag;
+CProbabilityItemBag * PCBangGageGreenBox; //test
+CProbabilityItemBag * PCBangGageRedBox; //test
+CProbabilityItemBag * PCBangGagePurpleBox; //test
 ///////////////////////////////////////////////////////////////////////////////
 CwsGameServer wsGServer;	// line : 213GameServer
 wsJoinServerCli wsJServerCli;	// line : 214 Join Server
@@ -2218,7 +2221,52 @@ void LoadItemBag()
 	}
 	PCBangEventNPCItemBag->Init("EventItemBags\\EventItemBag42.txt");
 
-	//--------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------
+	//PCBangGageGreenBox
+	if (PCBangGageGreenBox != NULL)
+		delete PCBangGageGreenBox;
+
+	PCBangGageGreenBox = new CProbabilityItemBag;
+	if (PCBangGageGreenBox == NULL)
+	{
+		// Memory allocation error
+		MsgBox("CItemBag %s", lMsg.Get(MSGGET(0, 110)));
+		return;
+	}
+
+	PCBangGageGreenBox->Init("EventItemBags\\EventItemBag43.txt");
+
+//--------------------------------------------------------------------------------
+	//PCBangGageRedBox
+	if (PCBangGageRedBox != NULL)
+		delete PCBangGageRedBox;
+
+	PCBangGageRedBox = new CProbabilityItemBag;
+	if (PCBangGageRedBox == NULL)
+	{
+		// Memory allocation error
+		MsgBox("CItemBag %s", lMsg.Get(MSGGET(0, 110)));
+		return;
+	}
+
+	PCBangGageRedBox->Init("EventItemBags\\EventItemBag44.txt");
+
+//--------------------------------------------------------------------------------
+	//PCBangGagePurpleBox
+	if (PCBangGagePurpleBox != NULL)
+		delete PCBangGagePurpleBox;
+
+	PCBangGagePurpleBox = new CProbabilityItemBag;
+	if (PCBangGagePurpleBox == NULL)
+	{
+		// Memory allocation error
+		MsgBox("CItemBag %s", lMsg.Get(MSGGET(0, 110)));
+		return;
+	}
+
+	PCBangGagePurpleBox->Init("EventItemBags\\EventItemBag45.txt");
+
+//--------------------------------------------------------------------------------
 }
 
 void LoadCustomJewel(char *filename)
