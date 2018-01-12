@@ -85,6 +85,7 @@ CLoginCount gLCount[3];	// line 329
 DWORD  gLevelExperience[MAX_CHAR_LEVEL+1];
 CSimpleModulus g_SimpleModulusCS;	// line 751
 CSimpleModulus g_SimpleModulusSC;	// line 752
+DWORD dwgCheckSum[MAX_CHECKSUM_KEY];
 char gMapName[MAX_NUMBER_MAP][255];
 ////////////////////////////////////////////////////////////////////
 char g_szMapName[MAX_NUMBER_MAP][32]={"Lorencia", "Dungeon", "Devias", "Noria", "LostTower",
@@ -102,7 +103,7 @@ char connectserverip[20];
 int  connectserverport;
 char szCommonlocIniFileName[256];
 BOOL GSInfoSendFlag;
-//void CheckSumFileLoad(char *szCheckSum);
+void CheckSumFileLoad(char *szCheckSum);
 
 CConfigs Configs;
 
@@ -858,8 +859,8 @@ void ReadCommonServerInfo()
 	//char szCheckSum[256];
 
 	
-	int DataBufferSize;
-	char *DataBuffer;
+	/*int DataBufferSize;
+	char *DataBuffer;*/
 	char szlMsgName[256];
 
 	ReadServerInfo();
@@ -915,6 +916,7 @@ void ReadCommonServerInfo()
 	}
 	//CheckSumFileLoad(szCheckSum);
 
+	CheckSumFileLoad(gDirPath.GetNewPath("CheckSum.dat"));
 #if (CSAUTH_VERSION==1)
 	BOOL bret = _LoadAuthTable(gDirPath.GetNewPath("CSAuth.tab"));
 
@@ -1532,6 +1534,33 @@ void GameServerInfoSend()
 	MessageBoxA(NULL, "CheckSum Disabled", "Msg", MB_OK);
 #endif
 } */
+
+void CheckSumFileLoad(char * szCheckSum)
+{
+	HANDLE handle = NULL;
+	HANDLE DataBuff = NULL;
+	HANDLE Pointer = NULL;
+	unsigned long Bytes = 0;
+	if (handle != NULL)
+	{
+		CloseHandle(handle);
+		GlobalUnlock((HGLOBAL)DataBuff);
+		GlobalFree((HGLOBAL)Pointer);
+	}
+	handle = CreateFileA(szCheckSum, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_ARCHIVE, NULL);
+	int iFileSize = GetFileSize(handle, NULL);
+	Pointer = GlobalAlloc(GHND, iFileSize + 1);
+	DataBuff = GlobalLock((HGLOBAL)Pointer);
+	ReadFile(handle, DataBuff, iFileSize, &Bytes, NULL);
+	CloseHandle(handle);
+	handle = NULL;
+	memcpy(dwgCheckSum, (char*)DataBuff, iFileSize);
+	GlobalUnlock((HGLOBAL)DataBuff);
+	GlobalFree((HGLOBAL)Pointer);
+	DataBuff = NULL;
+	Pointer = NULL;
+	LogAdd("%s file loaded", szCheckSum);
+}
 
 void LoadItemBag()
 {

@@ -193,6 +193,7 @@
 #include "protocol.h"
 #include "ProbabilityItemBag.h"
 #include "QuestInfo.h"
+#include "QuestUtil.h"
 #include "RingAttackEvent.h"
 #include "SendHackLog.h"
 #include "SetItemMacro.h"

@@ -1,19 +1,6 @@
 //GameServer 1.00.77 JPN - Completed
 //GameServer 1.00.90 JPN - Completed
 #include "stdafx.h"
-#include "QuestInfo.h"
-#include "readscript.h"
-#include "WzMemScript.h"
-#include "winutil.h"
-#include "logproc.h"
-#include "GameServer.h"
-#include "GameMain.h"
-#include "protocol.h"
-#include "GameServerAuth.h"
-#include "gObjMonster.h"
-#include "DSProtocol.h"
-
-#include "QuestUtil.h"
 
 BYTE QuestBitMask[8];
 CQuestInfo g_QuestInfo;
@@ -1070,6 +1057,34 @@ BOOL CQuestInfo::MonsterPlusKillCountParty(LPOBJ lpObj, LPOBJ lpTargetObj)
 			{
 				if(lpTargetObj->MonsterKillInfo[n].KillCount <= 50)
 				{
+					if (lpTargetObj->MonsterKillInfo[n].MonIndex == 409)
+					{
+						char szTemp[256];
+						wsprintf(szTemp, "Balram: %d/10 ", lpTargetObj->MonsterKillInfo[n].KillCount);
+						GCServerMsgStringSend(szTemp, lpTargetObj->m_Index, 1);
+					}
+
+					if (lpTargetObj->MonsterKillInfo[n].MonIndex == 410)
+					{
+						char szTemp[256];
+						wsprintf(szTemp, "Death Spirit: %d/10 ", lpTargetObj->MonsterKillInfo[n].KillCount);
+						GCServerMsgStringSend(szTemp, lpTargetObj->m_Index, 1);
+					}
+
+					if (lpTargetObj->MonsterKillInfo[n].MonIndex == 411)
+					{
+						char szTemp[256];
+						wsprintf(szTemp, "Soram: %d/10 ", lpTargetObj->MonsterKillInfo[n].KillCount);
+						GCServerMsgStringSend(szTemp, lpTargetObj->m_Index, 1);
+					}
+
+					if (lpTargetObj->MonsterKillInfo[n].MonIndex == 412)
+					{
+						char szTemp[256];
+						wsprintf(szTemp, "Dark Elf: %d/1 ", lpTargetObj->MonsterKillInfo[n].KillCount);
+						GCServerMsgStringSend(szTemp, lpTargetObj->m_Index, 1);
+					}
+
 					lpTargetObj->MonsterKillInfo[n].KillCount++;
 					break;
 				}
@@ -1125,6 +1140,33 @@ BOOL CQuestInfo::MonsterPlusKillCountParty(LPOBJ lpObj, LPOBJ lpTargetObj)
 				{
 					if(loc6->MonsterKillInfo[n].KillCount <= 50)
 					{
+						if (loc6->MonsterKillInfo[n].MonIndex == 409)
+						{
+							char szTemp[256];
+							wsprintf(szTemp, "Balram: %d/10 ", loc6->MonsterKillInfo[n].KillCount);
+							GCServerMsgStringSend(szTemp, lpObj->m_Index, 1);
+						}
+
+						if (loc6->MonsterKillInfo[n].MonIndex == 410)
+						{
+							char szTemp[256];
+							wsprintf(szTemp, "Death Spirit: %d/10 ", loc6->MonsterKillInfo[n].KillCount);
+							GCServerMsgStringSend(szTemp, lpObj->m_Index, 1);
+						}
+
+						if (loc6->MonsterKillInfo[n].MonIndex == 411)
+						{
+							char szTemp[256];
+							wsprintf(szTemp, "Soram: %d/10 ", loc6->MonsterKillInfo[n].KillCount);
+							GCServerMsgStringSend(szTemp, lpObj->m_Index, 1);
+						}
+
+						if (loc6->MonsterKillInfo[n].MonIndex == 412)
+						{
+							char szTemp[256];
+							wsprintf(szTemp, "Dark Elf: %d/1 ", loc6->MonsterKillInfo[n].KillCount);
+							GCServerMsgStringSend(szTemp, lpObj->m_Index, 1);
+						}
 						loc6->MonsterKillInfo[n].KillCount++;
 						break;
 					}
@@ -1278,7 +1320,7 @@ void CQuestInfo::GCReqWerewolfMove(int aIndex) //Identical gs-cs 56
 
 					if(dis < 10)
 					{
-						bMoveGateSuccess = gObjMoveGate(LocalPartyNumber,256);
+						bMoveGateSuccess = gObjMoveGate(LocalPartyNumber,240);
 
 						if(bMoveGateSuccess == FALSE)
 						{
@@ -1291,7 +1333,7 @@ void CQuestInfo::GCReqWerewolfMove(int aIndex) //Identical gs-cs 56
 			}
 		}
 
-		bMoveGateSuccess = gObjMoveGate(aIndex,256);
+		bMoveGateSuccess = gObjMoveGate(aIndex,240);
 
 		if(bMoveGateSuccess != FALSE)
 		{
@@ -1371,7 +1413,7 @@ void CQuestInfo::GCReqGateKeeperMove(int aIndex) //Identical gs-cs 56
 
 				if(dis < 10)
 				{
-					bMoveGateSuccess = gObjMoveGate(LocalPartyNumber,257);
+					bMoveGateSuccess = gObjMoveGate(LocalPartyNumber,241);
 
 					if(bMoveGateSuccess == FALSE)
 					{
@@ -1384,7 +1426,7 @@ void CQuestInfo::GCReqGateKeeperMove(int aIndex) //Identical gs-cs 56
 		}
 	}
 	//
-	bMoveGateSuccess = gObjMoveGate(aIndex,257);
+	bMoveGateSuccess = gObjMoveGate(aIndex,241);
 
 	if(bMoveGateSuccess == FALSE)
 	{

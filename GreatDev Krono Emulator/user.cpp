@@ -55,7 +55,6 @@
 #include "KanturuBattleUserMng.h"
 #include "Guardian.h"
 #include "SProtocol.h"
-#include "GameServerAuth.h"
 #include "MoveCommand.h"
 #include "ItemAddOption.h"
 #include "StatMng.h"
@@ -112,245 +111,244 @@ HANDLE hThread_gObjMove;
 
 struct PWMSG_COUNT {
 
-  // static data ------------------------------------
+	// static data ------------------------------------
 
-  // non-static data --------------------------------
-  /*<thisrel this+0x0>*/ /*|0x4|*/ struct PWMSG_HEAD h;
-  /*<thisrel this+0x4>*/ /*|0x1|*/ unsigned char count;
+	// non-static data --------------------------------
+	/*<thisrel this+0x0>*/ /*|0x4|*/ struct PWMSG_HEAD h;
+	/*<thisrel this+0x4>*/ /*|0x1|*/ unsigned char count;
 
-  // base classes -----------------------------------
+	// base classes -----------------------------------
 
-  // friends ----------------------------------------
+	// friends ----------------------------------------
 
-  // static functions -------------------------------
+	// static functions -------------------------------
 
-  // non-virtual functions --------------------------
+	// non-virtual functions --------------------------
 
-  // virtual functions ------------------------------
+	// virtual functions ------------------------------
 };
 // <size 0x5>
 
 struct PBMSG_COUNT {
 
-  // static data ------------------------------------
+	// static data ------------------------------------
 
-  // non-static data --------------------------------
-  /*<thisrel this+0x0>*/ /*|0x3|*/ struct PBMSG_HEAD h;
-  /*<thisrel this+0x3>*/ /*|0x1|*/ unsigned char count;
+	// non-static data --------------------------------
+	/*<thisrel this+0x0>*/ /*|0x3|*/ struct PBMSG_HEAD h;
+	/*<thisrel this+0x3>*/ /*|0x1|*/ unsigned char count;
 
-  // base classes -----------------------------------
+	// base classes -----------------------------------
 
-  // friends ----------------------------------------
+	// friends ----------------------------------------
 
-  // static functions -------------------------------
+	// static functions -------------------------------
 
-  // non-virtual functions --------------------------
+	// non-virtual functions --------------------------
 
-  // virtual functions ------------------------------
+	// virtual functions ------------------------------
 };
 // <size 0x4>
 
 struct PMSG_ITEMVIEWPORTCREATE {
 
-  // static data ------------------------------------
+	// static data ------------------------------------
 
-  // non-static data --------------------------------
-  /*<thisrel this+0x0>*/ /*|0x1|*/ unsigned char NumberH;
-  /*<thisrel this+0x1>*/ /*|0x1|*/ unsigned char NumberL;
-  /*<thisrel this+0x2>*/ /*|0x1|*/ unsigned char px;
-  /*<thisrel this+0x3>*/ /*|0x1|*/ unsigned char py;
-  /*<thisrel this+0x4>*/ /*|0x7|*/ unsigned char ItemInfo[7];
+	// non-static data --------------------------------
+	/*<thisrel this+0x0>*/ /*|0x1|*/ unsigned char NumberH;
+	/*<thisrel this+0x1>*/ /*|0x1|*/ unsigned char NumberL;
+	/*<thisrel this+0x2>*/ /*|0x1|*/ unsigned char px;
+	/*<thisrel this+0x3>*/ /*|0x1|*/ unsigned char py;
+	/*<thisrel this+0x4>*/ /*|0x7|*/ unsigned char ItemInfo[7];
 
-  // base classes -----------------------------------
+	// base classes -----------------------------------
 
-  // friends ----------------------------------------
+	// friends ----------------------------------------
 
-  // static functions -------------------------------
+	// static functions -------------------------------
 
-  // non-virtual functions --------------------------
+	// non-virtual functions --------------------------
 
-  // virtual functions ------------------------------
+	// virtual functions ------------------------------
 };
 // <size 0xb>
 
 struct PMSG_VIEWPORTCREATE {
 
-  // static data ------------------------------------
+	// static data ------------------------------------
 
-  // non-static data --------------------------------
-  /*<thisrel this+0x0>*/ /*|0x1|*/ unsigned char NumberH;
-  /*<thisrel this+0x1>*/ /*|0x1|*/ unsigned char NumberL;
-  /*<thisrel this+0x2>*/ /*|0x1|*/ unsigned char X;
-  /*<thisrel this+0x3>*/ /*|0x1|*/ unsigned char Y;
-  /*<thisrel this+0x4>*/ /*|0x12|*/ unsigned char CharSet[18];
-  /*<thisrel this+0x18>*/ /*|0x4|*/ unsigned long ViewSkillState;
-  /*<thisrel this+0x1c>*/ /*|0xa|*/ char Id[10];
-  /*<thisrel this+0x26>*/ /*|0x1|*/ unsigned char TX;
-  /*<thisrel this+0x27>*/ /*|0x1|*/ unsigned char TY;
-  /*<thisrel this+0x28>*/ /*|0x1|*/ unsigned char DirAndPkLevel;
+	// non-static data --------------------------------
+	/*<thisrel this+0x0>*/ /*|0x1|*/ unsigned char NumberH;
+	/*<thisrel this+0x1>*/ /*|0x1|*/ unsigned char NumberL;
+	/*<thisrel this+0x2>*/ /*|0x1|*/ unsigned char X;
+	/*<thisrel this+0x3>*/ /*|0x1|*/ unsigned char Y;
+	/*<thisrel this+0x4>*/ /*|0x12|*/ unsigned char CharSet[18];
+	/*<thisrel this+0x18>*/ /*|0x4|*/ unsigned long ViewSkillState;
+	/*<thisrel this+0x1c>*/ /*|0xa|*/ char Id[10];
+	/*<thisrel this+0x26>*/ /*|0x1|*/ unsigned char TX;
+	/*<thisrel this+0x27>*/ /*|0x1|*/ unsigned char TY;
+	/*<thisrel this+0x28>*/ /*|0x1|*/ unsigned char DirAndPkLevel;
 
-  // base classes -----------------------------------
+	// base classes -----------------------------------
 
-  // friends ----------------------------------------
+	// friends ----------------------------------------
 
-  // static functions -------------------------------
+	// static functions -------------------------------
 
-  // non-virtual functions --------------------------
+	// non-virtual functions --------------------------
 
-  // virtual functions ------------------------------
+	// virtual functions ------------------------------
 };
 // <size 0x2c>
 
 struct PMSG_VIEWPORTCREATE_CHANGE {
 
-  // static data ------------------------------------
+	// static data ------------------------------------
 
-  // non-static data --------------------------------
-  /*<thisrel this+0x0>*/ /*|0x1|*/ BYTE NumberH;
-  /*<thisrel this+0x1>*/ /*|0x1|*/ BYTE NumberL;
-  /*<thisrel this+0x2>*/ /*|0x1|*/ BYTE X;
-  /*<thisrel this+0x3>*/ /*|0x1|*/ BYTE Y;
-  /*<thisrel this+0x4>*/ /*|0x1|*/ BYTE SkinH;
-  /*<thisrel this+0x5>*/ /*|0x1|*/ BYTE SkinL;
-  /*<thisrel this+0x8>*/ /*|0x4|*/ int ViewSkillState;
-  /*<thisrel this+0xc>*/ /*|0xa|*/ char Id[10];
-  /*<thisrel this+0x16>*/ /*|0x1|*/ BYTE TX;
-  /*<thisrel this+0x17>*/ /*|0x1|*/ BYTE TY;
-  /*<thisrel this+0x18>*/ /*|0x1|*/ BYTE DirAndPkLevel;
-									BYTE CharSet[18]; //Season 2.5 add-on
+	// non-static data --------------------------------
+	/*<thisrel this+0x0>*/ /*|0x1|*/ unsigned char NumberH;
+	/*<thisrel this+0x1>*/ /*|0x1|*/ unsigned char NumberL;
+	/*<thisrel this+0x2>*/ /*|0x1|*/ unsigned char X;
+	/*<thisrel this+0x3>*/ /*|0x1|*/ unsigned char Y;
+	/*<thisrel this+0x4>*/ /*|0x1|*/ unsigned char SkinH;
+	/*<thisrel this+0x5>*/ /*|0x1|*/ unsigned char SkinL;
+	/*<thisrel this+0x8>*/ /*|0x4|*/ int ViewSkillState;
+	/*<thisrel this+0xc>*/ /*|0xa|*/ char Id[10];
+	/*<thisrel this+0x16>*/ /*|0x1|*/ unsigned char TX;
+	/*<thisrel this+0x17>*/ /*|0x1|*/ unsigned char TY;
+	/*<thisrel this+0x18>*/ /*|0x1|*/ unsigned char DirAndPkLevel;
+	/*<thisrel this+0x4>*/ /*|0x12|*/ unsigned char CharSet[18];
 
-  // base classes -----------------------------------
+	// base classes -----------------------------------
 
-  // friends ----------------------------------------
+	// friends ----------------------------------------
 
-  // static functions -------------------------------
+	// static functions -------------------------------
 
-  // non-virtual functions --------------------------
+	// non-virtual functions --------------------------
 
-  // virtual functions ------------------------------
+	// virtual functions ------------------------------
 };
 // <size 0x1c>
 
 struct PMSG_VIEWPORTDESTROY {
 
-  // static data ------------------------------------
+	// static data ------------------------------------
 
-  // non-static data --------------------------------
-  /*<thisrel this+0x0>*/ /*|0x1|*/ unsigned char NumberH;
-  /*<thisrel this+0x1>*/ /*|0x1|*/ unsigned char NumberL;
+	// non-static data --------------------------------
+	/*<thisrel this+0x0>*/ /*|0x1|*/ unsigned char NumberH;
+	/*<thisrel this+0x1>*/ /*|0x1|*/ unsigned char NumberL;
 
-  // base classes -----------------------------------
+	// base classes -----------------------------------
 
-  // friends ----------------------------------------
+	// friends ----------------------------------------
 
-  // static functions -------------------------------
+	// static functions -------------------------------
 
-  // non-virtual functions --------------------------
+	// non-virtual functions --------------------------
 
-  // virtual functions ------------------------------
+	// virtual functions ------------------------------
 };
 // <size 0x2>
 
 struct PMSG_MONSTER_VIEWPORTCREATE {
 
-  // static data ------------------------------------
+	// static data ------------------------------------
 
-  // non-static data --------------------------------
-  /*<thisrel this+0x0>*/ /*|0x1|*/ unsigned char NumberH;
-  /*<thisrel this+0x1>*/ /*|0x1|*/ unsigned char NumberL;
-  /*<thisrel this+0x2>*/ /*|0x1|*/ unsigned char Type_HI;
-  /*<thisrel this+0x3>*/ /*|0x1|*/ unsigned char Type_LO;
-  /*<thisrel this+0x4>*/ /*|0x4|*/ unsigned long ViewState;
-  /*<thisrel this+0x8>*/ /*|0x1|*/ unsigned char X;
-  /*<thisrel this+0x9>*/ /*|0x1|*/ unsigned char Y;
-  /*<thisrel this+0xa>*/ /*|0x1|*/ unsigned char TX;
-  /*<thisrel this+0xb>*/ /*|0x1|*/ unsigned char TY;
-  /*<thisrel this+0xc>*/ /*|0x1|*/ unsigned char Path;
+	// non-static data --------------------------------
+	/*<thisrel this+0x0>*/ /*|0x1|*/ unsigned char NumberH;
+	/*<thisrel this+0x1>*/ /*|0x1|*/ unsigned char NumberL;
+	/*<thisrel this+0x2>*/ /*|0x1|*/ unsigned char Type_HI;
+	/*<thisrel this+0x3>*/ /*|0x1|*/ unsigned char Type_LO;
+	/*<thisrel this+0x4>*/ /*|0x4|*/ unsigned long ViewState;
+	/*<thisrel this+0x8>*/ /*|0x1|*/ unsigned char X;
+	/*<thisrel this+0x9>*/ /*|0x1|*/ unsigned char Y;
+	/*<thisrel this+0xa>*/ /*|0x1|*/ unsigned char TX;
+	/*<thisrel this+0xb>*/ /*|0x1|*/ unsigned char TY;
+	/*<thisrel this+0xc>*/ /*|0x1|*/ unsigned char Path;
 
-  // base classes -----------------------------------
+	// base classes -----------------------------------
 
-  // friends ----------------------------------------
+	// friends ----------------------------------------
 
-  // static functions -------------------------------
+	// static functions -------------------------------
 
-  // non-virtual functions --------------------------
+	// non-virtual functions --------------------------
 
-  // virtual functions ------------------------------
+	// virtual functions ------------------------------
 };
 // <size 0x10>
 
 struct PMSG_CALLMONSTER_VIEWPORTCREATE {
 
-  // static data ------------------------------------
+	// static data ------------------------------------
 
-  // non-static data --------------------------------
-  /*<thisrel this+0x0>*/ /*|0x1|*/ unsigned char NumberH;
-  /*<thisrel this+0x1>*/ /*|0x1|*/ unsigned char NumberL;
-  /*<thisrel this+0x2>*/ /*|0x1|*/ unsigned char Type_HI;
-  /*<thisrel this+0x3>*/ /*|0x1|*/ unsigned char Type_LO;
-  /*<thisrel this+0x4>*/ /*|0x4|*/ int ViewState;
-  /*<thisrel this+0x8>*/ /*|0x1|*/ unsigned char X;
-  /*<thisrel this+0x9>*/ /*|0x1|*/ unsigned char Y;
-  /*<thisrel this+0xa>*/ /*|0x1|*/ unsigned char TX;
-  /*<thisrel this+0xb>*/ /*|0x1|*/ unsigned char TY;
-  /*<thisrel this+0xc>*/ /*|0x1|*/ unsigned char Path;
-  /*<thisrel this+0xd>*/ /*|0xa|*/ unsigned char Id[10];
+	// non-static data --------------------------------
+	/*<thisrel this+0x0>*/ /*|0x1|*/ unsigned char NumberH;
+	/*<thisrel this+0x1>*/ /*|0x1|*/ unsigned char NumberL;
+	/*<thisrel this+0x2>*/ /*|0x1|*/ unsigned char Type_HI;
+	/*<thisrel this+0x3>*/ /*|0x1|*/ unsigned char Type_LO;
+	/*<thisrel this+0x4>*/ /*|0x4|*/ int ViewState;
+	/*<thisrel this+0x8>*/ /*|0x1|*/ unsigned char X;
+	/*<thisrel this+0x9>*/ /*|0x1|*/ unsigned char Y;
+	/*<thisrel this+0xa>*/ /*|0x1|*/ unsigned char TX;
+	/*<thisrel this+0xb>*/ /*|0x1|*/ unsigned char TY;
+	/*<thisrel this+0xc>*/ /*|0x1|*/ unsigned char Path;
+	/*<thisrel this+0xd>*/ /*|0xa|*/ unsigned char Id[10];
 
-  // base classes -----------------------------------
+	// base classes -----------------------------------
 
-  // friends ----------------------------------------
+	// friends ----------------------------------------
 
-  // static functions -------------------------------
+	// static functions -------------------------------
 
-  // non-virtual functions --------------------------
+	// non-virtual functions --------------------------
 
-  // virtual functions ------------------------------
+	// virtual functions ------------------------------
 };
 // <size 0x18>
 
 struct PMSG_GUILDVIEWPORT_USER {
 
-  // static data ------------------------------------
+	// static data ------------------------------------
 
-  // non-static data --------------------------------
-  /*<thisrel this+0x0>*/ /*|0x1|*/ unsigned char NumberH;
-  /*<thisrel this+0x1>*/ /*|0x1|*/ unsigned char NumberL;
-  /*<thisrel this+0x2>*/ /*|0x1|*/ unsigned char GNumberH;
-  /*<thisrel this+0x3>*/ /*|0x1|*/ unsigned char GNumberL;
+	// non-static data --------------------------------
+	/*<thisrel this+0x0>*/ /*|0x1|*/ unsigned char NumberH;
+	/*<thisrel this+0x1>*/ /*|0x1|*/ unsigned char NumberL;
+	/*<thisrel this+0x2>*/ /*|0x1|*/ unsigned char GNumberH;
+	/*<thisrel this+0x3>*/ /*|0x1|*/ unsigned char GNumberL;
 
-  // base classes -----------------------------------
+	// base classes -----------------------------------
 
-  // friends ----------------------------------------
+	// friends ----------------------------------------
 
-  // static functions -------------------------------
+	// static functions -------------------------------
 
-  // non-virtual functions --------------------------
+	// non-virtual functions --------------------------
 
-  // virtual functions ------------------------------
+	// virtual functions ------------------------------
 };
 // <size 0x4>
 
 struct PMSG_GUILDVIEWPORT {
 
-  // static data ------------------------------------
+	// static data ------------------------------------
 
-  // non-static data --------------------------------
-  /*<thisrel this+0x0>*/ /*|0x1|*/ unsigned char NumberH;
-  /*<thisrel this+0x1>*/ /*|0x1|*/ unsigned char NumberL;
-  /*<thisrel this+0x2>*/ /*|0x8|*/ char GuildName[8];
-  /*<thisrel this+0xa>*/ /*|0x20|*/ unsigned char Mark[32];
+	// non-static data --------------------------------
+	/*<thisrel this+0x0>*/ /*|0x1|*/ unsigned char NumberH;
+	/*<thisrel this+0x1>*/ /*|0x1|*/ unsigned char NumberL;
+	/*<thisrel this+0x2>*/ /*|0x8|*/ char GuildName[8];
+	/*<thisrel this+0xa>*/ /*|0x20|*/ unsigned char Mark[32];
 
-  // base classes -----------------------------------
+	// base classes -----------------------------------
 
-  // friends ----------------------------------------
+	// friends ----------------------------------------
 
-  // static functions -------------------------------
+	// static functions -------------------------------
 
-  // non-virtual functions --------------------------
+	// non-virtual functions --------------------------
 
-  // virtual functions ------------------------------
+	// virtual functions ------------------------------
 };
-// <size 0x2a>
 
 BYTE GuildInfoBuf[10000];
 BYTE GuildUserBuf[10000];
@@ -2828,7 +2826,7 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 		cManager.ManagerAdd(lpObj->Name, lpObj->m_Index); //Season 2.5 add-on
 	}
 
-	if ((lpMsg->CtlCode & 0x20) == 0x20) //season4 add-on
+	/*if ((lpMsg->CtlCode & 0x20) == 0x20) //season4 add-on
 	{
 		lpObj->Authority = 0x22;
 		if (Configs.gLanguage == 2)
@@ -2836,7 +2834,7 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 			LogAddC(2, "(%s)(%s) Set Japan ADMIN | EVENT_GM", lpObj->AccountID, lpObj->Name);
 		}
 		cManager.ManagerAdd(lpObj->Name, lpObj->m_Index);
-	}
+	}*/
 
 	lpObj->Penalty = 0;
 
@@ -14560,12 +14558,9 @@ void gObjSecondProc()
 	if(gDisconnect == 1)
 		return;
 
-	int n;
-	LPOBJ lpObj;
-
-	for(n = 0; n < OBJMAX;n++)
+	for(int n = 0; n < OBJMAX;n++)
 	{
-		lpObj = &gObj[n];
+		LPOBJ lpObj = &gObj[n];
 
 		if(lpObj->Connected > PLAYER_LOGGED)
 		{
@@ -15764,6 +15759,8 @@ void gObjViewportListProtocol(short aIndex)
 									}
 								} 
 
+								memcpy(pViewportCreateChange.CharSet, lpTargetObj->CharSet, sizeof(pViewportCreateChange.CharSet)); //Season 2.5 add-on
+
 								memcpy(pViewportCreateChange.Id,lpTargetObj->Name,sizeof(pViewportCreateChange.Id));
 								memcpy(&SendGBufChange[lOfsChange],&pViewportCreateChange,sizeof(pViewportCreateChange));
 								lOfsChange += sizeof(pViewportCreateChange);
@@ -15832,6 +15829,7 @@ void gObjViewportListProtocol(short aIndex)
 											lpTargetObj->m_ViewSkillState &= ~0xC00000;
 									}
 								}
+
 								memcpy(pViewportCreate.CharSet,lpTargetObj->CharSet,sizeof(pViewportCreate.CharSet));
 								memcpy(pViewportCreate.Id,lpTargetObj->Name,sizeof(pViewportCreate.Id));
 								memcpy(&sendBuf[lOfs],&pViewportCreate,sizeof(pViewportCreate));

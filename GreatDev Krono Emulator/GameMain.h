@@ -165,11 +165,12 @@ extern CSimpleModulus g_SimpleModulusCS;	// line 751
 extern CSimpleModulus g_SimpleModulusSC;	// line 752
 extern char gMapName[MAX_NUMBER_MAP][255];
 extern char g_szMapName[MAX_NUMBER_MAP][32];
-extern char szAuthKey[20];
+//extern char szAuthKey[20];
 extern BOOL GSInfoSendFlag;
 extern char connectserverip[20];
 extern int  connectserverport;
 extern char szCommonlocIniFileName[256];
+extern DWORD dwgCheckSum[MAX_CHECKSUM_KEY];
 struct CConfigs 
 {
 
@@ -368,7 +369,7 @@ public:
  int g_iHallowinDayEventJOLPolymorphRingDropRate;
  int g_iShadowPhantomMaxLevel;
 
-//extern DWORD dwgCheckSum[MAX_CHECKSUM_KEY];
+
 
  short gGameServerCode;
  int  gPkTime;
@@ -541,11 +542,12 @@ void ReadCommonServerInfo();
 void GameServerInfoSendStop();
 void GameServerInfoSendStart();
 void GameServerInfoSend();
-//void CheckSumFileLoad(char *szCheckSum);
+void CheckSumFileLoad(char * szCheckSum);
 void LoadItemBag();
 void SetMapName();
 int GetEventFlag();
 void ReadEventInfo(MU_EVENT_TYPE eEventType);
 void ReadGameEtcInfo(MU_ETC_TYPE eGameEtcType);
 void LoadCustomJewel(char *filename);
+
 #endif
