@@ -112,9 +112,7 @@ public:
 	virtual ~CMagicDamage();
 
 	void Init();
-	void LogSkillList(char* Buffer, int iSize);
 	void LogSkillList(char* filename);
-	void LogSkillNameList(char* Buffer, int iSize);
 	void LogSkillNameList(char* filename);
 	int SkillGet(int skill);
 	int SkillGetMana(int skill);

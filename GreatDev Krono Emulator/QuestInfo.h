@@ -100,7 +100,6 @@ public:
 	void Init();
 	int IsQuest(int QuestIndex);
 	int GetQeustCount(){return m_QuestCount;}
-	int LoadQuestInfo(char* Buffer, int iSize);
 	int LoadQuestInfo(char* filename);
 	void InitQuestItem();
 	LPQUEST_INFO GetQuestInfo(int QuestIndex);

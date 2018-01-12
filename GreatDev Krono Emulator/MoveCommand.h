@@ -38,7 +38,6 @@ public:
 	virtual ~CMoveCommand();
 
 	void Init();
-	int Load(char *Buffer, int iSize);
 	int Load(char *filename);
 	int LoadMoveLevel(char *filename);
 	int GetMoveLevel(int mapnumber, int x, int y, int Class);

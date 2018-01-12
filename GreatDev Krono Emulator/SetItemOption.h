@@ -152,9 +152,7 @@ public:
 	CSetItemOption();
 	virtual ~CSetItemOption();
 
-	BOOL LoadTypeInfo(LPSTR Buffer, int iSize);
 	BOOL LoadTypeInfo(LPSTR filename);
-	BOOL LoadOptionInfo(LPSTR Buffer, int iSize);
 	BOOL LoadOptionInfo(LPSTR filename);
 	BOOL IsSetItem(int itemnum);
 	int GetOptionTableIndex(int itemnum, int setoption);

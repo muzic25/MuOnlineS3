@@ -158,17 +158,48 @@ void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOO
 		case LIVE_CLIENT: //0x0E:
 			CGLiveClient((PMSG_CLIENTTIME *)aRecv, aIndex);
 			break;
-			// --------------------------------------------------
-		case MOVE_PROTOCOL:
-			PMoveProc((PMSG_MOVE *)aRecv, aIndex); // Move
-			break;
-		case SETPOS_PROTOCOL:
-			RecvPositionSetProc((PMSG_POSISTION_SET*)aRecv, aIndex); //Skill
-			break;
-		case ATTACK_PROTOCOL:
-			CGAttack((PMSG_ATTACK *)aRecv, aIndex); // Attack
-			break;
-			// --------------------------------------------------
+
+			if (Configs.gLanguage == 0) //Korean
+			{
+				// --------------------------------------------------
+				case MOVE_PROTOCOL:
+					PMoveProc((PMSG_MOVE *)aRecv, aIndex); // Move
+				break;
+
+				case SETPOS_PROTOCOL:
+					RecvPositionSetProc((PMSG_POSISTION_SET*)aRecv, aIndex); //Skill
+				break;
+
+				case ATTACK_PROTOCOL:
+					CGAttack((PMSG_ATTACK *)aRecv, aIndex); // Attack
+				break;
+			
+				case BEATTACK_PROTOCOL:
+					CGBeattackRecv(aRecv, aIndex, FALSE);
+				break;
+				// --------------------------------------------------
+			}
+
+			if (Configs.gLanguage == 2) //Japan
+			{
+				// --------------------------------------------------
+				case 0x1D:
+					PMoveProc((PMSG_MOVE *)aRecv, aIndex);
+				break;
+
+				case 0xD6:
+					RecvPositionSetProc((PMSG_POSISTION_SET *)aRecv, aIndex);
+				break;
+
+				case 0xDC:
+					CGAttack((PMSG_ATTACK *)aRecv, aIndex);
+				break;
+
+				case 0x07:
+					CGBeattackRecv(aRecv, aIndex, FALSE);
+				break;
+			}
+
 		case ACTION_RECV: //0x18:
 			CGActionRecv((PMSG_ACTION *)aRecv, aIndex);
 			break;
@@ -193,9 +224,7 @@ void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOO
 				CGTargetTeleportRecv((PMSG_TARGET_TELEPORT *)aRecv, aIndex);
 			}
 			break;
-		case BEATTACK_PROTOCOL:
-			CGBeattackRecv(aRecv, aIndex, FALSE);
-			break;
+		
 		case DURATION_MAGIC_RECV: //0x1E:
 			if (DataEncryptCheck(aIndex, protoNum, Encrypt) != FALSE)
 			{
@@ -8999,7 +9028,18 @@ void PMoveProc(PMSG_MOVE* lpMove, int aIndex)
 		}
 	}	
 
-	PHeadSetB((LPBYTE)&pMove, MOVE_PROTOCOL, sizeof(pMove));
+
+	if (Configs.gLanguage == 0)
+	{
+		PHeadSetB((LPBYTE)&pMove, MOVE_PROTOCOL, sizeof(pMove));
+	}
+
+
+	if (Configs.gLanguage == 2)
+	{
+		PHeadSetB((LPBYTE)&pMove, 0x1D, sizeof(pMove));
+	}
+
 	pMove.NumberH = SET_NUMBERH(aIndex);
 	pMove.NumberL = SET_NUMBERL(aIndex);
 	pMove.X = ax;
@@ -9120,7 +9160,16 @@ void RecvPositionSetProc(PMSG_POSISTION_SET * lpMove, int aIndex)
 
 	PMSG_RECV_POSISTION_SET pMove;
 
-	PHeadSetB((LPBYTE)&pMove, SETPOS_PROTOCOL, sizeof(pMove));
+	if (Configs.gLanguage == 0)
+	{
+		PHeadSetB((LPBYTE)&pMove, SETPOS_PROTOCOL, sizeof(pMove));
+	}
+
+	if (Configs.gLanguage == 2)
+	{
+		PHeadSetB((LPBYTE)&pMove, 0xD6, sizeof(pMove));
+	}
+	
 	pMove.NumberH = SET_NUMBERH(aIndex);
 	pMove.NumberL = SET_NUMBERL(aIndex);
 	pMove.X = lpMove->X;
@@ -9264,7 +9313,16 @@ void GCDamageSend(int aIndex, int TargetIndex, int AttackDamage, int MSBFlag, in
 {
 	PMSG_ATTACKRESULT pResult;
 
-	PHeadSetB((LPBYTE)&pResult, ATTACK_PROTOCOL, sizeof(pResult));
+	if (Configs.gLanguage == 0)
+	{
+		PHeadSetB((LPBYTE)&pResult, ATTACK_PROTOCOL, sizeof(pResult));
+	}
+
+	if (Configs.gLanguage == 2)
+	{
+		PHeadSetB((LPBYTE)&pResult, 0xDC, sizeof(pResult));
+	}
+
 	pResult.NumberH = SET_NUMBERH(TargetIndex);
 	pResult.NumberL = SET_NUMBERL(TargetIndex);
 	pResult.DamageH = SET_NUMBERH(AttackDamage);
@@ -10059,12 +10117,23 @@ void CGBeattackRecv(unsigned char* lpRecv, int aIndex, int magic_send)
 	PMSG_BEATTACK_COUNT * lpCount = (PMSG_BEATTACK_COUNT *)lpRecv;
 
 	// Check the Protocol
-	if ( lpCount->h.headcode != BEATTACK_PROTOCOL )
+	if (Configs.gLanguage == 0)
 	{
-		LogAdd("error-L3 %s %d", __FILE__, __LINE__);
-		return;
+		if (lpCount->h.headcode != BEATTACK_PROTOCOL)
+		{
+			LogAdd("error-L3 %s %d", __FILE__, __LINE__);
+			return;
+		}
 	}
 
+	if (Configs.gLanguage == 2)
+	{
+		if (lpCount->h.headcode != 0xD7)
+		{
+			LogAdd("error-L3 %s %d", __FILE__, __LINE__);
+			return;
+		}
+	}
 	// Check if the count is leess than 1
 	if ( lpCount->Count < 1 )
 	{
@@ -12240,27 +12309,37 @@ struct PMSG_REQ_RESET_EVENTCHIP
 
 void GCUseRenaChangeZenRecv(PMSG_EXCHANGE_EVENTCHIP* lpMsg, int aIndex)
 {
-	if ( gObj[aIndex].UseEventServer )
+	if (gObj[aIndex].UseEventServer)
+	{
 		return;
+	}
 
 	gObj[aIndex].UseEventServer = TRUE;
 
 	PMSG_REQ_RESET_EVENTCHIP pMsg;
 
-	if ( lpMsg->btType == 1 )	// Stone?
+	if (lpMsg->btType == 1)	// Stone?
+	{
 		PHeadSetB((LPBYTE)&pMsg, 0x09, sizeof(pMsg));
+	}
 	else
+	{
 		PHeadSetB((LPBYTE)&pMsg, 0x04, sizeof(pMsg));
+	}
 
 	pMsg.iINDEX = aIndex;
 	strcpy(pMsg.szUID, gObj[aIndex].AccountID);
 
 	DataSendEventChip((PCHAR)&pMsg, sizeof(pMsg));
 
-	if ( lpMsg->btType == 0x01 )
+	if (lpMsg->btType == 0x01)
+	{
 		LogAddTD("[EventChip] [%s][%s] Request Change Stones", gObj[aIndex].AccountID, gObj[aIndex].Name);
+	}
 	else
+	{
 		LogAddTD("[EventChip] [%s][%s] Request Change Rena", gObj[aIndex].AccountID, gObj[aIndex].Name);
+	}
 }
 
 
@@ -15860,7 +15939,18 @@ void GCAnsCsSendCommand(int iCsJoinSize, BYTE btTeam, BYTE btX, BYTE btY, BYTE b
 {
 	PMSG_ANS_CSCOMMAND pMsgResult;
 
-	pMsgResult.h.set((LPBYTE)&pMsgResult, 0xB2, MOVE_PROTOCOL, sizeof(pMsgResult));
+
+	if (Configs.gLanguage == 0)
+	{
+		pMsgResult.h.set((LPBYTE)&pMsgResult, 0xB2, MOVE_PROTOCOL, sizeof(pMsgResult));
+	}
+
+
+	if (Configs.gLanguage == 2)
+	{
+		pMsgResult.h.set((LPBYTE)&pMsgResult, 0xB2, 0x1D, sizeof(pMsgResult));
+	}
+	
 	pMsgResult.btTeam = btTeam;
 	pMsgResult.btX = btX;
 	pMsgResult.btY = btY;

@@ -13,15 +13,7 @@
 //***************************************************
 
 #define LOG_INMEDIATLY	0
-#define GS_PROTECTED	0		// 1 : Protected	0 : Unprotected 
 
-// WARNING
-//--------------------------------------------
-// This will enable the auth server from Korea
-// Please check that you want to use this option
-// Default is : Enabled (1); (0) : Disabled
-
-#define FOREIGN_GAMESERVER 1 
 
 // GameServer Version
 //--------------------------

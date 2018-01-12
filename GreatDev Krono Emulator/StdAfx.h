@@ -129,7 +129,7 @@
 #include "GameEvent.h"
 #include "GameMain.h"
 #include "GameServer.h"
-#include "GameServerAuth.h"
+//#include "GameServerAuth.h"
 #include "Gate.h"
 //#include "GGSvr.h"
 #include "giocp.h"

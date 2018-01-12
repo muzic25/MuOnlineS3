@@ -195,92 +195,28 @@ BOOL CShop::LoadShopItem(char* filename)
 	return true;
 }
 
-BOOL CShop::LoadShopItem(int ShopNumber)
-{
-#if (FOREIGN_GAMESERVER==1)
-	gGameServerAuth.RequestData(ShopNumber);
-	int DataBufferSize = gGameServerAuth.GetDataBufferSize();
-	char* DataBuffer = gGameServerAuth.GetDataBuffer();
-#endif
-
-	CWzMemScript WzMemScript;
-	int Token;
-	int type;
-	int index;
-	int level;
-	int dur;
-	int op1;
-	int op2;
-	int op3;
-	int exe;
-#if (FOREIGN_GAMESERVER==1)
-	WzMemScript.SetBuffer(DataBuffer, DataBufferSize);
-#endif
-	this->Init();
-	
-	while (true)
-	{
-		Token = WzMemScript.GetToken();
-
-		if (Token == 2)
-		{
-			break;
-		}
-
-		if (Token == 1)
-		{
-			type = WzMemScript.GetNumber();
-
-			Token = WzMemScript.GetToken();
-			index = WzMemScript.GetNumber();
-
-			Token = WzMemScript.GetToken();
-			level = WzMemScript.GetNumber();
-
-			Token = WzMemScript.GetToken();
-			dur = WzMemScript.GetNumber();
-
-			Token = WzMemScript.GetToken();
-			op1 = WzMemScript.GetNumber();
-
-			Token = WzMemScript.GetToken();
-			op2 = WzMemScript.GetNumber();
-
-			Token = WzMemScript.GetToken();
-			op3 = WzMemScript.GetNumber();
-
-			Token = WzMemScript.GetToken();
-			exe = WzMemScript.GetNumber();
-
-			if (this->InsertItem(type, index, level, dur, op1, op2, op3, exe) == FALSE)
-			{
-				MsgBox("error-L3 : Shop %d", ShopNumber);
-			}
-		}
-	}
-	return TRUE;
-}
-
 BOOL ShopDataLoad()
 {
-	ShopC[0].LoadShopItem(11);
-	ShopC[1].LoadShopItem(12);
-	ShopC[2].LoadShopItem(13);
-	ShopC[3].LoadShopItem(14);
-	ShopC[4].LoadShopItem(15);
-	ShopC[5].LoadShopItem(16);
-	ShopC[6].LoadShopItem(17);
-	ShopC[7].LoadShopItem(18);
-	ShopC[8].LoadShopItem(19);
-	ShopC[9].LoadShopItem(20);
-	ShopC[10].LoadShopItem(21);
-	ShopC[11].LoadShopItem(22);
-	ShopC[12].LoadShopItem(23);
-	ShopC[13].LoadShopItem(30);
-	ShopC[14].LoadShopItem(31);
-	ShopC[15].LoadShopItem(32);
-	ShopC[16].LoadShopItem(33);
+	ShopC[0].LoadShopItem("..\\Data\\Shops\\Shop0.txt");
+	ShopC[1].LoadShopItem("..\\Data\\Shops\\Shop1.txt");
+	ShopC[2].LoadShopItem("..\\Data\\Shops\\Shop2.txt");
+	ShopC[3].LoadShopItem("..\\Data\\Shops\\Shop3.txt");
+	ShopC[4].LoadShopItem("..\\Data\\Shops\\Shop4.txt");
+	ShopC[5].LoadShopItem("..\\Data\\Shops\\Shop5.txt");
+	ShopC[6].LoadShopItem("..\\Data\\Shops\\Shop6.txt");
+	ShopC[7].LoadShopItem("..\\Data\\Shops\\Shop7.txt");
+	ShopC[8].LoadShopItem("..\\Data\\Shops\\Shop8.txt");
+	ShopC[9].LoadShopItem("..\\Data\\Shops\\Shop9.txt");
+	ShopC[10].LoadShopItem("..\\Data\\Shops\\Shop10.txt");
+	ShopC[11].LoadShopItem("..\\Data\\Shops\\Shop11.txt");
+	ShopC[12].LoadShopItem("..\\Data\\Shops\\Shop12.txt");
+	ShopC[13].LoadShopItem("..\\Data\\Shops\\Shop13.txt");
+	ShopC[14].LoadShopItem("..\\Data\\Shops\\Shop14.txt");
+	ShopC[15].LoadShopItem("..\\Data\\Shops\\Shop15.txt");
+	ShopC[16].LoadShopItem("..\\Data\\Shops\\Shop16.txt");
+	ShopC[17].LoadShopItem("..\\Data\\Shops\\Shop17.txt");
 	LogAdd(lMsg.Get(MSGGET(1, 209)));
 
 	return TRUE;
 }
+

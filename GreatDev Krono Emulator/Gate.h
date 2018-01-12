@@ -22,7 +22,6 @@ public:
 	virtual ~CGate();
 
 	void Init();
-	void Load(LPSTR Buffer, int iSize);
 	void Load(LPSTR filename);
 	int IsGate(int GateNumber);
 	int GetGate(int mgt, short& x, short& y, BYTE& MapNumber, BYTE& dir, short& Level);

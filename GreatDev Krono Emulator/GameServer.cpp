@@ -38,17 +38,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 {
 	MSG msg;
 	HACCEL hAccelTable;
-	// Check if the original language == KOREA
-	if (Configs.gLanguage == 0)
-	{
-		WIN32_FIND_DATA  wfd;
-
-		if (FindFirstFile(COMMONSERVER_PATH, &wfd) == INVALID_HANDLE_VALUE)
-		{
-			MessageBox(NULL, "Cannot find CommonServer.cfg", "Error", MB_OK | MB_ICONHAND | MB_APPLMODAL);
-			return 0; 
-		}
-	}	
 
 	//Load Title and WindowClass Name
 	LoadString(hInstance, IDS_APP_TITLE, szTitle, 100);

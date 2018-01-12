@@ -28,7 +28,16 @@ void CCannonTower::CannonTowerAct(int iIndex)
 	int ASBOfs = 0;
 	
 	pCount.h.c = 0xC1;
-	pCount.h.headcode = BEATTACK_PROTOCOL;
+	if (Configs.gLanguage == 0)
+	{
+		pCount.h.headcode = BEATTACK_PROTOCOL;
+	}
+
+	if (Configs.gLanguage == 2)
+	{
+		pCount.h.headcode = 0xD7;
+	}
+
 	pCount.h.size = 0;
 	pCount.MagicNumber = 0;
 	pCount.Count = 0;

@@ -224,9 +224,6 @@
     <ClCompile Include="GameServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameServerAuth.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Gate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -740,9 +737,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="GameServer.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameServerAuth.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="GameMain.h">

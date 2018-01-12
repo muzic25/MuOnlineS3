@@ -90,6 +90,7 @@ BOOL CSetItemOption::LoadOptionInfo(LPSTR filename)
 	{
 		return 0;
 	}
+
 	memset(&this->m_SetItemOptionInfo, 0, sizeof(this->m_SetItemOptionInfo));
 
 	for ( i=0;i<MAX_SETITEM_OPTION;i++)
@@ -102,7 +103,7 @@ BOOL CSetItemOption::LoadOptionInfo(LPSTR filename)
 	while ( true )
 	{
 		Token = GetToken();
-		int number=TokenNumber;
+		int number = TokenNumber;
 		
 		if (Token == 0 && strcmp("end", &TokenString[0]) == 0)
 		{
@@ -112,7 +113,7 @@ BOOL CSetItemOption::LoadOptionInfo(LPSTR filename)
 		{
 			LPSETITEM_OPTIONINFO p = new SETITEM_OPTIONINFO;
 
-			p = &this->m_SetItemOptionInfo[number];
+			//p = &this->m_SetItemOptionInfo[number];
 
 			Token = GetToken();
 
@@ -209,193 +210,6 @@ BOOL CSetItemOption::LoadOptionInfo(LPSTR filename)
 	return 1;
 }
 
-
-BOOL CSetItemOption::LoadTypeInfo(char* Buffer, int iSize)
-{
-	CWzMemScript WzMemScript;
-	int i;
-	int Token;
-
-	WzMemScript.SetBuffer(Buffer, iSize);
-
-	memset(this->m_SetItemTypeInfo , -1, sizeof(this->m_SetItemTypeInfo) );
-
-	for ( i=0; i<MAX_ITEMS; i++)
-	{
-		this->m_SetItemTypeInfo[i].IsLoad =FALSE;
-	}
-	
-	while ( true )
-	{
-		int number;
-		
-		Token=WzMemScript.GetToken();
-		if (Token == 2)
-		{
-			break;
-		}
-
-		if (Token == 1)
-		{
-			number = WzMemScript.GetNumber();
-			
-			while ( true )
-			{
-				int number2;
-				LPSETITEM_TYPEINFO pointer;
-
-				Token = WzMemScript.GetToken();
-				number2=WzMemScript.GetNumber();
-				if ( ( Token== 0) && (strcmp("end", WzMemScript.GetString() )== 0))
-				{
-					break;
-				}
-				else
-				{
-					pointer = &this->m_SetItemTypeInfo[number*MAX_SUBTYPE_ITEMS+number2];
-
-					Token=WzMemScript.GetToken();
-					pointer->OptionIndex[0]=WzMemScript.GetNumber();
-					Token=WzMemScript.GetToken();
-					pointer->OptionIndex[1]=WzMemScript.GetNumber();
-					Token=WzMemScript.GetToken();
-					pointer->ChaosMixLevel[0]=WzMemScript.GetNumber();
-					Token=WzMemScript.GetToken();
-					pointer->ChaosMixLevel[1]=WzMemScript.GetNumber();
-
-					pointer->IsLoad=TRUE;
-				}
-			}
-		}
-		
-	}
-
-	return 1;
-}
-
-BOOL CSetItemOption::LoadOptionInfo(LPSTR Buffer, int iSize)
-{
-	CWzMemScript WzMemScript;
-	int i;
-	int Token;
-	
-	WzMemScript.SetBuffer(Buffer, iSize);
-
-	memset(&this->m_SetItemOptionInfo, 0, sizeof(this->m_SetItemOptionInfo));
-
-	for (i = 0; i < MAX_SETITEM_OPTION; i++)
-	{
-		memset(&this->m_SetItemOptionInfo[i].SetOptionTable[0], -1, sizeof(this->m_SetItemOptionInfo[0].SetOptionTable) );
-		memset(&this->m_SetItemOptionInfo[i].SetExPOptionTable, -1, sizeof(this->m_SetItemOptionInfo[0].SetExPOptionTable) );
-		memset(&this->m_SetItemOptionInfo[i].SetFullOtionTable[0], -1, sizeof(this->m_SetItemOptionInfo[0].SetFullOtionTable) );
-	}
-
-	while (true)
-	{
-		Token = WzMemScript.GetToken();
-		int number = WzMemScript.GetNumber();
-		
-		if (Token == 0 && strcmp("end", WzMemScript.GetString()) == 0)
-		{
-			break;
-		}
-		else
-		{
-			LPSETITEM_OPTIONINFO p = new SETITEM_OPTIONINFO;
-
-			Token = WzMemScript.GetToken();
-
-			strcpy(&p->Name[0], WzMemScript.GetString());
-
-			for (i = 0; i < OPTION_TABLE_SIZE; i++)
-			{
-				Token = WzMemScript.GetToken();
-				p->SetOptionTable[i][0] = WzMemScript.GetNumber();
-				Token=WzMemScript.GetToken();
-				p->SetOptionTableValue[i][0] = WzMemScript.GetNumber();
-
-				Token=WzMemScript.GetToken();
-				p->SetOptionTable[i][1] = WzMemScript.GetNumber();
-				Token = WzMemScript.GetToken();
-				p->SetOptionTableValue[i][1] = WzMemScript.GetNumber();
-
-				if ((p->SetOptionTable[i][0] != -1) || (p->SetOptionTable[i][1] != -1))
-				{
-					p->SetOptionCount++;
-				}
-			}
-			
-			// Special Set Item Options
-			Token = WzMemScript.GetToken();
-			p->SetExPOptionTable[0] = WzMemScript.GetNumber();
-			Token = WzMemScript.GetToken();
-			p->SetExPOptionTableValue[0] = WzMemScript.GetNumber();
-
-			if (p->SetExPOptionTable[0] != -1)
-			{
-				p->SetOptionCount ++;
-			}
-
-			Token=WzMemScript.GetToken();
-			p->SetExPOptionTable[1]  = WzMemScript.GetNumber();
-			Token = WzMemScript.GetToken();
-			p->SetExPOptionTableValue[1] = WzMemScript.GetNumber();
-
-			if (p->SetExPOptionTable[1] != -1)
-			{
-				p->SetOptionCount ++;
-			}
-			
-			// Full Type Set Item
-			Token=WzMemScript.GetToken();
-			p->SetFullOtionTable[0] = WzMemScript.GetNumber();
-			Token=WzMemScript.GetToken();
-			p->SetFullOtionTableValue[0] = WzMemScript.GetNumber();
-
-			Token = WzMemScript.GetToken();
-			p->SetFullOtionTable[1] = WzMemScript.GetNumber();
-			Token=WzMemScript.GetToken();
-			p->SetFullOtionTableValue[1] = WzMemScript.GetNumber();
-
-			Token=WzMemScript.GetToken();
-			p->SetFullOtionTable[2] = WzMemScript.GetNumber();
-			Token=WzMemScript.GetToken();
-			p->SetFullOtionTableValue[2] = WzMemScript.GetNumber();
-
-			Token=WzMemScript.GetToken();
-			p->SetFullOtionTable[3] = WzMemScript.GetNumber();
-			Token=WzMemScript.GetToken();
-			p->SetFullOtionTableValue[3] = WzMemScript.GetNumber();
-
-			Token=WzMemScript.GetToken();
-			p->SetFullOtionTable[4] = WzMemScript.GetNumber();
-			Token=WzMemScript.GetToken();
-			p->SetFullOtionTableValue[4] = WzMemScript.GetNumber();
-
-			// Save Character Class Disponibility
-			Token=WzMemScript.GetToken();
-			p->RequireClass[CLASS_WIZARD] = WzMemScript.GetNumber();
-
-			Token=WzMemScript.GetToken();
-			p->RequireClass[CLASS_KNIGHT] = WzMemScript.GetNumber();
-
-			Token=WzMemScript.GetToken();
-			p->RequireClass[CLASS_ELF] = WzMemScript.GetNumber();
-
-			Token=WzMemScript.GetToken();
-			p->RequireClass[CLASS_MAGUMSA] = WzMemScript.GetNumber();
-
-			Token=WzMemScript.GetToken();
-			p->RequireClass[CLASS_DARKLORD] = WzMemScript.GetNumber();
-			
-			// Active SetItem
-			p->IsLoad = TRUE;	
-
-			delete p;
-		}
-	}
-	return 1;
-}
 
 int CSetItemOption::IsSetItem(int itemnum)	
 {

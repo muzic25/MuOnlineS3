@@ -301,8 +301,6 @@ float GetAllRepairItemRate(int index);
 void CalRepairRate( int itemtype, int itemsubtype, LPITEM_ATTRIBUTE p);
 BOOL OpenItemScript(char* FileName);
 BOOL OpenItemNameScript(char* FileName);
-BOOL OpenItemScript(char* Buffer, int iSize);
-BOOL OpenItemNameScript(char* Buffer, int iSize);
 int zzzItemLevel(int type, int index, int level);
 int GetLevelItem(int type, int index, int level);
 int GetSerialItem(int type);

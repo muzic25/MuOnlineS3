@@ -1328,7 +1328,17 @@ void gObjMonsterMagicAttack(LPOBJ lpObj, int iMonsterClass)
 	CGDurationMagicRecv(&pDuration, lpObj->m_Index);
 
 	pCount.h.c = 0xC1;
-	pCount.h.headcode = BEATTACK_PROTOCOL;
+
+	if (Configs.gLanguage == 0)
+	{
+		pCount.h.headcode = BEATTACK_PROTOCOL;
+	}
+
+	if (Configs.gLanguage == 2)
+	{
+		pCount.h.headcode = 0xD7;
+	}
+
 	pCount.h.size = 0;
 	pCount.MagicNumber = 0;
 	pCount.Count = 0;
@@ -1661,7 +1671,19 @@ BOOL PathFindMoveMsgSend(LPOBJ lpObj)
 	
 
 	pMove.h.c = 0xC1;
-	pMove.h.headcode = MOVE_PROTOCOL;
+
+	if (Configs.gLanguage == 0)
+	{
+		pMove.h.headcode = MOVE_PROTOCOL;
+	}
+
+
+	if (Configs.gLanguage == 2)
+	{
+		pMove.h.headcode = 0x1D;
+	}
+
+
 	pMove.h.size = sizeof(pMove);
 	pMove.X = lpObj->X;
 	pMove.Y = lpObj->Y;

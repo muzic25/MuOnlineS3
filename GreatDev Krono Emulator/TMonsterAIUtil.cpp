@@ -405,7 +405,17 @@ BOOL TMonsterAIUtil::SendMonsterMoveMsg(LPOBJ lpObj)
 {
 	PMSG_RECVMOVE pMove;
 
-	PHeadSetB((LPBYTE)&pMove, MOVE_PROTOCOL, sizeof(pMove));
+	if (Configs.gLanguage == 0)
+	{
+		PHeadSetB((LPBYTE)&pMove, MOVE_PROTOCOL, sizeof(pMove));
+	}
+
+
+	if (Configs.gLanguage == 2)
+	{
+		PHeadSetB((LPBYTE)&pMove, 0x1D, sizeof(pMove));
+	}
+
 	pMove.NumberH = SET_NUMBERH(lpObj->m_Index);
 	pMove.NumberL = SET_NUMBERL(lpObj->m_Index);
 	pMove.X = lpObj->MTX;

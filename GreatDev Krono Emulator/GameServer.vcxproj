@@ -249,7 +249,6 @@
     <ClCompile Include="GameEvent.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GameServer.cpp" />
-    <ClCompile Include="GameServerAuth.cpp" />
     <ClCompile Include="Gate.cpp" />
     <ClCompile Include="giocp.cpp" />
     <ClCompile Include="GMMng.cpp" />
@@ -431,7 +430,6 @@
     <ClInclude Include="GameEvent.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="GameServer.h" />
-    <ClInclude Include="GameServerAuth.h" />
     <ClInclude Include="Gate.h" />
     <ClInclude Include="giocp.h" />
     <ClInclude Include="GMMng.h" />

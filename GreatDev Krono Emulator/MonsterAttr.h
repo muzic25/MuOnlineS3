@@ -46,7 +46,6 @@ class CMonsterAttr
 public:
 
 	LPMONSTER_ATTRIBUTE GetAttr(int aClass);
-	void LoadAttr(char* Buffer, int iSize);
 	void LoadAttr(char* filename);
 
 	CMonsterAttr();

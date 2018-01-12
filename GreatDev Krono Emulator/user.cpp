@@ -206,17 +206,18 @@ struct PMSG_VIEWPORTCREATE_CHANGE {
   // static data ------------------------------------
 
   // non-static data --------------------------------
-  /*<thisrel this+0x0>*/ /*|0x1|*/ unsigned char NumberH;
-  /*<thisrel this+0x1>*/ /*|0x1|*/ unsigned char NumberL;
-  /*<thisrel this+0x2>*/ /*|0x1|*/ unsigned char X;
-  /*<thisrel this+0x3>*/ /*|0x1|*/ unsigned char Y;
-  /*<thisrel this+0x4>*/ /*|0x1|*/ unsigned char SkinH;
-  /*<thisrel this+0x5>*/ /*|0x1|*/ unsigned char SkinL;
+  /*<thisrel this+0x0>*/ /*|0x1|*/ BYTE NumberH;
+  /*<thisrel this+0x1>*/ /*|0x1|*/ BYTE NumberL;
+  /*<thisrel this+0x2>*/ /*|0x1|*/ BYTE X;
+  /*<thisrel this+0x3>*/ /*|0x1|*/ BYTE Y;
+  /*<thisrel this+0x4>*/ /*|0x1|*/ BYTE SkinH;
+  /*<thisrel this+0x5>*/ /*|0x1|*/ BYTE SkinL;
   /*<thisrel this+0x8>*/ /*|0x4|*/ int ViewSkillState;
   /*<thisrel this+0xc>*/ /*|0xa|*/ char Id[10];
-  /*<thisrel this+0x16>*/ /*|0x1|*/ unsigned char TX;
-  /*<thisrel this+0x17>*/ /*|0x1|*/ unsigned char TY;
-  /*<thisrel this+0x18>*/ /*|0x1|*/ unsigned char DirAndPkLevel;
+  /*<thisrel this+0x16>*/ /*|0x1|*/ BYTE TX;
+  /*<thisrel this+0x17>*/ /*|0x1|*/ BYTE TY;
+  /*<thisrel this+0x18>*/ /*|0x1|*/ BYTE DirAndPkLevel;
+									BYTE CharSet[18]; //Season 2.5 add-on
 
   // base classes -----------------------------------
 
@@ -2827,6 +2828,16 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 		cManager.ManagerAdd(lpObj->Name, lpObj->m_Index); //Season 2.5 add-on
 	}
 
+	if ((lpMsg->CtlCode & 0x20) == 0x20) //season4 add-on
+	{
+		lpObj->Authority = 0x22;
+		if (Configs.gLanguage == 2)
+		{
+			LogAddC(2, "(%s)(%s) Set Japan ADMIN | EVENT_GM", lpObj->AccountID, lpObj->Name);
+		}
+		cManager.ManagerAdd(lpObj->Name, lpObj->m_Index);
+	}
+
 	lpObj->Penalty = 0;
 
 	if ( lpObj->m_cAccountItemBlock != 0 )
@@ -4905,7 +4916,17 @@ BOOL gObjBackSpring(LPOBJ lpObj, LPOBJ lpTargetObj)
 
 	PMSG_POSISTION_SET pMove;
 	pMove.h.c = 0xC1;
-	pMove.h.headcode = SETPOS_PROTOCOL;
+
+	if (Configs.gLanguage == 0)
+	{
+		pMove.h.headcode = SETPOS_PROTOCOL;
+	}
+
+	if (Configs.gLanguage == 2)
+	{
+		pMove.h.headcode = 0xD6;
+	}
+
 	pMove.h.size = sizeof(pMove);
 	pMove.X = x;
 	pMove.Y = y;
@@ -5060,7 +5081,17 @@ BOOL gObjBackSpring2(LPOBJ lpObj, LPOBJ lpTargetObj, int count)
 	PMSG_POSISTION_SET pMove;
 
 	pMove.h.c = 0xC1;
-	pMove.h.headcode = SETPOS_PROTOCOL;
+
+	if (Configs.gLanguage == 0)
+	{
+		pMove.h.headcode = SETPOS_PROTOCOL;
+	}
+
+	if (Configs.gLanguage == 2)
+	{
+		pMove.h.headcode = 0xD6;
+	}
+
 	pMove.h.size = sizeof(pMove);
 	pMove.X = x;
 	pMove.Y = y;
@@ -5142,7 +5173,16 @@ bool gObjLevelUp(LPOBJ lpObj, int addexp, int iMonsterType, int iEventType)
 
 			if(iAddSkillPosition >= 0)
 			{
-				GCMagicListOneSend(lpObj->m_Index,iAddSkillPosition,0x4D,ATTACK_PROTOCOL,0,0);
+				if (Configs.gLanguage == 0)
+				{
+					GCMagicListOneSend(lpObj->m_Index, iAddSkillPosition, 0x4D, ATTACK_PROTOCOL, 0, 0);
+				}
+
+				if (Configs.gLanguage == 2)
+				{
+					GCMagicListOneSend(lpObj->m_Index, iAddSkillPosition, 0x4D, 0xDC, 0, 0);
+				}
+				
 				LogAddTD("[%s][%s] Add Infinity Arrow Skill (Character Level : %d)(ChangeUp: %d)",
 					lpObj->AccountID,lpObj->Name,lpObj->Level,lpObj->ChangeUP);
 			}
@@ -14814,8 +14854,6 @@ void gObjSecondProc()
 			GCMapEventStateSend(0, Configs.gAppearTamaJJang, 2);
 		}
 	}
-	
-	gGameServerAuth.SendInfo();
 }
 
 
@@ -15277,7 +15315,7 @@ void gObjViewportListProtocolCreate(LPOBJ lpObj)
 			lpObj->CharSet[0] &= 0xF8;
 			lpObj->CharSet[0] |= lpObj->m_ViewState & 0x07;
 
-
+			memcpy(pViewportCreateChange.CharSet, lpObj->CharSet, sizeof(pViewportCreateChange.CharSet)); //Season 2.5 Add-on
 			memcpy(pViewportCreateChange.Id,lpObj->Name,sizeof(pViewportCreateChange.Id));
 			memcpy(&sendBuf[lOfs],&pViewportCreateChange,sizeof(pViewportCreateChange));
 
@@ -19252,7 +19290,17 @@ void gObjSetPosition(int aIndex, int x, int y)
 	PMSG_POSISTION_SET pMove;
 
 	pMove.h.c = 0xC1;
-	pMove.h.headcode = SETPOS_PROTOCOL;
+
+	if (Configs.gLanguage == 0)
+	{
+		pMove.h.headcode = SETPOS_PROTOCOL;
+	}
+
+	if (Configs.gLanguage == 2)
+	{
+		pMove.h.headcode = 0xD6;
+	}
+
 	pMove.h.size = sizeof(pMove);
 
 	pMove.X = x;

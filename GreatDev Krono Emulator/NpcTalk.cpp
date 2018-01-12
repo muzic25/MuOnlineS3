@@ -675,6 +675,42 @@ BOOL NpcEventChipNPC(LPOBJ lpNpc, LPOBJ lpObj)
 		return TRUE;
 	}
 
+
+	if (lpNpc->MapNumber == 3)
+	{
+		PMSG_REQ_VIEW_EC_MN pMsgTha;
+
+		PHeadSetB((LPBYTE)&pMsgTha, 0x05, sizeof(pMsgTha));
+		pMsgTha.iINDEX = lpObj->m_Index;
+		strcpy(pMsgTha.szUID, lpObj->AccountID);
+		pEventObj = lpNpc;
+
+		DataSendEventChip((char*)&pMsgTha, sizeof(pMsgTha));
+
+		lpObj->m_IfState.type = 9;
+		lpObj->m_IfState.state = 0;
+		lpObj->m_IfState.use = 1;
+
+		return TRUE;
+	}
+
+	/*if (lpNpc->MapNumber == 3)
+	{
+		PMSG_EVENTCHIPINFO Result;
+
+		PHeadSetB((LPBYTE)&Result, 0x94, sizeof(Result));
+		Result.Type = 1;
+
+		DataSend(lpObj->m_Index, (LPBYTE)&Result, Result.h.size);
+
+		lpObj->m_IfState.type = 9;
+		lpObj->m_IfState.state = 0;
+		lpObj->m_IfState.use = 1;
+
+		return TRUE;
+	}*/
+
+
 	if ( lpNpc->MapNumber == 2 )
 	{
 		PMSG_EVENTCHIPINFO Result;

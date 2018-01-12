@@ -172,10 +172,6 @@ BOOL gJoominCheck(char* szJN, int iLimitAge) // Good
 void GameMainInit(HWND hWnd)
 {
 	int n;
-#if (FOREIGN_GAMESERVER == 1)
-	int DataBufferSize;
-	char* DataBuffer;
-#endif	
 	int LevelOver_N;
 	
 	
@@ -191,18 +187,6 @@ void GameMainInit(HWND hWnd)
 	Configs.gServerType = GetPrivateProfileInt("GameServerInfo", "ServerType", 0, gDirPath.GetNewPath("commonserver.cfg"));
 	Configs.gPartition = GetPrivateProfileInt("GameServerInfo", "Partition", 0, gDirPath.GetNewPath("commonserver.cfg"));
 	Configs.gLanguage = GetPrivateProfileInt("GameServerInfo", "Language", 0, gDirPath.GetNewPath("commonserver.cfg"));
-
-	// WARNING
-	// This will enable the auth server from Korea
-	// Please check that you want to use this option
-	// Default is : Enabled;
-
-#if (FOREIGN_GAMESERVER == 1)
-	//gGameServerAuth.Init();
-	gGameServerAuth.SetInfo(Configs.gLanguage, Configs.gPartition, 0, szGameServerVersion, Configs.szServerName, Configs.gServerType, GameServerAuthCallBackFunc);
-	gGameServerAuth.GetKey(&szAuthKey[0], 0, 5);
-
-#endif
 
 	DragonEvent = new CDragonEvent;
 	
@@ -231,9 +215,6 @@ void GameMainInit(HWND hWnd)
 			g_CastleSiege.SetDataLoadState(CASTLESIEGE_DATALOAD_2);
 		}
 	} 
-#if (FOREIGN_GAMESERVER==1)
-	gGameServerAuth.GetKey(szAuthKey, 10, 5);
-#endif
 
 	if (Configs.gEnableServerDivision != 0)
 	{
@@ -272,23 +253,10 @@ void GameMainInit(HWND hWnd)
 	gObjInit();
 	InitBattleSoccer();
 
-#if (FOREIGN_GAMESERVER == 1)
+	gMAttr.LoadAttr("..\\Data\\Monsters\\Monster.txt");
 
-	gGameServerAuth.RequestData(7); // Error: \\Data\\Lang\\Monster.txt
-	DataBufferSize = gGameServerAuth.GetDataBufferSize();
-	DataBuffer = gGameServerAuth.GetDataBuffer();
+	gMSetBase.LoadSetBase("..\\Data\\Monsters\\MonsterSetBase.txt");
 
-	gMAttr.LoadAttr(DataBuffer, DataBufferSize);
-
-	gGameServerAuth.RequestData(9);
-	DataBufferSize = gGameServerAuth.GetDataBufferSize();
-	DataBuffer = gGameServerAuth.GetDataBuffer();
-
-	gMSetBase.LoadSetBase(DataBuffer, DataBufferSize);
-#else
-	
-#endif
-	
 	g_MonsterItemMng.Init();
 
 	gLevelExperience[0]=0;
@@ -617,19 +585,10 @@ void GameMonsterAllCloseAndReLoad()
 	g_Crywolf.m_ObjSpecialNPC.Reset();
 	g_Crywolf.m_ObjCommonMonster.Reset();
 	g_Crywolf.m_ObjSpecialMonster.Reset(); 
-#if (FOREIGN_GAMESERVER == 1)
-	
-	gGameServerAuth.RequestData(7);
-	int DataBufferSize = gGameServerAuth.GetDataBufferSize();
-	char *DataBuffer = gGameServerAuth.GetDataBuffer();
-	gMAttr.LoadAttr(DataBuffer, DataBufferSize);
 
-	gGameServerAuth.RequestData(9);
-	DataBufferSize = gGameServerAuth.GetDataBufferSize();
-	DataBuffer = gGameServerAuth.GetDataBuffer();
-	gMSetBase.LoadSetBase(DataBuffer, DataBufferSize);
+	gMAttr.LoadAttr("..\\Data\\Monsters\\Monster.txt");
 
-#endif
+	gMSetBase.LoadSetBase("..\\Data\\Monsters\\MonsterSetBase.txt");
 
 	g_IllusionTempleEvent.AllObjReset();
 
@@ -866,11 +825,30 @@ void GMDataClientMsgProc(WPARAM wParam, LPARAM lParam)
 void ReadServerInfo()
 {
 	if (!IsFile(".\\GameServer.ini"))
+	{
 		MsgBox("GameServer.ini file not found");
+	}
+
+	char szTemp[256];
+	char *cvstr;
 
 	GetPrivateProfileString("GameServerInfo", "ServerName", "", Configs.szServerName, 50, ".\\GameServer.ini");
 	Configs.gGameServerCode = GetPrivateProfileInt("GameServerInfo", "ServerCode", 0, ".\\GameServer.ini");
 	Configs.bCanConnectMember = GetPrivateProfileInt("GameServerInfo", "ConnectMemberLoad", 0, ".\\GameServer.ini");
+
+	GetPrivateProfileString("GameServerInfo", "ClientExeSerial", "XXXXXXXXXXXXXXX", Configs.szGameServerExeSerial, 20, ".\\GameServer.ini");
+	GetPrivateProfileString("GameServerInfo", "ClientExeVersion", "1.00.00", szTemp, 8, ".\\GameServer.ini");
+
+
+	cvstr = strtok(szTemp, ".");
+	Configs.szClientVersion[0] = cvstr[0];
+	cvstr = strtok(NULL, ".");
+	Configs.szClientVersion[1] = cvstr[0];
+	Configs.szClientVersion[2] = cvstr[1];
+	cvstr = strtok(NULL, ".");
+	Configs.szClientVersion[3] = cvstr[0];
+	Configs.szClientVersion[4] = cvstr[1];
+
 }
 
 void ReadCommonServerInfo()
@@ -879,17 +857,14 @@ void ReadCommonServerInfo()
 
 	//char szCheckSum[256];
 
-	char *cvstr;
+	
 	int DataBufferSize;
 	char *DataBuffer;
 	char szlMsgName[256];
 
 	ReadServerInfo();
 
-	gGameServerAuth.RequestData(8);
-	DataBufferSize = gGameServerAuth.GetDataBufferSize();
-	DataBuffer = gGameServerAuth.GetDataBuffer();
-	gGateC.Load(DataBuffer, DataBufferSize);
+	gGateC.Load(gDirPath.GetNewPath("\\Move\\Gate.txt"));
 
 	if(!IsFile(gDirPath.GetNewPath("commonserver.cfg")))
 	{
@@ -910,10 +885,12 @@ void ReadCommonServerInfo()
 	{
 		MsgBox("Dec1.dat file not found");
 	}
+
 	if(g_SimpleModulusSC.LoadEncryptionKey(gDirPath.GetNewPath("Encryption\\Enc2.dat")) == FALSE)
 	{
 		MsgBox("Enc2.dat file not found");
 	}
+
 	strcpy(Configs.szKorItemTextFileName, gDirPath.GetNewPath("\\Items\\item.txt"));
 	strcpy(Configs.szKorSkillTextFileName, gDirPath.GetNewPath("\\Skills\\skill.txt"));
 	strcpy(szCommonlocIniFileName, gDirPath.GetNewPath("\\commonloc.cfg"));
@@ -969,85 +946,32 @@ void ReadCommonServerInfo()
 	lMsg.LoadMSG(szlMsgName);
 	SetMapName();
 
-#if (FOREIGN_GAMESERVER==1)
-	gGameServerAuth.RequestData(0);
-	DataBufferSize = gGameServerAuth.GetDataBufferSize();
-	DataBuffer = gGameServerAuth.GetDataBuffer();
-	OpenItemScript( DataBuffer, DataBufferSize);
-#endif
-	if (Configs.gLanguage != 0)
-	{
-#if (FOREIGN_GAMESERVER==1)
-		gGameServerAuth.RequestData(1);
-		DataBufferSize = gGameServerAuth.GetDataBufferSize();
-		DataBuffer = gGameServerAuth.GetDataBuffer();
-		OpenItemNameScript( DataBuffer, DataBufferSize);
-#endif
-	
-	}
-#if (FOREIGN_GAMESERVER==1)
-	gGameServerAuth.RequestData(2);
-	DataBufferSize = gGameServerAuth.GetDataBufferSize();
-	DataBuffer = gGameServerAuth.GetDataBuffer();
-	MagicDamageC.LogSkillList(DataBuffer, DataBufferSize);
-#endif
-	if (Configs.gLanguage != 0)
-	{
-#if (FOREIGN_GAMESERVER==1)
-		gGameServerAuth.RequestData(3);
-		DataBufferSize = gGameServerAuth.GetDataBufferSize();
-		DataBuffer = gGameServerAuth.GetDataBuffer();
-		MagicDamageC.LogSkillNameList(DataBuffer, DataBufferSize);
-#endif
-	}
+	OpenItemScript(gDirPath.GetNewPath("\\Items\\Item.txt"));
+
+	OpenItemNameScript(gDirPath.GetNewPath("\\Items\\ItemName.txt"));
+
+	MagicDamageC.LogSkillList(gDirPath.GetNewPath("\\Skills\\Skill.txt"));
+	MagicDamageC.LogSkillNameList(gDirPath.GetNewPath("Skills\\SkillName.txt"));
+
 	SkillSpearHitBox.Load(gDirPath.GetNewPath("\\Skills\\skillSpear.hit"));
 	SkillElectricSparkHitBox.Load(gDirPath.GetNewPath("\\Skills\\skillElect.hit"));
 
-#if (FOREIGN_GAMESERVER==1)
-
-	gGameServerAuth.RequestData(26);
-	DataBufferSize = gGameServerAuth.GetDataBufferSize();
-	DataBuffer = gGameServerAuth.GetDataBuffer();
-	gSetItemOption.LoadOptionInfo(DataBuffer, DataBufferSize);
-
-	gGameServerAuth.RequestData(28);
-	DataBufferSize = gGameServerAuth.GetDataBufferSize();
-	DataBuffer = gGameServerAuth.GetDataBuffer();
-	gSetItemOption.LoadTypeInfo(DataBuffer, DataBufferSize);
+	gSetItemOption.LoadOptionInfo(gDirPath.GetNewPath("\\Items\\ItemSetOption.txt"));
+	gSetItemOption.LoadTypeInfo(gDirPath.GetNewPath("\\Items\\ItemSetType.txt"));
 
 	g_kJewelOfHarmonySystem.LoadScript(gDirPath.GetNewPath("\\Items\\JewelOfHarmonyOption.txt"));
 	g_kJewelOfHarmonySystem.LoadScriptOfSmelt(gDirPath.GetNewPath("\\Items\\JewelOfHarmonySmelt.txt"));
 	g_kItemSystemFor380.Load380ItemOptionInfo(gDirPath.GetNewPath("\\Items\\ItemAddOption.txt"));	// #error Correct with the true file
 	g_ItemAddOption.Load(gDirPath.GetNewPath("\\Items\\ItemAddOption.txt"));
 
-	gGameServerAuth.RequestData(24);
-	DataBufferSize = gGameServerAuth.GetDataBufferSize();
-	DataBuffer = gGameServerAuth.GetDataBuffer();
-	gMoveCommand.Load(DataBuffer, DataBufferSize);
-	gMoveCommand.LoadMoveLevel(gDirPath.GetNewPath("\\Move\\MoveLevel.txt"));
 
-#endif
+	gMoveCommand.Load(gDirPath.GetNewPath("Move\\MoveReq.txt"));
+
+	gMoveCommand.LoadMoveLevel(gDirPath.GetNewPath("Move\\MoveLevel.txt"));
 
 	ConMember.Load(gDirPath.GetNewPath("ConnectMember.txt"));
 
-#if (FOREIGN_GAMESERVER==1)
-
-	gGameServerAuth.RequestData(4);
-	DataBufferSize = gGameServerAuth.GetDataBufferSize();
-	DataBuffer = gGameServerAuth.GetDataBuffer();
-	g_QuestInfo.LoadQuestInfo(DataBuffer, DataBufferSize);	
-	gGameServerAuth.GetClientVersion(szTemp, Configs.szGameServerExeSerial);
-
-#endif
-
-	cvstr = strtok(szTemp, ".");
-	Configs.szClientVersion[0] = cvstr[0];
-	cvstr = strtok(NULL, ".");
-	Configs.szClientVersion[1] = cvstr[0];
-	Configs.szClientVersion[2] = cvstr[1];
-	cvstr = strtok(NULL, ".");
-	Configs.szClientVersion[3] = cvstr[0];
-	Configs.szClientVersion[4] = cvstr[1];
+	g_QuestInfo.LoadQuestInfo(gDirPath.GetNewPath("\\Quests\\Quest.txt"));
 
 
 	TMonsterSkillElement::LoadData(gDirPath.GetNewPath("\\Monsters\\MonsterSkillElement.txt"));

@@ -1669,13 +1669,11 @@ void EGRecvChangeRena( PMSG_ANS_RESET_EVENTCHIP* aRecv)
 		lpObj->Money += lpObj->EventChipCount * 3000;
 		GCMoneySend(aIndex, lpObj->Money);
 
-		LogAddTD("[EventChip] [%s][%s] ChangeRena AddMoney(%d)",
-			lpObj->AccountID, lpObj->Name, lpObj->EventChipCount * 3000);
+		LogAddTD("[EventChip] [%s][%s] ChangeRena AddMoney(%d)",lpObj->AccountID, lpObj->Name, lpObj->EventChipCount * 3000);
 	}
 	else
 	{
-		LogAddTD("[EventChip] [%s][%s] ChangeRena Fail",
-			lpObj->AccountID, lpObj->Name);
+		LogAddTD("[EventChip] [%s][%s] ChangeRena Fail",lpObj->AccountID, lpObj->Name);
 	}
 
 	Result.ChipCount = 0;
@@ -1690,21 +1688,25 @@ void EGRecvChangeRena( PMSG_ANS_RESET_EVENTCHIP* aRecv)
 
 LPOBJ pEventObj;
 
-void EGRecvStoneInfo( PMSG_ANS_VIEW_STONES* aRecv)
+void EGRecvStoneInfo(PMSG_ANS_VIEW_STONES* aRecv)
 {
 	LPOBJ lpObj = &gObj[aRecv->iINDEX];
 
 	PMSG_EVENTCHIPINFO Result;
-	
+
 	PHeadSetB((LPBYTE)&Result, 0x94, sizeof(Result));
 
-	if ( aRecv->bSUCCESS )
+	if (aRecv->bSUCCESS)
+	{
 		lpObj->iStoneCount = aRecv->iStoneCount;
+	}
 	else
+	{
 		lpObj->iStoneCount = 0;
+	}
 
 	lpObj->MutoNumber = 0;
-	Result.Type = 3;
+	Result.Type = 1;
 	Result.ChipCount = aRecv->iStoneCount;
 
 	DataSend(lpObj->m_Index, (LPBYTE)&Result, Result.h.size);

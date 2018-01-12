@@ -19,7 +19,7 @@ public:
 	virtual ~CShop();
 
 	void Init();
-	BOOL LoadShopItem(int Shopnumber);
+	//BOOL LoadShopItem(int Shopnumber);
 	BOOL LoadShopItem(char* filename);
 	int InsertItem(int type, int index, int level, int dur, int op1,  int op2, int op3, int exe);
 	int InentoryMapCheck(int sx, int sy, int width,  int height);
