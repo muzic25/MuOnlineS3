@@ -83,7 +83,7 @@ UINT PCPointShop::ReadFile(char * file)
 					Items[HowManyItems].SlotX=CalcItemXY(Items[HowManyItems].X,Items[HowManyItems].Y);
 					this->HowManyItems++;
 
-					LogAddC(2,"[PCPoint]: item:[%d][%d][%d][%d][%d][%d][%d][%d][%d] Cost: [%d]",ItemIndex,ItemID,Level,Opt,Luck,Skill,Dur,Exc,Anci,Cost);
+					//LogAddC(2,"[PCPoint]: item:[%d][%d][%d][%d][%d][%d][%d][%d][%d] Cost: [%d]",ItemIndex,ItemID,Level,Opt,Luck,Skill,Dur,Exc,Anci,Cost);
 				}
 			}
 		}
@@ -105,7 +105,7 @@ UINT PCPointShop::ReadFile(char * file)
 					MonstrosSTC[tLengMonster].Mob = Mob;
 					MonstrosSTC[tLengMonster].Pontos = Pontos;
 					tLengMonster++;
-					LogAddC(2,"[PCPoint]: MOB:[%d][%d]",Mob , Pontos,tLengMonster);
+					//LogAddC(2,"[PCPoint]: MOB:[%d][%d]",Mob , Pontos,tLengMonster);
 				}
 
 			}
@@ -125,19 +125,20 @@ void PCPointShop::IncresePointMonster(int aIndex,int MobIndex)
 	LPOBJ lpObjEx = &gObj[aIndex];
 	LPOBJ MosterObj = &gObj[MobIndex];
 
-	if(PCPoint.EnabledMobGivePCPoint == 1)
+	for (int i = 0; i< tLengMonster; i++)
 	{
-		for(int i = 0; i< tLengMonster;i++)
-		{
-			int	Pontos = MonstrosSTC[i].Pontos;
+		int	Pontos = MonstrosSTC[i].Pontos;
 
-			if(MosterObj->Class == MonstrosSTC[i].Mob)
-			{
-				lpObjEx->PCPoint += Pontos;
-				this->SendPoints(aIndex,lpObjEx->PCPoint);
-			}
+		if (MosterObj->Class == MonstrosSTC[i].Mob)
+		{
+			lpObjEx->PCPoint += Pontos;
+			this->SendPoints(aIndex, lpObjEx->PCPoint);
+			char szTemp[128];
+			sprintf(szTemp, "[PCPoint] Aquired %d points.", Pontos);
+			GCServerMsgStringSend(szTemp, lpObjEx->m_Index, 1);
 		}
 	}
+	
 }
 int PCPointShop::SearchIndex(int Position)
 {
@@ -379,6 +380,7 @@ void PCPointShop::BuyItem(int aIndex,int Position)
 			{
 				if (RewardItem == SealWealt)
 				{
+					
 					g_ItemAddOption.SetItemEffect(&gObj[aIndex], ITEMGET(13, 44), 600);
 				}
 				if (RewardItem == SealAscencion)

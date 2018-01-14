@@ -756,7 +756,7 @@ void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOO
 					}
 				}
 				break; 
-
+				
 			default:
 				LogAddC(2, "error-L2 : account:%s name:%s HEAD:%x (%s,%d) State:%d",
 					gObj[aIndex].AccountID, gObj[aIndex].Name, protoNum, __FILE__, __LINE__, gObj[aIndex].Connected);
@@ -8603,7 +8603,7 @@ void CGChaosBoxItemMixButtonClick(PMSG_CHAOSMIX* aRecv, int aIndex)
 	 
 	switch ( iMixType )	// TEST - Good
 	{
-	case CHAOS_TYPE_SECOND_WING:
+	/*case CHAOS_TYPE_SECOND_WING:
 	case CHAOS_TYPE_CLOAK:
 		ChaosBox.SecondWingsMix(lpObj);
 		break;
@@ -8675,7 +8675,7 @@ void CGChaosBoxItemMixButtonClick(PMSG_CHAOSMIX* aRecv, int aIndex)
 		break;
 
 
-	/*Тут нече не переписано*/ 
+	Тут нече не переписано*
 	case CHAOS_TYPE_CASTLE_ITEM:
 		ChaosBox.CastleItemMix(lpObj);
 		break; 
@@ -8693,7 +8693,104 @@ void CGChaosBoxItemMixButtonClick(PMSG_CHAOSMIX* aRecv, int aIndex)
 		break;
 	//case CHAOS_TYPE_SETITEM:	// #warning Activate this to SetItemChaosMix
 		//SetItemChaosMix(lpObj);
-		//break;
+		//break;*/
+	case CHAOS_TYPE_DEVILSQUARE:
+		DevilSquareItemChaosMix(lpObj);
+		break;
+	case CHAOS_TYPE_UPGRADE_10:
+		PlusItemLevelChaosMix(lpObj, CHAOS_TYPE_UPGRADE_10);
+		break;
+	case CHAOS_TYPE_UPGRADE_11:
+		PlusItemLevelChaosMix(lpObj, CHAOS_TYPE_UPGRADE_11);
+		break;
+	case CHAOS_TYPE_UPGRADE_12:
+		PlusItemLevelChaosMix(lpObj, CHAOS_TYPE_UPGRADE_12);
+		break;
+	case CHAOS_TYPE_UPGRADE_13:
+		PlusItemLevelChaosMix(lpObj, CHAOS_TYPE_UPGRADE_13);
+		break;
+	case CHAOS_TYPE_DINORANT:
+		PegasiaChaosMix(lpObj);
+		break;
+	case CHAOS_TYPE_FRUIT:
+		CircleChaosMix(lpObj);
+		break;
+	case CHAOS_TYPE_CONDOR_FEATHER:
+	case CHAOS_TYPE_THIRD_WING:
+		Wing3ChaosMix(lpObj);
+		break;
+	case CHAOS_TYPE_SECOND_WING:
+	case CHAOS_TYPE_CLOAK:
+		WingChaosMix(lpObj);
+		break;
+	case CHAOS_TYPE_BLOODCATLE:
+		BloodCastleItemChaosMix(lpObj);
+		break;
+	case CHAOS_TYPE_DEFAULT:
+	case CHAOS_TYPE_FIRST_WING:
+		DefaultChaosMix(lpObj);
+		break;
+	case CHAOS_TYPE_SETITEM:	// #warning Activate this to SetItemChaosMix
+		SetItemChaosMix(lpObj);
+		break;
+	case CHAOS_TYPE_DARKHORSE:
+		DarkHorseChaosMix(lpObj);
+		break;
+	case CHAOS_TYPE_DARKSPIRIT:
+		DarkSpiritChaosMix(lpObj);
+		break;
+	case CHAOS_TYPE_BLESS_POTION:
+		BlessPotionChaosMix(lpObj);
+		break;
+	case CHAOS_TYPE_SOUL_POTION:
+		SoulPotionChaosMix(lpObj);
+		break;
+	case CHAOS_TYPE_LIFE_STONE:
+		LifeStoneChaosMix(lpObj);
+		break;
+	case CHAOS_TYPE_HT_BOX:
+		HiddenTreasureBoxItemMix(lpObj);
+		break;
+	case CHAOS_TYPE_FENRIR_01:
+		Fenrir_01Level_Mix(lpObj);
+		break;
+	case CHAOS_TYPE_FENRIR_02:
+		Fenrir_02Level_Mix(lpObj);
+		break;
+	case CHAOS_TYPE_FENRIR_03:
+		Fenrir_03Level_Mix(lpObj);
+		break;
+	case CHAOS_TYPE_FENRIR_04:
+		Fenrir_04Upgrade_Mix(lpObj);
+		break;
+	case CHAOS_TYPE_COMPOUNDPOTION_LV1:
+		ShieldPotionLv1_Mix(lpObj);
+		break;
+	case CHAOS_TYPE_COMPOUNTPOTION_LV2:
+		ShieldPotionLv2_Mix(lpObj);
+		break;
+	case CHAOS_TYPE_COMPOUNTPOTION_LV3:
+		ShieldPotionLv3_Mix(lpObj);
+		break;
+	case CHAOS_TYPE_JEWELOFHARMONY_PURITY:
+		g_kJewelOfHarmonySystem.PurityJewelOfHarmony(lpObj);
+		break;
+	case CHAOS_TYPE_JEWELOFHARMONY_MIX_SMELTINGITEM:
+		g_kJewelOfHarmonySystem.MakeSmeltingStoneItem(lpObj);
+		break;
+	case CHAOS_TYPE_JEWELOFHARMONY_RESTORE_ITEM:
+		g_kJewelOfHarmonySystem.RestoreStrengthenItem(lpObj);
+		break;
+	case CHAOS_TYPE_380_OPTIONITEM:
+		g_kItemSystemFor380.ChaosMix380ItemOption(lpObj);
+		break;
+	case CHAOS_TYPE_OLD_PAPER:
+		g_IllusionTempleEvent.TicketChaosMix(lpObj);
+		break;
+	case CHAOS_TYPE_LOTTERY_MIX:
+		LotteryItemMix(lpObj);
+		break;
+
 	default:
 		LogAddTD("[%s][%s] Undefine chaosmix type detect %d", lpObj->AccountID, lpObj->Name, iMixType);
 		break;
@@ -8723,7 +8820,7 @@ void CGChaosBoxUseEnd(int aIndex)
 		lpObj->m_IfState.state = 0;
 	}
 
-	ChaosBox.ChaosBoxInit(lpObj);
+	ChaosBoxInit(lpObj);
 	gObjInventoryCommit(lpObj->m_Index);
 	lpObj->m_bIsCastleNPCUpgradeCompleted = false;
 }
@@ -12490,7 +12587,7 @@ void CGCloseWindow(int aIndex)
 
 		if ( gObj[aIndex].m_IfState.type == 13 )
 		{
-			ChaosBox.ChaosBoxInit(&gObj[aIndex]);
+			ChaosBoxInit(&gObj[aIndex]);
 			gObjInventoryCommit(aIndex);
 		}
 

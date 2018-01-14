@@ -1612,19 +1612,31 @@ BOOL NpcWhiteAngelEvent(LPOBJ lpNpc, LPOBJ lpObj)
 BOOL NpcThansgivingEvent(LPOBJ lpNpc, LPOBJ lpObj)
 {
 
-	if (gObjIsConnected(lpObj->m_Index) == FALSE)
+/*	if (gObjIsConnected(lpObj->m_Index) == FALSE)
 	{
 		return TRUE;
 	}
 
-	if (lpObj->m_IfState.use != 0)
+/*	if (lpObj->m_IfState.use != 0)
 	{
 		return TRUE;
-	}
+	}*/
 
-	BYTE Buff[4] = { 0xC3, 0x04, 0x30, 0x19 };
+	PMSG_TALKRESULT pMsg;
+
+	pMsg.h.c = 0xC3;
+	pMsg.h.headcode = 0x30;
+	pMsg.h.size = sizeof(pMsg);
+	pMsg.result = 15;
+
+	DataSend(lpObj->m_Index, (LPBYTE)&pMsg, pMsg.h.size);
+
+	lpObj->m_IfState.use = 1;
+	lpObj->m_IfState.type = 12;
+
+	/*BYTE Buff[4] = { 0xC3, 0x04, 0x30, 0x19 };
 	DataSend(lpObj->m_Index, Buff, Buff[1]);
-
+	*/
 	/*PMSG_TALKRESULT pMsg;
 
 	pMsg.h.c = 0xC3;

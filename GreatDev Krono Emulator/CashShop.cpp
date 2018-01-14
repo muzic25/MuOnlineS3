@@ -1,12 +1,15 @@
 #include "StdAfx.h"
 #include "CashShop.h"
 #include "DSProtocol.h"
+
+
 BOOL g_bUseCashShop = FALSE;
 BOOL g_bConnectShopServer = FALSE;
 BOOL g_bShopServerConnectState = FALSE;
 BOOL g_bUseLotteryEvent = FALSE;
 char g_ShopServerIP[16] ={0};
 BOOL g_bUseMoveMapBound = FALSE;
+
 WNDPROC CCashShop::m_lpOldProc = NULL;
 
 CCashShop g_CashShop;
@@ -207,18 +210,18 @@ void CCashShop::Load(LPSTR pchFilename)
 
 				Token = (SMDToken)GetToken();
 				ItemStatus.btExOption = TokenNumber;
-/*
-				if ( btItemExOption > 0 )
-				{
-					btExOptionValue = 1 << (int)(btItemExOption-1);
-					btExOption |= btExOptionValue;
-					ItemStatus.btExOption = btExOption;
-				}
-				else
-				{
-					ItemStatus.btExOption = 0;
-				}
-*/
+
+			//	if ( btItemExOption > 0 )
+			//	{
+			//		btExOptionValue = 1 << (int)(btItemExOption-1);
+			//		btExOption |= btExOptionValue;
+			//		ItemStatus.btExOption = btExOption;
+			//	}
+			//	else
+			//	{
+			//		ItemStatus.btExOption = 0;
+			//	}
+
 				Token = (SMDToken)GetToken();
 				btItemX = TokenNumber;
 
@@ -1235,11 +1238,11 @@ void CCashShop::GSNtfBuyCashItem(protocol::MSG_GTOS_BUY_ITEM_NTF * pMsg)
 
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::: :INDIVIDUAL PACKETS :::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::: ( From Shop Server ) :::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::/
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::/
+//:::::::::::::::::::::::::::::::: :INDIVIDUAL PACKETS :::::::::::::::::::::::::::::::::::::/
+//::::::::::::::::::::::::::::::::: ( From Shop Server ) :::::::::::::::::::::::::::::::::::/
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::/
 
 
 void SGAnsCashPoint(protocol::MSG_STOG_USER_CASH_ANS* aRecv)

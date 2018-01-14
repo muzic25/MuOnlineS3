@@ -165,12 +165,13 @@ extern CSimpleModulus g_SimpleModulusCS;	// line 751
 extern CSimpleModulus g_SimpleModulusSC;	// line 752
 extern char gMapName[MAX_NUMBER_MAP][255];
 extern char g_szMapName[MAX_NUMBER_MAP][32];
-//extern char szAuthKey[20];
+extern char szAuthKey[20];
 extern BOOL GSInfoSendFlag;
 extern char connectserverip[20];
 extern int  connectserverport;
 extern char szCommonlocIniFileName[256];
 extern DWORD dwgCheckSum[MAX_CHECKSUM_KEY];
+
 struct CConfigs 
 {
 
@@ -233,7 +234,7 @@ public:
  int  ExDbPort;
  int  RankingServerPort;
  int  EventServerPort;
- int  UDP;
+ int  GameServerUpdPort;
  char ExDbIP[256];
  char DataServerIp2[256];
  char DataServerIp[256];
@@ -512,6 +513,67 @@ public:
 };
 extern CConfigs Configs;
 
+
+
+struct sChaosMixConf
+{
+	DWORD ChaosWeapon;
+	DWORD FirstWings;
+	DWORD SecondWings;
+	DWORD CapeOfLord;
+	DWORD Condor;
+	DWORD ThirdWings;
+	DWORD DarkHourse;
+	DWORD DarkRaven;
+	DWORD Dinorant;
+
+	//Devil Squate Tickets
+	DWORD DevilSquare[8];
+
+	//Blood CastleTickets 
+	DWORD BloodCastle[8];
+
+	//Illusion Temple Tickets 
+	DWORD Illusion[6];
+
+	//Upgrate Level Items 
+	DWORD PlusLevel10;
+	DWORD PlusLevel11;
+	DWORD PlusLevel12;
+	DWORD PlusLevel13;
+	DWORD AddLuckItems;
+
+	DWORD BlessPotion;
+	DWORD SoulPotion;
+	DWORD Fruit;
+	DWORD LifeStone;
+
+	DWORD FenrirLvl1;
+	DWORD FenrirLvl2;
+	DWORD FenrirLvl3;
+	DWORD FenrirLvl4;
+
+	DWORD ShieldPotionLvl1;
+	DWORD ShieldPotionLvl2;
+	DWORD ShieldPotionLvl3;
+};
+
+struct sDivInFormula
+{
+	int DivChaosWeapon;
+	int DivFirstWings;
+	int MainDivSecondWings;
+	int SubDivSecondWings;
+	int DivCondor;
+	int DivThirdWings;
+	int FisrtDivFenrir4;
+	int SecondDivFenrir4;
+};
+
+extern sChaosMixConf ConfRates;
+extern sChaosMixConf ConfCostZen;
+extern sDivInFormula DivValues;
+
 //------------------------------------------
 // GameMain.cpp Functions - Prototypes List - Completed
 //------------------------------------------
@@ -539,6 +601,7 @@ void ExDataClientMsgProc(WPARAM wParam, LPARAM lParam);
 void GMDataClientMsgProc(WPARAM wParam, LPARAM lParam);
 void ReadServerInfo();
 void ReadCommonServerInfo();
+void LoadConfigs(char * filename);
 void GameServerInfoSendStop();
 void GameServerInfoSendStart();
 void GameServerInfoSend();
@@ -549,5 +612,6 @@ int GetEventFlag();
 void ReadEventInfo(MU_EVENT_TYPE eEventType);
 void ReadGameEtcInfo(MU_ETC_TYPE eGameEtcType);
 void LoadCustomJewel(char *filename);
+
 
 #endif

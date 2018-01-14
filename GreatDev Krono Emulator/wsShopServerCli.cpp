@@ -1,5 +1,15 @@
-#include "StdAfx.h"
+// wsShopServerCli.cpp: implementation of the wsShopServerCli class.
+//	GS-N	1.00.18	JPN	0x005914B0 - Completed
+//////////////////////////////////////////////////////////////////////
+
+#include "stdafx.h"
 #include "wsShopServerCli.h"
+#include "PCSProtocol.h"
+#include "LogProc.h"
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
 
 wsShopServerCli::wsShopServerCli()
 {
@@ -10,6 +20,8 @@ wsShopServerCli::~wsShopServerCli()
 {
 	return;
 }
+
+
 
 BOOL wsShopServerCli::SetProtocolCore(ShopProtocolCore pc)
 {

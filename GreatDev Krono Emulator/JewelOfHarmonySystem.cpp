@@ -322,7 +322,7 @@ void CJewelOfHarmonySystem::PurityJewelOfHarmony(LPOBJ lpObj)
 		}
 		else
 		{
-			ChaosBox.ChaosBoxInit(lpObj);
+			ChaosBoxInit(lpObj);
 			GCUserChaosBoxSend(lpObj, 0);
 			DataSend(lpObj->m_Index, (LPBYTE)&pMsg, pMsg.h.size);
 
@@ -1012,7 +1012,7 @@ BOOL CJewelOfHarmonySystem::MakeSmeltingStoneItem(LPOBJ lpObj)
 	}
 	else
 	{
-		ChaosBox.ChaosBoxInit(lpObj);
+		ChaosBoxInit(lpObj);
 		GCUserChaosBoxSend(lpObj, 0);
 		DataSend(lpObj->m_Index, (LPBYTE)&pMsg, pMsg.h.size);
 

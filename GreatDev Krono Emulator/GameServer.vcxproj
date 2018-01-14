@@ -290,6 +290,7 @@
     <ClCompile Include="MapItem.cpp" />
     <ClCompile Include="MapServerManager.cpp" />
     <ClCompile Include="Mercenary.cpp" />
+    <ClCompile Include="MiniDump.cpp" />
     <ClCompile Include="MonsterAttr.cpp" />
     <ClCompile Include="MonsterHerd.cpp" />
     <ClCompile Include="MonsterItemMng.cpp" />
@@ -473,6 +474,7 @@
     <ClInclude Include="MapItem.h" />
     <ClInclude Include="MapServerManager.h" />
     <ClInclude Include="Mercenary.h" />
+    <ClInclude Include="MiniDump.h" />
     <ClInclude Include="MonsterAttr.h" />
     <ClInclude Include="MonsterHerd.h" />
     <ClInclude Include="MonsterItemMng.h" />

@@ -2523,7 +2523,7 @@ void ItemSerialCreateRecv(SDHP_ITEMCREATERECV * lpMsg)
 		ItemByteConvert(pMsg.ItemInfo, NewItem);
 		NewItem.m_Number = lpMsg->m_Number;
 		//
-		ChaosBox.ChaosBoxInit(lpObj); 
+		ChaosBoxInit(lpObj); 
 		//
 		gObjChaosBoxInsertItemPos(aIndex, NewItem, 0, -1);
 		gObjChaosItemSet(aIndex, 0, 1);

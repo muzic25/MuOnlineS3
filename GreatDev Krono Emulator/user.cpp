@@ -2149,7 +2149,7 @@ BOOL gObjSetCharacter(LPBYTE lpdata, int aIndex)
 
 	gObjCharZeroSet(aIndex);
 
-	if ( ChaosBox.ChaosBoxInit(lpObj) == FALSE )
+	if ( ChaosBoxInit(lpObj) == FALSE )
 	{
 		LogAdd("error-L1 : ChaosBox Init error %s %d", __FILE__, __LINE__);
 	}
@@ -12839,20 +12839,6 @@ void gObjViewportPaint(HWND hWnd, short aIndex)
 
 	for (n = 0; n<OBJMAX; n++)
 	{
-		if (gObj[n].Live != FALSE)
-		{
-			if (gObj[n].Connected != PLAYER_EMPTY)
-			{
-				if (gCurPaintMapNumber == gObj[n].MapNumber)
-				{
-					if (gObj[n].Type == OBJ_USER)
-					{
-						playerc++;
-					}
-				}
-			}
-		}
-
 		if (gObj[n].Type == OBJ_USER && gObj[n].Connected != PLAYER_EMPTY)
 		{
 			totalplayer++;
@@ -13010,8 +12996,8 @@ void gObjViewportPaint(HWND hWnd, short aIndex)
 
 	gObjTotalUser = totalplayer;
 
-	wsprintf(szTemp, "Monsters: [%d/%d] Players: [%d/%d] GameMasters:[%d] Player(%d):%d VpCount:%d(%d/%d) : item count:%d ",
-		count, OBJ_MAXMONSTER, totalplayer, gServerMaxUser, gamemasters, aIndex, playerc, gObj[aIndex].VPCount, count3, count2, gItemLoop);
+	wsprintf(szTemp, "Monsters: [%d/%d] Players: [%d/%d] GameMasters:[%d] VpCount:%d(%d/%d) : item count:%d ",
+		count, OBJ_MAXMONSTER, totalplayer, gServerMaxUser, gamemasters, aIndex, gObj[aIndex].VPCount, count3, count2, gItemLoop);
 	
 	if (Configs.gXMasEvent)
 		strcat(szTemp, ":StarOfXMas");
@@ -13025,7 +13011,7 @@ void gObjViewportPaint(HWND hWnd, short aIndex)
 	if (Configs.gMedalEvent)
 		strcat(szTemp, ":MedalEvent");
 
-	TextOut(hdc, 200, 0, szTemp, strlen(szTemp));
+	TextOutA(hdc, 150, 0, szTemp, strlen(szTemp));
 	ReleaseDC(hWnd, hdc);
 }
 
@@ -19163,7 +19149,7 @@ void gObjSendUserStatistic(int aIndex, int startLevel, int endLevel)
 	sClassCount[CLASS_KNIGHT] = 0;
 	sClassCount[CLASS_ELF] = 0;
 	sClassCount[CLASS_MAGUMSA] = 0;
-	sClassCount[4] = 0;
+	sClassCount[CLASS_SUMMONER] = 0;
 
 	for(n = OBJ_STARTUSERINDEX; n < OBJMAX; n++)
 	{
@@ -21961,7 +21947,7 @@ int gObjCheckSerial0ItemList(class CItem* lpItem)
 {
 	if (Configs.gItemSerialCheck == 0)
 	{
-		return true;
+		return false;
 	}
 
 	if(lpItem->m_Type == ITEMGET(14,13)
@@ -21990,13 +21976,13 @@ int gObjCheckSerial0ItemList(class CItem* lpItem)
 
 int gObjCheckInventorySerial0Item(LPOBJ lpObj)
 {
-int iItemSerial;
-int iCount;
-int i;
+	int iItemSerial;
+	int iCount;
+	int i;
 
-if (Configs.gItemSerialCheck == 0)
+	if (Configs.gItemSerialCheck == 0)
 	{
-		return true;
+		return false;
 	}
 
 	iCount = 0;

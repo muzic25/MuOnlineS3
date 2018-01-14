@@ -36,6 +36,7 @@ BOOL CALLBACK CsLogDlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lPara
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	CMiniDump::Begin();
 	MSG msg;
 	HACCEL hAccelTable;
 
@@ -58,24 +59,42 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	GiocpInit();
 
-	GameMainInit(ghWnd);  
+	GameMainInit(ghWnd);
 
-	GetPrivateProfileString("GameServerConnect", "JoinServerIp", "127.0.0.1", Configs.JoinServerIp, 50, ".\\GameServer.ini");
-	GetPrivateProfileString("GameServerConnect", "DataServerIp", "127.0.0.1", Configs.DataServerIp, 50, ".\\GameServer.ini");
-	GetPrivateProfileString("GameServerConnect", "DataServer2Ip", "127.0.0.1", Configs.DataServerIp2, 50, ".\\GameServer.ini");
-	GetPrivateProfileString("GameServerConnect", "ExDBServerIP", "127.0.0.1", Configs.ExDbIP, 50, ".\\GameServer.ini");
-	GetPrivateProfileString("GameServerConnect", "RankingServerIP", "127.0.0.1", Configs.RankingServerIP, 50, ".\\GameServer.ini");
-	GetPrivateProfileString("GameServerConnect", "EventServerIP", "127.0.0.1", Configs.EventServerIP, 50, ".\\GameServer.ini");
+	ReadServerInfo();
+
+	memset(Configs.JoinServerIp, 0, sizeof(Configs.JoinServerIp));
+	memset(Configs.DataServerIp, 0, sizeof(Configs.DataServerIp));
+	memset(Configs.DataServerIp2, 0, sizeof(Configs.DataServerIp2));
+	memset(Configs.ExDbIP, 0, sizeof(Configs.ExDbIP));
+	memset(Configs.RankingServerIP, 0, sizeof(Configs.RankingServerIP));
+	memset(Configs.EventServerIP, 0, sizeof(Configs.EventServerIP));
+	Configs.GameServerPort = 0;
+	Configs.GameServerUpdPort = 0;
+	Configs.JoinServerPort = 0;
+	Configs.DataServerPort = 0;
+	Configs.DataServer2Port = 0;
+	Configs.ExDbPort = 0;
+	Configs.RankingServerPort = 0;
+	Configs.EventServerPort = 0;
+
+	GetPrivateProfileString("GameServerConnect", "JoinServerIp", "127.0.0.1", Configs.JoinServerIp, sizeof(Configs.JoinServerIp), ".\\GameServer.ini");
+	GetPrivateProfileString("GameServerConnect", "DataServerIp", "127.0.0.1", Configs.DataServerIp, sizeof(Configs.DataServerIp), ".\\GameServer.ini");
+	GetPrivateProfileString("GameServerConnect", "DataServer2Ip", "127.0.0.1",Configs.DataServerIp2, sizeof(Configs.DataServerIp2), ".\\GameServer.ini");
+	GetPrivateProfileString("GameServerConnect", "ExDBServerIP", "127.0.0.1", Configs.ExDbIP, sizeof(Configs.ExDbIP), ".\\GameServer.ini");
+	GetPrivateProfileString("GameServerConnect", "RankingServerIP", "127.0.0.1", Configs.RankingServerIP, sizeof(Configs.RankingServerIP), ".\\GameServer.ini");
+	GetPrivateProfileString("GameServerConnect", "EventServerIP", "127.0.0.1", Configs.EventServerIP, sizeof(Configs.EventServerIP), ".\\GameServer.ini");
 	Configs.JoinServerPort		= GetPrivateProfileInt("GameServerConnect", "JoinServerPort", 55970, ".\\GameServer.ini");
-	Configs.DataServerPort		= GetPrivateProfileInt("GameServerConnect", "DataServerPort", 55960, ".\\GameServer.ini");
+	Configs.DataServerPort	= GetPrivateProfileInt("GameServerConnect", "DataServerPort", 55960, ".\\GameServer.ini");
 	Configs.DataServer2Port		= GetPrivateProfileInt("GameServerConnect", "DataServer2Port", 55962, ".\\GameServer.ini");
 	Configs.GameServerPort		= GetPrivateProfileInt("GameServerConnect", "GameServerPort", 55901, ".\\GameServer.ini");
 	Configs.ExDbPort			= GetPrivateProfileInt("GameServerConnect", "ExDBServerPort", 55906, ".\\GameServer.ini");
 	Configs.RankingServerPort	= GetPrivateProfileInt("GameServerConnect", "RankingServerPort", 44455, ".\\GameServer.ini");
 	Configs.EventServerPort		= GetPrivateProfileInt("GameServerConnect", "EventServerPort", 44456, ".\\GameServer.ini");
-	Configs.UDP					= GetPrivateProfileInt("GameServerConnect", "UpdatePort", 60006, ".\\GameServer.ini");
+	Configs.GameServerUpdPort	= GetPrivateProfileInt("GameServerConnect", "UpdatePort", 60006, ".\\GameServer.ini");
 
 	gWhatsUpDummyServer.Start(ghWnd, Configs.GameServerPort + 1);
+	
 	AllServerStart(); 
 
 	GMS.LoadIniConfig();
@@ -90,6 +109,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 			DispatchMessage(&msg);
 		}
 	}
+	CMiniDump::End();
 	return msg.wParam;
 }
 
@@ -271,6 +291,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					break;
 				case IDM_OPTION_RELOAD:
 					ReadCommonServerInfo();
+					//GameServerInfoSend();
 					break;
 				case IDM_CASHSHOP_OPTION_RELOAD:
 					g_CashShop.CashShopOptioNReload();

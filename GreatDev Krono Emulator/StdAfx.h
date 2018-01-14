@@ -11,6 +11,9 @@
 
 #define INTERNATIONAL_INFO	0
 
+
+#define DEBUG_MINIDUMP 1
+
 #if(INTERNATIONAL_INFO == 1) //Japan
 	#define MOVE_PROTOCOL		0x1D
 	#define SETPOS_PROTOCOL		0xD6
@@ -129,7 +132,6 @@
 #include "GameEvent.h"
 #include "GameMain.h"
 #include "GameServer.h"
-//#include "GameServerAuth.h"
 #include "Gate.h"
 //#include "GGSvr.h"
 #include "giocp.h"
@@ -166,6 +168,7 @@
 #include "LifeStone.h"
 #include "logproc.h"
 #include "LogToFile.h"
+#include "Minidump.h"
 #include "MagicDamage.h"
 #include "MagicInf.h"
 #include "MapClass.h"

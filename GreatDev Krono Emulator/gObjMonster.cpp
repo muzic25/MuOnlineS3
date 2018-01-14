@@ -2627,6 +2627,11 @@ void gObjMonsterDieGiveItem(LPOBJ lpObj, LPOBJ lpTargetObj)
 	}
 
 
+	if (PCPoint.EnabledMobGivePCPoint == 1)
+	{
+		PCPoint.IncresePointMonster(lpTargetObj->m_Index, lpObj->m_Index);
+	}
+
 	if ( lpObj->Class == 340 )	// Dark Elf
 	{
 		if ( Configs.g_bCrywolfMonsterDarkElfItemDrop )

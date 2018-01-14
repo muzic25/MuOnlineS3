@@ -105,6 +105,9 @@ char szCommonlocIniFileName[256];
 BOOL GSInfoSendFlag;
 void CheckSumFileLoad(char *szCheckSum);
 
+sChaosMixConf ConfRates;
+sChaosMixConf ConfCostZen;
+sDivInFormula DivValues;
 CConfigs Configs;
 
 void gSetDate() // Good
@@ -185,6 +188,7 @@ void GameMainInit(HWND hWnd)
 	gDirPath.SetFirstPath(FIRST_PATH);
 	gDirPath.SetFirstPath(FINAL_PATH);
 	
+
 	Configs.gServerType = GetPrivateProfileInt("GameServerInfo", "ServerType", 0, gDirPath.GetNewPath("commonserver.cfg"));
 	Configs.gPartition = GetPrivateProfileInt("GameServerInfo", "Partition", 0, gDirPath.GetNewPath("commonserver.cfg"));
 	Configs.gLanguage = GetPrivateProfileInt("GameServerInfo", "Language", 0, gDirPath.GetNewPath("commonserver.cfg"));
@@ -234,7 +238,8 @@ void GameMainInit(HWND hWnd)
 		return;
 	}
 
-	gUdpSocCER.RecvSet( Configs.UDP ); // Same as MuManager to JS ¿
+	Configs.GameServerUpdPort = GetPrivateProfileInt("GameServerConnect", "UpdatePort", 60006, ".\\GameServer.ini");
+	gUdpSocCER.RecvSet( Configs.GameServerUpdPort ); // Same as MuManager to JS ¿
 	gUdpSocCER.Run();
 
 	if ( gUdpSocCE.CreateSocket() == 0)
@@ -242,7 +247,9 @@ void GameMainInit(HWND hWnd)
 		MsgBox("UDP Socket create error");
 		return;
 	}
-	
+
+
+
 	gUdpSocCER.SetProtocolCore(ChaosEventProtocolCore);
 	gUdpSocCE.SetProtocolCore(ChaosEventProtocolCore); 
 
@@ -361,6 +368,7 @@ void GameMainInit(HWND hWnd)
 	acceptIP.Load(gDirPath.GetNewPath("IpList.dat"));
 	ConMember.Load(gDirPath.GetNewPath("ConnectMember.txt"));
 	GCTeleportSend(gObj, 1, 1, 1, 2, 3);
+	
 }
 
 unsigned int TickCount = GetTickCount();
@@ -596,6 +604,7 @@ void GameMonsterAllCloseAndReLoad()
 	g_MonsterItemMng.Init();
 	gObjMonCount = 0;
 	GameMonsterAllAdd();
+
 }
 
 void GameMainFree()
@@ -849,7 +858,6 @@ void ReadServerInfo()
 	cvstr = strtok(NULL, ".");
 	Configs.szClientVersion[3] = cvstr[0];
 	Configs.szClientVersion[4] = cvstr[1];
-
 }
 
 void ReadCommonServerInfo()
@@ -863,7 +871,7 @@ void ReadCommonServerInfo()
 	char *DataBuffer;*/
 	char szlMsgName[256];
 
-	ReadServerInfo();
+	
 
 	gGateC.Load(gDirPath.GetNewPath("\\Move\\Gate.txt"));
 
@@ -894,7 +902,7 @@ void ReadCommonServerInfo()
 
 	strcpy(Configs.szKorItemTextFileName, gDirPath.GetNewPath("\\Items\\item.txt"));
 	strcpy(Configs.szKorSkillTextFileName, gDirPath.GetNewPath("\\Skills\\skill.txt"));
-	strcpy(szCommonlocIniFileName, gDirPath.GetNewPath("\\commonloc.cfg"));
+	strcpy(szCommonlocIniFileName, gDirPath.GetNewPath("Other\\commonloc.cfg"));
 	strcpy(szlMsgName, gDirPath.GetNewPath("Messages.ini"));
 	strcpy(Configs.szItemTextFileName, gDirPath.GetNewPath("\\Items\\item.txt"));
 	strcpy(Configs.szSkillTextFileName, gDirPath.GetNewPath("\\Skills\\skill.txt"));
@@ -917,6 +925,7 @@ void ReadCommonServerInfo()
 	//CheckSumFileLoad(szCheckSum);
 
 	CheckSumFileLoad(gDirPath.GetNewPath("CheckSum.dat"));
+
 #if (CSAUTH_VERSION==1)
 	BOOL bret = _LoadAuthTable(gDirPath.GetNewPath("CSAuth.tab"));
 
@@ -1023,7 +1032,7 @@ void ReadCommonServerInfo()
 
 	GetPrivateProfileString("GameServerInfo", "SpeedHackPlayerBlock", "0", szTemp, 5, gDirPath.GetNewPath("commonserver.cfg"));
 	Configs.SpeedHackPlayerBlock = atoi(szTemp);
-	GetPrivateProfileString("GameServerInfo", "ItemSerialCheck", "1", szTemp, 5, gDirPath.GetNewPath("commonserver.cfg"));
+	GetPrivateProfileString("GameServerInfo", "ItemSerialCheck", "0", szTemp, 5, gDirPath.GetNewPath("commonserver.cfg"));
 	Configs.gItemSerialCheck = atoi(szTemp);
 	GetPrivateProfileString("GameServerInfo", "AddExperience", "1", szTemp, 5, gDirPath.GetNewPath("commonserver.cfg"));
 	Configs.gAddExperience = atof(szTemp);
@@ -1041,7 +1050,7 @@ void ReadCommonServerInfo()
 
 	Configs.bCanChaosBox = GetPrivateProfileInt("GameServerInfo", "ChaosBox", 0, gDirPath.GetNewPath("commonserver.cfg"));
 	Configs.gChaosEvent = GetPrivateProfileInt("GameServerInfo", "ChaosEvent", 0, gDirPath.GetNewPath("commonserver.cfg"));
-	GetPrivateProfileString("GameServerInfo", "ChaosEventServer", "210.181.89.241", Configs.gChaosEventServerIp, 20, gDirPath.GetNewPath("commonserver.cfg"));
+	GetPrivateProfileString("GameServerInfo", "ChaosEventServer", "127.0.0.1", Configs.gChaosEventServerIp, 20, gDirPath.GetNewPath("commonserver.cfg"));
 	LogAdd("[Option] ChaosBox = %d", Configs.bCanChaosBox);
 	LogAdd("[Option] ChaosEvent = %d", Configs.gChaosEvent);
 	LogAdd("[Option] ChaosEventServer = %s", Configs.gChaosEventServerIp);
@@ -1331,22 +1340,17 @@ void ReadCommonServerInfo()
 
 	g_IllusionTempleEvent.ReadCommonServerInfo();
 
+	PCPoint.Init();
 
 	GetPrivateProfileString("ConnectServerInfo", "IP", "", connectserverip, 20, szCommonlocIniFileName);
 	GetPrivateProfileString("ConnectServerInfo", "PORT", "", szTemp, 10, szCommonlocIniFileName);
-	connectserverport = atoi(szTemp);
+	connectserverport = atoi(szTemp); //55557; 
 	LogAddTD(lMsg.Get(MSGGET(1, 158)), connectserverip, connectserverport);
-
-	gUdpSoc.SendSet(connectserverip, connectserverport);
-
-	// Servers
-	/*GetPrivateProfileString("ConnectServerInfo", "IP", "", Configs.connectserverip, 20, gDirPath.GetNewPath("commonserver.cfg"));
-	GetPrivateProfileString("ConnectServerInfo", "PORT", "", szTemp, 10, gDirPath.GetNewPath("commonserver.cfg"));
-	Configs.connectserverport = atoi(szTemp);
-	// (Option) Connect Server IP(%s) / PORT(%d)
-	LogAddTD(lMsg.Get(MSGGET(1, 158)), Configs.connectserverip, Configs.connectserverport);
-	gUdpSoc.SendSet(Configs.connectserverip, Configs.connectserverport);*/
+	gUdpSoc.SendSet("127.0.0.1", connectserverport);
 	gUdpSocCE.SendSet(Configs.gChaosEventServerIp, 60005);
+
+
+	
 	DevilSquareEventConnect = GetPrivateProfileInt("GameServerInfo","DevilSquareEventConnect", 1, gDirPath.GetNewPath("commonserver.cfg"));
 	EventChipServerConnect = GetPrivateProfileInt("GameServerInfo","EventChipServerConnect", 0, gDirPath.GetNewPath("commonserver.cfg"));
 
@@ -1368,9 +1372,11 @@ void ReadCommonServerInfo()
 	// COMMANDS Init ( /make / Create /trace etc...)
 	cManager.Init();
 
+
+
 	// Hack Log SERVER
-	GetPrivateProfileString("GameServerInfo", "HackLogServer", "10.1.2.69", Configs.gHackLogServerIp, 20, gDirPath.GetNewPath("commonserver.cfg"));
-	gSendHackLog.SendSet(Configs.gHackLogServerIp, 60005);
+	//GetPrivateProfileString("GameServerInfo", "HackLogServer", "127.0.0.1", Configs.gHackLogServerIp, 20, gDirPath.GetNewPath("commonserver.cfg"));
+	//gSendHackLog.SendSet(Configs.gHackLogServerIp, 60005);
 
 	// Penetration Skill
 	Configs.gEnableCheckPenetrationSkill = GetPrivateProfileInt("GameServerInfo", "EnableCheckPenetrationSkill", 1, gDirPath.GetNewPath("commonserver.cfg"));
@@ -1432,6 +1438,7 @@ void ReadCommonServerInfo()
 	gEledoradoEvent.SetEventState(Configs.gIsEledoradoEvent);
 	gEledoradoEvent.Init();
 
+
 	//gPacketCheckSum.Init();
 
 	Configs.gDoPShopOpen = GetPrivateProfileInt("GameServerInfo", "PersonalShopOpen", 0, gDirPath.GetNewPath("commonserver.cfg"));
@@ -1458,10 +1465,147 @@ void ReadCommonServerInfo()
 
 	g_CouponEventItemLIst.Load(gDirPath.GetNewPath("EventItemList.txt"));
 
-	PCPoint.Init();
-
 	LoadCustomJewel(gDirPath.GetNewPath("\\Customs\\Jewels.ini"));
+	LoadConfigs(gDirPath.GetNewPath("ChaosMix.ini"));
+
 }
+
+void LoadConfigs(char* filename)
+{
+	/************************************************************************/
+	/*                               Load Rate Mix                          */
+	/************************************************************************/
+	ConfRates.FirstWings = GetPrivateProfileIntA("MaxRate", "FirstWingsRate", 100, filename);
+	ConfRates.SecondWings = GetPrivateProfileIntA("MaxRate", "SecondWingsRate", 90, filename);
+	ConfRates.CapeOfLord = GetPrivateProfileIntA("MaxRate", "CapeOfLordRate", 90, filename);
+	ConfRates.Condor = GetPrivateProfileIntA("MaxRate", "CondorRate", 60, filename);
+	ConfRates.ThirdWings = GetPrivateProfileIntA("MaxRate", "ThirdWingsRate", 40, filename);
+	ConfRates.DarkHourse = GetPrivateProfileIntA("MaxRate", "DarkHourseRate", 60, filename);
+	ConfRates.DarkRaven = GetPrivateProfileIntA("MaxRate", "DarkRavenRate", 60, filename);
+	ConfRates.Dinorant = GetPrivateProfileIntA("MaxRate", "DinorantRate", 70, filename);
+
+	ConfRates.DevilSquare[0] = GetPrivateProfileIntA("MaxRate", "DevilSquareRate0", 60, filename);
+	ConfRates.DevilSquare[1] = GetPrivateProfileIntA("MaxRate", "DevilSquareRate1", 75, filename);
+	ConfRates.DevilSquare[2] = GetPrivateProfileIntA("MaxRate", "DevilSquareRate2", 70, filename);
+	ConfRates.DevilSquare[3] = GetPrivateProfileIntA("MaxRate", "DevilSquareRate3", 65, filename);
+	ConfRates.DevilSquare[4] = GetPrivateProfileIntA("MaxRate", "DevilSquareRate4", 60, filename);
+	ConfRates.DevilSquare[5] = GetPrivateProfileIntA("MaxRate", "DevilSquareRate5", 55, filename);
+	ConfRates.DevilSquare[6] = GetPrivateProfileIntA("MaxRate", "DevilSquareRate6", 50, filename);
+	ConfRates.DevilSquare[7] = GetPrivateProfileIntA("MaxRate", "DevilSquareRate7", 45, filename);
+
+	ConfRates.BloodCastle[0] = GetPrivateProfileIntA("MaxRate", "BloodCastleRate1", 80, filename);
+	ConfRates.BloodCastle[1] = GetPrivateProfileIntA("MaxRate", "BloodCastleRate2", 80, filename);
+	ConfRates.BloodCastle[2] = GetPrivateProfileIntA("MaxRate", "BloodCastleRate3", 80, filename);
+	ConfRates.BloodCastle[3] = GetPrivateProfileIntA("MaxRate", "BloodCastleRate4", 80, filename);
+	ConfRates.BloodCastle[4] = GetPrivateProfileIntA("MaxRate", "BloodCastleRate5", 80, filename);
+	ConfRates.BloodCastle[5] = GetPrivateProfileIntA("MaxRate", "BloodCastleRate6", 80, filename);
+	ConfRates.BloodCastle[6] = GetPrivateProfileIntA("MaxRate", "BloodCastleRate7", 80, filename);
+	ConfRates.BloodCastle[7] = GetPrivateProfileIntA("MaxRate", "BloodCastleRate8", 80, filename);
+
+	ConfRates.Illusion[0] = GetPrivateProfileIntA("MaxRate", "IllusionRate1", 70, filename);
+	ConfRates.Illusion[1] = GetPrivateProfileIntA("MaxRate", "IllusionRate2", 70, filename);
+	ConfRates.Illusion[2] = GetPrivateProfileIntA("MaxRate", "IllusionRate3", 70, filename);
+	ConfRates.Illusion[3] = GetPrivateProfileIntA("MaxRate", "IllusionRate4", 70, filename);
+	ConfRates.Illusion[4] = GetPrivateProfileIntA("MaxRate", "IllusionRate5", 70, filename);
+	ConfRates.Illusion[5] = GetPrivateProfileIntA("MaxRate", "IllusionRate6", 70, filename);
+
+	ConfRates.PlusLevel10 = GetPrivateProfileIntA("MaxRate", "PlusLevelRate10", 50, filename);
+	ConfRates.PlusLevel11 = GetPrivateProfileIntA("MaxRate", "PlusLevelRate11", 45, filename);
+	ConfRates.PlusLevel12 = GetPrivateProfileIntA("MaxRate", "PlusLevelRate12", 45, filename);
+	ConfRates.PlusLevel13 = GetPrivateProfileIntA("MaxRate", "PlusLevelRate13", 45, filename);
+	ConfRates.AddLuckItems = GetPrivateProfileIntA("MaxRate", "AddRateLuckItems", 25, filename);
+
+	ConfRates.BlessPotion = GetPrivateProfileIntA("MaxRate", "BlessPotionRate", 100, filename);
+	ConfRates.SoulPotion = GetPrivateProfileIntA("MaxRate", "SoulPotionRate", 100, filename);
+	ConfRates.Fruit = GetPrivateProfileIntA("MaxRate", "FruitRate", 90, filename);
+	ConfRates.LifeStone = GetPrivateProfileIntA("MaxRate", "LifeStoneRate", 100, filename);
+
+	ConfRates.FenrirLvl1 = GetPrivateProfileIntA("ZenCost", "FenrirRatePart1", 70, filename);
+	ConfRates.FenrirLvl2 = GetPrivateProfileIntA("ZenCost", "FenrirRatePart2", 50, filename);
+	ConfRates.FenrirLvl3 = GetPrivateProfileIntA("ZenCost", "FenrirRatePart3", 30, filename);
+	ConfRates.FenrirLvl4 = GetPrivateProfileIntA("ZenCost", "FenrirRatePart4", 79, filename);
+
+	ConfRates.ShieldPotionLvl1 = GetPrivateProfileIntA("ZenCost", "ShieldPotionMixLvl1", 50, filename);
+	ConfRates.ShieldPotionLvl2 = GetPrivateProfileIntA("ZenCost", "ShieldPotionMixLvl1", 30, filename);
+	ConfRates.ShieldPotionLvl3 = GetPrivateProfileIntA("ZenCost", "ShieldPotionMixLvl1", 30, filename);
+
+	/************************************************************************/
+	/*                               Load Cost Mix                          */
+	/************************************************************************/
+	ConfCostZen.FirstWings = GetPrivateProfileIntA("ZenCost", "FirstWingsZen", 10000, filename);
+	ConfCostZen.SecondWings = GetPrivateProfileIntA("ZenCost", "SecondWingsZen", 5000000, filename);
+	ConfCostZen.CapeOfLord = GetPrivateProfileIntA("ZenCost", "CapeOfLordZen", 5000000, filename);
+	ConfCostZen.Condor = GetPrivateProfileIntA("ZenCost", "CondorZen", 200000, filename);
+	ConfCostZen.ThirdWings = GetPrivateProfileIntA("ZenCost", "ThirdWingsZen", 200000, filename);
+	ConfCostZen.DarkHourse = GetPrivateProfileIntA("ZenCost", "DarkHourseZen", 5000000, filename);
+	ConfCostZen.DarkRaven = GetPrivateProfileIntA("ZenCost", "DarkRavenZen", 1000000, filename);
+	ConfCostZen.Dinorant = GetPrivateProfileIntA("ZenCost", "DinorantZen", 500000, filename);
+
+	ConfCostZen.DevilSquare[0] = GetPrivateProfileIntA("ZenCost", "DevilSquareZen0", 100000, filename);
+	ConfCostZen.DevilSquare[1] = GetPrivateProfileIntA("ZenCost", "DevilSquareZen1", 100000, filename);
+	ConfCostZen.DevilSquare[2] = GetPrivateProfileIntA("ZenCost", "DevilSquareZen2", 200000, filename);
+	ConfCostZen.DevilSquare[3] = GetPrivateProfileIntA("ZenCost", "DevilSquareZen3", 400000, filename);
+	ConfCostZen.DevilSquare[4] = GetPrivateProfileIntA("ZenCost", "DevilSquareZen4", 700000, filename);
+	ConfCostZen.DevilSquare[5] = GetPrivateProfileIntA("ZenCost", "DevilSquareZen5", 1100000, filename);
+	ConfCostZen.DevilSquare[6] = GetPrivateProfileIntA("ZenCost", "DevilSquareZen6", 1600000, filename);
+	ConfCostZen.DevilSquare[7] = GetPrivateProfileIntA("ZenCost", "DevilSquareZen7", 2100000, filename);
+
+	ConfCostZen.BloodCastle[0] = GetPrivateProfileIntA("ZenCost", "BloodCastleZen1", 50000, filename);
+	ConfCostZen.BloodCastle[1] = GetPrivateProfileIntA("ZenCost", "BloodCastleZen2", 80000, filename);
+	ConfCostZen.BloodCastle[2] = GetPrivateProfileIntA("ZenCost", "BloodCastleZen3", 150000, filename);
+	ConfCostZen.BloodCastle[3] = GetPrivateProfileIntA("ZenCost", "BloodCastleZen4", 250000, filename);
+	ConfCostZen.BloodCastle[4] = GetPrivateProfileIntA("ZenCost", "BloodCastleZen5", 400000, filename);
+	ConfCostZen.BloodCastle[5] = GetPrivateProfileIntA("ZenCost", "BloodCastleZen6", 600000, filename);
+	ConfCostZen.BloodCastle[6] = GetPrivateProfileIntA("ZenCost", "BloodCastleZen7", 850000, filename);
+	ConfCostZen.BloodCastle[7] = GetPrivateProfileIntA("ZenCost", "BloodCastleZen8", 1000000, filename);
+
+	ConfCostZen.Illusion[0] = GetPrivateProfileIntA("ZenCost", "IllusionZen1", 3000000, filename);
+	ConfCostZen.Illusion[1] = GetPrivateProfileIntA("ZenCost", "IllusionZen2", 5000000, filename);
+	ConfCostZen.Illusion[2] = GetPrivateProfileIntA("ZenCost", "IllusionZen3", 7000000, filename);
+	ConfCostZen.Illusion[3] = GetPrivateProfileIntA("ZenCost", "IllusionZen4", 9000000, filename);
+	ConfCostZen.Illusion[4] = GetPrivateProfileIntA("ZenCost", "IllusionZen5", 11000000, filename);
+	ConfCostZen.Illusion[5] = GetPrivateProfileIntA("ZenCost", "IllusionZen6", 13000000, filename);
+
+	ConfCostZen.PlusLevel10 = GetPrivateProfileIntA("ZenCost", "PlusLevelZen10", 2000000, filename);
+	ConfCostZen.PlusLevel11 = GetPrivateProfileIntA("ZenCost", "PlusLevelZen11", 4000000, filename);
+	ConfCostZen.PlusLevel12 = GetPrivateProfileIntA("ZenCost", "PlusLevelZen12", 6000000, filename);
+	ConfCostZen.PlusLevel13 = GetPrivateProfileIntA("ZenCost", "PlusLevelZen13", 8000000, filename);
+
+	ConfCostZen.BlessPotion = GetPrivateProfileIntA("ZenCost", "BlessPotionZen", 100000, filename);
+	ConfCostZen.SoulPotion = GetPrivateProfileIntA("ZenCost", "SoulPotionZen", 50000, filename);
+	ConfCostZen.Fruit = GetPrivateProfileIntA("ZenCost", "FruitZen", 3000000, filename);
+	ConfCostZen.LifeStone = GetPrivateProfileIntA("ZenCost", "LifeStoneZen", 5000000, filename);
+
+	ConfCostZen.FenrirLvl1 = GetPrivateProfileIntA("ZenCost", "FenrirZenPart1", 0, filename);
+	ConfCostZen.FenrirLvl2 = GetPrivateProfileIntA("ZenCost", "FenrirZenPart2", 0, filename);
+	ConfCostZen.FenrirLvl3 = GetPrivateProfileIntA("ZenCost", "FenrirZenPart3", 10000000, filename);
+	ConfCostZen.FenrirLvl4 = GetPrivateProfileIntA("ZenCost", "FenrirZenPart4", 10000000, filename);
+
+	ConfCostZen.ShieldPotionLvl1 = GetPrivateProfileIntA("ZenCost", "ShieldPotionMixLvl1", 100000, filename);
+	ConfCostZen.ShieldPotionLvl2 = GetPrivateProfileIntA("ZenCost", "ShieldPotionMixLvl1", 500000, filename);
+	ConfCostZen.ShieldPotionLvl3 = GetPrivateProfileIntA("ZenCost", "ShieldPotionMixLvl1", 1000000, filename);
+
+	/************************************************************************/
+	/*								Div Values                              */
+	/************************************************************************/
+	DivValues.DivFirstWings = GetPrivateProfileIntA("DivValueRate", "DivFirstWings", 20000, filename);
+	DivValues.MainDivSecondWings = GetPrivateProfileIntA("DivValueRate", "MainDivSecondWings", 4000000, filename);
+	DivValues.SubDivSecondWings = GetPrivateProfileIntA("DivValueRate", "SubDivSecondWings", 40000, filename);
+	DivValues.DivCondor = GetPrivateProfileIntA("DivValueRate", "DivCondor", 300000, filename);
+	DivValues.DivThirdWings = GetPrivateProfileIntA("DivValueRate", "DivThirdWings", 3000000, filename);
+	DivValues.FisrtDivFenrir4 = GetPrivateProfileIntA("DivValueRate", "FisrtDivFenrirPart4", 100, filename);
+	DivValues.SecondDivFenrir4 = GetPrivateProfileIntA("DivValueRate", "SecondDivFenrirPart4", 3000000, filename);
+
+	/************************************************************************/
+	/*                           LoadSubConfig                              */
+	/************************************************************************/
+	/*this->SecondWingsExcRate = GetPrivateProfileIntA("MaxRate", "SecondWingsExcRate", 30, filename);
+	this->SecondWingsMaxOpt = GetPrivateProfileIntA("MaxRate", "SecondWingsMaxOpt", 3, filename);
+	this->ThirdWingsExcRate = GetPrivateProfileIntA("MaxRate", "ThirdWingsExcRate", 20, filename);
+	this->ThirdWingsMaxOpt = GetPrivateProfileIntA("MaxRate", "ThirdWingsMaxOpt", 2, filename);*/
+}
+
+
 
 void GameServerInfoSendStop()
 {
@@ -1519,21 +1663,6 @@ void GameServerInfoSend()
 
 	gUdpSoc.SendData((LPBYTE)&pMsg, pMsg.h.size);
 }
-
-
-/* void CheckSumFileLoad(char *szCheckSum)
-{
-#if (FOREIGN_GAMESERVER==1)
-	//int DataBufferSize;
-	//char *DataBuffer;
-	//gGameServerAuth.RequestData(6);
-	//DataBufferSize=gGameServerAuth.GetDataBufferSize();
-	//DataBuffer=gGameServerAuth.GetDataBuffer();
-	//memcpy(dwgCheckSum, DataBuffer, DataBufferSize);
-#else
-	MessageBoxA(NULL, "CheckSum Disabled", "Msg", MB_OK);
-#endif
-} */
 
 void CheckSumFileLoad(char * szCheckSum)
 {

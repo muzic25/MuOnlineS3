@@ -929,7 +929,7 @@ bool CBloodCastle::CheckEnterFreeTicket(int iIndex)
 	return false;
 }
 
-/*
+
 static const int g_iBC_ChoasMixSuccessRate[MAX_BLOOD_CASTLE_LEVEL] = { 80, 80, 80, 80, 80, 80, 80 };
 static const int g_iBC_ChoasMixMoney[MAX_BLOOD_CASTLE_LEVEL] = {50000 , 80000 , 150000, 250000, 400000, 600000, 850000};
 
@@ -969,7 +969,7 @@ bool CBloodCastle::BloodCastleChaosMix(int iIndex, int iLEVEL)
 		return false;
 	}
 
-	if ( g_CrywolfSync.GetOccupationState() == 0 && g_iCrywolfApplyMvpBenefit )
+	if ( g_CrywolfSync.GetOccupationState() == 0 && Configs.g_iCrywolfApplyMvpBenefit )
 	{
 		iMIX_SUCCESS_RATE += g_CrywolfSync.GetPlusChaosRate();
 	}
@@ -1030,7 +1030,7 @@ bool CBloodCastle::BloodCastleChaosMix(int iIndex, int iLEVEL)
 	}
 	else	// Failure
 	{
-		ChaosBox.ChaosBoxInit(&gObj[iIndex]);
+		ChaosBoxInit(&gObj[iIndex]);
 		GCUserChaosBoxSend(&gObj[iIndex], 0);
 		DataSend(iIndex, (UCHAR*)&pMsg, pMsg.h.size);
 		LogAddTD("[≈ı∏Ì∏¡≈‰ Mix] [%s][%s] CBMix Fail %d Money : %d-%d",
@@ -1042,7 +1042,7 @@ bool CBloodCastle::BloodCastleChaosMix(int iIndex, int iLEVEL)
 	::gObjInventoryCommit(iIndex);
 
 	return true;
-}*/
+}
 
 static const struct ST_BC_EVENT_SCORE
 {
@@ -1090,7 +1090,7 @@ static const int g_iBC_MONSTER_CHANGE_STATE[2][3] =
 	10,	20,	-14,
 	20, 40, -32
 };
-/*
+
 int  CBloodCastle::CheckChoasMixItem(int iIndex)
 {
 	if ( OBJMAX_RANGE(iIndex) == FALSE )
@@ -1210,7 +1210,7 @@ int  CBloodCastle::CheckChoasMixItem(int iIndex)
 
 	return 0;
 }
-*/
+
 int  CBloodCastle::CheckEnterItem(int iIndex)
 {
 	int iITEM_LEVEL = 0;

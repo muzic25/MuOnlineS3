@@ -65,20 +65,20 @@ void DestroyGIocp()
 //#endif
 	return; // DESTROY FIX
 
-	closesocket(g_Listen);
+	//closesocket(g_Listen);
 
-	for (DWORD dwCPU=0; dwCPU < g_dwThreadCount;dwCPU++ )
-	{
-		TerminateThread( g_ThreadHandles[dwCPU] , 0);
-	}
+	//for (DWORD dwCPU=0; dwCPU < g_dwThreadCount;dwCPU++ )
+	//{
+	//	TerminateThread( g_ThreadHandles[dwCPU] , 0);
+	//}
 
-	TerminateThread(g_IocpThreadHandle, 0);
+	//TerminateThread(g_IocpThreadHandle, 0);
 
-	if ( g_CompletionPort != NULL )
-	{
-		CloseHandle(g_CompletionPort);
-		g_CompletionPort=NULL;
-	} 
+	//if ( g_CompletionPort != NULL )
+	//{
+	//	CloseHandle(g_CompletionPort);
+	//	g_CompletionPort=NULL;
+	//} 
 	
 }
 

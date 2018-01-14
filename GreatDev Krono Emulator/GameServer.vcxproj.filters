@@ -75,6 +75,9 @@
     <Filter Include="Source Files\Events\Coupon Event">
       <UniqueIdentifier>{d8af9599-d834-4e56-a206-77941cfa4627}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\MiniDump">
+      <UniqueIdentifier>{d97af265-a557-4343-905f-ccbb13939537}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AcceptIp.cpp">
@@ -574,6 +577,9 @@
     </ClCompile>
     <ClCompile Include="CouponEventItem.cpp">
       <Filter>Source Files\Events\Coupon Event</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniDump.cpp">
+      <Filter>Source Files\MiniDump</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1107,6 +1113,9 @@
     </ClInclude>
     <ClInclude Include="CouponEventItem.h">
       <Filter>Source Files\Events\Coupon Event</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniDump.h">
+      <Filter>Source Files\MiniDump</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

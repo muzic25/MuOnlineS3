@@ -37,15 +37,17 @@ void CCashItemPeriodSystem::Initialize()
 	{
 		this->hThreadHandle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)CCashItemPeriodSystem::PeriodCheckThread, this->ItemPeriodInfo, 0, NULL);
 		
-		if ( this->hThreadHandle == NULL )
+		if (this->hThreadHandle)	//Fixed This!
+		{
+			g_bRunningPeriodCheckThread = TRUE;
+			CloseHandle(this->hThreadHandle);
+		}
+		else
 		{
 			LogAdd("CreateThread() failed with error %d", GetLastError());
-			return;
 		}
-	}
 
-	g_bRunningPeriodCheckThread = TRUE;
-	CloseHandle(this->hThreadHandle);
+	}
 }
 
 
@@ -542,7 +544,7 @@ void CCashItemPeriodSystem::GDReqPeriodItemDelete(LPOBJ lpObj, LPSTR pchCharacte
 	cDBSMng.Send((char*)&pMsg, sizeof(PMSG_REQ_PERIODITEM_DELETE));
 }
 
-
+#pragma warning ( disable : 4060 )
 void CCashItemPeriodSystem::DGAnsPeriodItemDelete(PMSG_ANS_PERIODITEM_DELETE *aRecv)
 {
 	LPOBJ lpObj = NULL;
@@ -557,6 +559,7 @@ void CCashItemPeriodSystem::DGAnsPeriodItemDelete(PMSG_ANS_PERIODITEM_DELETE *aR
 
 	switch ( aRecv->btResult ){}
 }
+#pragma warning ( disable : 4060 )
 
 
 void CCashItemPeriodSystem::GCSendPeriodItemInserResult(LPOBJ lpObj, BYTE btResult)

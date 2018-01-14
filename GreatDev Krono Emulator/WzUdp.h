@@ -1,63 +1,68 @@
-// ------------------------------
-// Decompiled by Deathway
-// Date : 2007-03-09
-// ------------------------------
-#ifndef WZUDP_H
-#define WZUDP_H
+// WzUdp.h: interface for the WzUdp class.
+//
+//////////////////////////////////////////////////////////////////////
+
+#if !defined(AFX_WZUDP_H__E6DD88C5_2F76_4C09_82DD_FE7D27E6822D__INCLUDED_)
+#define AFX_WZUDP_H__E6DD88C5_2F76_4C09_82DD_FE7D27E6822D__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
 
-typedef void (*UdpProtocolCore)(BYTE,LPBYTE, int);
+#define DEFAULT_BUFFER_LENGTH   4096
 
+#include "WzQueue.h"
 
+#define DATA_BUFSIZE 2048
 
-struct PER_IO_OPERATION_DATA
+typedef struct
 {
-	WSAOVERLAPPED Overlapped;	// 0
-	WSABUF DataBuf;	// 14
-	char Buffer[2048];	// 1C
-	DWORD Bytes;	// 81C
-	int lOfs;	// 820
-};
+   OVERLAPPED	Overlapped;
+   WSABUF		DataBuf;
+   CHAR			Buffer[DATA_BUFSIZE];
+   DWORD		Bytes;
+	int			lOfs; 
+} PER_IO_OPERATION_DATA, * LPPER_IO_OPERATION_DATA;
 
-class WzUdp
-{
+
+class WzUdp  
+{	
+	int		m_Port;
+	
+	HANDLE	m_ThreadHandle;
+	DWORD	m_ThreadID;
+
 public:
+	SOCKET	m_Socket;
+	LPBYTE	m_Recvbuf;
+	LPBYTE  m_Sendbuf;
+	int     m_dwLength;
+	int		m_dwRecvOfs;
+	int     m_dwSendLength;
+	
+
+	PER_IO_OPERATION_DATA	m_PerIoSendData;
+
+	SOCKADDR_IN		m_SockAddr;
+
+	//WZQueue RecvQueue;
+	//WZQueue	SendQueue;
 
 	WzUdp();
 	virtual ~WzUdp();
 
-	BOOL Init();
+	BOOL Init();	
 	BOOL CreateSocket();
 	BOOL Run();
 	BOOL SendData(LPBYTE SendData, DWORD nSendDataLen);
-	BOOL MuProtocolParse(LPBYTE RecvData, int& nRecvDataLen);
+	BOOL MuProtocolParse(LPBYTE RecvData, int & nRecvDataLen);
 	BOOL Close();
-	BOOL SendSet(LPSTR ip, int port);
+	BOOL SendSet(char *ip, int port);
 	BOOL RecvSet(int port);
-	BOOL __declspec(noreturn) RecvThread();	// #error Why it return a value in PDB?
-	BOOL SetProtocolCore(UdpProtocolCore pc);
+	BOOL RecvThread();
+	BOOL SetProtocolCore(void (*pc)(BYTE, BYTE*, int));
 	
-	
-private:
-
-	int m_Port;	//4
-	HANDLE m_ThreadHandle;	//8
-	DWORD m_ThreadID;	//C
-	SOCKET m_Socket;	// 10
-	LPBYTE m_Recvbuf;	//14
-	LPBYTE m_Sendbuf;	//18
-	int m_dwLength; //1C
-	int m_dwRecvOfs;	//20
-	int m_dwSendLength;	//24
-	PER_IO_OPERATION_DATA m_PerIoSendData;	// 28
-	sockaddr_in	m_SockAddr;	// 84C
-	UdpProtocolCore ProtocolCore;	// 85C
-
+	void (*ProtocolCore)(BYTE protoNum, BYTE *aRecv, int aLen);
 };
 
-
-
-#endif
+#endif // !defined(AFX_WZUDP_H__E6DD88C5_2F76_4C09_82DD_FE7D27E6822D__INCLUDED_)

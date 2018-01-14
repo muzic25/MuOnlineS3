@@ -1,257 +1,249 @@
-#include "StdAfx.h"
+// WzUdp.cpp: implementation of the WzUdp class.
+// GS-N 1.00.90 - finished
+//////////////////////////////////////////////////////////////////////
+
+#include "stdafx.h"
+#include <winsock2.h>
+#include "WzQueue.h"
 #include "WzUdp.h"
 
-#define WZ_UPD_WINSOCK_VERSION 0x202
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
 
-DWORD __stdcall WzUdpRecvThread(WzUdp* lpWzUdp);
+DWORD WINAPI WzUdpRecvThread(WzUdp*		lpWzUdp);
+DWORD WINAPI WzUDPSendThread(LPVOID p);
 
 WzUdp::WzUdp()
 {
-	this->Init();
+	Init();
 }
-
 
 WzUdp::~WzUdp()
 {
-	this->Close();
+	Close();
 }
 
-int WzUdp::Init()
+BOOL WzUdp::Init()
 {
-	WSADATA wsd;
+	WSADATA			wsd;
 
-	if ( WSAStartup(WZ_UPD_WINSOCK_VERSION, &wsd) )
-	{
-		return 0;
-	}
-	this->m_Socket = INVALID_SOCKET;	// Set socket NULL
-	this->m_dwLength = 4096;
-	this->m_dwRecvOfs = 0;
-	this->m_ThreadHandle = NULL;
-	this->ProtocolCore=0;	// Protocol Core Null
-	return 1;
+	if (WSAStartup(MAKEWORD(2,2), &wsd) != 0)
+    {        
+        return FALSE;
+    }
+	m_Socket = -1;//Season 4.5 changed
+	m_dwLength  = DEFAULT_BUFFER_LENGTH;
+	m_dwRecvOfs = 0;
+	m_ThreadHandle = NULL;
+	ProtocolCore   = NULL;
+	return TRUE;
 }
 
-int WzUdp::Close()
+BOOL WzUdp::Close()
 {
-	::TerminateThread(this->m_ThreadHandle, 0);
-
-	if (this->m_ThreadHandle != 0)
+	TerminateThread(m_ThreadHandle, 0);
+	if( m_ThreadHandle != NULL )
 	{
-		WaitForSingleObject(this->m_ThreadHandle , INFINITE);	// Interesting, this could block GS
-		CloseHandle(this->m_ThreadHandle );
-		this->m_ThreadHandle =0;	// NULL handle
+		WaitForSingleObject( m_ThreadHandle, INFINITE );
+		CloseHandle(m_ThreadHandle);
+		m_ThreadHandle = NULL;
+	}
+	HeapFree(GetProcessHeap(), 0, m_Recvbuf);
+	return TRUE;
+}	
+
+BOOL WzUdp::CreateSocket()
+{
+	if( m_Socket != INVALID_SOCKET)//Season 4.5 addon
+	{
+		closesocket(m_Socket);
+		m_Socket = -1;
 	}
 
-	HeapFree(GetProcessHeap(), 0, this->m_Recvbuf);
-	return 1;
+	m_Socket = WSASocket(AF_INET, SOCK_DGRAM, 0, NULL, 0, NULL);
+    
+	if( m_Socket == INVALID_SOCKET )
+    {        
+        return FALSE;
+    }
+	return TRUE;
 }
 
-
-int WzUdp::CreateSocket()
+BOOL WzUdp::SendSet(char *ip, int port)
 {
-	if ( this->m_Socket != INVALID_SOCKET )
+	m_Port					= port;
+    m_SockAddr.sin_family	= AF_INET;
+    m_SockAddr.sin_port		= htons(port);
+	if( (m_SockAddr.sin_addr.s_addr	= inet_addr(ip)) == INADDR_NONE )
 	{
-		closesocket(this->m_Socket );
-		this->m_Socket=INVALID_SOCKET;
-	}
-	this->m_Socket=WSASocket(AF_INET, SOCK_DGRAM, IPPROTO_IP, NULL, 0,0);
-
-	if ( this->m_Socket== INVALID_SOCKET)
-	{
-		return 0;
-	}
-	return 1;
-}
-
-int WzUdp::SendSet(char* ip, int port)
-{
-	this->m_Port = port;
-	this->m_SockAddr.sin_family=AF_INET;
-
-	this->m_SockAddr.sin_port=htons(port);
-	this->m_SockAddr.sin_addr.S_un.S_addr=inet_addr(ip);
-
-	if ( this->m_SockAddr.sin_addr.S_un.S_addr == -1)
-	{
-		hostent* host=0;	// NULL pointer
-		host=gethostbyname(ip);
-
-		if (host != 0)
+		struct hostent *host=NULL;
+		host = gethostbyname(ip);
+		if( host )
 		{
-			memcpy(&this->m_SockAddr.sin_addr.S_un.S_addr,*host->h_addr_list ,host->h_length);	// Add Type Structure {$D }
+			CopyMemory(&m_SockAddr.sin_addr, host->h_addr_list[0], host->h_length);
 		}
 		else
-		{
-			return 0;
+		{		
+			return FALSE;
 		}
 	}
-	return 1;
+	return TRUE;
 }
 
-int WzUdp::SetProtocolCore(UdpProtocolCore pc)
+BOOL WzUdp::SetProtocolCore(void (*pc)(BYTE, BYTE*, int))
 {
-	this->ProtocolCore=pc;
-	return 1;
+	ProtocolCore = pc;
+	return TRUE;
 }
 
-int WzUdp::RecvSet(int port)
+
+BOOL WzUdp::RecvSet(int port)
 {
-
-	this->m_Port=port;
-
-	this->m_SockAddr.sin_port=htons(port);
-	this->m_SockAddr.sin_family=AF_INET;
-
-	this->m_SockAddr.sin_addr.S_un.S_addr=htonl(0);
+	m_Port						= port;
+    m_SockAddr.sin_port			= htons(port);
+	m_SockAddr.sin_family		= AF_INET;
+    m_SockAddr.sin_addr.s_addr	= htonl(INADDR_ANY);
 	
-	if( bind(this->m_Socket, (sockaddr*)&this->m_SockAddr, 16) == -1 )
-	{
-		return 0;
-	}
-	this->m_Recvbuf=(unsigned char*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, this->m_dwLength);
-
-	if ( this->m_Recvbuf == 0)
-	{
-		return 0;
-	}
-	return 1;
+	if( bind(m_Socket, (SOCKADDR *)&m_SockAddr, sizeof(m_SockAddr)) == SOCKET_ERROR )
+    {		
+		return FALSE;
+    }
+	
+	m_Recvbuf = (LPBYTE)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, m_dwLength);
+    if (!m_Recvbuf)
+    {        
+        return FALSE;
+    }
+	return TRUE;
 }
 
-int WzUdp::SendData(LPBYTE SendData, DWORD nSendDataLen)
-{
-	int Ret;
-	memset(&this->m_PerIoSendData.Overlapped, 0, 20);	// Add Type Structure {$D}
-	memcpy(this->m_PerIoSendData.Buffer , SendData, nSendDataLen);
-	
-	this->m_PerIoSendData.lOfs=nSendDataLen;
-	this->m_PerIoSendData.DataBuf.buf =this->m_PerIoSendData.Buffer;	// 40 Pointer 44 ...
-	this->m_PerIoSendData.DataBuf.len =this->m_PerIoSendData.lOfs;	// No complex
 
-	Ret=WSASendTo(this->m_Socket, &this->m_PerIoSendData.DataBuf, 1, (unsigned long*)&nSendDataLen, 0, (sockaddr*)&this->m_SockAddr, 16, &this->m_PerIoSendData.Overlapped, NULL); 		// 28 Add Type Structure {$D}
-	if (Ret == -1 )
+
+BOOL WzUdp::SendData(LPBYTE SendData, DWORD nSendDataLen)
+{
+	DWORD Ret;
+
+	ZeroMemory(&(m_PerIoSendData.Overlapped), sizeof(OVERLAPPED));
+	
+	memcpy(m_PerIoSendData.Buffer, SendData, nSendDataLen);
+	
+	m_PerIoSendData.lOfs		= nSendDataLen;
+	m_PerIoSendData.DataBuf.buf = m_PerIoSendData.Buffer;
+	m_PerIoSendData.DataBuf.len = m_PerIoSendData.lOfs;
+		
+	Ret = WSASendTo(m_Socket, &(m_PerIoSendData.DataBuf), 1, &nSendDataLen, 
+		0, (SOCKADDR*)&m_SockAddr, sizeof(m_SockAddr), &(m_PerIoSendData.Overlapped), NULL);
+	if( Ret == SOCKET_ERROR )
 	{
-		if (WSAGetLastError() != WSA_IO_PENDING ) //WSA_IO_PENDING
+		if (WSAGetLastError() != ERROR_IO_PENDING)
 		{
+			//printf("WSASend() failed with error %d\n", WSAGetLastError());
 			return -1;
 		}
 	}
-	return 1;
+	return TRUE;
 }
 
-int WzUdp::MuProtocolParse(LPBYTE RecvData, int& nRecvDataLen)
-{
-	int lOfs=0;
-	int size=0;
-	BYTE headcode;
+BOOL WzUdp::MuProtocolParse(LPBYTE RecvData, int & nRecvDataLen)
+{	
+	int		lOfs = 0;
+	int		size = 0;
+	BYTE	headcode;
 
-	if (this->ProtocolCore == 0)
+	if( ProtocolCore == NULL ) return FALSE;
+
+	while( TRUE )
 	{
-		return 0;
-	}
-
-	while ( true )	
-	{
-		if ( RecvData[lOfs]==0xC1 ) // Packet Type Manager
+		if( RecvData[lOfs] == 0xC1 )
 		{
-			size=RecvData[lOfs+1];	// Set Size
-			headcode=RecvData[lOfs+2];
+			size		= *(RecvData+lOfs+1);
+			headcode	= *(RecvData+lOfs+2);
 		}
-		else if ( RecvData[lOfs]== 0xC2 )
+		else if( RecvData[lOfs] == 0xC2 )
 		{
-			size=RecvData[lOfs+1];
-			size =size<<8;
-			size |= RecvData[lOfs+2];
-			headcode = RecvData[lOfs+3];
+			size		 = (WORD)(*(RecvData+lOfs+1));
+			size	   <<= 8;
+			size		|= (WORD)(*(RecvData+lOfs+2));
+			headcode	 = *(RecvData+lOfs+3);
 		}
-		else
+		else  // ????°? ???? ??????..
 		{
-			this->m_dwRecvOfs = 0;
-			return 0;
+			m_dwRecvOfs = 0;
+			return FALSE;
 		}
-
-		if ( size <= 0 )
+		if( size <= 0 )	// size °? 0??¶§?? ??·?..
 		{
-			return 0;
-		}
-
-		if ( size <= nRecvDataLen )
+			return FALSE;
+		}		
+		else if( size <= nRecvDataLen )	// ?????? ???¶?? ??????????..
 		{
-			this->ProtocolCore(headcode, &RecvData[lOfs], size );
-			lOfs += size;
-			this->m_dwRecvOfs -= size;
-
-			if (this->m_dwRecvOfs <= 0 )
+			(*ProtocolCore)(headcode, RecvData+lOfs, size);
+			lOfs		 += size;
+			m_dwRecvOfs  -= size;
+			if( m_dwRecvOfs <= 0 ) break;
+		}		
+		else												// µ?????°? ?? ????????
+		{	
+			if( lOfs > 0 )									// ??????»? µ??????¦ ???®?? ?? ¶???..
 			{
-				break;
+				if( m_dwRecvOfs < 1 )
+				{
+					return FALSE;
+				}
+				else 
+				{
+					memcpy(RecvData, (RecvData+lOfs), m_dwRecvOfs); // ???????­ ??»?????.
+					return TRUE;
+				}
 			}
-		}
-		else if ( lOfs > 0 )
-		{
-			if (this->m_dwRecvOfs < 1 )
-			{
-				return 0;
-			}
-
-			memcpy(RecvData, &RecvData[lOfs], this->m_dwRecvOfs);
-			return 1;
-		}
-		else
-		{
 			break;
 		}
 	}
-	return 1;
+	return TRUE;
 }
-
 
 
 BOOL WzUdp::Run()
 {
-	this->m_ThreadHandle=CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)WzUdpRecvThread, this, 0, &this->m_ThreadID);
-
-	if (this->m_ThreadHandle == 0 )
-	{
-		return 0;
+	if( (m_ThreadHandle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)WzUdpRecvThread, (void*)this, 0, &m_ThreadID) ) == NULL)
+	{		
+		return FALSE;
 	}
-	 return 1;
+	return TRUE;
 }
 
 BOOL WzUdp::RecvThread()
 {
-	int ret;
-	DWORD dwSenderSize;
-	sockaddr_in sender;
-	dwSenderSize=16;
-	while ( true )
-	{
-		ret=recvfrom(this->m_Socket , (char*)&this->m_Recvbuf[this->m_dwRecvOfs], ( 4096 - this->m_dwRecvOfs ), 0, (sockaddr*)&sender, (int*)&dwSenderSize);
+	int			ret;
+    DWORD		dwSenderSize;
+    SOCKADDR_IN	sender;	
+	
+	dwSenderSize = sizeof(sender);
+	while(1)
+	{		
+		ret = recvfrom(m_Socket, (char*)m_Recvbuf+m_dwRecvOfs,
+			DEFAULT_BUFFER_LENGTH-m_dwRecvOfs, 0, (SOCKADDR *)&sender, (int*)&dwSenderSize);
 
-		if ( ret == -1 )
+		if (ret == SOCKET_ERROR)
 		{
-			//continue;
+			//printf("recvfrom() failed; %d\n", WSAGetLastError());
 		}
-		else if ( ret == 0 )
+		else if (ret == 0)
 		{
-			//continue;
 		}
 		else
 		{
-			this->m_dwLength=ret;
-			this->m_dwRecvOfs += ret;
-			this->MuProtocolParse(this->m_Recvbuf, this->m_dwLength);
+			m_dwLength  = ret;
+			m_dwRecvOfs += ret;
+			MuProtocolParse(m_Recvbuf, m_dwLength);
 		}
 	}
 }
 
-DWORD __stdcall WzUdpRecvThread(WzUdp* lpWzUdp)
+DWORD WINAPI WzUdpRecvThread(WzUdp*	lpWzUdp)
 {
-	lpWzUdp->RecvThread();
-	__asm MOV EAX, 1
-	//	return 1;
+    lpWzUdp->RecvThread();
+	return TRUE;
 }
-
-
-
-
 

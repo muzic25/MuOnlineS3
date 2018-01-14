@@ -15,6 +15,8 @@
 #include "protocol.h"
 #include "wsShopServerCli.h"
 
+extern BOOL g_bUseMoveMapBound;
+
 
 #define MAX_CASH_SHOP_CATEGORY	4
 #define MAX_CASH_SHOP_ITEM		500	//135
@@ -195,7 +197,7 @@ private:
 	DWORD dwCheckShopServerConnectStatePeriod;	// 218B8
 };
 
-extern BOOL g_bUseMoveMapBound;
+
 extern CCashShop g_CashShop;
 extern wsShopServerCli g_ShopServerClient;
 
@@ -208,7 +210,6 @@ void SGAnsPackageItemList(protocol::MSG_STOG_PACKAGE_LIST_ANS* aRecv);
 void SGAnsBranchItemList(protocol::MSG_STOG_BRANCH_ITEM_LIST_ANS* lpMsg);
 void SGAnsBuyCashItem( protocol::MSG_STOG_BUY_ITEM_ANS* aRecv);
 BOOL IsCashItem(int iItemCode);
-
 
 
 #endif // !defined(AFX_CASHSHOP_H__B57A9271_3D21_40E0_B132_82F87B122CB4__INCLUDED_)

@@ -1,5 +1,7 @@
-#include "StdAfx.h"
+//	GS-CS	1.00.90	JPN		-	Completed
+#include "stdafx.h"
 #include "CWhatsUpDummyServer.h"
+#include "GameServer.h"
 
 WhatsUpDummyServerProc CWhatsUpDummyServer::m_lpOldProc=0;
 

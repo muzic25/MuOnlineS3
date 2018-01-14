@@ -125,6 +125,9 @@ public:
 	void AllObjReset();
 	BYTE GetUserJoinSide(BYTE MapNumber, int aIndex);
 	void SetNpcStatueRegen(BYTE MapNumber);
+	void TicketChaosMix(LPOBJ lpObj);
+	BYTE IllusionTempleChaosMix(int arg1, int arg2, int arg3);
+	BOOL CheckChoasMixItem(int arg1);
 	BYTE SetKillCount(int aIndex, BYTE btMapNumber, BYTE btObjType);
 	BYTE RemoveKillPointFromUser(int aIndex, BYTE MapNumber, BYTE KillPoint);
 	void RunningSkill(int aIndex, WORD skill, int aTargetIndex, BYTE dis);

@@ -832,7 +832,7 @@ void CIllusionTempleEvent::SetNpcStatueRegen(BYTE MapNumber)
 
 	this->m_IllusionTempleProcess[MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN].SetNpcStatueRegen();
 }
-/*
+
 void CIllusionTempleEvent::TicketChaosMix(LPOBJ lpObj)
 {
 	lpObj->ChaosLock = TRUE;
@@ -915,8 +915,8 @@ void CIllusionTempleEvent::TicketChaosMix(LPOBJ lpObj)
 		default:
 			lpObj->ChaosLock = FALSE;
 	}
-}	  */
-/*
+}	  
+
 BYTE CIllusionTempleEvent::IllusionTempleChaosMix(int arg1, int arg2, int arg3)
 {
 	if( OBJMAX_RANGE(arg1) == FALSE )
@@ -941,7 +941,7 @@ BYTE CIllusionTempleEvent::IllusionTempleChaosMix(int arg1, int arg2, int arg3)
 	char szTemp[17];
 	wsprintf(szTemp, "피의 두루마리 Mix,%d", arg2);
 
-	g_MixSystem.LogChaosItem(&gObj[arg1], szTemp);
+	LogChaosItem(&gObj[arg1], szTemp);
 
 	int iMIX_SUCCESS_RATE = g_iIT_ChoasMixSuccessRate[arg2-1]; //loc11
 
@@ -952,7 +952,7 @@ BYTE CIllusionTempleEvent::IllusionTempleChaosMix(int arg1, int arg2, int arg3)
 		return FALSE;
 	}
 
-	if ( g_CrywolfSync.GetOccupationState() == 0 && g_iCrywolfApplyMvpBenefit )
+	if ( g_CrywolfSync.GetOccupationState() == 0 && Configs.g_iCrywolfApplyMvpBenefit )
 	{
 		iMIX_SUCCESS_RATE += g_CrywolfSync.GetPlusChaosRate();
 	}
@@ -997,7 +997,7 @@ BYTE CIllusionTempleEvent::IllusionTempleChaosMix(int arg1, int arg2, int arg3)
 	}
 	else
 	{
-		g_MixSystem.ChaosBoxInit(&gObj[arg1]);
+		ChaosBoxInit(&gObj[arg1]);
 		GCUserChaosBoxSend(&gObj[arg1], 0);
 		DataSend(arg1, (LPBYTE)&pMsg, pMsg.h.size);
 		LogAddTD("[피의 두루마리 Mix] [%s][%s] CBMix Fail %d Money : %d-%d, CharmRate : %d", gObj[arg1].AccountID, gObj[arg1].Name, iMIX_SUCCESS_RATE, gObj[arg1].Money, iMIX_NEED_MONEY, arg3);
@@ -1110,7 +1110,7 @@ BOOL CIllusionTempleEvent::CheckChoasMixItem(int arg1)
 
 	return FALSE;
 }
-	  */
+
 BYTE CIllusionTempleEvent::SetKillCount(int aIndex, BYTE btMapNumber, BYTE btObjType)
 {
 	if( OBJMAX_RANGE(aIndex) == FALSE )

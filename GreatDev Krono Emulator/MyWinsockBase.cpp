@@ -1,4 +1,12 @@
-#include "StdAfx.h"
+
+// ------------------------------
+// Decompiled by Deathway
+// Date : 2007-03-09
+// ------------------------------
+// GS-N 0.99.60T MyWinsockBase.cpp	Status : Completed - Review procedure MyWinsockBase::Startup() - Finished, just SAR problem -SHR
+//	GS-N	1.00.18	JPN	0x0048CD90	-	Completed
+
+#include "stdafx.h"
 #include "MyWinsockBase.h"
 
 MyWinsockBase::MyWinsockBase()
