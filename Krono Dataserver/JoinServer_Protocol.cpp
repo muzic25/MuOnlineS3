@@ -146,6 +146,13 @@ void JoinServer_Protocol::ProtocolCore(int aIndex, BYTE HeadCode, LPBYTE aRecv, 
     }
     break;
 
+	case 0xF0: // [OK] - [Fine]
+	{
+		this->GJSetStatusBan(aIndex, reinterpret_cast<SDHP_SETSTATUSBAN_INFOSAVE *>(aRecv));
+	}
+	break;
+
+
     default:
     {
         LogAddC(eDebug, "[Debug] JoinServer Recv: 0x%02x", HeadCode);
@@ -732,4 +739,26 @@ void JoinServer_Protocol::MngPro_UserNoticeSend(int aIndex, LPPMSG_USERNOTICE * 
             gJoinServer_Manager.CloseClient(aIndex);
         }
     }
+}
+
+
+void JoinServer_Protocol::GJSetStatusBan(int aIndex, SDHP_SETSTATUSBAN_INFOSAVE * lpMsg)
+{
+	char szName[11] = { 0 };
+	memcpy(szName, lpMsg->Name, 10);
+
+	if ((gFunc.CheckSQLSyntex(szName) == TRUE))
+	{
+		if (lpMsg->Type == 0) //Ban account
+		{
+			gDataBase.ExecFormat("UPDATE dbo.MEMB_INFO SET bloc_code = %d WHERE memb___id = '%s'", lpMsg->Ban, szName);
+		}
+		else
+		{
+			gDataBase.ExecFormat("UPDATE dbo.Character SET CtlCode = %d WHERE Name = '%s'", lpMsg->Ban, szName);
+		}
+
+		//	gDataBase.Fetch();
+		gDataBase.Clear();
+	}
 }

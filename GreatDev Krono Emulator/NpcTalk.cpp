@@ -607,6 +607,21 @@ BOOL NpcDeviasWareHousemen(LPOBJ lpNpc, LPOBJ lpObj)
 
 BOOL NpcWarehouse(LPOBJ lpNpc, LPOBJ lpObj)
 {
+
+	char MSG[255];
+	if (lpObj->TempoRespownVault > 0)
+	{
+		sprintf(MSG, "Wait %d second to reopen the vault!", lpObj->TempoRespownVault);
+		GCServerMsgStringSend(MSG, lpObj->m_Index, 1);
+		return TRUE;
+	}
+	else
+	{
+		lpObj->TempoRespownVault = Configs.VaultFloodTime;
+		return FALSE;
+	}
+
+
 	return FALSE;
 }
 

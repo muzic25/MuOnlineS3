@@ -1,0 +1,8 @@
+[CashShopOption]
+UseCashShop		= 0			// Habilitar Cashshop
+ConnectShopServer	= 0			// Connectar à Cashshopserver.exe
+ShopServerIP		= 127.0.0.1		// IP
+ShopServerPort		= 55821			// PORTA
+
+UseLotteryEvent		= 1			// Loteria event
+MapMoveBoundCheck	= 0			// Move necessitando de SEALS

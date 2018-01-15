@@ -348,7 +348,13 @@ typedef struct
     BYTE	Result;
 } PMSG_GAME_BLOCK_RESULT, *LPPMSG_GAME_BLOCK_RESULT;
 
-
+struct SDHP_SETSTATUSBAN_INFOSAVE
+{
+	PBMSG_HEAD h;
+	char Name[11];
+	BYTE Ban;
+	BOOL Type;
+};
 
 class JoinServer_Protocol
 {
@@ -381,6 +387,7 @@ public:
     void MngPro_UserClose(int aIndex, LPPMSG_FORCELOGOUT *lpMsg);
     void MngPro_AllNoticeSend(int aIndex, LPPMSG_SETENTIRENOTICE *lpMsg);
     void MngPro_UserNoticeSend(int aIndex, LPPMSG_USERNOTICE *lpMsg);
+	void GJSetStatusBan(int aIndex, SDHP_SETSTATUSBAN_INFOSAVE * lpMsg);
     //	void MngPro_GameBlock		(int aIndex, LPPMSG_GAME_BLOCK *lpMsg);
     void UserCountRecv(int aIndex, PMSG_NOTIFY_MAXUSER * lpMsg);
     void UpdateUserCharacters(int aIndex, UPDATEUSERCHARACTERS * lpMsg);

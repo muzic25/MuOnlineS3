@@ -193,6 +193,7 @@ void GameMainInit(HWND hWnd)
 	Configs.gPartition = GetPrivateProfileInt("GameServerInfo", "Partition", 0, gDirPath.GetNewPath("commonserver.cfg"));
 	Configs.gLanguage = GetPrivateProfileInt("GameServerInfo", "Language", 0, gDirPath.GetNewPath("commonserver.cfg"));
 
+
 	DragonEvent = new CDragonEvent;
 	
 	if ( DragonEvent == 0 )
@@ -902,7 +903,7 @@ void ReadCommonServerInfo()
 
 	strcpy(Configs.szKorItemTextFileName, gDirPath.GetNewPath("\\Items\\item.txt"));
 	strcpy(Configs.szKorSkillTextFileName, gDirPath.GetNewPath("\\Skills\\skill.txt"));
-	strcpy(szCommonlocIniFileName, gDirPath.GetNewPath("Other\\commonloc.cfg"));
+	strcpy(szCommonlocIniFileName, gDirPath.GetNewPath("commonloc.cfg"));
 	strcpy(szlMsgName, gDirPath.GetNewPath("Messages.ini"));
 	strcpy(Configs.szItemTextFileName, gDirPath.GetNewPath("\\Items\\item.txt"));
 	strcpy(Configs.szSkillTextFileName, gDirPath.GetNewPath("\\Skills\\skill.txt"));
@@ -1372,11 +1373,9 @@ void ReadCommonServerInfo()
 	// COMMANDS Init ( /make / Create /trace etc...)
 	cManager.Init();
 
-
-
 	// Hack Log SERVER
-	//GetPrivateProfileString("GameServerInfo", "HackLogServer", "127.0.0.1", Configs.gHackLogServerIp, 20, gDirPath.GetNewPath("commonserver.cfg"));
-	//gSendHackLog.SendSet(Configs.gHackLogServerIp, 60005);
+	GetPrivateProfileString("GameServerInfo", "HackLogServer", "127.0.0.1", Configs.gHackLogServerIp, 20, gDirPath.GetNewPath("commonserver.cfg"));
+	gSendHackLog.SendSet(Configs.gHackLogServerIp, 60005);
 
 	// Penetration Skill
 	Configs.gEnableCheckPenetrationSkill = GetPrivateProfileInt("GameServerInfo", "EnableCheckPenetrationSkill", 1, gDirPath.GetNewPath("commonserver.cfg"));
@@ -1438,8 +1437,9 @@ void ReadCommonServerInfo()
 	gEledoradoEvent.SetEventState(Configs.gIsEledoradoEvent);
 	gEledoradoEvent.Init();
 
+	GMSystem.LoadIniConfig(".\\GMSystem.txt");
 
-	//gPacketCheckSum.Init();
+	gPacketCheckSum.Init();
 
 	Configs.gDoPShopOpen = GetPrivateProfileInt("GameServerInfo", "PersonalShopOpen", 0, gDirPath.GetNewPath("commonserver.cfg"));
 
@@ -1466,11 +1466,15 @@ void ReadCommonServerInfo()
 	g_CouponEventItemLIst.Load(gDirPath.GetNewPath("EventItemList.txt"));
 
 	LoadCustomJewel(gDirPath.GetNewPath("\\Customs\\Jewels.ini"));
-	LoadConfigs(gDirPath.GetNewPath("ChaosMix.ini"));
+	LoadChaosConfigs(gDirPath.GetNewPath("ChaosMix.ini"));
 
+	LoadCommands(gDirPath.GetNewPath("Commands.ini"));
+
+	//Custom Configs
+	Configs.VaultFloodTime = GetPrivateProfileInt("GameServerInfo", "FloodTime", 1, gDirPath.GetNewPath("commonserver.cfg"));
 }
 
-void LoadConfigs(char* filename)
+void LoadChaosConfigs(char* filename)
 {
 	/************************************************************************/
 	/*                               Load Rate Mix                          */
@@ -1605,7 +1609,16 @@ void LoadConfigs(char* filename)
 	this->ThirdWingsMaxOpt = GetPrivateProfileIntA("MaxRate", "ThirdWingsMaxOpt", 2, filename);*/
 }
 
+void LoadCommands(char* filename)
+{
+	//Post
+	Configs.CmdPostEnabled = GetPrivateProfileInt("Post", "PostEnabled", 1, filename);
+	Configs.CmdPostMoney = GetPrivateProfileInt("Post", "PostMoney", 50000, filename);
+	Configs.CmdPostLevel = GetPrivateProfileInt("Post", "PostLevel", 50, filename);
+	Configs.CmdPostAF = GetPrivateProfileInt("Post", "PostAntiFloodSec", 3, filename);
 
+
+}
 
 void GameServerInfoSendStop()
 {

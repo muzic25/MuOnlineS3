@@ -29,6 +29,20 @@ BOOL DataEncryptCheck(int aIndex, BYTE protoNum, BOOL Encrypt)
 	return TRUE;
 }
 
+
+BYTE RecvProtocolJPN(BYTE Type)
+{
+	switch (Type)
+	{
+	case 0x1D: return 0xD3;        //Walk Protocol 100%
+	case 0xD6: return 0xDF;        //Skills Use Fix 100%
+	case 0xDC: return 0xD7;        //Attack Protocol 100%
+	case 0x07: return 0x10;		   //BeAttack Protocol 100%
+}
+	return Type;
+}
+
+
 void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOOL Encrypt, int serial)
 {
 #if (TEST_SERVER == 1)
@@ -61,6 +75,19 @@ void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOO
 			}
 		}
 	}	
+
+	if (Configs.gLanguage == 2)
+	{
+		protoNum = RecvProtocolJPN(protoNum);
+		if (aRecv[0] == 0xC1 ||	aRecv[0] == 0xC3)
+		{
+			aRecv[2] = protoNum;
+		}
+		else
+		{
+			aRecv[3] = protoNum;
+		}
+	}
 
 	if (protoNum == 0xF1 || protoNum == 0xF3)
 	{
@@ -159,48 +186,39 @@ void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOO
 			CGLiveClient((PMSG_CLIENTTIME *)aRecv, aIndex);
 			break;
 
-			if (Configs.gLanguage == 0) //Korean
-			{
-				// --------------------------------------------------
-				case MOVE_PROTOCOL:
-					PMoveProc((PMSG_MOVE *)aRecv, aIndex); // Move
-				break;
+			// --------------------------------------------------
+		case 0xD3:
+			PMoveProc((PMSG_MOVE *)aRecv, aIndex); // Move
+			break;
 
-				case SETPOS_PROTOCOL:
-					RecvPositionSetProc((PMSG_POSISTION_SET*)aRecv, aIndex); //Skill
-				break;
+		case 0xDF:
+			RecvPositionSetProc((PMSG_POSISTION_SET*)aRecv, aIndex); //Skill
+			break;
 
-				case ATTACK_PROTOCOL:
-					CGAttack((PMSG_ATTACK *)aRecv, aIndex); // Attack
-				break;
-			
-				case BEATTACK_PROTOCOL:
-					CGBeattackRecv(aRecv, aIndex, FALSE);
-				break;
-				// --------------------------------------------------
-			}
+		case 0xD7:
+			CGAttack((PMSG_ATTACK *)aRecv, aIndex); // Attack
+			break;
 
-			if (Configs.gLanguage == 2) //Japan
-			{
-				// --------------------------------------------------
-				case 0x1D:
-					PMoveProc((PMSG_MOVE *)aRecv, aIndex);
-				break;
-
-				case 0xD6:
-					RecvPositionSetProc((PMSG_POSISTION_SET *)aRecv, aIndex);
-				break;
-
-				case 0xDC:
-					CGAttack((PMSG_ATTACK *)aRecv, aIndex);
-				break;
-
-				case 0x07:
-					CGBeattackRecv(aRecv, aIndex, FALSE);
-				break;
-			}
-
+		case 0x10:
+			CGBeattackRecv(aRecv, aIndex, FALSE);
+			break;
+			// --------------------------------------------------
 		case ACTION_RECV: //0x18:
+
+			if (aLen != 5)
+			{
+				LogAdd("[DC-Hack] Detected! Account: %s PacketLenght: %d", gObj[aIndex].AccountID, aLen);
+				CloseClient(aIndex);
+				return;
+			}
+
+			if (aRecv[3] > 7)
+			{
+				LogAdd("[DC-Hack] Detected! Account: %s Received Packet: %d", gObj[aIndex].AccountID, aRecv[3]);
+				CloseClient(aIndex);
+				return;
+			}
+
 			CGActionRecv((PMSG_ACTION *)aRecv, aIndex);
 			break;
 		case MAGIC_ATTACK: //0x19:
@@ -1100,7 +1118,9 @@ void PChatProc(PMSG_CHATDATA * lpChat, short aIndex)
 			if (lpObj->Authority & 32) //season4 changed
 			{
 				DataSend(aIndex, (LPBYTE)lpChat, lpChat->h.size);
-				AllSendServerMsg(&lpChat->chatmsg[1]);
+				char szTemp[128];
+				wsprintf(szTemp, "[%s]:%s", lpObj->Name, &lpChat->chatmsg[1]);
+				AllSendServerMsg(szTemp);
 
 				LogAddTD(lMsg.Get(MSGGET(1, 215)), gObj[aIndex].AccountID, gObj[aIndex].Name, &lpChat->chatmsg[1]);
 
@@ -9126,17 +9146,8 @@ void PMoveProc(PMSG_MOVE* lpMove, int aIndex)
 	}	
 
 
-	if (Configs.gLanguage == 0)
-	{
-		PHeadSetB((LPBYTE)&pMove, MOVE_PROTOCOL, sizeof(pMove));
-	}
 
-
-	if (Configs.gLanguage == 2)
-	{
-		PHeadSetB((LPBYTE)&pMove, 0x1D, sizeof(pMove));
-	}
-
+	PHeadSetB((LPBYTE)&pMove, 0xD3, sizeof(pMove));
 	pMove.NumberH = SET_NUMBERH(aIndex);
 	pMove.NumberL = SET_NUMBERL(aIndex);
 	pMove.X = ax;
@@ -9172,8 +9183,10 @@ void PMoveProc(PMSG_MOVE* lpMove, int aIndex)
 
 	int MVL = MAX_VIEWPORT;
 
-	if ( lpObj->Type == OBJ_MONSTER )
+	if (lpObj->Type == OBJ_MONSTER)
+	{
 		MVL = MAX_VIEWPORT_MONSTER;
+	}
 		
 	for (n=0;n<MVL;n++)
 	{
@@ -9257,16 +9270,9 @@ void RecvPositionSetProc(PMSG_POSISTION_SET * lpMove, int aIndex)
 
 	PMSG_RECV_POSISTION_SET pMove;
 
-	if (Configs.gLanguage == 0)
-	{
-		PHeadSetB((LPBYTE)&pMove, SETPOS_PROTOCOL, sizeof(pMove));
-	}
 
-	if (Configs.gLanguage == 2)
-	{
-		PHeadSetB((LPBYTE)&pMove, 0xD6, sizeof(pMove));
-	}
-	
+	PHeadSetB((LPBYTE)&pMove, 0xDF, sizeof(pMove));
+
 	pMove.NumberH = SET_NUMBERH(aIndex);
 	pMove.NumberL = SET_NUMBERL(aIndex);
 	pMove.X = lpMove->X;
@@ -9410,15 +9416,8 @@ void GCDamageSend(int aIndex, int TargetIndex, int AttackDamage, int MSBFlag, in
 {
 	PMSG_ATTACKRESULT pResult;
 
-	if (Configs.gLanguage == 0)
-	{
-		PHeadSetB((LPBYTE)&pResult, ATTACK_PROTOCOL, sizeof(pResult));
-	}
 
-	if (Configs.gLanguage == 2)
-	{
-		PHeadSetB((LPBYTE)&pResult, 0xDC, sizeof(pResult));
-	}
+	PHeadSetB((LPBYTE)&pResult, 0xD7, sizeof(pResult));
 
 	pResult.NumberH = SET_NUMBERH(TargetIndex);
 	pResult.NumberL = SET_NUMBERL(TargetIndex);
@@ -10214,23 +10213,12 @@ void CGBeattackRecv(unsigned char* lpRecv, int aIndex, int magic_send)
 	PMSG_BEATTACK_COUNT * lpCount = (PMSG_BEATTACK_COUNT *)lpRecv;
 
 	// Check the Protocol
-	if (Configs.gLanguage == 0)
-	{
-		if (lpCount->h.headcode != BEATTACK_PROTOCOL)
+	if (lpCount->h.headcode != 0x10)
 		{
 			LogAdd("error-L3 %s %d", __FILE__, __LINE__);
 			return;
 		}
-	}
 
-	if (Configs.gLanguage == 2)
-	{
-		if (lpCount->h.headcode != 0xD7)
-		{
-			LogAdd("error-L3 %s %d", __FILE__, __LINE__);
-			return;
-		}
-	}
 	// Check if the count is leess than 1
 	if ( lpCount->Count < 1 )
 	{
@@ -16037,17 +16025,9 @@ void GCAnsCsSendCommand(int iCsJoinSize, BYTE btTeam, BYTE btX, BYTE btY, BYTE b
 	PMSG_ANS_CSCOMMAND pMsgResult;
 
 
-	if (Configs.gLanguage == 0)
-	{
-		pMsgResult.h.set((LPBYTE)&pMsgResult, 0xB2, MOVE_PROTOCOL, sizeof(pMsgResult));
-	}
 
+	pMsgResult.h.set((LPBYTE)&pMsgResult, 0xB2, 0xD3, sizeof(pMsgResult));
 
-	if (Configs.gLanguage == 2)
-	{
-		pMsgResult.h.set((LPBYTE)&pMsgResult, 0xB2, 0x1D, sizeof(pMsgResult));
-	}
-	
 	pMsgResult.btTeam = btTeam;
 	pMsgResult.btX = btX;
 	pMsgResult.btY = btY;

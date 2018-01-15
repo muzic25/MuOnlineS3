@@ -1,6 +1,6 @@
 # RMST GameServer Krono Emulator Season 3 
 
-Status: Fully Bugs With some events (Beta)   
+Status: Some Bugs (Beta)  
   
 - Login: OK  
 
@@ -18,20 +18,21 @@ Illusion Temple: Unknown -> Original Functions Added  -> Test
 Chaos Castle: OK  
   
 - Systems  
--ChaosMachine: Bugged  
+-ChaosMachine: Bugged -> Reverted to original -> Need Add Config values  
 -PCPoint Shop/System: 98% (Seals don't show but the effects are working)  
+-GMSystem Works 100%  
 
 - Items/Itembags/Maps/Others:  
 -ItemsBags: Fixed and Added new bags  
 -Maps: missing -> Added/Fixed -> OK  
--GameServer Interface: Logger bugged -> Fixed -> OK -> Bugged (WhiteScreen)    
+-GameServer Interface: Logger bugged -> Fixed -> OK -> Bugged (WhiteScreen)  -> Fixed  
 -3rd wings: Fixed -> OK    
 -Other bugs
 
 Some Pic:  
-http://i1155.photobucket.com/albums/p550/muzic25/Screen11_10-19_57-0000_zpspvxjtrt8.jpg
-http://i1155.photobucket.com/albums/p550/muzic25/Screen01_11-00_25-0002_zps7qs3gos0.jpg
-http://i1155.photobucket.com/albums/p550/muzic25/Screen01_10-21_49-0000_zps0uoay8pn.jpg
+http://i1155.photobucket.com/albums/p550/muzic25/Screen11_10-19_57-0000_zpspvxjtrt8.jpg  
+http://i1155.photobucket.com/albums/p550/muzic25/Screen01_11-00_25-0002_zps7qs3gos0.jpg  
+http://i1155.photobucket.com/albums/p550/muzic25/Screen01_10-21_49-0000_zps0uoay8pn.jpg  
 
 Used Client: 1.04J (1.04.10) Korean  
 Client link: http://dfiles.eu/files/4tmc1jve5  

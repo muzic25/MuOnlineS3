@@ -1,184 +1,159 @@
-// ================================================== //
-// # GameServer 1.00.90 WzAG.dll					# //
-// # RMST Storm & Tornado Projects 2010-2011		# //
-// ================================================== //
-
-
 #include "StdAfx.h"
-#include "GmSystem.h"
-#include "Logger.h"
-cGmSystem GMS;
 
-#define KRONO_GM_SYSTEM ".\\GMSystem.txt"
-
-cGmSystem::cGmSystem()
+CGMSystem::CGMSystem()
 {
-
+	ZeroMemory(this->m_Data, sizeof(this->m_Data));
 }
 
-cGmSystem::~cGmSystem()
+CGMSystem::~CGMSystem()
 {
 }
 
-void cGmSystem::LoadIniConfig()
+CGMSystem GMSystem;
+
+void CGMSystem::LoadIniConfig(char * filename)
 {
-	IsGMSystem = GetPrivateProfileInt("GMSystem","IsGMSystem",1,KRONO_GM_SYSTEM);
-	IsGMInDB = GetPrivateProfileInt("GMSystem","IsGMInDB",1,KRONO_GM_SYSTEM);
+	IsGMSystem = GetPrivateProfileInt("GMSystem", "IsGMSystem", 1, filename);
+	this->Load(filename);
 }
 
-void cGmSystem::LoadGMSystem()
+void CGMSystem::Load(char * filename)
 {
-	FILE *fp;
-	BOOL bRead = FALSE;
-	DWORD dwArgv = 0;
-	char sLineTxt[256];
-	GMCount = 0;
-	BOOL bResult = FALSE;
-
-	fp = fopen(KRONO_GM_SYSTEM,"r");
-
-	rewind(fp);
-	int CFG = -1;
-	while(fgets(sLineTxt, 255, fp) != NULL)
+	SMDToken Token;
+	SMDFile = fopen(filename, "r");
+	// ---
+	this->iDataCount = 0;
+	// ---
+	if (!SMDFile)
 	{
-		if(sLineTxt[0] == '/')continue;
-		if(sLineTxt[0] == ';')continue;
-		if(sLineTxt[0] == 'e' && sLineTxt[1] == 'n' && sLineTxt[2] == 'd')
-		{
-			CFG = -1;
-			continue;
-		}
-		
-		if(strlen(sLineTxt) < 3)
-		{	 			
-            UINT q = 0;
-            sscanf(sLineTxt, "%d", &q);
-			CFG = q;
-			continue;
-		}										
-
-		if(CFG == 1)
-		{
-			int n[14];
-			char GetGMName[11];
-			int isAdmin;
-
-			sscanf(sLineTxt, "%d %s %d %d %d %d %d %d %d %d %d %d %d %d %d %d",&isAdmin, &GetGMName, &n[0], &n[1], &n[2], &n[3], &n[4], &n[5],  &n[6], &n[7], &n[8], &n[9], &n[10], &n[11], &n[12], &n[13]);
-			GM[GMCount].IsAdmin		= isAdmin;
-			sprintf(GM[GMCount].Name,"%s",GetGMName);
-			GM[GMCount].Drop		= n[0];
-			GM[GMCount].Gg			= n[1];
-			GM[GMCount].SetZen		= n[2];
-			GM[GMCount].Status		= n[3];
-			GM[GMCount].Gmove		= n[4];
-			GM[GMCount].SetPK		= n[5];		 
-			GM[GMCount].PkClear		= n[6];	 	
-			GM[GMCount].BanPlayer	= n[7];   
-			GM[GMCount].Reload		= n[8];
-			GM[GMCount].Skin		= n[9];			 
-			GM[GMCount].BanPost		= n[10];
-			GM[GMCount].Voskl		= n[11];  
-			GM[GMCount].Disconnect	= n[12];
-			GM[GMCount].Trace		= n[13];
-			GMCount++;
-		}
+		MsgBox("[%s] file not found", filename);
+		ExitProcess(0);
 	}
-
-	rewind(fp);
-	fclose(fp);	
-	//Log.LogOutPut(true, Log.c_Blue, Log.t_NULL,"[GMSystem] Load sucsessfully. Total GMs: %d",GMCount);
-}
-
-													   
-int cGmSystem::IsCommand(Commands Cmd, char Character[11])
-{	
-	switch (Cmd)
+	// ---
+	while (true)
 	{
-		case NONE:
-			return 1;
-	}
-	if(IsGMBD(Character))
-	{
-		if (this->IsGMSystem)
+		Token = GetToken();
+		// ---
+		if (Token == SMDToken::END)
 		{
-			for(int x=0; x < GMCount; x++)
-				if(!strcmp(GM[x].Name, Character))
+			break;
+		}
+		// ---
+		if (Token == SMDToken::NUMBER)
+		{
+			int Section = TokenNumber;
+			// ---
+			if (Section == 0)
+			{
+				while (true)
 				{
-					switch (Cmd)
+					Token = GetToken();
+					// ---
+					if (Token == SMDToken::NAME)
 					{
-					case cDrop:
-						return GM[x].Drop;
-					case cGg:
-						return GM[x].Gg;
-					case cSetZen:
-						return GM[x].SetZen;
-					case cStatus:
-						return GM[x].Status;
-					case cGmove:
-						return GM[x].Gmove;	 
-					case cSetPK:
-						return GM[x].SetPK;	   
-					case cPkClear:
-						return GM[x].PkClear;		 
-					case cBanPlayer:
-						return GM[x].BanPlayer;
-					case cReload:
-						return GM[x].Reload;
-					case cSkin:
-						return GM[x].Skin;	  	
-					case cBanPost:
-						return GM[x].BanPost;
-					case cVoskl:
-						return GM[x].Voskl;		
-					case cDisconnect:
-						return GM[x].Disconnect;
-					case cTrace:
-						return GM[x].Trace;
+						if (strcmp("end", TokenString) == 0)
+						{
+							break;
+						}
 					}
+					// ---
+					memcpy(this->m_Data[this->iDataCount].szName, TokenString, MAX_ACCOUNT_LEN);
+					// ---
+					GetToken();
+					this->m_Data[this->iDataCount].iCommand[COMMAND_DROP] = TokenNumber;
+					// ---
+					GetToken();
+					this->m_Data[this->iDataCount].iCommand[COMMAND_GG] = TokenNumber;
+					// ---
+					GetToken();
+					this->m_Data[this->iDataCount].iCommand[COMMAND_SETZEN] = TokenNumber;
+					// ---
+					GetToken();
+					this->m_Data[this->iDataCount].iCommand[COMMAND_STATS] = TokenNumber;
+					// ---
+					GetToken();
+					this->m_Data[this->iDataCount].iCommand[COMMAND_MOVE] = TokenNumber;
+					// ---
+					GetToken();
+					this->m_Data[this->iDataCount].iCommand[COMMAND_SETPK] = TokenNumber;
+					// ---
+					GetToken();
+					this->m_Data[this->iDataCount].iCommand[COMMAND_PKCLEAR] = TokenNumber;
+					// ---
+					GetToken();
+					this->m_Data[this->iDataCount].iCommand[COMMAND_BANPLAYER] = TokenNumber;
+					// ---
+					GetToken();
+					this->m_Data[this->iDataCount].iCommand[COMMAND_RELOAD] = TokenNumber;
+					// ---
+					GetToken();
+					this->m_Data[this->iDataCount].iCommand[COMMAND_SKIN] = TokenNumber;
+					// ---
+					GetToken();
+					this->m_Data[this->iDataCount].iCommand[COMMAND_BANCHAT] = TokenNumber;
+					// ---
+					GetToken();
+					this->m_Data[this->iDataCount].iCommand[COMMAND_UNBANCHAT] = TokenNumber;
+					// ---
+					GetToken();
+					this->m_Data[this->iDataCount].iCommand[COMMAND_DISK] = TokenNumber;
+					// ---
+					GetToken();
+					this->m_Data[this->iDataCount].iCommand[COMMAND_TRACE] = TokenNumber;
+					// ---
+					this->iDataCount++;
 				}
-			return 0; 
+			}
 		}
-		else
-			return 1;
 	}
-	else
-		return 0;
+	// ---
+	LogAdd("[%s] Uploaded Successfully", filename);
+	// ---
+	fclose(SMDFile);
 }
 
-int cGmSystem::IsAdmin(char Character[11])
-{	
-	if(IsGMBD(Character))
-	{
-		if (this->IsGMSystem)
-		{
-			for(int x=0; x < GMCount; x++)
-				if(!strcmp(GM[x].Name, Character))
-				{
-					switch (GM[x].IsAdmin)
-					{
-					case 0: 
-						return 0;
-					case 1: 
-						return 1;
-					case 2:
-						return 2;					
-					}
-				}
-			return 0; 
-		}
-		else
-			return 2;
-	}
-	else return 0;
-}					  
-	
-bool cGmSystem::IsGMBD(char Character[11])
+bool CGMSystem::IsCommand(LPOBJ lpObj, int Command)
 {
-	for(int i = OBJMAX - OBJMAXUSER; i <= OBJMAX; i++)
-	{  	 
-		if(gObj[i].Connected < 3) continue;
-		if(!strcmp(gObj->Name, Character) && (gObj->Authority == 32 || gObj->Authority == 8))
-			return true;
+	if (lpObj->Authority == 8 || lpObj->Authority == 32)
+	{
+		for (int i = 0; i < this->iDataCount; i++)
+		{
+			if (!strcmp(this->m_Data[i].szName, lpObj->Name))
+			{
+				switch (Command)
+				{
+				case 0:
+					return this->m_Data[i].iCommand[COMMAND_DROP];
+				case 1:
+					return this->m_Data[i].iCommand[COMMAND_GG];
+				case 2:
+					return this->m_Data[i].iCommand[COMMAND_SETZEN];
+				case 3:
+					return this->m_Data[i].iCommand[COMMAND_STATS];
+				case 4:
+					return this->m_Data[i].iCommand[COMMAND_MOVE];
+				case 5:
+					return this->m_Data[i].iCommand[COMMAND_SETPK];
+				case 6:
+					return this->m_Data[i].iCommand[COMMAND_PKCLEAR];
+				case 7:
+					return this->m_Data[i].iCommand[COMMAND_BANPLAYER];
+				case 8:
+					return this->m_Data[i].iCommand[COMMAND_RELOAD];
+				case 9:
+					return this->m_Data[i].iCommand[COMMAND_SKIN];
+				case 10:
+					return this->m_Data[i].iCommand[COMMAND_BANCHAT];
+				case 11:
+					return this->m_Data[i].iCommand[COMMAND_UNBANCHAT];
+				case 12:
+					return this->m_Data[i].iCommand[COMMAND_DISK];
+				case 13:
+					return this->m_Data[i].iCommand[COMMAND_TRACE];
+				}
+			}
+		}
 	}
+	// ---
 	return false;
 }

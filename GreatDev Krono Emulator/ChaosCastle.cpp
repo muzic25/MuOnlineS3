@@ -1802,15 +1802,9 @@ void CChaosCastle::GiveUserDamage(int iUserIndex, int iDamage)
 
 	PMSG_ATTACKRESULT pResult;
 
-	if (Configs.gLanguage == 0)
-	{
-		PHeadSetB((LPBYTE)&pResult, ATTACK_PROTOCOL, sizeof(pResult));
-	}
 
-	if (Configs.gLanguage == 2)
-	{
-		PHeadSetB((LPBYTE)&pResult, 0xDC, sizeof(pResult));
-	}
+	PHeadSetB((LPBYTE)&pResult, 0xD7, sizeof(pResult));
+
 
 	pResult.NumberH = SET_NUMBERH(iUserIndex);
 	pResult.NumberL = SET_NUMBERL(iUserIndex);
@@ -2312,15 +2306,7 @@ BOOL CChaosCastle::ObjSetPosition(int iIndex, int iX, int iY)
 	PMSG_POSISTION_SET pMove;
 
 	pMove.h.c = 0xC1;
-	if (Configs.gLanguage == 0)
-	{
-		pMove.h.headcode = SETPOS_PROTOCOL;
-	}
-
-	if (Configs.gLanguage == 2)
-	{
-		pMove.h.headcode = 0xD6;
-	}
+	pMove.h.headcode = 0xDF;
 	pMove.h.size = sizeof(pMove);
 	pMove.X = iX;
 	pMove.Y = iY;
@@ -2338,16 +2324,7 @@ BOOL CChaosCastle::ObjSetPosition(int iIndex, int iX, int iY)
 
 	PMSG_RECV_POSISTION_SET pMove2;
 
-	if (Configs.gLanguage == 0)
-	{
-		PHeadSetB((LPBYTE)&pMove2, SETPOS_PROTOCOL, sizeof(pMove2));
-	}
-
-	if (Configs.gLanguage == 2)
-	{
-		PHeadSetB((LPBYTE)&pMove2, 0xD6, sizeof(pMove2));
-	}
-
+	PHeadSetB((LPBYTE)&pMove2, 0xDF, sizeof(pMove2));
 	pMove2.NumberH = SET_NUMBERH(iIndex);
 	pMove2.NumberL = SET_NUMBERL(iIndex);
 	pMove2.X = pMove.X;

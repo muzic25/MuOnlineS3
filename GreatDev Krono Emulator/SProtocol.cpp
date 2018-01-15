@@ -70,9 +70,6 @@ void SProtocolCore(BYTE protoNum, LPBYTE aRecv, int aLen)
 		case 0x7B:
 			JGAnsMapSvrAuth((PMSG_ANS_MAPSVRAUTH *)aRecv);
 			break;
-		case 0x90:
-			JGRecvPcBangInfo((SDHP_PCBANGINFO *)aRecv);
-			break;
 	}
 }
 
@@ -898,26 +895,14 @@ void GJUpdateMatchDBUserCharacters(LPOBJ lpObj)
 	wsJServerCli.DataSend((PCHAR)&pMsg, pMsg.h.size);
 }
 
-void JGRecvPcBangInfo(SDHP_PCBANGINFO *lpMsg)
+void GJSetStatusBan(char* Name, BOOL Type, BYTE Ban)
 {
-/*	int nIndex; // [sp+4Ch] [bp-14h]@1
-	char szAccountID; // [sp+50h] [bp-10h]@1
-	int v3; // [sp+51h] [bp-Fh]@1
-	int v4; // [sp+55h] [bp-Bh]@1
-	__int16 v5; // [sp+59h] [bp-7h]@1
+	SDHP_SETSTATUSBAN_INFOSAVE	pMsg = { 0 };
 
-	szAccountID = 0;
-	v3 = 0;
-	v4 = 0;
-	v5 = 0;
-	nIndex = lpMsg->iIndex;
-	memcpy(&szAccountID, lpMsg->szAccountID, 0xBu);
-	if (gObjIsAccontConnect(nIndex, &szAccountID))
-	{
-		gObj[nIndex].m_bPCBangUser = lpMsg->bPcBangUser;
-		gObj[nIndex].m_bPCBangPointUser = lpMsg->bPcBangUser;
-		gObj[nIndex].m_bPCBangFreeChaosCastleUser = lpMsg->bPcBangUser;
-		gObj[nIndex].m_bPCBangCouponUser = lpMsg->bPcBangUser;
-		//CPCBangPointSystem::SendPCBangPointInfo(&g_PCBangPointSystem, nIndex);
-	}*/
+	PHeadSetB((LPBYTE)&pMsg, 0xF0, sizeof(pMsg));
+	pMsg.Ban = Ban;
+	pMsg.Type = Type;
+	memcpy(pMsg.Name, Name, MAX_ACCOUNT_LEN);
+
+	wsJServerCli.DataSend((char*)&pMsg, pMsg.h.size);
 }

@@ -35,7 +35,6 @@ CGMMng::~CGMMng()
 void CGMMng::Init()
 {
 	this->cCommand.Init();
-
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 184)), 100);
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 185)), 101);
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 186)), 102);
@@ -135,7 +134,16 @@ void CGMMng::Init()
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 4)), 395);
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 5)), 396);
 	this->cCommand.Add(lMsg.Get(MSGGET(11, 6)), 397);
-
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 8)), 398);
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 9)), 399);
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 10)), 400);
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 11)), 401);
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 12)), 402);
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 13)), 403);
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 14)), 404);
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 15)), 405);
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 16)), 406);
+	this->cCommand.Add(lMsg.Get(MSGGET(11, 17)), 407);
 	this->WatchTargetIndex = -1;
 }
 
@@ -373,7 +381,13 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 		char Msg[100];
 
 		if ((lpObj->Authority & 2) != 2 && (lpObj->Authority & 0x20) != 0x20)
+		{	
+			return 0;
+		}
+
+		if (!GMSystem.IsCommand(lpObj, COMMAND_STATS))
 		{
+			GCServerMsgStringSend("You can't use this command.", lpObj->m_Index, 1);
 			return 0;
 		}
 
@@ -412,6 +426,13 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 		{
 			return 0;
 		}
+
+		if (!GMSystem.IsCommand(lpObj, COMMAND_TRACE))
+		{
+			GCServerMsgStringSend("You can't use this command.", lpObj->m_Index, 1);
+			return 0;
+		}
+
 
 		pId = this->GetTokenString();
 
@@ -481,6 +502,12 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 	{
 		if ((lpObj->AuthorityCode & 4) != 4)
 		{
+			return 0;
+		}
+
+		if (!GMSystem.IsCommand(lpObj, COMMAND_DISK))
+		{
+			GCServerMsgStringSend("You can't use this command.", lpObj->m_Index, 1);
 			return 0;
 		}
 
@@ -555,7 +582,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 	case 101:	//101:
 	{
 		pId = this->GetTokenString();
-
+		
 		if (pId != NULL)
 		{
 			int lc165 = -1;
@@ -714,9 +741,16 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 
 	case 104:	//102:
 	{
-		if ((lpObj->AuthorityCode & 0x20) != 0x20)
+
+		if ((lpObj->Authority & 2) != 2 && (lpObj->Authority & 0x20) != 0x20)
 		{
-			return FALSE;
+			return 0;
+		}
+
+		if (!GMSystem.IsCommand(lpObj, COMMAND_BANCHAT))
+		{
+			GCServerMsgStringSend("You can't use this command.", lpObj->m_Index, 1);
+			return 0;
 		}
 
 		LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
@@ -741,9 +775,20 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 
 	case 106:	//103:
 	{
+		if ((lpObj->Authority & 2) != 2 && (lpObj->Authority & 0x20) != 0x20)
+		{
+			return 0;
+		}
+
 		if ((lpObj->AuthorityCode & 32) != 32)
 		{
 			return FALSE;
+		}
+
+		if (!GMSystem.IsCommand(lpObj, COMMAND_UNBANCHAT))
+		{
+			GCServerMsgStringSend("You can't use this command.", lpObj->m_Index, 1);
+			return 0;
 		}
 
 		LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] : %s", lpObj->Ip_addr, lpObj->AccountID,
@@ -1085,7 +1130,13 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 		{
 			if ((lpObj->Authority & 2) != 2 && (lpObj->Authority & 0x20) != 0x20)
 			{
-				return FALSE;
+				return 0;
+			}
+
+			if (!GMSystem.IsCommand(lpObj, COMMAND_DROP))
+			{
+				GCServerMsgStringSend("You can't use this command.", lpObj->m_Index, 1);
+				return 0;
 			}
 
 			int type, index,ItemLevel,ItemSkill,ItemLuck,ItemOpt,ItemExc,ItemAncient;
@@ -1098,87 +1149,145 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			ItemExc = GetTokenNumber();
 			ItemAncient = GetTokenNumber();
 		
+			if (index < 0 ||
+				(type  < 0 || type  > 15) ||
+				(ItemLevel < 0 || ItemLevel > 13) ||
+				(ItemOpt   < 0 || ItemOpt   > 7) ||
+				(ItemLuck  < 0 || ItemLuck  > 1) ||
+				(ItemSkill < 0 || ItemSkill > 1) ||
+				(ItemExc   < 0 || ItemExc   > 63) ||
+				(ItemAncient   < 0 || ItemAncient   > 40))
+			{
+				GCServerMsgStringSend("Invalid Item.", lpObj->m_Index, 1);
+				return 0;
+			}
+
+
 			if( (type >= 0 && type <= 15) )
 			{
-			int Item = ItemGetNumberMake( type, index);
-			ItemSerialCreateSend(aIndex, gObj[aIndex].MapNumber, gObj[aIndex].X, gObj[aIndex].Y, Item,ItemLevel,0,ItemSkill,ItemLuck,ItemOpt,-1,ItemExc,ItemAncient);
+				int Item = ItemGetNumberMake( type, index);
+				ItemSerialCreateSend(aIndex, gObj[aIndex].MapNumber, gObj[aIndex].X, gObj[aIndex].Y, Item,ItemLevel,0,ItemSkill,ItemLuck,ItemOpt,-1,ItemExc,ItemAncient);
 			}
 
 		}
 		break;
 		case 391:
 		{
-			int Level = 50;
-			if(lpObj->Level<Level)
+			if (Configs.CmdPostEnabled == 1)
 			{
-				char levelmsg[100];
-				sprintf(levelmsg,"[Global]: to use /post you need level %d ",Level);
-				GCServerMsgStringSend(levelmsg,aIndex,1);
-				return FALSE;
+
+				int Level = 50;
+
+				if (lpObj->Level < Level)
+				{
+					char levelmsg[100];
+					sprintf(levelmsg, "[Global]: to use /post you need level %d ", Level);
+					GCServerMsgStringSend(levelmsg, aIndex, 1);
+					return FALSE;
+				}
+
+				if (lpObj->Money < Configs.CmdPostMoney)
+				{
+					GCServerMsgStringSend(lMsg.Get(MSGGET(14, 67)), aIndex, 1);
+					return FALSE;
+				}
+				/*
+				char Message[255];
+				sprintf(Message, " <Post> %s",(char*)szCmd+strlen("/post"));
+
+				char szBuffer[1024];
+				va_list pArguments;
+				va_start(pArguments,Message);
+				vsprintf(szBuffer,Message,pArguments);
+				va_end(pArguments);
+				BYTE *Packet;
+				Packet = (BYTE*)malloc(200);
+				memset(Packet,0x00,200);
+				*Packet = 0xC1;
+				if(1)*(Packet+2)=0x02;
+				else *(Packet+2)=0x00;
+				memcpy((Packet+3),lpObj->Name,strlen(lpObj->Name));
+				memcpy((Packet+13),szBuffer,strlen(szBuffer));
+				int Len = (strlen(szBuffer)+0x13);
+				*(Packet+1)=Len;
+				if(!lpObj)DataSendAll(Packet,Len);
+				else
+				if(lpObj->Connected)
+				::DataSend(lpObj->m_Index,Packet,Len);
+				free(Packet);*/
+
+				lpObj->Money -= Configs.CmdPostMoney;
+				GCMoneySend(lpObj->m_Index, lpObj->Money);
+
+				/*switch (Configs.CmdPostColor)
+				{
+				case 0:
+					//wsprintf(szTemp, "[POST] %s:%s", lpObj->Name, (char*)szCmd + strlen(szCmdToken));
+					ServerMsgSend(0, 1, lpObj->Name, "[POST]%s", (char*)szCmd + strlen("/post"));
+					//this->MessageAll(2, 1, lpObj->Name, szTemp);
+					break;
+				case 1:
+					//wsprintf(szTemp, "~[POST] %s:%s", lpObj->Name, (char*)szCmd + strlen(szCmdToken));
+					ServerMsgSend(0, 1, lpObj->Name, "~[POST]%s", (char*)szCmd + strlen("/post"));
+					//this->MessageAll(2, 1, lpObj->Name, szTemp);
+					break;
+				case 2:
+					//wsprintf(szTemp, "@[POST] %s:%s", lpObj->Name, (char*)szCmd + strlen(szCmdToken));
+					ServerMsgSend(0, 1, lpObj->Name, "@[POST]%s", (char*)szCmd + strlen("/post"));
+					//this->MessageAll(2, 1, lpObj->Name, szTemp);
+					break;
+				}*/
+
+				if (Configs.CmdPostAF > 0)
+				{
+					if (lpObj->aFloodPostCmd != 0)
+					{
+						GCServerMsgStringSend("You must wait before use post command again", lpObj->m_Index, 1);
+						return FALSE;
+					}
+					lpObj->aFloodPostCmd = Configs.CmdPostAF;
+				}
+
+				ServerMsgSend(0, 1, lpObj->Name, "[POST]%s", (char*)szCmd + strlen("/post"));
+
+				char timeStr[9];
+				_strtime(timeStr);
+				char iPostLog[200];
+				sprintf(iPostLog, "%s [%s]: <Post> %s", timeStr, lpObj->Name, (char*)szCmd + strlen("/post"));
+				LogAddC(3, iPostLog);
+				return TRUE;
 			}
-			/*
-			char Message[255];
-			sprintf(Message, " <Post> %s",(char*)szCmd+strlen("/post"));
-
-			char szBuffer[1024];
-			va_list pArguments;
-			va_start(pArguments,Message);
-			vsprintf(szBuffer,Message,pArguments);
-			va_end(pArguments);
-			BYTE *Packet;
-			Packet = (BYTE*)malloc(200);
-			memset(Packet,0x00,200);
-			*Packet = 0xC1;
-			if(1)*(Packet+2)=0x02;
-			else *(Packet+2)=0x00;
-			memcpy((Packet+3),lpObj->Name,strlen(lpObj->Name));
-			memcpy((Packet+13),szBuffer,strlen(szBuffer));
-			int Len = (strlen(szBuffer)+0x13);
-			*(Packet+1)=Len;
-			if(!lpObj)DataSendAll(Packet,Len);
-			else
-			if(lpObj->Connected)
-			::DataSend(lpObj->m_Index,Packet,Len);
-			free(Packet);*/
-
-			ServerMsgSend(0,1,lpObj->Name,"[POST]%s",(char*)szCmd+strlen("/post"));
-					
-			char timeStr[9];
-			_strtime(timeStr);
-			char iPostLog[200];
-			sprintf(iPostLog, "%s [%s]: <Post> %s", timeStr, lpObj->Name, (char*)szCmd+strlen("/post"));
-			LogAddC(3,iPostLog);
-			return TRUE;
 		}
 		break;
 		case 392:
 		{
-			if(lpObj->m_PK_Level <= 3) 
-			{
-			char Msg[100] = "You're not PK!";
-			GCServerMsgStringSend(Msg,aIndex,1);
-			return TRUE;
-			}
-			else if(lpObj->Money < 10000000)
-			{
-			char Msg[100] = "You do not have enough Zen!";
-			GCServerMsgStringSend(Msg,aIndex,1);
-			return TRUE;
-			}
-			else if(lpObj->Money >= 10000000)
-			{
-			lpObj->Money -= 10000000;
-			GCMoneySend(lpObj->m_Index,lpObj->Money);
-			lpObj->m_PK_Level = 3;
-			GCPkLevelSend(lpObj->m_Index, 3);
-			char Msg[100] = "PK status removed.";
-			GCServerMsgStringSend(Msg,aIndex,1);
 
-			char timeStr[9];
-			_strtime(timeStr);
-			char LinhaLog[200];
-			sprintf(LinhaLog, "%s [PK SYSTEM CMD][%s][%s] PK clear success.", timeStr, lpObj->AccountID, lpObj->Name);
-			LogAddC(7,LinhaLog);
+			if (lpObj->m_PK_Level <= 3)
+			{
+				char Msg[100] = "You're not PK!";
+				GCServerMsgStringSend(Msg, aIndex, 1);
+				return TRUE;
+			}
+			else if (lpObj->Money < 10000000)
+			{
+				char Msg[100] = "You do not have enough Zen!";
+				GCServerMsgStringSend(Msg, aIndex, 1);
+				return TRUE;
+			}
+			else if (lpObj->Money >= 10000000)
+			{
+				lpObj->Money -= 10000000;
+				GCMoneySend(lpObj->m_Index, lpObj->Money);
+				lpObj->m_PK_Level = 3;
+				GCPkLevelSend(lpObj->m_Index, 3);
+				char Msg[100] = "PK status removed.";
+				GCServerMsgStringSend(Msg, aIndex, 1);
+
+				char timeStr[9];
+				_strtime(timeStr);
+				char LinhaLog[200];
+				sprintf(LinhaLog, "%s [PK SYSTEM CMD][%s][%s] PK clear success.", timeStr, lpObj->AccountID, lpObj->Name);
+				LogAddC(7, LinhaLog);
 			}
 			return TRUE;
 		}
@@ -1207,7 +1316,23 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			char Msg[100];
 			sprintf(Msg, "[CmdAdd]: Points added [%d] to strength.", Pontos);
 			GCServerMsgStringSend(Msg,lpObj->m_Index,1);
-			GCServerMsgStringSend("[CmdAdd]: Do switch char.",lpObj->m_Index,1);
+			gObjCalCharacter(lpObj->m_Index);
+			gObjSetBP(lpObj->m_Index);
+
+			if (Pontos > 200)
+			{
+				GCLevelUpMsgSend(lpObj->m_Index, 0);
+			}
+			else
+			{
+				BYTE lpMsg[5] = { 0xC1,0x05,0xF3,0x06,0x00 };
+				for (UINT i = 0; i < Pontos; i++)
+				{
+					CGLevelUpPointAdd((PMSG_LVPOINTADD*)lpMsg, gObj->m_Index);
+				}
+				GCLevelUpMsgSend(lpObj->m_Index, 0);
+			}
+
 			return TRUE;
 		}
 			break;
@@ -1230,12 +1355,29 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 				GCServerMsgStringSend("[CmdAdd]: Cant add more than 32767!.",lpObj->m_Index,1);
 				return FALSE;
 			}
+
 			lpObj->LevelUpPoint -= Pontos;
 			lpObj->Dexterity += Pontos;
 			char Msg[100];
 			sprintf(Msg, "[CmdAdd]: Points added [%d] to Agility.", Pontos);
 			GCServerMsgStringSend(Msg,lpObj->m_Index,1);
-			GCServerMsgStringSend("[CmdAdd]: do switch..",lpObj->m_Index,1);
+			gObjCalCharacter(lpObj->m_Index);
+			gObjSetBP(lpObj->m_Index);
+			GCReFillSend(lpObj->m_Index, lpObj->MaxLife + lpObj->AddLife, 0xFE, 0, lpObj->iMaxShield + lpObj->iAddShield);
+			GCManaSend(lpObj->m_Index, lpObj->MaxMana + lpObj->AddMana, 0xFE, 0, lpObj->MaxBP + lpObj->AddBP);
+			if (Pontos > 200)
+			{
+				GCLevelUpMsgSend(lpObj->m_Index, 0);
+			}
+			else
+			{
+				BYTE lpMsg[5] = { 0xC1,0x05,0xF3,0x06,0x01 };
+				for (UINT i = 0; i < Pontos; i++)
+				{
+					CGLevelUpPointAdd((PMSG_LVPOINTADD*)lpMsg, gObj->m_Index);
+				}
+				GCLevelUpMsgSend(lpObj->m_Index, 0);
+			}
 			return TRUE;
 		}
 			break;
@@ -1263,7 +1405,23 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			char Msg[100];
 			sprintf(Msg, "[CmdAdd]: Added [%d] points on vitality.", Pontos);
 			GCServerMsgStringSend(Msg,lpObj->m_Index,1);
-			GCServerMsgStringSend("[CmdAdd]: do switch char.",lpObj->m_Index,1);
+			gObjCalCharacter(lpObj->m_Index);
+			gObjSetBP(lpObj->m_Index);
+			GCReFillSend(lpObj->m_Index, lpObj->MaxLife + lpObj->AddLife, 0xFE, 0, lpObj->iMaxShield + lpObj->iAddShield);
+			GCManaSend(lpObj->m_Index, lpObj->MaxMana + lpObj->AddMana, 0xFE, 0, lpObj->MaxBP + lpObj->AddBP);
+			if (Pontos > 200)
+			{
+				GCLevelUpMsgSend(lpObj->m_Index, 0);
+			}
+			else
+			{
+				BYTE lpMsg[5] = { 0xC1,0x05,0xF3,0x06,0x02 };
+				for (UINT i = 0; i < Pontos; i++)
+				{
+					CGLevelUpPointAdd((PMSG_LVPOINTADD*)lpMsg, gObj->m_Index);
+				}
+				GCLevelUpMsgSend(lpObj->m_Index, 0);
+			}
 			return TRUE;
 		}
 			break;
@@ -1289,9 +1447,25 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			lpObj->LevelUpPoint -= Pontos;
 			lpObj->Energy += Pontos;
 			char Msg[100];
-			sprintf(Msg, "[CmdAdd]: Foram adicionados [%d] pontos em Energia.", Pontos);
+			sprintf(Msg, "[CmdAdd]: Added [%d] points on Energy.", Pontos);
 			GCServerMsgStringSend(Msg,lpObj->m_Index,1);
-			GCServerMsgStringSend("[CmdAdd]: do switch char.",lpObj->m_Index,1);
+			gObjCalCharacter(lpObj->m_Index);
+			gObjSetBP(lpObj->m_Index);
+			GCReFillSend(lpObj->m_Index, lpObj->MaxLife + lpObj->AddLife, 0xFE, 0, lpObj->iMaxShield + lpObj->iAddShield);
+			GCManaSend(lpObj->m_Index, lpObj->MaxMana + lpObj->AddMana, 0xFE, 0, lpObj->MaxBP + lpObj->AddBP);
+			if (Pontos > 200)
+			{
+				GCLevelUpMsgSend(lpObj->m_Index, 0);
+			}
+			else
+			{
+				BYTE lpMsg[5] = { 0xC1,0x05,0xF3,0x06,0x03 };
+				for (UINT i = 0; i < Pontos; i++)
+				{
+					CGLevelUpPointAdd((PMSG_LVPOINTADD*)lpMsg, gObj->m_Index);
+				}
+				GCLevelUpMsgSend(lpObj->m_Index, 0);
+			}
 			return TRUE;
 		}
 			break;
@@ -1299,7 +1473,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 		{
 			if(lpObj->DbClass !=64)
 			{
-				GCServerMsgStringSend("[UCD]: Only Dark Lord Can use /addcmd.",lpObj->m_Index,1);
+				GCServerMsgStringSend("[CmdAdd]: Only Dark Lord Can use /addcmd.",lpObj->m_Index,1);
 				return FALSE;
 			}
 
@@ -1325,8 +1499,401 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			char Msg[100];
 			sprintf(Msg, "[CmdAdd]: [%d] points added to command.", Pontos);
 			GCServerMsgStringSend(Msg,lpObj->m_Index,1);
-			GCServerMsgStringSend("[CmdAdd]: do switch char.",lpObj->m_Index,1);
+			gObjCalCharacter(lpObj->m_Index);
+			gObjSetBP(lpObj->m_Index);
+			GCReFillSend(lpObj->m_Index, lpObj->MaxLife + lpObj->AddLife, 0xFE, 0, lpObj->iMaxShield + lpObj->iAddShield);
+			GCManaSend(lpObj->m_Index, lpObj->MaxMana + lpObj->AddMana, 0xFE, 0, lpObj->MaxBP + lpObj->AddBP);
+			if (Pontos > 200)
+			{
+				GCLevelUpMsgSend(lpObj->m_Index, 0);
+			}
+			else
+			{
+				BYTE lpMsg[5] = { 0xC1,0x05,0xF3,0x06,0x04 };
+				for (UINT i = 0; i < Pontos; i++)
+				{
+					CGLevelUpPointAdd((PMSG_LVPOINTADD*)lpMsg, gObj->m_Index);
+				}
+				GCLevelUpMsgSend(lpObj->m_Index, 0);
+			}
 			return TRUE;
+		}
+		break;
+
+		case 398:
+		{
+			if ((lpObj->AuthorityCode & 4) != 4)
+			{
+				return 0;
+			}
+
+			if (!GMSystem.IsCommand(lpObj, COMMAND_BANPLAYER))
+			{
+				GCServerMsgStringSend("You can't use this command.", lpObj->m_Index, 1);
+				return 0;
+			}
+
+			pId = this->GetTokenString();
+
+			if (pId == NULL)
+			{
+				return 0;
+			}
+
+			int iTargetIndex = gObjGetIndex(pId);
+
+
+			if (iTargetIndex >= 0)
+			{
+				LPOBJ lpTargetObj = gObjFind(pId);
+
+				if (lpTargetObj == NULL)
+				{
+					return 0;
+				}
+
+				LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] / Target : [%s][%s] : %s",
+					lpObj->Ip_addr, lpObj->AccountID, lpObj->Name, lpTargetObj->AccountID,
+					lpTargetObj->Name, "User Ban");
+				LogAdd(lMsg.Get(MSGGET(1, 191)), pId);
+				GJSetStatusBan(pId, 1, 1);
+				CloseClient(iTargetIndex);
+			}
+			else
+			{
+				LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] / Target : [%s] : %s",
+					lpObj->Ip_addr, lpObj->AccountID, lpObj->Name,pId, "User Ban");
+				LogAdd(lMsg.Get(MSGGET(1, 191)), pId);
+				GJSetStatusBan(pId, 1, 1);
+			}
+			
+		}
+		break;
+
+		case 399:
+		{
+			if ((lpObj->AuthorityCode & 4) != 4)
+			{
+				return 0;
+			}
+
+			if (!GMSystem.IsCommand(lpObj, COMMAND_BANPLAYER))
+			{
+				GCServerMsgStringSend("You can't use this command.", lpObj->m_Index, 1);
+				return 0;
+			}
+
+			pId = this->GetTokenString();
+
+			if (pId == NULL)
+			{
+				return 0;
+			}
+
+			LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] / Target : [%s]: %s",
+				lpObj->Ip_addr, lpObj->AccountID, lpObj->Name, pId, "User UnBan");
+			GJSetStatusBan(pId, 1, 0);
+
+		}
+		break;
+		case 400://Skin
+		{
+			if (Configs.SkinOnlyForGm)
+			{
+				if ((lpObj->AuthorityCode & 32) != 32)
+				{
+					return 0;
+				}
+
+				if (!GMSystem.IsCommand(lpObj, COMMAND_SKIN))
+				{
+					GCServerMsgStringSend("You can't use this command.", lpObj->m_Index, 1);
+					return 0;
+				}
+
+				pId = this->GetTokenString();
+
+				if (pId == NULL)
+				{
+					return 0;
+				}
+
+				int NumSkin = 0;
+				NumSkin = GetTokenNumber();
+
+				int Index = gObjGetIndex(pId);
+				LPOBJ tObj = &gObj[Index];
+				gObj[Index].m_Change = NumSkin;
+				gObjViewportListProtocolCreate(tObj);
+				char Msg[100];
+				sprintf(Msg, "[Skin] You successfully change %s Skin.", gObj[Index].Name);
+				GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
+
+			}
+			else
+			{
+				if((lpObj->AuthorityCode & 32) == 32 && GMSystem.IsCommand(lpObj, COMMAND_SKIN))
+				{ 
+					pId = this->GetTokenString();
+
+					if (pId == NULL)
+					{
+						return 0;
+					}
+
+					int NumSkin = 0;
+					NumSkin = GetTokenNumber();
+
+					int Index = gObjGetIndex(pId);
+					LPOBJ tObj = &gObj[Index];
+					gObj[Index].m_Change = NumSkin;
+					gObjViewportListProtocolCreate(tObj);
+					char Msg[100];
+					sprintf(Msg, "[Skin] You successfully change %s Skin.", gObj[Index].Name);
+					GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
+				}
+				else
+				{
+					int NumSkin = 0;
+					NumSkin = GetTokenNumber();
+					lpObj->m_Change = NumSkin;
+					gObjViewportListProtocolCreate(lpObj);
+					GCServerMsgStringSend("[Skin] Your Skin successfully changed!", lpObj->m_Index, 1);
+				}
+			}
+		}
+		break;
+		case 401:
+		{
+			if ((lpObj->AuthorityCode & 32) != 32)
+			{
+				return 0;
+			}
+
+			if (!GMSystem.IsCommand(lpObj, COMMAND_SETZEN))
+			{
+				GCServerMsgStringSend("You can't use this command.", lpObj->m_Index, 1);
+				return 0;
+			}
+
+			pId = this->GetTokenString();
+
+			if (pId == NULL)
+			{
+				return 0;
+			}
+
+			int NumSkin = 0;
+			NumSkin = GetTokenNumber();
+
+
+			int Value;
+
+			if (Value < 0 || Value > 2000000000)
+			{
+				GCServerMsgStringSend("[SetZen] Value can't be less than 0 and more than 2000000000!", lpObj->m_Index, 1);
+				return 0;
+			}
+
+			int Index = gObjGetIndex(pId);
+			gObj[Index].Money = Value;
+			GCMoneySend(Index, Value);
+
+			char Msg[100];
+			sprintf(Msg, "[SetZen] You sucsessfully changed %s zen.", gObj[Index].Name);
+			GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
+
+			//char Msg[100];
+			sprintf(Msg, "[SetZen] Your zen was changed to %d by %s.", Value, lpObj->Name);
+			GCServerMsgStringSend(Msg, Index, 1);
+		}
+		break;
+		case 402:
+		{
+			SYSTEMTIME t;
+			GetLocalTime(&t);
+			char Msg[100];
+			sprintf(Msg, "Server Time & Date: %02d:%02d:%02d %02d-%02d-%02d.",
+				t.wHour, t.wMinute, t.wSecond, t.wDay, t.wMonth, t.wYear); 
+			GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
+		}
+		break;
+		case 403:
+		{
+			int totGMs = 0;
+			int totPlayers = 0;
+			for (short i = OBJMAX - OBJMAXUSER; i< OBJMAX; i++)
+			{
+				if (gObj[i].Connected == PLAYER_PLAYING)
+				{
+					if (gObj[i].Authority == 8 || gObj[i].Authority == 32)
+					{
+						totGMs++;
+					}
+					if (gObj[i].Authority == 0)
+					{
+						totPlayers++;
+					}
+				}
+			}
+
+			char Msg[100];
+			sprintf(Msg, "[ONLINE]: %d Player(s), %d GM(s)", totPlayers, totGMs);
+			GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
+		}
+		break;
+		case 404:
+		{
+			if ((lpObj->AuthorityCode & 32) != 32)
+			{
+				return 0;
+			}
+
+			if (!GMSystem.IsCommand(lpObj, COMMAND_SETPK))
+			{
+				GCServerMsgStringSend("You can't use this command.", lpObj->m_Index, 1);
+				return 0;
+			}
+
+			pId = this->GetTokenString();
+
+			if (pId == NULL)
+			{
+				return 0;
+			}
+
+			int PkLevel = 0;
+			PkLevel = GetTokenNumber();
+
+			int Index = gObjGetIndex(pId);
+			gObj[Index].m_PK_Level = PkLevel;
+			GCPkLevelSend(Index, PkLevel);
+
+			char Msg[100];
+			sprintf(Msg, "[SetPK] You sucsessfully changed %s PK Level. PKLevel: %d", gObj[Index].Name, PkLevel);
+			GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
+		}
+		break;
+		case 405:
+		{
+			if ((lpObj->AuthorityCode & 32) != 32)
+			{
+				return 0;
+			}
+
+			if (!GMSystem.IsCommand(lpObj, COMMAND_RELOAD))
+			{
+				GCServerMsgStringSend("You can't use this command.", lpObj->m_Index, 1);
+				return 0;
+			}
+
+			int NumberReload;
+			NumberReload = GetTokenNumber();
+
+			switch (NumberReload)
+			{
+			case 0:
+			{
+
+				break;
+			}
+			case 1:
+			{
+
+				break;
+			}
+			case 2:
+			{
+
+				break;
+			}
+			case 3:
+			{
+				if (GMSystem.IsGMSystem != 1)
+				{
+					GCServerMsgStringSend("[Reload] GMSystem is disabled", lpObj->m_Index, 1);
+					return 0;
+				}
+
+				GMSystem.LoadIniConfig(".\\GMSystem.txt");
+				GCServerMsgStringSend("[Reload] GMSystem Reloaded.", lpObj->m_Index, 1);
+				LogAddTD("[Reload] GMSystem Reloaded.");
+				break;
+			}
+			case 4:
+			{
+				break;
+			}
+			case 5:
+			{
+				break;
+			}
+			case 6:
+			{
+				break;
+			}
+			default:
+			{
+				GCServerMsgStringSend("[Reload] Usage: /reload <Number>.", lpObj->m_Index, 1);
+				break;
+			}
+			}
+		}
+		break;
+		case 406:
+		{
+			if ((lpObj->AuthorityCode & 32) != 32)
+			{
+				return 0;
+			}
+
+			if (!GMSystem.IsCommand(lpObj, COMMAND_MOVE))
+			{
+				GCServerMsgStringSend("You can't use this command.", lpObj->m_Index, 1);
+				return 0;
+			}
+
+			pId = this->GetTokenString();
+
+			int Map = 0;
+			Map = GetTokenNumber();
+			BYTE x = 0,	y = 0;
+			x = GetTokenNumber();
+			y = GetTokenNumber();
+
+			short TargetIndex = gObjGetIndex(pId);
+
+			gObjTeleport(TargetIndex, Map, x, y);
+
+		}
+		break;
+		case 407:
+		{
+			if ((lpObj->AuthorityCode & 32) != 32)
+			{
+				return 0;
+			}
+
+			if (!GMSystem.IsCommand(lpObj, COMMAND_GG))
+			{
+				GCServerMsgStringSend("You can't use this command.", lpObj->m_Index, 1);
+				return 0;
+			}
+
+			char *sztemp;
+
+			sztemp = this->GetTokenString();
+
+			char pBuffer[MAX_CHAT_LEN];
+			sprintf(pBuffer, "[%s] %s", lpObj->Name, sztemp);
+
+			for (int n = OBJ_STARTUSERINDEX; n < OBJMAX; n++)
+			{
+				if (gObj[n].Connected >= PLAYER_PLAYING)
+				{
+					GCServerMsgStringSend(pBuffer, n, 0);
+				}
+			}
 		}
 		break;
 	}
@@ -1335,7 +1902,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 
 void CGMMng::GetInfinityArrowMPConsumption(LPOBJ lpObj)
 {
-	MsgOutput(lpObj->m_Index, "인피니티 애로우 MP 소모량[+0:%d] [+1:%d] [+2:%d]",
+	MsgOutput(lpObj->m_Index, "Infinity Arrow MP Consumption [+0:%d] [+1:%d] [+2:%d]",
 		g_SkillAdditionInfo.GetInfinityArrowMPConsumptionPlus0(),
 		g_SkillAdditionInfo.GetInfinityArrowMPConsumptionPlus1(),
 		g_SkillAdditionInfo.GetInfinityArrowMPConsumptionPlus2());

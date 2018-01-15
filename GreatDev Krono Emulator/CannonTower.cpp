@@ -30,10 +30,10 @@ void CCannonTower::CannonTowerAct(int iIndex)
 	pCount.h.c = 0xC1;
 	if (Configs.gLanguage == 0)
 	{
-		pCount.h.headcode = BEATTACK_PROTOCOL;
+		pCount.h.headcode = 0x10;
 	}
 
-	if (Configs.gLanguage == 2)
+	else if (Configs.gLanguage == 2)
 	{
 		pCount.h.headcode = 0xD7;
 	}

@@ -97,9 +97,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	
 	AllServerStart(); 
 
-	GMS.LoadIniConfig();
-	GMS.LoadGMSystem();
-
 	// Main Message Loop
 	while(GetMessage(&msg, NULL, 0, 0) != 0)
 	{

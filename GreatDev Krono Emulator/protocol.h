@@ -1451,6 +1451,7 @@ struct PMSG_REQ_WHITEANGEL_ITEM
 
 
 void ProtocolCore(BYTE protoNum, LPBYTE aRecv, int aLen, int aIndex, BOOL Encrypt, int serial);
+BYTE RecvProtocolJPN(BYTE Type);
 void TestSend();
 void MsgSendV2(LPOBJ lpObj, unsigned char* Msg, int size);
 void CGLiveClient(PMSG_CLIENTTIME* lpClientTime, short aIndex);

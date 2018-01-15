@@ -1,1 +1,8 @@
+[GMSystem]
+IsGMSystem	= 1
+
+				
+0
+//	GMName		/drop	/gg     /setzen    /status	/gmove    /setpk	/pkclear	Playerban	/reload		/skin		/banchat	/unbanchat	/disconnect	/trace	
+	"Palizer" 	 1 	 1 	   1 	      1		   1 	   1		   1 		    1 		   1 		  1 		   1 		  1 		   1 		   1
 end

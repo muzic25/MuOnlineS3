@@ -952,6 +952,9 @@ struct OBJECTSTRUCT
 
 	//PC Point System
 	int PCPoint;
+
+	WORD aFloodPostCmd;
+	short   TempoRespownVault;
 };
 
 typedef OBJECTSTRUCT * LPOBJ;

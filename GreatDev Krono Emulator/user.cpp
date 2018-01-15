@@ -4915,15 +4915,8 @@ BOOL gObjBackSpring(LPOBJ lpObj, LPOBJ lpTargetObj)
 	PMSG_POSISTION_SET pMove;
 	pMove.h.c = 0xC1;
 
-	if (Configs.gLanguage == 0)
-	{
-		pMove.h.headcode = SETPOS_PROTOCOL;
-	}
+	pMove.h.headcode = 0xDF;
 
-	if (Configs.gLanguage == 2)
-	{
-		pMove.h.headcode = 0xD6;
-	}
 
 	pMove.h.size = sizeof(pMove);
 	pMove.X = x;
@@ -5080,15 +5073,8 @@ BOOL gObjBackSpring2(LPOBJ lpObj, LPOBJ lpTargetObj, int count)
 
 	pMove.h.c = 0xC1;
 
-	if (Configs.gLanguage == 0)
-	{
-		pMove.h.headcode = SETPOS_PROTOCOL;
-	}
+	pMove.h.headcode = 0xDF;
 
-	if (Configs.gLanguage == 2)
-	{
-		pMove.h.headcode = 0xD6;
-	}
 
 	pMove.h.size = sizeof(pMove);
 	pMove.X = x;
@@ -5171,16 +5157,8 @@ bool gObjLevelUp(LPOBJ lpObj, int addexp, int iMonsterType, int iEventType)
 
 			if(iAddSkillPosition >= 0)
 			{
-				if (Configs.gLanguage == 0)
-				{
-					GCMagicListOneSend(lpObj->m_Index, iAddSkillPosition, 0x4D, ATTACK_PROTOCOL, 0, 0);
-				}
 
-				if (Configs.gLanguage == 2)
-				{
-					GCMagicListOneSend(lpObj->m_Index, iAddSkillPosition, 0x4D, 0xDC, 0, 0);
-				}
-				
+				GCMagicListOneSend(lpObj->m_Index, iAddSkillPosition, 0x4D, 0xD7, 0, 0);
 				LogAddTD("[%s][%s] Add Infinity Arrow Skill (Character Level : %d)(ChangeUp: %d)",
 					lpObj->AccountID,lpObj->Name,lpObj->Level,lpObj->ChangeUP);
 			}
@@ -14779,6 +14757,17 @@ void gObjSecondProc()
 				CloseClient(n);
 			}
 
+
+			if (lpObj->aFloodPostCmd > 0)
+			{
+				lpObj->aFloodPostCmd--;
+			}
+
+			if (lpObj->TempoRespownVault > 0)
+			{
+				lpObj->TempoRespownVault--;
+			}
+
 			gObjPkDownTimeCheck(lpObj,1);
 			gObjInterfaceTimeCheck(lpObj);
 			gObjTimeCheckSelfDefense(lpObj);
@@ -19275,15 +19264,8 @@ void gObjSetPosition(int aIndex, int x, int y)
 
 	pMove.h.c = 0xC1;
 
-	if (Configs.gLanguage == 0)
-	{
-		pMove.h.headcode = SETPOS_PROTOCOL;
-	}
 
-	if (Configs.gLanguage == 2)
-	{
-		pMove.h.headcode = 0xD6;
-	}
+	pMove.h.headcode = 0xDF;
 
 	pMove.h.size = sizeof(pMove);
 

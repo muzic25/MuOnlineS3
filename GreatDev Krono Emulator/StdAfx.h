@@ -136,6 +136,7 @@
 //#include "GGSvr.h"
 #include "giocp.h"
 #include "GMMng.h"
+#include "GmSystem.h"
 #include "gObjMonster.h"
 #include "Guardian.h"
 #include "GuardianStatue.h"

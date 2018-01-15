@@ -383,15 +383,13 @@ struct PMSG_ANS_MAPSVRAUTH
 };*/
 
 
-struct SDHP_PCBANGINFO
+struct SDHP_SETSTATUSBAN_INFOSAVE
 {
 	PBMSG_HEAD h;
-	int iIndex;
-	char szAccountID[11];
-	int bPcBangUser;
+	char Name[11];
+	BYTE Ban;
+	BOOL Type;
 };
-
-
 
 void SProtocolCore(BYTE protoNum, LPBYTE aRecv, int aLen);
 void GJServerLogin();
@@ -421,8 +419,5 @@ void JGAnsMapSvrAuth(PMSG_ANS_MAPSVRAUTH * lpMsg);
 void GJNotifyMaxUserCount();
 void JGPSendMail(PMSG_JG_MEMO_SEND * lpMsg);
 void GJUpdateMatchDBUserCharacters(LPOBJ lpObj);
-
-void JGRecvPcBangInfo(SDHP_PCBANGINFO * lpMsg);
-
-
+void GJSetStatusBan(char * Name, BOOL Type, BYTE Ban);
 #endif

@@ -495,7 +495,7 @@ public:
  int gMonsterHPAdjust;
  BOOL gEnableCheckPenetrationSkill;
 
-
+ int VaultFloodTime;
  BOOL gIsDropSetItemInCastleHuntZone;
  int gSetItemInCastleHuntZoneDropRate;
  int gSetItemInCastleHuntZoneDropLevel;
@@ -509,6 +509,18 @@ public:
  int g_iRateJewelOfMyst; 
  int g_iJewelOfMystID;
  int g_iJewelOfMystType;
+
+
+ //Commands
+ BOOL CmdPostEnabled;
+ int CmdPostMoney;
+ int CmdPostLevel;
+ int CmdPostAF;
+
+ BYTE SkinEnabled;
+ BYTE SkinOnlyForGm;
+ short SkinLevelReq;
+ int SkinPriceZen;
 
 };
 extern CConfigs Configs;
@@ -601,7 +613,8 @@ void ExDataClientMsgProc(WPARAM wParam, LPARAM lParam);
 void GMDataClientMsgProc(WPARAM wParam, LPARAM lParam);
 void ReadServerInfo();
 void ReadCommonServerInfo();
-void LoadConfigs(char * filename);
+void LoadChaosConfigs(char * filename);
+void LoadCommands(char * filename);
 void GameServerInfoSendStop();
 void GameServerInfoSendStart();
 void GameServerInfoSend();
