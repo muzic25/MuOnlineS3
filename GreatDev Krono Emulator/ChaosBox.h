@@ -97,8 +97,6 @@ struct CBUPS_ITEMPRIZESEND	// Confirmed size
 #define CB_NO_BC_CORRECT_ITEMS		10
 #define CB_BC_NOT_ENOUGH_ZEN		11
 
-
-
 BOOL ChaosBoxCheck(LPOBJ lpObj);
 BOOL ChaosBoxInit(LPOBJ lpObj);
 BOOL ChaosBoxItemDown(LPOBJ lpObj);
@@ -115,7 +113,13 @@ BOOL PlusItemLevelChaosMix(LPOBJ lpObj, int mixType);
 BOOL PegasiaChaosMix(LPOBJ lpObj);
 BOOL CircleChaosMix(LPOBJ lpObj);
 BOOL WingChaosMix(LPOBJ lpObj);
-BOOL Wing3ChaosMix(LPOBJ lpObj);
+BOOL CheckLevel2WingItem(int iItemCode);
+BOOL CheckLevel3WingItem(int iItemCode);
+BOOL CheckItemCondition(CItem * lpItem, short Level, BYTE Op1, BYTE Op2, BYTE Op3, BYTE SetOption, BYTE NewOption);
+void ThirdWingMix1(LPOBJ lpObj);
+void ThirdWingMix2(LPOBJ lpObj);
+void ThirdWingMixItemDown(LPOBJ lpObj);
+void ThirdWingMixItemDown2(CItem * lpItem);
 void DefaultChaosMix(LPOBJ lpObj);
 void DevilSquareItemChaosMix(LPOBJ lpObj);
 void BloodCastleItemChaosMix(LPOBJ lpObj);

@@ -3,6 +3,23 @@
 // GS-N 0.99.60T 0x0047C360 - Completed
 //	GS-N	1.00.18	JPN	0x00493D40	-	Completed
 
+int iJewelofChaos = ITEMGET(12, 15);
+int iJewelofBless = ITEMGET(14, 13);
+int iJewelofSoul = ITEMGET(14, 14);
+int iJewelofCreation = ITEMGET(14, 22);
+int iBundleofBless = ITEMGET(12, 30);
+int iBundleofSoul = ITEMGET(12, 31);
+int iCondorFeather = ITEMGET(13, 53);
+int iCondorFlame = ITEMGET(13, 52);
+int iWingofStorm = ITEMGET(12, 36);
+int iWingofEternal = ITEMGET(12, 37);
+int iWingofIllusion = ITEMGET(12, 38);
+int iWingofRuin = ITEMGET(12, 39);
+int iCapeofLord = ITEMGET(12, 40);
+int iWingofDimension = ITEMGET(12, 43);
+int i3rdWingLuckRate = 50;
+
+
 
 BOOL ChaosBoxCheck(LPOBJ lpObj)
 {
@@ -218,10 +235,10 @@ int ChaosBoxMix(LPOBJ lpObj, int & Result2)
 
 	if ( lpObj->ChaosSuccessRate  > 100 )
 	{
-		lpObj->ChaosSuccessRate = 100;
+		lpObj->ChaosSuccessRate = Configs.ChaosWeaponMixRate;
 	}
 
-	lpObj->ChaosMoney = lpObj->ChaosSuccessRate * ConfCostZen.FirstWings;	// Required Money to MIX anc createe a Chaos Item
+	lpObj->ChaosMoney = lpObj->ChaosSuccessRate * Configs.ChaosWeaponMixCost;	// Required Money to MIX anc createe a Chaos Item
 
 	LogAddTD("[%s][%s] CBMix need Zen : %d SuccessRate : %d, CharmRate : %d",
 		lpObj->AccountID, lpObj->Name, lpObj->ChaosMoney, 
@@ -825,28 +842,28 @@ BOOL PlusItemLevelChaosMix(LPOBJ lpObj, int mixType)
 	if ( Plus9ItemCount == 1 && ChaosGemCount == 1 && BlessGemCount == 1 && SoulGemCount == 1 && Plus10ItemCount == 0 && Plus11ItemCount == 0 && Plus12ItemCount == 0 )
 	{
 		MixType = 3;
-		lpObj->ChaosMoney = 2000000;
+		lpObj->ChaosMoney = Configs.PlusLevel10_Cost;
 		ExtraBlessGemCount = BlessGemCount - 1;
 		ExtraSoulGemCount = SoulGemCount - 1;
 	}
 	else if ( Plus10ItemCount == 1 && ChaosGemCount == 1 && BlessGemCount == 2 && SoulGemCount == 2 && Plus9ItemCount == 0 && Plus11ItemCount == 0 && Plus12ItemCount == 0 )
 	{
 		MixType = 4;
-		lpObj->ChaosMoney = 4000000;
+		lpObj->ChaosMoney = Configs.PlusLevel11_Cost;
 		ExtraBlessGemCount = BlessGemCount - 2;
 		ExtraSoulGemCount = SoulGemCount - 2;
 	}
 	else if ( Plus11ItemCount == 1 && ChaosGemCount == 1 && BlessGemCount == 3 && SoulGemCount == 3 && Plus9ItemCount == 0 && Plus10ItemCount == 0 && Plus12ItemCount == 0 )
 	{
 		MixType = 22;
-		lpObj->ChaosMoney = 6000000;
+		lpObj->ChaosMoney = Configs.PlusLevel12_Cost;
 		ExtraBlessGemCount = BlessGemCount - 3;
 		ExtraSoulGemCount = SoulGemCount - 3;
 	}
 	else if ( Plus12ItemCount == 1 && ChaosGemCount == 1 && BlessGemCount == 4 && SoulGemCount == 4 && Plus9ItemCount == 0 && Plus10ItemCount == 0 && Plus11ItemCount == 0 )
 	{
 		MixType = 23;
-		lpObj->ChaosMoney = 8000000;
+		lpObj->ChaosMoney = Configs.PlusLevel13_Cost;
 		ExtraBlessGemCount = BlessGemCount - 4;
 		ExtraSoulGemCount = SoulGemCount - 4;
 	}
@@ -901,24 +918,24 @@ BOOL PlusItemLevelChaosMix(LPOBJ lpObj, int mixType)
 
 	if ( lpObj->pChaosBox[PlusItemPos].m_Level == 9 )
 	{
-		lpObj->ChaosSuccessRate = 50;
+		lpObj->ChaosSuccessRate = Configs.PlusLevel10;
 	}
 	else if ( lpObj->pChaosBox[PlusItemPos].m_Level == 10 )
 	{
-		lpObj->ChaosSuccessRate = 45;
+		lpObj->ChaosSuccessRate = Configs.PlusLevel11;
 	}
 	else if ( lpObj->pChaosBox[PlusItemPos].m_Level == 11 )
 	{
-		lpObj->ChaosSuccessRate =45;
+		lpObj->ChaosSuccessRate = Configs.PlusLevel12;
 	}
 	else if ( lpObj->pChaosBox[PlusItemPos].m_Level == 12 )
 	{
-		lpObj->ChaosSuccessRate = 45;
+		lpObj->ChaosSuccessRate = Configs.PlusLevel13;
 	}
 
 	if ( lpObj->pChaosBox[PlusItemPos].m_Option2 != FALSE )	// if Have Luck
 	{
-		lpObj->ChaosSuccessRate += 20;
+		lpObj->ChaosSuccessRate += Configs.AddLuckItems;
 	}
 
 	if ( lpObj->ChaosSuccessRate > 75 )
@@ -1046,7 +1063,7 @@ BOOL PegasiaChaosMix(LPOBJ lpObj)
 		return 0;
 	}
 
-	int nChaosNeedMoney = 500000;
+	int nChaosNeedMoney = Configs.DinorantMixCost;
 	int iChaosTaxMoney = (int)((__int64)nChaosNeedMoney * (__int64)g_CastleSiegeSync.GetTaxRateChaos(lpObj->m_Index) / (__int64)100);
 
 	if ( iChaosTaxMoney < 0 )
@@ -1074,7 +1091,7 @@ BOOL PegasiaChaosMix(LPOBJ lpObj)
 
 	LogChaosItem(lpObj, "DinorantMix");
 	LogAddTD("[DinorantMix] Chaos Mix Start");
-	lpObj->ChaosSuccessRate = 70;	// Succes Rate for Dinorant
+	lpObj->ChaosSuccessRate = Configs.DinorantMixRate;	// Succes Rate for Dinorant
 	lpObj->ChaosSuccessRate += iCharmOfLuckCount;
 	lpObj->Money -= nChaosNeedMoney;
 
@@ -1179,7 +1196,7 @@ BOOL CircleChaosMix(LPOBJ lpObj)	// Fruits
 		return TRUE;
 	}
 
-	int nChaosNeedMoney = 3000000;
+	int nChaosNeedMoney = Configs.FruitMixCost;
 	int iChaosTaxMoney = (int)((__int64)nChaosNeedMoney * (__int64)g_CastleSiegeSync.GetTaxRateChaos(lpObj->m_Index) / (__int64)100);
 
 	if ( iChaosTaxMoney < 0 )
@@ -1207,7 +1224,7 @@ BOOL CircleChaosMix(LPOBJ lpObj)	// Fruits
 
 	LogChaosItem(lpObj, "CircleMix");
 	LogAddTD("[CircleMix] Chaos Mix Start");
-	lpObj->ChaosSuccessRate = 90;	// Succes Rate for Fruit
+	lpObj->ChaosSuccessRate = Configs.FruitMixRate;	// Succes Rate for Fruit
 	lpObj->ChaosSuccessRate += iCharmOfLuckCount;
 	lpObj->Money -= nChaosNeedMoney;
 
@@ -1384,7 +1401,7 @@ BOOL WingChaosMix(LPOBJ lpObj)
 		}
 	}
 
-	int nChaosNeedMoney = ConfCostZen.SecondWings;
+	int nChaosNeedMoney = Configs.WingsLvl2MixCost;
 	int iChaosTaxMoney = (int)((__int64)nChaosNeedMoney * (__int64)g_CastleSiegeSync.GetTaxRateChaos(lpObj->m_Index) / (__int64)100);
 
 	if ( iChaosTaxMoney < 0 )
@@ -1410,7 +1427,7 @@ BOOL WingChaosMix(LPOBJ lpObj)
 	}
 
 	CItem * pWing = &lpObj->pChaosBox[WingIndex];
-	lpObj->ChaosSuccessRate = (DWORD)((DWORD)iWingChaosMoney / (DWORD)DivValues.SubDivSecondWings);
+	lpObj->ChaosSuccessRate = (DWORD)((DWORD)iWingChaosMoney / (DWORD)4000000);
 	lpObj->ChaosSuccessRate += iChaosMoney / 40000;
 
 	if ( lpObj->ChaosSuccessRate == 0 )
@@ -1427,21 +1444,21 @@ BOOL WingChaosMix(LPOBJ lpObj)
 
 	if ( iSleeveOfLord == 1 )
 	{
-		if ( lpObj->ChaosSuccessRate > ConfRates.SecondWings)
+		if ( lpObj->ChaosSuccessRate > Configs.WingsLvl2MixRate)
 		{
-			lpObj->ChaosSuccessRate = ConfRates.SecondWings;
+			lpObj->ChaosSuccessRate = Configs.WingsLvl2MixRate;
 		}
 	}
 	else if ( LokesFeathersCount == 1 )
 	{
-		if ( lpObj->ChaosSuccessRate > ConfRates.SecondWings)
+		if ( lpObj->ChaosSuccessRate > Configs.WingsLvl2MixRate)
 		{
-			lpObj->ChaosSuccessRate = ConfRates.SecondWings;
+			lpObj->ChaosSuccessRate = Configs.WingsLvl2MixRate;
 		}
 	}
-	else if ( lpObj->ChaosSuccessRate > ConfRates.SecondWings)
+	else if ( lpObj->ChaosSuccessRate > Configs.WingsLvl2MixRate)
 	{
-		lpObj->ChaosSuccessRate = ConfRates.SecondWings;
+		lpObj->ChaosSuccessRate = Configs.WingsLvl2MixRate;
 	}
 
 	lpObj->ChaosSuccessRate += iCharmOfLuckCount;
@@ -1555,266 +1572,541 @@ BOOL WingChaosMix(LPOBJ lpObj)
 	}
 }
 
-BOOL Wing3ChaosMix(LPOBJ lpObj)
+//Identical gs-cs 56
+BOOL CheckLevel2WingItem(int iItemCode) //func_5d83b0
 {
-
-	lpObj->ChaosLock = TRUE;
-	int WingCount = 0;
-	int ChoasGemCount = 0;
-	int CondorCrystalCount = 0;
-	int CondorFeatherCount = 0;
-	int BundleOfBlessCount = 0;
-	int BundleOfSoulCount = 0;
-	int JewelOfCreationCount = 0;
-	int ExcItemCount = 0;
-	int SetItemCount = 0;
-	int WingIndex = -1;
-	int iChaosMoney = 0;
-	int iWingChaosMoney = 0;
-
-	for ( int n=0;n<CHAOS_BOX_SIZE;n++)
+	if (iItemCode == ITEMGET(12, 3) ||
+		iItemCode == ITEMGET(12, 4) ||
+		iItemCode == ITEMGET(12, 5) ||
+		iItemCode == ITEMGET(12, 6) ||
+		iItemCode == ITEMGET(13, 30)) //season3 addon
 	{
-		if ( lpObj->pChaosBox[n].IsItem() == TRUE )
-		{
-			if ( (lpObj->pChaosBox[n].m_Type >= ITEMGET(12,3) && lpObj->pChaosBox[n].m_Type <= ITEMGET(12,6)) || lpObj->pChaosBox[n].m_Type == ITEMGET(14,30) )	
-			{
-				WingCount++;
-				WingIndex = n;
-				iWingChaosMoney = lpObj->pChaosBox[n].m_BuyMoney;
-			}
-
-			else if ( lpObj->pChaosBox[n].m_Type == ITEMGET(12,15) ) // Chaos
-			{
-				ChoasGemCount++;
-			}
-			else if ( lpObj->pChaosBox[n].m_Type == ITEMGET(13,52) ) // Crystal
-			{
-				if ( lpObj->pChaosBox[n].m_Level == 0 ) // Crystal
-				{
-					CondorCrystalCount++;
-				}
-			}
-
-			else if ( lpObj->pChaosBox[n].m_Type == ITEMGET(13,53) ) // Condor Feather
-			{
-				CondorFeatherCount++;
-			}
-
-
-			else if ( lpObj->pChaosBox[n].m_Type == ITEMGET(14,22) )	// Jewel of Creation
-			{
-				JewelOfCreationCount++;
-			}
-
-			else if ( lpObj->pChaosBox[n].m_Type == ITEMGET(12,30)) // Bundle of Bless
-			{
-				BundleOfBlessCount++;
-			}
-
-			else if ( lpObj->pChaosBox[n].m_Type == ITEMGET(12,31)) // Bundle of Soul
-			{
-				BundleOfSoulCount++;
-			}
-
-			
-		}
+		return TRUE;
 	}
+	return FALSE;
+}
+
+//func_005d8410
+BOOL CheckLevel3WingItem(int iItemCode)
+{
+	if (iItemCode == iWingofStorm ||
+		iItemCode == iWingofEternal ||
+		iItemCode == iWingofIllusion ||
+		iItemCode == iWingofRuin ||
+		iItemCode == iCapeofLord ||
+		iItemCode == iWingofDimension)
+	{
+		return TRUE;
+	}
+	return FALSE;
+}
+
+//func_005d8480
+BOOL CheckItemCondition(CItem * lpItem, short Level, BYTE Op1, BYTE Op2, BYTE Op3, BYTE SetOption, BYTE NewOption) //identical gs-cs 56
+{
+	if (lpItem == NULL) { return FALSE; }
+	if (Level != FALSE) { if (lpItem->m_Level < Level) { return FALSE; } }
+	if (Op1 != FALSE) { if (lpItem->m_Option1 < Op1) { return FALSE; } }
+	if (Op2 != FALSE) { if (lpItem->m_Option2 < Op2) { return FALSE; } }
+	if (Op3 != FALSE) { if (lpItem->m_Option3 < Op3) { return FALSE; } }
+	if (SetOption != FALSE) { if (!lpItem->m_SetOption) { return FALSE; } }
+	if (NewOption != FALSE) { if (!lpItem->m_NewOption) { return FALSE; } }
+	return TRUE;
+}
+
+
+void ThirdWingMix1(LPOBJ lpObj)
+{
+	lpObj->ChaosLock = TRUE;
+
+	int loc2 = 0;
+	int loc3 = 0;
+	int loc4 = 0;
+	int loc5 = 0;
+	int loc6 = 0;
+	int loc7 = 0;
+	int loc8 = 0;
+	int loc9 = 0;
+	int loc10 = 0;
 
 	PMSG_CHAOSMIXRESULT pMsg;
 
 	PHeadSetB((LPBYTE)&pMsg.h, 0x86, sizeof(PMSG_CHAOSMIXRESULT));
 	pMsg.Result = CB_ERROR;
 
-	
-	if ( WingCount == 1 )
+	for (int n = 0; n<CHAOS_BOX_SIZE; n++) //loc14
 	{
-		if ( JewelOfCreationCount != 1 || ChoasGemCount != 1 || BundleOfBlessCount != 0 )
+		if (lpObj->pChaosBox[n].IsItem() == TRUE)
 		{
-			lpObj->ChaosLock = FALSE;
-			pMsg.Result = CB_INCORRECT_MIX_ITEMS;
-			DataSend(lpObj->m_Index, (BYTE *)&pMsg, pMsg.h.size);
-			return FALSE;
+			if (CheckLevel2WingItem(lpObj->pChaosBox[n].m_Type) != FALSE)
+			{
+				if (CheckItemCondition(&lpObj->pChaosBox[n], 9, 0, 0, 1, 0, 0) != FALSE)
+				{
+					loc2++;
+				}
+			}
+			else if (CheckItemCondition(&lpObj->pChaosBox[n], 7, 0, 0, 1, 1, 0) != FALSE)
+			{
+				loc3++;
+				loc8 += lpObj->pChaosBox[n].m_BuyMoney;
+			}
+			else if (lpObj->pChaosBox[n].m_Type == iJewelofChaos)
+			{
+				loc4++;
+			}
+			else if (lpObj->pChaosBox[n].m_Type == iBundleofSoul)
+			{
+				loc5++;
+			}
+			else if (lpObj->pChaosBox[n].m_Type == iJewelofCreation)
+			{
+				loc6++;
+			}
+			else if (lpObj->pChaosBox[n].m_Type == ITEMGET(14, 53))
+			{
+				loc10 += lpObj->pChaosBox[n].m_Durability;
+			}
+			else
+			{
+				loc7++;
+			}
 		}
 	}
 
-	else if ( CondorFeatherCount == 1 )
+	if (loc10 > 10)
 	{
-		if ( CondorCrystalCount != 1 || JewelOfCreationCount != 1 || ChoasGemCount != 1 || BundleOfBlessCount != 1 || BundleOfSoulCount != 1  )
-		{
-			pMsg.Result = CB_INCORRECT_MIX_ITEMS;
-			DataSend(lpObj->m_Index, (BYTE *)&pMsg, pMsg.h.size);
-			lpObj->ChaosLock = FALSE;
-
-			return FALSE;
-		}
-	}
-
-	/*else
-	{
+		pMsg.Result = 0xF0; //new macro
+		DataSend(lpObj->m_Index, (LPBYTE)&pMsg, pMsg.h.size);
 		lpObj->ChaosLock = FALSE;
+		return;
+	}
+
+	if (loc2 != 1 || loc3 < 1 || loc4 != 1 || loc5 != 1 || loc6 != 1 || loc7 > 0)
+	{
 		pMsg.Result = CB_INCORRECT_MIX_ITEMS;
-		DataSend(lpObj->m_Index, (BYTE *)&pMsg, pMsg.h.size);
+		DataSend(lpObj->m_Index, (LPBYTE)&pMsg, pMsg.h.size);
+		lpObj->ChaosLock = FALSE;
+		return;
+	}
 
-		return FALSE;
-	}*/
+	LogChaosItem(lpObj, "ThirdWingLevel1_Mix");
+	LogAddTD("[ThirdWing Mix][Level 01] Chaos Mix Start");
 
-	int nChaosNeedMoney = 5000000;
-	int iChaosTaxMoney = (int)((__int64)nChaosNeedMoney * (__int64)g_CastleSiegeSync.GetTaxRateChaos(lpObj->m_Index) / (__int64)100);
+	if (loc8 > 0)
+	{
+		lpObj->ChaosSuccessRate = loc8 / Configs.CondorMixCost;
+	}
 
-	if ( iChaosTaxMoney < 0 )
+	if (lpObj->ChaosSuccessRate > Configs.CondorMixRate)
+	{
+		lpObj->ChaosSuccessRate = Configs.CondorMixRate;
+	}
+	else if (lpObj->ChaosSuccessRate < 1)
+	{
+		lpObj->ChaosSuccessRate = 1;
+	}
+
+	loc9 = lpObj->ChaosSuccessRate * Configs.CondorMixCost;
+
+	lpObj->ChaosSuccessRate += loc10;
+
+	//loc9 = lpObj->ChaosSuccessRate * 200000; //why double? maybe inside some if
+
+	int iChaosTaxMoney = (int)((__int64)loc9 * (__int64)g_CastleSiegeSync.GetTaxRateChaos(lpObj->m_Index) / (__int64)100);
+
+	if (iChaosTaxMoney < 0)
 	{
 		iChaosTaxMoney = 0;
 	}
 
-	nChaosNeedMoney += iChaosTaxMoney;
+	loc9 += iChaosTaxMoney;
 
-	if ( nChaosNeedMoney < 0 )
+	if (loc9 < 0)
 	{
-		nChaosNeedMoney = 0;
+		loc9 = 0;
 	}
 
-	if ( lpObj->Money < nChaosNeedMoney )
+	if (lpObj->Money < loc9)
 	{
 		pMsg.Result = CB_NOT_ENOUGH_ZEN;
-		
-		DataSend(lpObj->m_Index, (BYTE *)&pMsg, pMsg.h.size);
+
+		DataSend(lpObj->m_Index, (LPBYTE)&pMsg, pMsg.h.size);
 		lpObj->ChaosLock = FALSE;
 
-		return TRUE;
+		return;
 	}
 
-	CItem * pWing = &lpObj->pChaosBox[WingIndex];
-	lpObj->ChaosSuccessRate = (DWORD)((DWORD)iWingChaosMoney / (DWORD)4000000);
-	lpObj->ChaosSuccessRate += iChaosMoney / 40000;
-
-	if ( lpObj->ChaosSuccessRate == 0 && CondorFeatherCount != 1 )
-	{
-		pMsg.Result = CB_INCORRECT_MIX_ITEMS;
-		DataSend(lpObj->m_Index, (BYTE *)&pMsg, pMsg.h.size);
-		lpObj->ChaosLock = FALSE;
-
-		return FALSE;
-	}
-
-	LogChaosItem(lpObj, "WingMix,3");
-	LogAddTD("[WingMix 3] Chaos Mix Start");
-
-	if ( WingCount == 1 )
-	{
-		if ( lpObj->ChaosSuccessRate > 90)
-		{
-			lpObj->ChaosSuccessRate = 90;
-		}
-	}
-	else if ( CondorFeatherCount == 1 )
-	{
-		if ( lpObj->ChaosSuccessRate > 100 )
-		{
-			lpObj->ChaosSuccessRate =  100;
-		}
-	}
-	else if ( lpObj->ChaosSuccessRate > 100 )
-	{
-		lpObj->ChaosSuccessRate = 100;
-	}
-
-	lpObj->Money  -= nChaosNeedMoney;
+	lpObj->Money -= loc9;
 	g_CastleSiegeSync.AddTributeMoney(iChaosTaxMoney);
-
 	GCMoneySend(lpObj->m_Index, lpObj->Money);
 
-	if ( (rand()%100) < lpObj->ChaosSuccessRate )
+	if ((rand() % 100) < lpObj->ChaosSuccessRate)
 	{
-		int iWingLevel = 0;
-		int iItemType;
-		int iItemSubType;
+		int type = ITEMGET(13, 53);
+		int level = 0;
+		int dur = 1;
 
-		if ( CondorFeatherCount != 0 )
-		{
-			iItemType = 12;
-			iItemSubType = 36 + rand()%5;
-		}
-
-		else if (WingCount != 0)
-		{
-			iItemType = 13;
-			iItemSubType = 53;
-		}
-
-
-		int iWingNum = ITEMGET(iItemType, iItemSubType);
-		int iOption1 = 0;
-		int iOption2 = 0;
-		int iOption3 = 0;
-
-		if ( (rand()%5) == 0 )
-		{
-			iOption1 = 1;
-		}
-
-		int iRandomValue = rand() % 100;
-		int iRandomValue2 = rand() % 3;
-
-		switch ( iRandomValue2 )
-		{
-			case 0:
-				if ( iRandomValue < 4 )
-				{
-					iOption2 = 3;	// +12
-				}
-				break;
-
-			case 1:
-				if ( iRandomValue < 10 )
-				{
-					iOption2 = 2;	// +8
-				}
-				break;
-
-			case 2:
-				if ( iRandomValue < 20 )
-				{
-					iOption2 = 1;	// +4;
-				}
-		}
-
-		//int ExOption;
-
-		if ( CondorFeatherCount == 1 )
-		{
-			if ( (rand()%5) == 0 )
-			{
-				iOption3 = 1 << (rand()%4);
-			}
-				iOption3 |= 0x20;
-		}
-
-		::ItemSerialCreateSend(lpObj->m_Index, -1, 0, 0, iWingNum, iWingLevel, 0, 0, iOption1, iOption2, -1, iOption3, 0);
+		ItemSerialCreateSend(lpObj->m_Index, -1, 0, 0, type, level, dur, 0, 0, 0, -1, 0, 0);
 		::gObjInventoryCommit(lpObj->m_Index);
-		::LogAddTD("[WingMix 3] [%s][%s] CBMix Success %d Money : %d-%d",
-			lpObj->AccountID, lpObj->Name, lpObj->ChaosSuccessRate, lpObj->Money, nChaosNeedMoney);
-		return TRUE;
+
+		LogAddTD("[ThirdWing Mix][Level 01] [%s][%s] CBMix Success %d Money : %d-%d, CharmRate : %d",
+			lpObj->AccountID, lpObj->Name, lpObj->ChaosSuccessRate, lpObj->Money, loc9, loc10);
 	}
 	else
 	{
-		for (int n=0;n<CHAOS_BOX_SIZE;n++)
-		{
-			lpObj->pChaosBox[n].Clear();
-		}
+		ThirdWingMixItemDown(lpObj);
+		::GCUserChaosBoxSend(lpObj, 0);
+		DataSend(lpObj->m_Index, (LPBYTE)&pMsg, pMsg.h.size);
 
-		GCUserChaosBoxSend(lpObj, 0);
-		DataSend(lpObj->m_Index, (BYTE *)&pMsg, pMsg.h.size);
-		::LogAddTD("[WingMix 3] [%s][%s] CBMix Fail %d Money : %d-%d",
-			lpObj->AccountID, lpObj->Name, lpObj->ChaosSuccessRate, lpObj->Money, nChaosNeedMoney);
-		
+		LogAddTD("[ThirdWing Mix][Level 01] [%s][%s] CBMix Fail %d Money : %d-%d, CharmRate : %d",
+			lpObj->AccountID, lpObj->Name, lpObj->ChaosSuccessRate, lpObj->Money, loc9, loc10);
 		lpObj->ChaosLock = FALSE;
-
-		return FALSE;
 	}
 }
 
+//func_5d8c70
+void ThirdWingMix2(LPOBJ lpObj)
+{
+	lpObj->ChaosLock = TRUE;
 
+	int loc2 = 0;
+	int loc3 = 0;
+	int loc4 = 0;
+	int loc5 = 0;
+	int loc6 = 0;
+	int loc7 = 0;
+	int loc8 = 0;
+	int loc9 = 0;
+	int loc10 = 0;
+	int loc11 = 0;
+	int loc12 = 0;
 
+	PMSG_CHAOSMIXRESULT pMsg;
+
+	PHeadSetB((LPBYTE)&pMsg.h, 0x86, sizeof(PMSG_CHAOSMIXRESULT));
+	pMsg.Result = CB_ERROR;
+
+	for (int n = 0; n<CHAOS_BOX_SIZE; n++) //loc16
+	{
+		if (lpObj->pChaosBox[n].IsItem() == TRUE)
+		{
+			if (CheckItemCondition(&lpObj->pChaosBox[n], 7, 0, 0, 1, 0, 1) != FALSE)
+			{
+				loc2++;
+				loc10 += lpObj->pChaosBox[n].m_BuyMoney;
+			}
+			else if (lpObj->pChaosBox[n].m_Type == iCondorFeather)
+			{
+				loc3++;
+			}
+			else if (lpObj->pChaosBox[n].m_Type == iCondorFlame)
+			{
+				loc4++;
+			}
+			else if (lpObj->pChaosBox[n].m_Type == iJewelofChaos)
+			{
+				loc5++;
+			}
+			else if (lpObj->pChaosBox[n].m_Type == iBundleofBless)
+			{
+				loc7++;
+			}
+			else if (lpObj->pChaosBox[n].m_Type == iBundleofSoul)
+			{
+				loc6++;
+			}
+			else if (lpObj->pChaosBox[n].m_Type == iJewelofCreation)
+			{
+				loc8++;
+			}
+			else if (lpObj->pChaosBox[n].m_Type == ITEMGET(14, 53))
+			{
+				loc12 += lpObj->pChaosBox[n].m_Durability;
+			}
+			else
+			{
+				loc9++;
+			}
+		}
+	}
+
+	if (loc12 > 10)
+	{
+		pMsg.Result = 0xF0; //new macro
+		DataSend(lpObj->m_Index, (LPBYTE)&pMsg, pMsg.h.size);
+		lpObj->ChaosLock = FALSE;
+		return;
+	}
+
+	if (loc2 < 1 || loc3 != 1 || loc4 != 1 || loc5 != 1 || loc7 != 1 || loc6 != 1 || loc8 != 1 || loc9 > 0)
+	{
+		pMsg.Result = CB_INCORRECT_MIX_ITEMS;
+		DataSend(lpObj->m_Index, (LPBYTE)&pMsg, pMsg.h.size);
+		lpObj->ChaosLock = FALSE;
+		return;
+	}
+
+	LogChaosItem(lpObj, "ThirdWingLevel2_Mix");
+	LogAddTD("[ThirdWing Mix][Level 02] Chaos Mix Start");
+
+	if (loc10 > 0)
+	{
+		lpObj->ChaosSuccessRate = loc10 / 3000000;
+	}
+
+	if (lpObj->ChaosSuccessRate > Configs.WingsLvl3MixRate)
+	{
+		lpObj->ChaosSuccessRate = Configs.WingsLvl3MixRate;
+	}
+	else if (lpObj->ChaosSuccessRate < 1)
+	{
+		lpObj->ChaosSuccessRate = 1;
+	}
+
+	loc11 = lpObj->ChaosSuccessRate * Configs.WingsLvl3MixCost;
+
+	lpObj->ChaosSuccessRate += loc12;
+
+	//loc11 = lpObj->ChaosSuccessRate * 200000;
+
+	int iChaosTaxMoney = (int)((__int64)loc11 * (__int64)g_CastleSiegeSync.GetTaxRateChaos(lpObj->m_Index) / (__int64)100);
+
+	if (iChaosTaxMoney < 0)
+	{
+		iChaosTaxMoney = 0;
+	}
+
+	loc11 += iChaosTaxMoney;
+
+	if (loc11 < 0)
+	{
+		loc11 = 0;
+	}
+
+	if (lpObj->Money < loc11)
+	{
+		pMsg.Result = CB_NOT_ENOUGH_ZEN;
+
+		DataSend(lpObj->m_Index, (LPBYTE)&pMsg, pMsg.h.size);
+		lpObj->ChaosLock = FALSE;
+
+		return;
+	}
+
+	lpObj->Money -= loc11;
+	g_CastleSiegeSync.AddTributeMoney(iChaosTaxMoney);
+	GCMoneySend(lpObj->m_Index, lpObj->Money);
+
+	if ((rand() % 100) < lpObj->ChaosSuccessRate)
+	{
+		int loc18 = rand() % 6;
+		int loc19 = 0;
+
+		if (loc18 == 0)
+		{
+			loc19 = iWingofStorm;
+		}
+		else if (loc18 == 1)
+		{
+			loc19 = iWingofEternal;
+		}
+		else if (loc18 == 2)
+		{
+			loc19 = iWingofIllusion;
+		}
+		else if (loc18 == 3)
+		{
+			loc19 = iWingofRuin;
+		}
+		else if (loc18 == 4)
+		{
+			loc19 = iCapeofLord;
+		}
+		else if (loc18 == 5)
+		{
+			loc19 = iWingofDimension;
+		}
+
+		int loc20 = 0;
+		int loc21 = 0;
+
+		if ((rand() % 1000) <= i3rdWingLuckRate)
+		{
+			loc21 = 1;
+		}
+
+		int loc22 = 0;
+		int loc23 = 0;
+		int loc24 = rand() % 2;
+		int loc25;
+		int loc26;
+		int loc27;
+		int loc28;
+		int loc29;
+
+		switch (loc24)
+		{
+		case 0:
+			loc25 = rand() % 1000;
+			if (loc25 < 400)
+			{
+				loc23 |= 0x10;
+			}
+			break;
+
+		case 1:
+			loc25 = rand() % 1000;
+			if (loc24 < 300)
+			{
+				loc23 |= 0x20;
+			}
+			break;
+		}
+
+		loc26 = rand() % 4;
+		loc27 = rand() % 1000;
+		loc22 = 0;
+
+		switch (loc26)
+		{
+		case 1:
+		{
+			if (loc27 < 120)
+			{
+				loc22 = 1;
+			}
+		}
+		break;
+
+		case 2:
+		{
+			if (loc27 < 60)
+			{
+				loc22 = 2;
+			}
+		}
+		break;
+
+		case 3:
+		{
+			if (loc27 < 30)
+			{
+				loc22 = 3;
+			}
+		}
+		break;
+		}
+
+		loc28 = rand() % 4;
+		loc29 = rand() % 1000;
+
+		switch (loc28)
+		{
+		case 0:
+		{
+			if (loc29 < 40)
+			{
+				loc23 |= 1;
+			}
+		}
+		break;
+		case 1:
+		{
+			if (loc29 < 20)
+			{
+				loc23 |= 2;
+			}
+		}
+		break;
+
+		case 2:
+		{
+			if (loc29 < 70)
+			{
+				loc23 |= 4;
+			}
+		}
+		break;
+		case 3:
+		{
+			if (loc29 < 70)
+			{
+				loc23 |= 8;
+			}
+		}
+		break;
+		}
+
+		ItemSerialCreateSend(lpObj->m_Index, -1, 0, 0, loc19, 0, 0, loc20, loc21, loc22, -1, loc23, 0);
+		::gObjInventoryCommit(lpObj->m_Index);
+
+		LogAddTD("[ThirdWing Mix][Level 02] [%s][%s] CBMix Success %d Money : %d-%d, CharmRate : %d",
+			lpObj->AccountID, lpObj->Name, lpObj->ChaosSuccessRate, lpObj->Money, loc11, loc12);
+	}
+	else
+	{
+		ThirdWingMixItemDown(lpObj);
+		::GCUserChaosBoxSend(lpObj, 0);
+		DataSend(lpObj->m_Index, (LPBYTE)&pMsg, pMsg.h.size);
+
+		LogAddTD("[ThirdWing Mix][Level 02] [%s][%s] CBMix Fail %d Money : %d-%d, CharmRate : %d",
+			lpObj->AccountID, lpObj->Name, lpObj->ChaosSuccessRate, lpObj->Money, loc11, loc12);
+		lpObj->ChaosLock = FALSE;
+	}
+}
+
+//005D95E0   /> \55                            PUSH EBP
+void ThirdWingMixItemDown(LPOBJ lpObj)
+{
+	if (lpObj->pChaosBox == NULL)
+	{
+		return;
+	}
+
+	for (int n = 0; n<CHAOS_BOX_SIZE; n++) //loc2
+	{
+		if (lpObj->pChaosBox[n].IsItem() == TRUE)
+		{
+			if (CheckLevel2WingItem(lpObj->pChaosBox[n].m_Type) != FALSE)
+			{
+				ThirdWingMixItemDown2(&lpObj->pChaosBox[n]);
+			}
+			else if (CheckItemCondition(&lpObj->pChaosBox[n], 0, 0, 0, 0, 1, 0) != FALSE)
+			{
+				ThirdWingMixItemDown2(&lpObj->pChaosBox[n]);
+			}
+			else if (CheckItemCondition(&lpObj->pChaosBox[n], 0, 0, 0, 0, 0, 1) != FALSE)
+			{
+				ThirdWingMixItemDown2(&lpObj->pChaosBox[n]);
+			}
+			else
+			{
+				lpObj->pChaosBox[n].Clear();
+			}
+		}
+	}
+}
+
+//005D97A0   /> \55                            PUSH EBP
+void ThirdWingMixItemDown2(CItem * lpItem)
+{
+	if (lpItem == NULL)
+	{
+		return;
+	}
+
+	if ((rand() % 2) < 1)
+	{
+		lpItem->m_Level -= 2;
+	}
+	else
+	{
+		lpItem->m_Level -= 3;
+	}
+
+	lpItem->m_Option3 = 0;
+	lpItem->Convert(lpItem->m_Type, lpItem->m_Option1, lpItem->m_Option2, lpItem->m_Option3, lpItem->m_NewOption, lpItem->m_SetOption, lpItem->m_ItemOptionEx,3);
+}
 
 void DefaultChaosMix(LPOBJ lpObj)
 {
@@ -1836,7 +2128,7 @@ void DefaultChaosMix(LPOBJ lpObj)
 		return;
 	}
 
-	int iChaosTaxMoney = (int)((__int64)lpObj->ChaosMoney * (__int64)g_CastleSiegeSync.GetTaxRateChaos(lpObj->m_Index) / (__int64)DivValues.DivFirstWings);
+	int iChaosTaxMoney = (int)((__int64)lpObj->ChaosMoney * (__int64)g_CastleSiegeSync.GetTaxRateChaos(lpObj->m_Index) / (__int64)Configs.WingsLvl1MixCost);
 
 	if ( iChaosTaxMoney < 0 )
 	{
@@ -1863,9 +2155,9 @@ void DefaultChaosMix(LPOBJ lpObj)
 	{
 		if ( lpObj->ChaosSuccessRate > 0 )
 		{
-			if ( lpObj->ChaosSuccessRate >= ConfRates.FirstWings)
+			if ( lpObj->ChaosSuccessRate >= Configs.WingsLvl1MixRate)
 			{
-				lpObj->ChaosSuccessRate = ConfRates.FirstWings;
+				lpObj->ChaosSuccessRate = Configs.WingsLvl1MixRate;
 			}
 
 			if ( (rand()%100) <= (lpObj->ChaosSuccessRate-1) ) 
@@ -2425,10 +2717,10 @@ void DarkHorseChaosMix(LPOBJ lpObj)
 
 	LogChaosItem(lpObj, "DarkHorseMix");
 	LogAddTD("[DarkHorseMix] Chaos Mix Start");
-	lpObj->ChaosSuccessRate = 60;
+	lpObj->ChaosSuccessRate = Configs.DarkHorseMixRate;
 	lpObj->ChaosSuccessRate += iCharmOfLuckCount;
 
-	int nChaosNeedMoney = 5000000;
+	int nChaosNeedMoney = Configs.DarkHorseMixCost;
 
 	int iChaosTaxMoney = (int)((__int64)nChaosNeedMoney * (__int64)g_CastleSiegeSync.GetTaxRateChaos(lpObj->m_Index) / (__int64)100);
 
@@ -2603,10 +2895,10 @@ void DarkSpiritChaosMix(LPOBJ lpObj)
 
 	LogChaosItem(lpObj, "DarkSpiritMix");
 	LogAddTD("[DarkSpiritMix] Chaos Mix Start");
-	lpObj->ChaosSuccessRate = 60;
+	lpObj->ChaosSuccessRate = Configs.DarkRavenMixRate;
 	lpObj->ChaosSuccessRate += iCharmOfLuckCount;
 
-	int nChaosNeedMoney = 1000000;
+	int nChaosNeedMoney = Configs.DarkRavenMixCost;
 
 	int iChaosTaxMoney = (int)((__int64)nChaosNeedMoney * (__int64)g_CastleSiegeSync.GetTaxRateChaos(lpObj->m_Index) / (__int64)100);
 
@@ -2860,9 +3152,9 @@ void SoulPotionChaosMix(LPOBJ lpObj)
 
 	LogChaosItem(lpObj, "SoulPotionMix");
 	LogAddTD("[SoulPotionMix] Chaos Mix Start");
-	lpObj->ChaosSuccessRate = 100;
+	lpObj->ChaosSuccessRate = Configs.SoulPotionMixRate;
 
-	int nChaosNeedMoney = 50000;
+	int nChaosNeedMoney = Configs.SoulPotionMixCost;
 
 	int iChaosTaxMoney = (int)((__int64)nChaosNeedMoney * (__int64)g_CastleSiegeSync.GetTaxRateChaos(lpObj->m_Index) / (__int64)100);
 
@@ -2976,9 +3268,9 @@ void LifeStoneChaosMix(LPOBJ lpObj)
 
 	LogChaosItem(lpObj, "LifeStoneMix");
 	LogAddTD("[LifeStoneMix] Chaos Mix Start");
-	lpObj->ChaosSuccessRate = 100;
+	lpObj->ChaosSuccessRate = Configs.StoneMixRate;
 
-	int nChaosNeedMoney = 5000000;
+	int nChaosNeedMoney = Configs.StoneMixCost;
 
 	int iChaosTaxMoney = (int)((__int64)nChaosNeedMoney * (__int64)g_CastleSiegeSync.GetTaxRateChaos(lpObj->m_Index) / (__int64)100);
 

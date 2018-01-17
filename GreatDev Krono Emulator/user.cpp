@@ -5191,31 +5191,68 @@ BOOL gObjLevelUpPointAdd(BYTE type, LPOBJ lpObj)	// type : [1:Strength][2:Agilit
 		return FALSE;
 	}
 
-	switch ( type )
+	switch (type)
 	{
-		case 0:
+	case 0:
+		if (lpObj->Strength <= Configs.g_CharMaxStat)
+		{
 			lpObj->Strength++;
-			break;
+		}
+		else
+		{
+			return false;
+		}
+		break;
 
-		case 1:
+	case 1:
+		if (lpObj->Dexterity <= Configs.g_CharMaxStat)
+		{
 			lpObj->Dexterity++;
-			break;
+		}
+		else
+		{
+			return false;
+		}
+		break;
 
-		case 2:
+	case 2:
+
+		if (lpObj->Vitality <= Configs.g_CharMaxStat)
+		{
 			lpObj->Vitality++;
+		}
+		else
+		{
+			return false;
+		}
 
-			lpObj->MaxLife += lpObj->VitalityToLife;
-			gObjCalcMaxLifePower(lpObj->m_Index);
-			break;
+		lpObj->MaxLife += lpObj->VitalityToLife;
+		gObjCalcMaxLifePower(lpObj->m_Index);
+		break;
 
-		case 3:
+	case 3:
+		if (lpObj->Energy <= Configs.g_CharMaxStat)
+		{
 			lpObj->Energy++;
-			lpObj->MaxMana += lpObj->EnergyToMana;
-			break;
+		}
+		else
+		{
+			return false;
+		}
 
-		case 4:
+		lpObj->MaxMana += lpObj->EnergyToMana;
+		break;
+
+	case 4:
+		if (lpObj->Leadership <= Configs.g_CharMaxStat)
+		{
 			lpObj->Leadership++;
-			break;
+		}
+		else
+		{
+			return false;
+		}
+		break;
 	}
 
 	lpObj->LevelUpPoint--;
@@ -12989,7 +13026,7 @@ void gObjViewportPaint(HWND hWnd, short aIndex)
 	if (Configs.gMedalEvent)
 		strcat(szTemp, ":MedalEvent");
 
-	TextOutA(hdc, 150, 0, szTemp, strlen(szTemp));
+	TextOutA(hdc, 170, 0, szTemp, strlen(szTemp));
 	ReleaseDC(hWnd, hdc);
 }
 

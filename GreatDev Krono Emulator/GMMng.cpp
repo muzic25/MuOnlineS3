@@ -1128,6 +1128,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 	
 		case 390:
 		{
+			if (Configs.Drop == 0)
+			{
+				return 0;
+			}
+
 			if ((lpObj->Authority & 2) != 2 && (lpObj->Authority & 0x20) != 0x20)
 			{
 				return 0;
@@ -1176,12 +1181,10 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			if (Configs.CmdPostEnabled == 1)
 			{
 
-				int Level = 50;
-
-				if (lpObj->Level < Level)
+				if (lpObj->Level < Configs.CmdPostLevel)
 				{
 					char levelmsg[100];
-					sprintf(levelmsg, "[Global]: to use /post you need level %d ", Level);
+					sprintf(levelmsg, "[Global]: to use /post you need level %d ", Configs.CmdPostLevel);
 					GCServerMsgStringSend(levelmsg, aIndex, 1);
 					return FALSE;
 				}
@@ -1191,6 +1194,10 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 					GCServerMsgStringSend(lMsg.Get(MSGGET(14, 67)), aIndex, 1);
 					return FALSE;
 				}
+	
+				lpObj->Money -= Configs.CmdPostMoney;
+				GCMoneySend(lpObj->m_Index, lpObj->Money);
+
 				/*
 				char Message[255];
 				sprintf(Message, " <Post> %s",(char*)szCmd+strlen("/post"));
@@ -1215,10 +1222,6 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 				if(lpObj->Connected)
 				::DataSend(lpObj->m_Index,Packet,Len);
 				free(Packet);*/
-
-				lpObj->Money -= Configs.CmdPostMoney;
-				GCMoneySend(lpObj->m_Index, lpObj->Money);
-
 				/*switch (Configs.CmdPostColor)
 				{
 				case 0:
@@ -1261,6 +1264,32 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 		break;
 		case 392:
 		{
+			if (Configs.PkClearEnabled == 0)
+			{
+				return 0;
+			}
+
+
+			if (Configs.PkClearOnlyForGm == 1)
+			{
+				if ((lpObj->Authority & 2) != 2 && (lpObj->Authority & 0x20) != 0x20)
+				{
+					return 0;
+				}
+			}
+			if (lpObj->Level < Configs.PkClearLevelReq)
+			{
+				char levelmsg[100];
+				sprintf(levelmsg, "[Global]: to use /post you need level %d ", Configs.CmdPostLevel);
+				GCServerMsgStringSend(levelmsg, aIndex, 1);
+				return FALSE;
+			}
+
+			if (lpObj->Money < Configs.PkClearPriceZen)
+			{
+				GCServerMsgStringSend(lMsg.Get(MSGGET(14, 67)), aIndex, 1);
+				return FALSE;
+			}
 
 			if (lpObj->m_PK_Level <= 3)
 			{
@@ -1268,15 +1297,15 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 				GCServerMsgStringSend(Msg, aIndex, 1);
 				return TRUE;
 			}
-			else if (lpObj->Money < 10000000)
+			else if (lpObj->Money < lpObj->m_PK_Level * Configs.PkClearPriceZen)
 			{
 				char Msg[100] = "You do not have enough Zen!";
 				GCServerMsgStringSend(Msg, aIndex, 1);
 				return TRUE;
 			}
-			else if (lpObj->Money >= 10000000)
+			else if (lpObj->Money >= lpObj->m_PK_Level * Configs.PkClearPriceZen)
 			{
-				lpObj->Money -= 10000000;
+				lpObj->Money -= lpObj->m_PK_Level * Configs.PkClearPriceZen;
 				GCMoneySend(lpObj->m_Index, lpObj->Money);
 				lpObj->m_PK_Level = 3;
 				GCPkLevelSend(lpObj->m_Index, 3);
@@ -1294,6 +1323,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			break;
 		case 393:
 		{
+			if (Configs.AddPointEnabled == 0)
+			{
+				return 0;
+			}
+
 			int Pontos;
 			Pontos = GetTokenNumber();
 			if(Pontos == NULL)
@@ -1306,7 +1340,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 				GCServerMsgStringSend("[CmdAdd]: not enough points.",lpObj->m_Index,1);
 				return FALSE;
 			}
-			if((Pontos + lpObj->Strength) > 65000)
+			if((Pontos + lpObj->Strength) > Configs.g_CharMaxStat)
 			{
 				GCServerMsgStringSend("[CmdAdd]: Cant add more than 32767!.",lpObj->m_Index,1);
 				return FALSE;
@@ -1338,6 +1372,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			break;
 		case 394:
 		{
+			if (Configs.AddPointEnabled == 0)
+			{
+				return 0;
+			}
+
 			int Pontos;
 			Pontos = GetTokenNumber();
 			if(Pontos == NULL)
@@ -1350,9 +1389,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 				GCServerMsgStringSend("[CmdAdd]: add more than 0 points.",lpObj->m_Index,1);
 				return FALSE;
 			}
-			if((Pontos + lpObj->Dexterity) > 65000)
+			if((Pontos + lpObj->Dexterity) > Configs.g_CharMaxStat)
 			{
-				GCServerMsgStringSend("[CmdAdd]: Cant add more than 32767!.",lpObj->m_Index,1);
+				char Msg[100];
+				sprintf(Msg, "[CmdAdd]: Cant add more than %d!.", Configs.g_CharMaxStat);
+				GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
 				return FALSE;
 			}
 
@@ -1383,6 +1424,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			break;
 		case 395:
 		{
+			if (Configs.AddPointEnabled == 0)
+			{
+				return 0;
+			}
+
 			int Pontos;
 			Pontos = GetTokenNumber();
 			if(Pontos == NULL)
@@ -1395,9 +1441,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 				GCServerMsgStringSend("[CmdAdd]: Add more than 0 points",lpObj->m_Index,1);
 				return FALSE;
 			}
-			if((Pontos + lpObj->Vitality) > 65000)
+			if((Pontos + lpObj->Vitality) > Configs.g_CharMaxStat)
 			{
-				GCServerMsgStringSend("[CmdAdd]: Cant add more than 32767!.",lpObj->m_Index,1);
+				char Msg[100];
+				sprintf(Msg, "[CmdAdd]: Cant add more than %d!.", Configs.g_CharMaxStat);
+				GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
 				return FALSE;
 			}
 			lpObj->LevelUpPoint -= Pontos;
@@ -1427,6 +1475,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			break;
 		case 396:
 		{
+			if (Configs.AddPointEnabled == 0)
+			{
+				return 0;
+			}
+
 			int Pontos;
 			Pontos = GetTokenNumber();
 			if(Pontos == NULL)
@@ -1439,9 +1492,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 				GCServerMsgStringSend("[CmdAdd]: add more than 0 point.",lpObj->m_Index,1);
 				return FALSE;
 			}
-			if((Pontos + lpObj->Energy) > 65000)
+			if((Pontos + lpObj->Energy) > Configs.g_CharMaxStat)
 			{
-				GCServerMsgStringSend("[CmdAdd]: Dont add more than 65k point.",lpObj->m_Index,1);
+				char Msg[100];
+				sprintf(Msg, "[CmdAdd]: Cant add more than %d!.", Configs.g_CharMaxStat);
+				GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
 				return FALSE;
 			}
 			lpObj->LevelUpPoint -= Pontos;
@@ -1471,6 +1526,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			break;
 		case 397:
 		{
+			if (Configs.AddPointEnabled == 0)
+			{
+				return 0;
+			}
+
 			if(lpObj->DbClass !=64)
 			{
 				GCServerMsgStringSend("[CmdAdd]: Only Dark Lord Can use /addcmd.",lpObj->m_Index,1);
@@ -1489,9 +1549,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 				GCServerMsgStringSend("[CmdAdd]: cant add - point.",lpObj->m_Index,1);
 				return FALSE;
 			}
-			if((Pontos + lpObj->Leadership) > 65000)
+			if((Pontos + lpObj->Leadership) > Configs.g_CharMaxStat)
 			{
-				GCServerMsgStringSend("[CmdAdd]: Cant add more than 32767 s!.",lpObj->m_Index,1);
+				char Msg[100];
+				sprintf(Msg, "[CmdAdd]: Cant add more than %d!.", Configs.g_CharMaxStat);
+				GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
 				return FALSE;
 			}
 			lpObj->LevelUpPoint -= Pontos;
@@ -1503,6 +1565,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			gObjSetBP(lpObj->m_Index);
 			GCReFillSend(lpObj->m_Index, lpObj->MaxLife + lpObj->AddLife, 0xFE, 0, lpObj->iMaxShield + lpObj->iAddShield);
 			GCManaSend(lpObj->m_Index, lpObj->MaxMana + lpObj->AddMana, 0xFE, 0, lpObj->MaxBP + lpObj->AddBP);
+			
 			if (Pontos > 200)
 			{
 				GCLevelUpMsgSend(lpObj->m_Index, 0);
@@ -1522,6 +1585,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 
 		case 398:
 		{
+			if (Configs.BanChar == 0)
+			{
+				return 0;
+			}
+
 			if ((lpObj->AuthorityCode & 4) != 4)
 			{
 				return 0;
@@ -1572,6 +1640,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 
 		case 399:
 		{
+			if (Configs.BanChar == 0)
+			{
+				return 0;
+			}
+
 			if ((lpObj->AuthorityCode & 4) != 4)
 			{
 				return 0;
@@ -1593,11 +1666,15 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			LogAddTD("Use GM Command -> [ %s ]\t[ %s ]\t[ %s ] / Target : [%s]: %s",
 				lpObj->Ip_addr, lpObj->AccountID, lpObj->Name, pId, "User UnBan");
 			GJSetStatusBan(pId, 1, 0);
-
 		}
 		break;
 		case 400://Skin
 		{
+			if (Configs.SkinEnabled == 0)
+			{
+				return 0;
+			}
+
 			if (Configs.SkinOnlyForGm)
 			{
 				if ((lpObj->AuthorityCode & 32) != 32)
@@ -1654,10 +1731,27 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 				}
 				else
 				{
+					if (lpObj->Level < Configs.SkinLevelReq)
+					{
+						char levelmsg[100];
+						sprintf(levelmsg, "[Global]: to use /post you need level %d ", Configs.CmdPostLevel);
+						GCServerMsgStringSend(levelmsg, aIndex, 1);
+						return FALSE;
+					}
+
+					if (lpObj->Money < Configs.SkinPriceZen)
+					{
+						GCServerMsgStringSend(lMsg.Get(MSGGET(14, 67)), aIndex, 1);
+						return FALSE;
+					}
+
 					int NumSkin = 0;
 					NumSkin = GetTokenNumber();
 					lpObj->m_Change = NumSkin;
 					gObjViewportListProtocolCreate(lpObj);
+					lpObj->Money -= Configs.SkinPriceZen;
+					GCMoneySend(lpObj->m_Index, lpObj->Money);
+
 					GCServerMsgStringSend("[Skin] Your Skin successfully changed!", lpObj->m_Index, 1);
 				}
 			}
@@ -1665,6 +1759,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 		break;
 		case 401:
 		{
+			if (Configs.SetZen == 0)
+			{
+				return 0;
+			}
+
 			if ((lpObj->AuthorityCode & 32) != 32)
 			{
 				return 0;
@@ -1683,11 +1782,8 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 				return 0;
 			}
 
-			int NumSkin = 0;
-			NumSkin = GetTokenNumber();
-
-
-			int Value;
+			int Value = 0;
+			Value = GetTokenNumber();
 
 			if (Value < 0 || Value > 2000000000)
 			{
@@ -1710,16 +1806,26 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 		break;
 		case 402:
 		{
+			if (Configs.Time == 0)
+			{
+				return 0;
+			}
+
 			SYSTEMTIME t;
 			GetLocalTime(&t);
 			char Msg[100];
-			sprintf(Msg, "Server Time & Date: %02d:%02d:%02d %02d-%02d-%02d.",
-				t.wHour, t.wMinute, t.wSecond, t.wDay, t.wMonth, t.wYear); 
+			sprintf(Msg, "Server Date & Time : %02d:%02d:%02d %02d-%02d-%02d.",
+				t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond);
 			GCServerMsgStringSend(Msg, lpObj->m_Index, 1);
 		}
 		break;
 		case 403:
 		{
+			if (Configs.Online == 0)
+			{
+				return 0;
+			}
+
 			int totGMs = 0;
 			int totPlayers = 0;
 			for (short i = OBJMAX - OBJMAXUSER; i< OBJMAX; i++)
@@ -1744,6 +1850,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 		break;
 		case 404:
 		{
+			if (Configs.SetPK == 0)
+			{
+				return 0;
+			}
+
 			if ((lpObj->AuthorityCode & 32) != 32)
 			{
 				return 0;
@@ -1776,6 +1887,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 		break;
 		case 405:
 		{
+			if (Configs.Reload == 0)
+			{
+				return 0;
+			}
+
 			if ((lpObj->AuthorityCode & 32) != 32)
 			{
 				return 0;
@@ -1794,7 +1910,9 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			{
 			case 0:
 			{
-
+				ShopDataLoad();
+				GCServerMsgStringSend("[Reload] Shops Reloaded.", lpObj->m_Index, 1);
+				LogAddTD("[Reload] Shops Reloaded.");
 				break;
 			}
 			case 1:
@@ -1809,12 +1927,6 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 			}
 			case 3:
 			{
-				if (GMSystem.IsGMSystem != 1)
-				{
-					GCServerMsgStringSend("[Reload] GMSystem is disabled", lpObj->m_Index, 1);
-					return 0;
-				}
-
 				GMSystem.LoadIniConfig(".\\GMSystem.txt");
 				GCServerMsgStringSend("[Reload] GMSystem Reloaded.", lpObj->m_Index, 1);
 				LogAddTD("[Reload] GMSystem Reloaded.");
@@ -1842,6 +1954,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 		break;
 		case 406:
 		{
+			if (Configs.Gmove == 0)
+			{
+				return 0;
+			}
+
 			if ((lpObj->AuthorityCode & 32) != 32)
 			{
 				return 0;
@@ -1869,6 +1986,11 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 		break;
 		case 407:
 		{
+			if (Configs.GG == 0)
+			{
+				return 0;
+			}
+
 			if ((lpObj->AuthorityCode & 32) != 32)
 			{
 				return 0;

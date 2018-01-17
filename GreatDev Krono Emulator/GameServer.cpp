@@ -288,7 +288,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					break;
 				case IDM_OPTION_RELOAD:
 					ReadCommonServerInfo();
-					//GameServerInfoSend();
 					break;
 				case IDM_CASHSHOP_OPTION_RELOAD:
 					g_CashShop.CashShopOptioNReload();

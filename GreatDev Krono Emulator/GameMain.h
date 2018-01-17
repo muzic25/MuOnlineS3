@@ -165,10 +165,7 @@ extern CSimpleModulus g_SimpleModulusCS;	// line 751
 extern CSimpleModulus g_SimpleModulusSC;	// line 752
 extern char gMapName[MAX_NUMBER_MAP][255];
 extern char g_szMapName[MAX_NUMBER_MAP][32];
-extern char szAuthKey[20];
 extern BOOL GSInfoSendFlag;
-extern char connectserverip[20];
-extern int  connectserverport;
 extern char szCommonlocIniFileName[256];
 extern DWORD dwgCheckSum[MAX_CHECKSUM_KEY];
 
@@ -428,7 +425,8 @@ public:
 
  char szGameServerVersion[12]; 
  int g_iCastleItemMixLimit; 
-
+ char connectserverip[20];
+ int  connectserverport;
  char szClientVersion[8];
  BOOL bCanTrade;
  BOOL bCanChaosBox;
@@ -509,82 +507,100 @@ public:
  int g_iRateJewelOfMyst; 
  int g_iJewelOfMystID;
  int g_iJewelOfMystType;
+ int g_CharMaxStat;
 
 
  //Commands
+ BYTE AddPointEnabled;
+ short AddPointLevelReq;
+ int	AddPriceZen;
+ short MaxAddedStats;
+ BYTE Enable65kStats;
+
+ //Post
  BOOL CmdPostEnabled;
  int CmdPostMoney;
  int CmdPostLevel;
  int CmdPostAF;
-
+ //Skin
  BYTE SkinEnabled;
  BYTE SkinOnlyForGm;
  short SkinLevelReq;
  int SkinPriceZen;
 
+ //PkClear
+ BYTE PkClearEnabled;
+ BYTE PkClearOnlyForGm;
+ short PkClearLevelReq;
+ BYTE PKClearType;
+ int PkClearPriceZen;
+
+ //GM Cmd
+ BYTE Drop;
+ BYTE Gmove;
+ BYTE Online;
+ BYTE Time;
+ BYTE Disconnect;
+ BYTE GG;
+ BYTE BanChar;
+ BYTE Status;
+ BYTE SetPK;
+ BYTE SetZen;
+ BYTE Reload;
+
+
+ //Chaos Machine Mix's
+ DWORD PlusLevel10;
+ DWORD PlusLevel11;
+ DWORD PlusLevel12;
+ DWORD PlusLevel13;
+ DWORD AddLuckItems;
+ DWORD PlusLevel10_Cost;
+ DWORD PlusLevel11_Cost;
+ DWORD PlusLevel12_Cost;
+ DWORD PlusLevel13_Cost;
+
+ int SoulPotionMixRate;
+ int SoulPotionMixCost;
+ int BlessPotionMixRate;
+ int BlessPotionMixCost;
+ int ChaosWeaponMixRate;
+ int ChaosWeaponMixCost;
+ int WingsLvl1MixRate;
+ int WingsLvl1MixCost;
+ int WingsLvl2MixRate;
+ int WingsLvl2MixCost;
+ int WingsLvl3MixRate;
+ int WingsLvl3MixCost;
+ int CondorMixRate;
+ int CondorMixCost;
+ int StoneMixRate;
+ int StoneMixCost;
+
+ //Pets
+ int DarkHorseMixRate;
+ int DarkHorseMixCost;
+ int DarkRavenMixRate;
+ int DarkRavenMixCost;
+ int DinorantMixRate;
+ int DinorantMixCost;
+ int FruitMixRate;
+ int FruitMixCost;
+
+ //BloodCastle Settings
+ int BloodCastleMixMoney[7];
+ int BloodCastleMixSuccess[7];
+
+ //IllusionTemple Settings
+ int IllusionTempleMixMoney[6];
+ int IllusionTempleMixSuccess[6];
+
+ //DevilSquare Settings
+ int DevilSquareMixSuccess[8];
+ int DevilSquareMixMoney[8];
+
 };
 extern CConfigs Configs;
-
-
-
-struct sChaosMixConf
-{
-	DWORD ChaosWeapon;
-	DWORD FirstWings;
-	DWORD SecondWings;
-	DWORD CapeOfLord;
-	DWORD Condor;
-	DWORD ThirdWings;
-	DWORD DarkHourse;
-	DWORD DarkRaven;
-	DWORD Dinorant;
-
-	//Devil Squate Tickets
-	DWORD DevilSquare[8];
-
-	//Blood CastleTickets 
-	DWORD BloodCastle[8];
-
-	//Illusion Temple Tickets 
-	DWORD Illusion[6];
-
-	//Upgrate Level Items 
-	DWORD PlusLevel10;
-	DWORD PlusLevel11;
-	DWORD PlusLevel12;
-	DWORD PlusLevel13;
-	DWORD AddLuckItems;
-
-	DWORD BlessPotion;
-	DWORD SoulPotion;
-	DWORD Fruit;
-	DWORD LifeStone;
-
-	DWORD FenrirLvl1;
-	DWORD FenrirLvl2;
-	DWORD FenrirLvl3;
-	DWORD FenrirLvl4;
-
-	DWORD ShieldPotionLvl1;
-	DWORD ShieldPotionLvl2;
-	DWORD ShieldPotionLvl3;
-};
-
-struct sDivInFormula
-{
-	int DivChaosWeapon;
-	int DivFirstWings;
-	int MainDivSecondWings;
-	int SubDivSecondWings;
-	int DivCondor;
-	int DivThirdWings;
-	int FisrtDivFenrir4;
-	int SecondDivFenrir4;
-};
-
-extern sChaosMixConf ConfRates;
-extern sChaosMixConf ConfCostZen;
-extern sDivInFormula DivValues;
 
 //------------------------------------------
 // GameMain.cpp Functions - Prototypes List - Completed
@@ -613,6 +629,7 @@ void ExDataClientMsgProc(WPARAM wParam, LPARAM lParam);
 void GMDataClientMsgProc(WPARAM wParam, LPARAM lParam);
 void ReadServerInfo();
 void ReadCommonServerInfo();
+void LoadChaosBox(char * filename);
 void LoadChaosConfigs(char * filename);
 void LoadCommands(char * filename);
 void GameServerInfoSendStop();

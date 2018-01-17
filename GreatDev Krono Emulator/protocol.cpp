@@ -8735,10 +8735,17 @@ void CGChaosBoxItemMixButtonClick(PMSG_CHAOSMIX* aRecv, int aIndex)
 	case CHAOS_TYPE_FRUIT:
 		CircleChaosMix(lpObj);
 		break;
-	case CHAOS_TYPE_CONDOR_FEATHER:
+	/*case CHAOS_TYPE_CONDOR_FEATHER:
 	case CHAOS_TYPE_THIRD_WING:
 		Wing3ChaosMix(lpObj);
+		break;*/
+	case CHAOS_TYPE_CONDOR_FEATHER:
+		ThirdWingMix1(lpObj);
 		break;
+	case CHAOS_TYPE_THIRD_WING:
+		ThirdWingMix2(lpObj);
+		break;
+
 	case CHAOS_TYPE_SECOND_WING:
 	case CHAOS_TYPE_CLOAK:
 		WingChaosMix(lpObj);
@@ -8750,9 +8757,9 @@ void CGChaosBoxItemMixButtonClick(PMSG_CHAOSMIX* aRecv, int aIndex)
 	case CHAOS_TYPE_FIRST_WING:
 		DefaultChaosMix(lpObj);
 		break;
-	case CHAOS_TYPE_SETITEM:	// #warning Activate this to SetItemChaosMix
-		SetItemChaosMix(lpObj);
-		break;
+	//case CHAOS_TYPE_SETITEM:	// #warning Activate this to SetItemChaosMix
+	//	SetItemChaosMix(lpObj);
+	//	break;
 	case CHAOS_TYPE_DARKHORSE:
 		DarkHorseChaosMix(lpObj);
 		break;

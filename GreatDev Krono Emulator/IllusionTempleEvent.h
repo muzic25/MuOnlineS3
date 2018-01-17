@@ -91,8 +91,6 @@ struct PMSG_REQ_ILLUSIONTEMPLE_ENTERCOUNT
 	int iObjIndex;	// 1C
 };
 
-static const int g_iIT_ChoasMixSuccessRate[MAX_FLOOR_DATA+1] = {70, 70, 70, 70, 70, 70};
-static const int g_iIT_ChoasMixMoney[MAX_FLOOR_DATA+1] = {3000000 , 5000000 , 7000000, 9000000, 11000000, 13000000};
 
 class CIllusionTempleEvent
 {

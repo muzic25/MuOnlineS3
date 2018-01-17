@@ -28,6 +28,10 @@ int m_i_IT_CloseTime;
 int m_i_IT_RestTime;
 int m_i_IT_WaitTime;
 
+static const int g_iIT_ChoasMixSuccessRate[MAX_FLOOR_DATA + 1] = { Configs.IllusionTempleMixSuccess[0], Configs.IllusionTempleMixSuccess[1], Configs.IllusionTempleMixSuccess[2], Configs.IllusionTempleMixSuccess[3], Configs.IllusionTempleMixSuccess[4], Configs.IllusionTempleMixSuccess[5] };
+static const int g_iIT_ChoasMixMoney[MAX_FLOOR_DATA + 1] = { Configs.IllusionTempleMixMoney[0] , Configs.IllusionTempleMixMoney[1] , Configs.IllusionTempleMixMoney[2], Configs.IllusionTempleMixMoney[3], Configs.IllusionTempleMixMoney[4], Configs.IllusionTempleMixMoney[5] };
+
+
 CIllusionTempleEvent g_IllusionTempleEvent;
 
 CIllusionTempleEvent::CIllusionTempleEvent()

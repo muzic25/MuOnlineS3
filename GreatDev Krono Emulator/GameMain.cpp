@@ -98,16 +98,11 @@ char szGameServerVersion[12]=GAMESERVER_VERSION;
 int  MapMinUserLevel[MAX_NUMBER_MAP] = { 0, 20, 15, 10, 80, 0, 0, 60, 130, 0, 160, 10, 36, 80, 130, 170, 210,
 										310, 15, 30, 100, 160, 220, 280, 15, 50, 120, 180, 240, 300, 10, 10, 0};
 char gCountryName[20]="Kor";
-char szAuthKey[20];
-char connectserverip[20];
-int  connectserverport;
+
 char szCommonlocIniFileName[256];
 BOOL GSInfoSendFlag;
 void CheckSumFileLoad(char *szCheckSum);
 
-sChaosMixConf ConfRates;
-sChaosMixConf ConfCostZen;
-sDivInFormula DivValues;
 CConfigs Configs;
 
 void gSetDate() // Good
@@ -1343,14 +1338,12 @@ void ReadCommonServerInfo()
 
 	PCPoint.Init();
 
-	GetPrivateProfileString("ConnectServerInfo", "IP", "", connectserverip, 20, szCommonlocIniFileName);
-	GetPrivateProfileString("ConnectServerInfo", "PORT", "", szTemp, 10, szCommonlocIniFileName);
-	connectserverport = atoi(szTemp); //55557; 
-	LogAddTD(lMsg.Get(MSGGET(1, 158)), connectserverip, connectserverport);
-	gUdpSoc.SendSet("127.0.0.1", connectserverport);
+	GetPrivateProfileString("ConnectServerInfo", "IP", "", Configs.connectserverip, 20, gDirPath.GetNewPath("commonserver.cfg"));
+	GetPrivateProfileString("ConnectServerInfo", "PORT", "", szTemp, 10, gDirPath.GetNewPath("commonserver.cfg"));
+	Configs.connectserverport = atoi(szTemp); //55557; 
+	LogAddTD(lMsg.Get(MSGGET(1, 158)), Configs.connectserverip, Configs.connectserverport);
+	gUdpSoc.SendSet(Configs.connectserverip, Configs.connectserverport);
 	gUdpSocCE.SendSet(Configs.gChaosEventServerIp, 60005);
-
-
 	
 	DevilSquareEventConnect = GetPrivateProfileInt("GameServerInfo","DevilSquareEventConnect", 1, gDirPath.GetNewPath("commonserver.cfg"));
 	EventChipServerConnect = GetPrivateProfileInt("GameServerInfo","EventChipServerConnect", 0, gDirPath.GetNewPath("commonserver.cfg"));
@@ -1464,160 +1457,160 @@ void ReadCommonServerInfo()
 	g_CashLotterySystem.Load(gDirPath.GetNewPath("ChaosCardProbability.txt"));
 
 	g_CouponEventItemLIst.Load(gDirPath.GetNewPath("EventItemList.txt"));
-
+	
+	//Custom Configs
 	LoadCustomJewel(gDirPath.GetNewPath("\\Customs\\Jewels.ini"));
-	LoadChaosConfigs(gDirPath.GetNewPath("ChaosMix.ini"));
+	LoadChaosBox(gDirPath.GetNewPath("ChaosMix.ini"));
 
 	LoadCommands(gDirPath.GetNewPath("Commands.ini"));
 
-	//Custom Configs
-	Configs.VaultFloodTime = GetPrivateProfileInt("GameServerInfo", "FloodTime", 1, gDirPath.GetNewPath("commonserver.cfg"));
+
+	Configs.VaultFloodTime = GetPrivateProfileInt("GameServerInfo", "VaultAntiFloodTime", 1, gDirPath.GetNewPath("commonserver.cfg"));
+	Configs.g_CharMaxStat = GetPrivateProfileInt("GameServerInfo", "CharacterMaxStats", 65000, gDirPath.GetNewPath("commonserver.cfg"));
+
 }
 
-void LoadChaosConfigs(char* filename)
+void LoadChaosBox(char* filename)
 {
-	/************************************************************************/
-	/*                               Load Rate Mix                          */
-	/************************************************************************/
-	ConfRates.FirstWings = GetPrivateProfileIntA("MaxRate", "FirstWingsRate", 100, filename);
-	ConfRates.SecondWings = GetPrivateProfileIntA("MaxRate", "SecondWingsRate", 90, filename);
-	ConfRates.CapeOfLord = GetPrivateProfileIntA("MaxRate", "CapeOfLordRate", 90, filename);
-	ConfRates.Condor = GetPrivateProfileIntA("MaxRate", "CondorRate", 60, filename);
-	ConfRates.ThirdWings = GetPrivateProfileIntA("MaxRate", "ThirdWingsRate", 40, filename);
-	ConfRates.DarkHourse = GetPrivateProfileIntA("MaxRate", "DarkHourseRate", 60, filename);
-	ConfRates.DarkRaven = GetPrivateProfileIntA("MaxRate", "DarkRavenRate", 60, filename);
-	ConfRates.Dinorant = GetPrivateProfileIntA("MaxRate", "DinorantRate", 70, filename);
+	// ****************************************************
+	//  Chaos Machine MixRates
+	// ****************************************************
+	Configs.PlusLevel10 = GetPrivateProfileInt("ItemLevelPlus", "PlusLevelRate10", 50, filename);
+	Configs.PlusLevel11 = GetPrivateProfileInt("ItemLevelPlus", "PlusLevelRate11", 45, filename);
+	Configs.PlusLevel12 = GetPrivateProfileInt("ItemLevelPlus", "PlusLevelRate12", 45, filename);
+	Configs.PlusLevel13 = GetPrivateProfileInt("ItemLevelPlus", "PlusLevelRate13", 45, filename);
+	Configs.AddLuckItems = GetPrivateProfileInt("ItemLevelPlus", "AddRateLuckItems", 25, filename);
 
-	ConfRates.DevilSquare[0] = GetPrivateProfileIntA("MaxRate", "DevilSquareRate0", 60, filename);
-	ConfRates.DevilSquare[1] = GetPrivateProfileIntA("MaxRate", "DevilSquareRate1", 75, filename);
-	ConfRates.DevilSquare[2] = GetPrivateProfileIntA("MaxRate", "DevilSquareRate2", 70, filename);
-	ConfRates.DevilSquare[3] = GetPrivateProfileIntA("MaxRate", "DevilSquareRate3", 65, filename);
-	ConfRates.DevilSquare[4] = GetPrivateProfileIntA("MaxRate", "DevilSquareRate4", 60, filename);
-	ConfRates.DevilSquare[5] = GetPrivateProfileIntA("MaxRate", "DevilSquareRate5", 55, filename);
-	ConfRates.DevilSquare[6] = GetPrivateProfileIntA("MaxRate", "DevilSquareRate6", 50, filename);
-	ConfRates.DevilSquare[7] = GetPrivateProfileIntA("MaxRate", "DevilSquareRate7", 45, filename);
+	Configs.PlusLevel10_Cost = GetPrivateProfileInt("ItemLevelPlus", "PlusLevelZen10", 2000000, filename);
+	Configs.PlusLevel11_Cost = GetPrivateProfileInt("ItemLevelPlus", "PlusLevelZen11", 4000000, filename);
+	Configs.PlusLevel12_Cost = GetPrivateProfileInt("ItemLevelPlus", "PlusLevelZen12", 6000000, filename);
+	Configs.PlusLevel13_Cost = GetPrivateProfileInt("ItemLevelPlus", "PlusLevelZen13", 8000000, filename);
 
-	ConfRates.BloodCastle[0] = GetPrivateProfileIntA("MaxRate", "BloodCastleRate1", 80, filename);
-	ConfRates.BloodCastle[1] = GetPrivateProfileIntA("MaxRate", "BloodCastleRate2", 80, filename);
-	ConfRates.BloodCastle[2] = GetPrivateProfileIntA("MaxRate", "BloodCastleRate3", 80, filename);
-	ConfRates.BloodCastle[3] = GetPrivateProfileIntA("MaxRate", "BloodCastleRate4", 80, filename);
-	ConfRates.BloodCastle[4] = GetPrivateProfileIntA("MaxRate", "BloodCastleRate5", 80, filename);
-	ConfRates.BloodCastle[5] = GetPrivateProfileIntA("MaxRate", "BloodCastleRate6", 80, filename);
-	ConfRates.BloodCastle[6] = GetPrivateProfileIntA("MaxRate", "BloodCastleRate7", 80, filename);
-	ConfRates.BloodCastle[7] = GetPrivateProfileIntA("MaxRate", "BloodCastleRate8", 80, filename);
+	Configs.SoulPotionMixRate = GetPrivateProfileInt("PotionsMix", "SoulPotion_SuccessRate", 100, filename);
+	Configs.SoulPotionMixCost = GetPrivateProfileInt("PotionsMix", "SoulPotion_Cost", 100000, filename);
+	Configs.BlessPotionMixRate = GetPrivateProfileInt("PotionsMix", "BlessPotion_SuccessRate", 100, filename);
+	Configs.BlessPotionMixCost = GetPrivateProfileInt("PotionsMix", "BlessPotion_Cost", 50000, filename);
 
-	ConfRates.Illusion[0] = GetPrivateProfileIntA("MaxRate", "IllusionRate1", 70, filename);
-	ConfRates.Illusion[1] = GetPrivateProfileIntA("MaxRate", "IllusionRate2", 70, filename);
-	ConfRates.Illusion[2] = GetPrivateProfileIntA("MaxRate", "IllusionRate3", 70, filename);
-	ConfRates.Illusion[3] = GetPrivateProfileIntA("MaxRate", "IllusionRate4", 70, filename);
-	ConfRates.Illusion[4] = GetPrivateProfileIntA("MaxRate", "IllusionRate5", 70, filename);
-	ConfRates.Illusion[5] = GetPrivateProfileIntA("MaxRate", "IllusionRate6", 70, filename);
+	Configs.ChaosWeaponMixRate = GetPrivateProfileInt("WingsMix", "ChaosWeapon_SuccessRate", 50, filename);
+	Configs.ChaosWeaponMixCost = GetPrivateProfileInt("WingsMix", "ChaosWeapon_ZenCost", 10000, filename);
 
-	ConfRates.PlusLevel10 = GetPrivateProfileIntA("MaxRate", "PlusLevelRate10", 50, filename);
-	ConfRates.PlusLevel11 = GetPrivateProfileIntA("MaxRate", "PlusLevelRate11", 45, filename);
-	ConfRates.PlusLevel12 = GetPrivateProfileIntA("MaxRate", "PlusLevelRate12", 45, filename);
-	ConfRates.PlusLevel13 = GetPrivateProfileIntA("MaxRate", "PlusLevelRate13", 45, filename);
-	ConfRates.AddLuckItems = GetPrivateProfileIntA("MaxRate", "AddRateLuckItems", 25, filename);
+	Configs.WingsLvl1MixRate = GetPrivateProfileInt("WingsMix", "Level1Wings_SuccessRate", 50, filename);
+	Configs.WingsLvl1MixCost = GetPrivateProfileInt("WingsMix", "Level1Wings_ZenCost", 10000, filename);
+	Configs.WingsLvl2MixRate = GetPrivateProfileInt("WingsMix", "Level2Wings_SuccessRate", 25, filename);
+	Configs.WingsLvl2MixCost = GetPrivateProfileInt("WingsMix", "Level2Wings_ZenCost", 5000000, filename);
+	Configs.WingsLvl3MixRate = GetPrivateProfileInt("WingsMix", "Level3Wings_SuccessRate", 70, filename);
+	Configs.WingsLvl3MixCost = GetPrivateProfileInt("WingsMix", "Level3Wings_ZenCost", 200000, filename);
+	Configs.CondorMixRate = GetPrivateProfileInt("WingsMix", "CondorMix_SuccessRate", 70, filename);
+	Configs.CondorMixCost = GetPrivateProfileInt("WingsMix", "CondorMix_Cost", 2000000, filename);
+	Configs.FruitMixRate = GetPrivateProfileInt("FruitMix", "Fruit_SuccessRate", 60, filename);
+	Configs.FruitMixCost = GetPrivateProfileInt("FruitMix", "Fruit_Cost", 2000000, filename);
+	Configs.StoneMixRate = GetPrivateProfileInt("Stone", "LifeStone_SuccessRate", 60, filename);
+	Configs.StoneMixCost = GetPrivateProfileInt("Stone", "LileStone_Cost", 300000, filename);
+	// -----
+	// ****************************************************
+	//  Pets Mixrates
+	// ****************************************************
+	Configs.DarkHorseMixRate = GetPrivateProfileInt("PetsMix", "DarkHorseMix_SuccessRate", 50, filename);
+	Configs.DarkHorseMixCost = GetPrivateProfileInt("PetsMix", "DarkHorseMix_Price", 500000, filename);
+	Configs.DarkRavenMixRate = GetPrivateProfileInt("PetsMix", "DarkRavenMix_SuccessRate", 80, filename);
+	Configs.DarkRavenMixCost = GetPrivateProfileInt("PetsMix", "DarkRavenMix_Price", 2500000, filename);
+	Configs.DinorantMixRate = GetPrivateProfileInt("PetsMix", "DinorantMix_SuccessRate", 60, filename);
+	Configs.DinorantMixCost = GetPrivateProfileInt("PetsMix", "DinorantMix_Price", 500000, filename);
+	// ****************************************************
+	//  BloodCastle Mixrates
+	// ****************************************************
+	// ----
+	Configs.BloodCastleMixSuccess[1] = GetPrivateProfileInt("BloodCastle", "BloodCastle1MixSuccessRate", 0, filename);
+	Configs.BloodCastleMixSuccess[2] = GetPrivateProfileInt("BloodCastle", "BloodCastle2MixSuccessRate", 0, filename);
+	Configs.BloodCastleMixSuccess[3] = GetPrivateProfileInt("BloodCastle", "BloodCastle3MixSuccessRate", 0, filename);
+	Configs.BloodCastleMixSuccess[4] = GetPrivateProfileInt("BloodCastle", "BloodCastle4MixSuccessRate", 0, filename);
+	Configs.BloodCastleMixSuccess[5] = GetPrivateProfileInt("BloodCastle", "BloodCastle5MixSuccessRate", 0, filename);
+	Configs.BloodCastleMixSuccess[6] = GetPrivateProfileInt("BloodCastle", "BloodCastle6MixSuccessRate", 0, filename);
+	Configs.BloodCastleMixSuccess[7] = GetPrivateProfileInt("BloodCastle", "BloodCastle7MixSuccessRate", 0, filename);
 
-	ConfRates.BlessPotion = GetPrivateProfileIntA("MaxRate", "BlessPotionRate", 100, filename);
-	ConfRates.SoulPotion = GetPrivateProfileIntA("MaxRate", "SoulPotionRate", 100, filename);
-	ConfRates.Fruit = GetPrivateProfileIntA("MaxRate", "FruitRate", 90, filename);
-	ConfRates.LifeStone = GetPrivateProfileIntA("MaxRate", "LifeStoneRate", 100, filename);
+	Configs.BloodCastleMixMoney[1] = GetPrivateProfileInt("BloodCastle", "BloodCastle1MixMoney", 0, filename);
+	Configs.BloodCastleMixMoney[2] = GetPrivateProfileInt("BloodCastle", "BloodCastle2MixMoney", 0, filename);
+	Configs.BloodCastleMixMoney[3] = GetPrivateProfileInt("BloodCastle", "BloodCastle3MixMoney", 0, filename);
+	Configs.BloodCastleMixMoney[4] = GetPrivateProfileInt("BloodCastle", "BloodCastle4MixMoney", 0, filename);
+	Configs.BloodCastleMixMoney[5] = GetPrivateProfileInt("BloodCastle", "BloodCastle5MixMoney", 0, filename);
+	Configs.BloodCastleMixMoney[6] = GetPrivateProfileInt("BloodCastle", "BloodCastle6MixMoney", 0, filename);
+	Configs.BloodCastleMixMoney[7] = GetPrivateProfileInt("BloodCastle", "BloodCastle7MixMoney", 0, filename);
+	// ****************************************************
+	//  Illusion Temple Mixrates
+	// ****************************************************
+	// ----
+	Configs.IllusionTempleMixSuccess[0] = GetPrivateProfileInt("IllusionTemple", "IllusionTemple1MixSuccessRate", 70, filename);
+	Configs.IllusionTempleMixSuccess[1] = GetPrivateProfileInt("IllusionTemple", "IllusionTemple2MixSuccessRate", 70, filename);
+	Configs.IllusionTempleMixSuccess[2] = GetPrivateProfileInt("IllusionTemple", "IllusionTemple3MixSuccessRate", 70, filename);
+	Configs.IllusionTempleMixSuccess[3] = GetPrivateProfileInt("IllusionTemple", "IllusionTemple4MixSuccessRate", 70, filename);
+	Configs.IllusionTempleMixSuccess[4] = GetPrivateProfileInt("IllusionTemple", "IllusionTemple5MixSuccessRate", 70, filename);
+	Configs.IllusionTempleMixSuccess[5] = GetPrivateProfileInt("IllusionTemple", "IllusionTemple6MixSuccessRate", 70, filename);
 
-	ConfRates.FenrirLvl1 = GetPrivateProfileIntA("ZenCost", "FenrirRatePart1", 70, filename);
-	ConfRates.FenrirLvl2 = GetPrivateProfileIntA("ZenCost", "FenrirRatePart2", 50, filename);
-	ConfRates.FenrirLvl3 = GetPrivateProfileIntA("ZenCost", "FenrirRatePart3", 30, filename);
-	ConfRates.FenrirLvl4 = GetPrivateProfileIntA("ZenCost", "FenrirRatePart4", 79, filename);
+	Configs.IllusionTempleMixMoney[0] = GetPrivateProfileInt("IllusionTemple", "IllusionTemple1MixMoney", 3000000, filename);
+	Configs.IllusionTempleMixMoney[1] = GetPrivateProfileInt("IllusionTemple", "IllusionTemple2MixMoney", 5000000, filename);
+	Configs.IllusionTempleMixMoney[2] = GetPrivateProfileInt("IllusionTemple", "IllusionTemple3MixMoney", 7000000, filename);
+	Configs.IllusionTempleMixMoney[3] = GetPrivateProfileInt("IllusionTemple", "IllusionTemple4MixMoney", 9000000, filename);
+	Configs.IllusionTempleMixMoney[4] = GetPrivateProfileInt("IllusionTemple", "IllusionTemple5MixMoney", 11000000, filename);
+	Configs.IllusionTempleMixMoney[5] = GetPrivateProfileInt("IllusionTemple", "IllusionTemple6MixMoney", 13000000, filename);
+	// ****************************************************
+	//  Devil Square Mixrates
+	// ****************************************************
+	// ----
+	Configs.DevilSquareMixSuccess[0] = GetPrivateProfileInt("DevilSquare", "DevilSquare1MixSuccessRate", 60, filename);
+	Configs.DevilSquareMixSuccess[1] = GetPrivateProfileInt("DevilSquare", "DevilSquare2MixSuccessRate", 75, filename);
+	Configs.DevilSquareMixSuccess[2] = GetPrivateProfileInt("DevilSquare", "DevilSquare3MixSuccessRate", 70, filename);
+	Configs.DevilSquareMixSuccess[3] = GetPrivateProfileInt("DevilSquare", "DevilSquare4MixSuccessRate", 65, filename);
+	Configs.DevilSquareMixSuccess[4] = GetPrivateProfileInt("DevilSquare", "DevilSquare5MixSuccessRate", 60, filename);
+	Configs.DevilSquareMixSuccess[5] = GetPrivateProfileInt("DevilSquare", "DevilSquare6MixSuccessRate", 55, filename);
+	Configs.DevilSquareMixSuccess[6] = GetPrivateProfileInt("DevilSquare", "DevilSquare7MixSuccessRate", 50, filename);
+	Configs.DevilSquareMixSuccess[7] = GetPrivateProfileInt("DevilSquare", "DevilSquare8MixSuccessRate", 45, filename);
 
-	ConfRates.ShieldPotionLvl1 = GetPrivateProfileIntA("ZenCost", "ShieldPotionMixLvl1", 50, filename);
-	ConfRates.ShieldPotionLvl2 = GetPrivateProfileIntA("ZenCost", "ShieldPotionMixLvl1", 30, filename);
-	ConfRates.ShieldPotionLvl3 = GetPrivateProfileIntA("ZenCost", "ShieldPotionMixLvl1", 30, filename);
-
-	/************************************************************************/
-	/*                               Load Cost Mix                          */
-	/************************************************************************/
-	ConfCostZen.FirstWings = GetPrivateProfileIntA("ZenCost", "FirstWingsZen", 10000, filename);
-	ConfCostZen.SecondWings = GetPrivateProfileIntA("ZenCost", "SecondWingsZen", 5000000, filename);
-	ConfCostZen.CapeOfLord = GetPrivateProfileIntA("ZenCost", "CapeOfLordZen", 5000000, filename);
-	ConfCostZen.Condor = GetPrivateProfileIntA("ZenCost", "CondorZen", 200000, filename);
-	ConfCostZen.ThirdWings = GetPrivateProfileIntA("ZenCost", "ThirdWingsZen", 200000, filename);
-	ConfCostZen.DarkHourse = GetPrivateProfileIntA("ZenCost", "DarkHourseZen", 5000000, filename);
-	ConfCostZen.DarkRaven = GetPrivateProfileIntA("ZenCost", "DarkRavenZen", 1000000, filename);
-	ConfCostZen.Dinorant = GetPrivateProfileIntA("ZenCost", "DinorantZen", 500000, filename);
-
-	ConfCostZen.DevilSquare[0] = GetPrivateProfileIntA("ZenCost", "DevilSquareZen0", 100000, filename);
-	ConfCostZen.DevilSquare[1] = GetPrivateProfileIntA("ZenCost", "DevilSquareZen1", 100000, filename);
-	ConfCostZen.DevilSquare[2] = GetPrivateProfileIntA("ZenCost", "DevilSquareZen2", 200000, filename);
-	ConfCostZen.DevilSquare[3] = GetPrivateProfileIntA("ZenCost", "DevilSquareZen3", 400000, filename);
-	ConfCostZen.DevilSquare[4] = GetPrivateProfileIntA("ZenCost", "DevilSquareZen4", 700000, filename);
-	ConfCostZen.DevilSquare[5] = GetPrivateProfileIntA("ZenCost", "DevilSquareZen5", 1100000, filename);
-	ConfCostZen.DevilSquare[6] = GetPrivateProfileIntA("ZenCost", "DevilSquareZen6", 1600000, filename);
-	ConfCostZen.DevilSquare[7] = GetPrivateProfileIntA("ZenCost", "DevilSquareZen7", 2100000, filename);
-
-	ConfCostZen.BloodCastle[0] = GetPrivateProfileIntA("ZenCost", "BloodCastleZen1", 50000, filename);
-	ConfCostZen.BloodCastle[1] = GetPrivateProfileIntA("ZenCost", "BloodCastleZen2", 80000, filename);
-	ConfCostZen.BloodCastle[2] = GetPrivateProfileIntA("ZenCost", "BloodCastleZen3", 150000, filename);
-	ConfCostZen.BloodCastle[3] = GetPrivateProfileIntA("ZenCost", "BloodCastleZen4", 250000, filename);
-	ConfCostZen.BloodCastle[4] = GetPrivateProfileIntA("ZenCost", "BloodCastleZen5", 400000, filename);
-	ConfCostZen.BloodCastle[5] = GetPrivateProfileIntA("ZenCost", "BloodCastleZen6", 600000, filename);
-	ConfCostZen.BloodCastle[6] = GetPrivateProfileIntA("ZenCost", "BloodCastleZen7", 850000, filename);
-	ConfCostZen.BloodCastle[7] = GetPrivateProfileIntA("ZenCost", "BloodCastleZen8", 1000000, filename);
-
-	ConfCostZen.Illusion[0] = GetPrivateProfileIntA("ZenCost", "IllusionZen1", 3000000, filename);
-	ConfCostZen.Illusion[1] = GetPrivateProfileIntA("ZenCost", "IllusionZen2", 5000000, filename);
-	ConfCostZen.Illusion[2] = GetPrivateProfileIntA("ZenCost", "IllusionZen3", 7000000, filename);
-	ConfCostZen.Illusion[3] = GetPrivateProfileIntA("ZenCost", "IllusionZen4", 9000000, filename);
-	ConfCostZen.Illusion[4] = GetPrivateProfileIntA("ZenCost", "IllusionZen5", 11000000, filename);
-	ConfCostZen.Illusion[5] = GetPrivateProfileIntA("ZenCost", "IllusionZen6", 13000000, filename);
-
-	ConfCostZen.PlusLevel10 = GetPrivateProfileIntA("ZenCost", "PlusLevelZen10", 2000000, filename);
-	ConfCostZen.PlusLevel11 = GetPrivateProfileIntA("ZenCost", "PlusLevelZen11", 4000000, filename);
-	ConfCostZen.PlusLevel12 = GetPrivateProfileIntA("ZenCost", "PlusLevelZen12", 6000000, filename);
-	ConfCostZen.PlusLevel13 = GetPrivateProfileIntA("ZenCost", "PlusLevelZen13", 8000000, filename);
-
-	ConfCostZen.BlessPotion = GetPrivateProfileIntA("ZenCost", "BlessPotionZen", 100000, filename);
-	ConfCostZen.SoulPotion = GetPrivateProfileIntA("ZenCost", "SoulPotionZen", 50000, filename);
-	ConfCostZen.Fruit = GetPrivateProfileIntA("ZenCost", "FruitZen", 3000000, filename);
-	ConfCostZen.LifeStone = GetPrivateProfileIntA("ZenCost", "LifeStoneZen", 5000000, filename);
-
-	ConfCostZen.FenrirLvl1 = GetPrivateProfileIntA("ZenCost", "FenrirZenPart1", 0, filename);
-	ConfCostZen.FenrirLvl2 = GetPrivateProfileIntA("ZenCost", "FenrirZenPart2", 0, filename);
-	ConfCostZen.FenrirLvl3 = GetPrivateProfileIntA("ZenCost", "FenrirZenPart3", 10000000, filename);
-	ConfCostZen.FenrirLvl4 = GetPrivateProfileIntA("ZenCost", "FenrirZenPart4", 10000000, filename);
-
-	ConfCostZen.ShieldPotionLvl1 = GetPrivateProfileIntA("ZenCost", "ShieldPotionMixLvl1", 100000, filename);
-	ConfCostZen.ShieldPotionLvl2 = GetPrivateProfileIntA("ZenCost", "ShieldPotionMixLvl1", 500000, filename);
-	ConfCostZen.ShieldPotionLvl3 = GetPrivateProfileIntA("ZenCost", "ShieldPotionMixLvl1", 1000000, filename);
-
-	/************************************************************************/
-	/*								Div Values                              */
-	/************************************************************************/
-	DivValues.DivFirstWings = GetPrivateProfileIntA("DivValueRate", "DivFirstWings", 20000, filename);
-	DivValues.MainDivSecondWings = GetPrivateProfileIntA("DivValueRate", "MainDivSecondWings", 4000000, filename);
-	DivValues.SubDivSecondWings = GetPrivateProfileIntA("DivValueRate", "SubDivSecondWings", 40000, filename);
-	DivValues.DivCondor = GetPrivateProfileIntA("DivValueRate", "DivCondor", 300000, filename);
-	DivValues.DivThirdWings = GetPrivateProfileIntA("DivValueRate", "DivThirdWings", 3000000, filename);
-	DivValues.FisrtDivFenrir4 = GetPrivateProfileIntA("DivValueRate", "FisrtDivFenrirPart4", 100, filename);
-	DivValues.SecondDivFenrir4 = GetPrivateProfileIntA("DivValueRate", "SecondDivFenrirPart4", 3000000, filename);
-
-	/************************************************************************/
-	/*                           LoadSubConfig                              */
-	/************************************************************************/
-	/*this->SecondWingsExcRate = GetPrivateProfileIntA("MaxRate", "SecondWingsExcRate", 30, filename);
-	this->SecondWingsMaxOpt = GetPrivateProfileIntA("MaxRate", "SecondWingsMaxOpt", 3, filename);
-	this->ThirdWingsExcRate = GetPrivateProfileIntA("MaxRate", "ThirdWingsExcRate", 20, filename);
-	this->ThirdWingsMaxOpt = GetPrivateProfileIntA("MaxRate", "ThirdWingsMaxOpt", 2, filename);*/
+	Configs.DevilSquareMixMoney[0] = GetPrivateProfileInt("DevilSquare", "DevilSquareZen1", 100000, filename);
+	Configs.DevilSquareMixMoney[1] = GetPrivateProfileInt("DevilSquare", "DevilSquareZen2", 100000, filename);
+	Configs.DevilSquareMixMoney[2] = GetPrivateProfileInt("DevilSquare", "DevilSquareZen3", 200000, filename);
+	Configs.DevilSquareMixMoney[3] = GetPrivateProfileInt("DevilSquare", "DevilSquareZen4", 400000, filename);
+	Configs.DevilSquareMixMoney[4] = GetPrivateProfileInt("DevilSquare", "DevilSquareZen5", 700000, filename);
+	Configs.DevilSquareMixMoney[5] = GetPrivateProfileInt("DevilSquare", "DevilSquareZen6", 1100000, filename);
+	Configs.DevilSquareMixMoney[6] = GetPrivateProfileInt("DevilSquare", "DevilSquareZen7", 1600000, filename);
+	Configs.DevilSquareMixMoney[7] = GetPrivateProfileInt("DevilSquare", "DevilSquareZen8", 2100000, filename);
 }
 
 void LoadCommands(char* filename)
 {
+	Configs.AddPointEnabled = GetPrivateProfileInt("AddCommand", "AddPointEnabled", 1, filename);
+	Configs.AddPointLevelReq = GetPrivateProfileInt("AddCommand", "AddPointLevelReq", 10, filename);
+	Configs.AddPriceZen = GetPrivateProfileInt("AddCommand", "AddPriceZen", 100000, filename);
+	Configs.MaxAddedStats = GetPrivateProfileInt("AddCommand", "MaxAddedStats", 100, filename);
+
 	//Post
 	Configs.CmdPostEnabled = GetPrivateProfileInt("Post", "PostEnabled", 1, filename);
 	Configs.CmdPostMoney = GetPrivateProfileInt("Post", "PostMoney", 50000, filename);
 	Configs.CmdPostLevel = GetPrivateProfileInt("Post", "PostLevel", 50, filename);
 	Configs.CmdPostAF = GetPrivateProfileInt("Post", "PostAntiFloodSec", 3, filename);
+	//Skin
+	Configs.SkinEnabled = GetPrivateProfileInt("Skin", "SkinEnabled", 1, filename);
+	Configs.SkinOnlyForGm = GetPrivateProfileInt("Skin", "SkinOnlyForGm", 0, filename);
+	Configs.SkinLevelReq = GetPrivateProfileInt("Skin", "SkinLevelReq", 100, filename);
+	Configs.SkinPriceZen = GetPrivateProfileInt("Skin", "SkinPriceZen", 100000, filename);
 
+	//PkClear
+	Configs.PkClearEnabled = GetPrivateProfileInt("PkClear", "PkClearEnabled", 1, filename);
+	Configs.PkClearOnlyForGm = GetPrivateProfileInt("PkClear", "PkClearOnlyForGm", 0, filename);
+	Configs.PkClearLevelReq = GetPrivateProfileInt("PkClear", "PkClearLevelReq", 100, filename);
+	Configs.PKClearType = GetPrivateProfileInt("PkClear", "PKClearType", 2, filename);
+	Configs.PkClearPriceZen = GetPrivateProfileInt("PkClear", "PkClearPriceZen", 100000, filename);
 
+	//GmCommands
+	Configs.Drop = GetPrivateProfileInt("Drop", "DropEnabled", 1, filename);
+	Configs.Gmove = GetPrivateProfileInt("Gmove", "GMoveEnabled", 1, filename);
+	Configs.Online = GetPrivateProfileInt("Online", "OnlineEnabled", 1, filename);
+	Configs.Time = GetPrivateProfileInt("Time", "TimeEnabled", 1, filename);
+	Configs.SetZen = GetPrivateProfileInt("SetZen", "SetZenEnabled", 1, filename);
+	Configs.GG = GetPrivateProfileInt("GG", "GGEnabled", 1, filename);
+	Configs.BanChar = GetPrivateProfileInt("BanChar", "BanCharEnabled", 1, filename);
+	Configs.SetPK = GetPrivateProfileInt("SetPK", "SetPKEnabled", 1, filename);
+	Configs.Status = GetPrivateProfileInt("Status", "StatusEnabled", 1, filename);
+	Configs.Reload = GetPrivateProfileInt("Reload", "ReloadEnabled", 1, filename);
 }
 
 void GameServerInfoSendStop()

@@ -930,8 +930,8 @@ bool CBloodCastle::CheckEnterFreeTicket(int iIndex)
 }
 
 
-static const int g_iBC_ChoasMixSuccessRate[MAX_BLOOD_CASTLE_LEVEL] = { 80, 80, 80, 80, 80, 80, 80 };
-static const int g_iBC_ChoasMixMoney[MAX_BLOOD_CASTLE_LEVEL] = {50000 , 80000 , 150000, 250000, 400000, 600000, 850000};
+static const int g_iBC_ChoasMixSuccessRate[MAX_BLOOD_CASTLE_LEVEL] = { Configs.BloodCastleMixSuccess[1], Configs.BloodCastleMixSuccess[2], Configs.BloodCastleMixSuccess[3], Configs.BloodCastleMixSuccess[4], Configs.BloodCastleMixSuccess[5], Configs.BloodCastleMixSuccess[6], Configs.BloodCastleMixSuccess[7] };
+static const int g_iBC_ChoasMixMoney[MAX_BLOOD_CASTLE_LEVEL] = { Configs.BloodCastleMixMoney[1] , Configs.BloodCastleMixMoney[2] , Configs.BloodCastleMixMoney[3], Configs.BloodCastleMixMoney[4], Configs.BloodCastleMixMoney[5], Configs.BloodCastleMixMoney[6], Configs.BloodCastleMixMoney[7] };
 
 
 bool CBloodCastle::BloodCastleChaosMix(int iIndex, int iLEVEL)
