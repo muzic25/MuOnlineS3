@@ -9,7 +9,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#define MAX_TYPE_PLAYER 6
+#define MAX_TYPE_PLAYER 5
 #define MAX_ITEM_LEVEL	15
 // ItemAttribute Begin:9439368 END 9446B68 Array[512]
 

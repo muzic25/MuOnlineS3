@@ -123,11 +123,32 @@ BOOL CObjBaseAttack::PkCheck(LPOBJ lpObj, LPOBJ lpTargetObj)
 {
 	if (Configs.gLanguage == 0 || Configs.gLanguage == 2 || Configs.gLanguage == 4)
 	{
-		if ( lpObj->Type == OBJ_USER )
+		if (lpObj->Type == OBJ_USER)
 		{
-			if (lpObj->m_PK_Level >= 6 )
+			BOOL bPlayerKiller = FALSE; //Season 2.5 add-on
+
+			if (lpObj->PartyNumber >= 0) //Season 2.5 add-on
 			{
-				if ( lpObj->m_PK_Count >= 3 )
+				if (gParty.GetPkLevel(lpObj->PartyNumber) >= 6)
+				{
+					bPlayerKiller = TRUE;
+				}
+			}
+			else if (lpObj->m_PK_Level >= 6)
+			{
+				bPlayerKiller = TRUE;
+			}
+
+			if (bPlayerKiller == TRUE) //Season 2.5 add-on
+			{
+				if (lpObj->PartyNumber >= 0)
+				{
+					if (Configs.gPkLimitFree == FALSE)
+					{
+						return FALSE;
+					}
+				}
+				else if (lpObj->m_PK_Count >= 3)
 				{
 					if (Configs.gPkLimitFree == FALSE)
 					{
@@ -183,7 +204,12 @@ BOOL CObjBaseAttack::PkCheck(LPOBJ lpObj, LPOBJ lpTargetObj)
 			}
 		}
 
-		if ( CC_MAP_RANGE(lpObj->MapNumber) != FALSE )
+		if (IT_MAP_RANGE(lpObj->MapNumber) != FALSE) //season2.5 add-on
+		{
+			//
+		}
+
+		else if ( CC_MAP_RANGE(lpObj->MapNumber) != FALSE )
 		{
 			if ( g_ChaosCastle.GetCurrentState(lpObj->MapNumber-MAP_INDEX_CHAOSCASTLE1) != 2 )
 			{
@@ -215,9 +241,30 @@ BOOL CObjBaseAttack::PkCheck(LPOBJ lpObj, LPOBJ lpTargetObj)
 
 		if (Configs.gLanguage == 0 || Configs.gLanguage == 2)
 		{
-			if (lpObj->m_PK_Level >= 6 )
+			BOOL bPlayerKiller = FALSE; //Season 2.5 add-on
+
+			if (lpObj->PartyNumber >= 0) //Season 2.5 add-on
 			{
-				if ( lpObj->m_PK_Count >= 3 )
+				if (gParty.GetPkLevel(lpObj->PartyNumber) >= 6)
+				{
+					bPlayerKiller = TRUE;
+				}
+			}
+			else if (lpObj->m_PK_Level >= 6)
+			{
+				bPlayerKiller = TRUE;
+			}
+
+			if (bPlayerKiller == TRUE) //Season 2.5 add-on
+			{
+				if (lpObj->PartyNumber >= 0)
+				{
+					if (Configs.gPkLimitFree == FALSE)
+					{
+						return FALSE;
+					}
+				}
+				else if (lpObj->m_PK_Count >= 3)
 				{
 					if (Configs.gPkLimitFree == FALSE)
 					{
@@ -225,21 +272,47 @@ BOOL CObjBaseAttack::PkCheck(LPOBJ lpObj, LPOBJ lpTargetObj)
 					}
 				}
 			}
-			
-			if (lpTargetObj->m_PK_Level >= 6 )
+
+			bPlayerKiller = FALSE; //Season 2.5 add-on
+
+			if (lpTargetObj->PartyNumber >= 0) //Season 2.5 add-on
 			{
-				if ( lpTargetObj->m_PK_Count >= 3 )
+				if (gParty.GetPkLevel(lpTargetObj->PartyNumber) >= 6)
+				{
+					bPlayerKiller = TRUE;
+				}
+			}
+			else if (lpTargetObj->m_PK_Level >= 6)
+			{
+				bPlayerKiller = TRUE;
+			}
+
+			
+			if (bPlayerKiller == 1) //Season 2.5 add-on
+			{
+				if (lpTargetObj->PartyNumber >= 0)
 				{
 					if (Configs.gPkLimitFree == FALSE)
-					{ 
-						if ( g_CastleSiege.GetCastleState() != CASTLESIEGE_STATE_STARTSIEGE )
-						{ 
-						return FALSE; 
-						} 
+					{
+						if (g_CastleSiege.GetCastleState() != CASTLESIEGE_STATE_STARTSIEGE)
+						{
+							return FALSE;
+						}
+
+					}
+				}
+				else if (lpTargetObj->m_PK_Count >= 3)
+				{
+					if (Configs.gPkLimitFree == FALSE)
+					{
+						if (g_CastleSiege.GetCastleState() != CASTLESIEGE_STATE_STARTSIEGE)
+						{
+							return FALSE;
+						}
+
 					}
 				}
 			}
-
 		}
 	}
 	return TRUE;

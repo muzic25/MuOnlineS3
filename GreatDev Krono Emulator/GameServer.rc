@@ -99,7 +99,7 @@ BEGIN
         MENUITEM "Reload DevilSquare",          IDM_RELOAD_DEVILSQUARE
         MENUITEM "Reload BloodCastle",          IDM_RELOAD_BLOODCASTLE
         MENUITEM "Reload ChaosCastle",          IDM_RELOAD_CHAOSCASTLE
-        MENUITEM "Reload Illusion Temple",      IDM_MONSTER_POSITION_RELOAD
+        MENUITEM "Reload Illusion Temple",      IDM_EVENTLOAD_RELOADILLUSIONTEMPLE
         MENUITEM SEPARATOR
         MENUITEM "Reload UnderWorld Attack",    IDM_RELOAD_UNDERWORLD_ATTACK
         MENUITEM "Reload GoldenTroop Attack",   IDM_RELOAD_GOLDENTROOP_ATTACK
@@ -278,7 +278,9 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDI_NORMAL_V1           ICON                    "GameServer.ico"
+
 IDI_ICON_MINIMIZED      ICON                    "small.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -309,6 +311,7 @@ LANGUAGE LANG_SPANISH, SUBLANG_SPANISH_PERU
 //
 
 IDB_BITMAP              BITMAP                  "bitmap.bmp"
+
 #endif    // Spanish (Peru) resources
 /////////////////////////////////////////////////////////////////////////////
 

@@ -1056,11 +1056,37 @@ BOOL CObjAttack::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf* lpMagic,  int
 		}
 	}
 
-	if ( selfdefense == TRUE && bDamageReflect == FALSE )
+	if (lpObj->PartyNumber >= 0) //Season 2.5 add-on
 	{
-		if ( !gObjTargetGuildWarCheck(lpObj, lpCallObj) )
+		if (lpCallObj->PartyNumber >= 0)
 		{
-			gObjCheckSelfDefense(lpObj, lpCallObj->m_Index);
+			if (lpObj->PartyNumber == lpCallObj->PartyNumber)
+			{
+				selfdefense = FALSE;
+			}
+		}
+
+	}
+
+
+	if (selfdefense == TRUE && bDamageReflect == FALSE)
+	{
+		if (!gObjTargetGuildWarCheck(lpObj, lpCallObj))
+		{
+			if (lpCallObj->PartyNumber >= 0) //Season 2.5 add-on
+			{
+				int number = 0;
+				int partynum = lpCallObj->PartyNumber;
+
+				if ((gParty.GetPkLevel(partynum)) < 5)
+				{
+					gObjCheckSelfDefense(lpObj, lpCallObj->m_Index);
+				}
+			}
+			else
+			{
+				gObjCheckSelfDefense(lpObj, lpCallObj->m_Index);
+			}
 		}
 	}
 

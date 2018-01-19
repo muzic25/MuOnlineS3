@@ -384,3 +384,73 @@ void PartyClass::PartyMemberLifeSend(int party_number)
 	}
 }
 
+
+BYTE PartyClass::GetPkLevel(int party_number) //Season 2.5 add-on Identical
+{
+	return this->m_PartyS[party_number].m_PartyPkLevel;
+}
+
+void PartyClass::SetPkLevel(int party_number, int usernumber, int dbnumber, BYTE pklevel) //Season 2.5 add-on Identical
+{
+	if (this->IsParty(party_number) == FALSE)
+	{
+		return;
+	}
+
+	for (int i = 0; i<MAX_USER_IN_PARTY; i++)
+	{
+		if ((this->m_PartyS[party_number].Number[i] == usernumber) && (this->m_PartyS[party_number].DbNumber[i] == dbnumber))
+		{
+			this->m_PartyS[party_number].m_PkLevel[i] = pklevel;
+			break;
+		}
+	}
+}
+
+void PartyClass::SetPkCount(int party_number) //Season 2.5 add-on Identical
+{
+	int PKUserCount = 0;//lc2
+	int usern = 0;//lc3
+
+	for (int i = 0; i<MAX_USER_IN_PARTY; i++)
+	{
+		usern = this->m_PartyS[party_number].Number[i];
+
+		if (usern >= 0 && this->m_PartyS[party_number].m_PkLevel[i] >= 5)
+		{
+			if (this->m_PartyS[party_number].m_PartyPkLevel  < this->m_PartyS[party_number].m_PkLevel[i])
+			{
+				this->m_PartyS[party_number].m_PartyPkLevel = this->m_PartyS[party_number].m_PkLevel[i];
+			}
+			PKUserCount++;
+		}
+	}
+
+	this->m_PartyS[party_number].m_PkCount = PKUserCount;
+
+	if (PKUserCount == 0)
+	{
+		this->m_PartyS[party_number].m_PartyPkLevel = 3;
+	}
+}
+
+void PartyClass::ResetPkLevel(int party_number) //Season 2.5 add-on Identical
+{
+	int usern = 0;
+
+	for (int i = 0; i<MAX_USER_IN_PARTY; i++)
+	{
+		usern = this->m_PartyS[party_number].Number[i];
+
+		if (usern >= 0)
+		{
+			this->m_PartyS[party_number].Number[0] = this->m_PartyS[party_number].Number[i];
+			this->m_PartyS[party_number].Number[i] = -1;
+			this->m_PartyS[party_number].DbNumber[0] = this->m_PartyS[party_number].DbNumber[i];
+			this->m_PartyS[party_number].DbNumber[i] = -1;
+			this->m_PartyS[party_number].m_PkLevel[0] = this->m_PartyS[party_number].m_PkLevel[i];
+			this->m_PartyS[party_number].m_PkLevel[i] = 3;
+			break;
+		}
+	}
+}

@@ -620,6 +620,7 @@
     <None Include="MuServer\Data\Events\Crywolf.dat" />
     <None Include="MuServer\Data\Events\DevilSquare.dat" />
     <None Include="MuServer\Data\Events\EventManagement.dat" />
+    <None Include="MuServer\Data\Events\IllusionTemple.dat" />
     <None Include="MuServer\Data\Events\Kanturu.dat" />
     <None Include="MuServer\Data\Events\MuCastleData.dat" />
     <None Include="MuServer\Data\Events\RingAttackEvent.dat" />

@@ -314,7 +314,7 @@ void CIllusionTempleProcess::ProcState_Closed(int iTick)
 
 			this->RemoveInvalid();
 
-			if(this->m_iEnteredUserCount < 4) //UserCount
+			if(this->m_iEnteredUserCount < m_i_IT_MinPlayer) //UserCount
 			{
 				for( int n = 0; n < MAX_FLOOR_USER; n++ )
 				{
@@ -343,7 +343,7 @@ void CIllusionTempleProcess::ProcState_Closed(int iTick)
 							{
 								LogAddTD("[Illusion Temple] (%d) Payback to User Failed (%s)(%s) Scroll Not Found", this->m_btFloorIndex+1, gObj[this->m_FloorData[n].m_iTeamPlayerIndex].AccountID, gObj[this->m_FloorData[n].m_iTeamPlayerIndex].Name);
 							}
-							gObjMoveGate(this->m_FloorData[n].m_iTeamPlayerIndex, 267); //Elbeland
+							gObjMoveGate(this->m_FloorData[n].m_iTeamPlayerIndex, 22); //Devias
 						}
 					}
 				}
@@ -744,7 +744,7 @@ void CIllusionTempleProcess::SetState_NONE()
 			{
 				if( gObj[this->m_FloorData[i].m_iTeamPlayerIndex].MapNumber == (this->m_btFloorIndex + MAP_INDEX_ILLUSIONTEMPLE) )
 				{
-					gObjMoveGate(this->m_FloorData[i].m_iTeamPlayerIndex, 267); //Elbeland
+					gObjMoveGate(this->m_FloorData[i].m_iTeamPlayerIndex, 22); //Devias
 #if(DEBUG_IT == 1)
 				GCServerMsgStringSend("CIllusionTempleProcess::SetState_NONE()", this->m_FloorData[i].m_iTeamPlayerIndex, 0);
 #endif
@@ -989,7 +989,7 @@ int CIllusionTempleProcess::GetFloorIndex(int aIndex) //Identical (Unused)
 	if( lpObj->Level < 351 ) return 3;
 	if( lpObj->Level < 381 ) return 4;
 	if( lpObj->Level <= 400 && lpObj->ChangeUP3rd == 0) return 5;
-	if( lpObj->Level == 400 && lpObj->ChangeUP3rd != 0){ if(g_iUseMaxLevelIllusionTemple != 0){	return 6;}else{return 5;}};
+	if( lpObj->Level == 400 && lpObj->ChangeUP3rd != 0){ if(g_iUseMaxLevelIllusionTemple != 0){	return 5;}else{return 5;}};
 	return -1;
 }
 
@@ -1754,8 +1754,10 @@ void CIllusionTempleProcess::NotifyTempleInfo(BYTE btState, int aIndex)
 
 	PHeadSubSetB((LPBYTE)&pMsg, 0xBF, 0x09, sizeof(pMsg));
 
-	pMsg.m_btFloorIndex = this->m_btFloorIndex;
+	pMsg.m_btFloorIndex = 0;
 	pMsg.m_btState = btState;
+
+	//LogAddTD("pMsg.m_btFloorIndex: %d pMsg.m_btState: %d aIndex: %d ",pMsg.m_btFloorIndex, pMsg.m_btState, aIndex);
 
 	if(aIndex != -1)
 	{
@@ -2790,20 +2792,19 @@ void CIllusionTempleProcess::SendRewardScore()
 
 	loc2 += sizeof(_ILLUSIONTEMPLE_RANKING_DATA);
 
-	int i;
-
-	for(i = 0; i < MAX_FLOOR_USER; i++)
+	for(int i = 0; i < MAX_FLOOR_USER; i++)
 	{
 		_ILLUSIONTEMPLE_PLAYER_RANK_DATA TempMsg;
 
 		if(this->m_FloorData[i].m_iTeamPlayerIndex != -1 && gObj[this->m_FloorData[i].m_iTeamPlayerIndex].Connected > PLAYER_LOGGED)
 		{
-			memcpy(TempMsg.szCharacterName, gObj[this->m_FloorData[i].m_iTeamPlayerIndex].Name, 10);
-			TempMsg.m_btMapNumber = this->m_btFloorIndex + MAP_INDEX_ILLUSIONTEMPLE_MIN;
-			TempMsg.m_btTeamJoinSide = this->m_FloorData[i].m_btTeamJoinSide;
+			
+		//	TempMsg.m_btMapNumber = this->m_btFloorIndex + MAP_INDEX_ILLUSIONTEMPLE_MIN;
+			TempMsg.ChangeUP = gObj[this->m_FloorData[i].m_iTeamPlayerIndex].ChangeUP;
 			TempMsg.m_btClass = gObj[this->m_FloorData[i].m_iTeamPlayerIndex].Class;
-			TempMsg.m_dwExpReward = this->m_FloorData[i].m_i64ExpReward;
-
+			TempMsg.m_btTeamJoinSide = this->m_FloorData[i].m_btTeamJoinSide;
+			//TempMsg.m_dwExpReward = this->m_FloorData[i].m_i64ExpReward;
+			memcpy(TempMsg.szCharacterName, gObj[this->m_FloorData[i].m_iTeamPlayerIndex].Name, 10);
 			memcpy(&cTEMP_BUF[loc2],&TempMsg,sizeof(_ILLUSIONTEMPLE_PLAYER_RANK_DATA));
 
 			loc2 += sizeof(_ILLUSIONTEMPLE_PLAYER_RANK_DATA);
@@ -2816,7 +2817,7 @@ void CIllusionTempleProcess::SendRewardScore()
 
 	memcpy(cTEMP_BUF,&pMsg,sizeof(pMsg));
 
-	for(i = 0; i < MAX_FLOOR_USER; i++)
+	for(int i = 0; i < MAX_FLOOR_USER; i++)
 	{
 		if(this->m_FloorData[i].m_btTeamJoinSide == (BYTE)-1)
 		{

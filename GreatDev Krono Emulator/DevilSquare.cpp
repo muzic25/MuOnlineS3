@@ -11,12 +11,22 @@ unsigned int __stdcall DevilSquareThreadFunc(void * p)
 
 void DevilSquareEventProtocolCore(BYTE protoNum, LPBYTE aRecv, int aLen)
 {
-	#ifdef TRACE_PROTOCOL
-		LogAddHeadHex("DEVIL_SQUARE", aRecv, aLen);
-	#endif
-	switch ( protoNum )
+	LogAddC(2, "HEAD: %x",protoNum);
+	//LogAdd("DEVIL_SQUARE %x %x", aRecv, aLen);
+	switch (protoNum)
 	{
+	case 11: //Receive the EnterCount for BloodCastle on T Key
+		EGAnsBloodCastleEnterCount((PMSG_ANS_BLOODCASTLE_ENTERCOUNT *)aRecv);
+		break;
+	case 18: //To enter Illusion Temple Increasing the EnterCount thru Ranking Server
+		g_IllusionTempleEvent.EGAnsIllusionTempleEnter((PMSG_ANS_ILLUSIONTEMPLE_ENTER_RESULT *)aRecv);
+		break;
+	case 20: //Receive the EnterCount for IllusionTemple on T Key
+		g_IllusionTempleEvent.EGAnsIllusionTempleEnterCount((PMSG_ANS_ILLUSIONTEMPLE_ENTERCOUNT *)aRecv);
+		break;
+
 	}
+
 }
 
 

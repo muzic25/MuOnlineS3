@@ -78,7 +78,45 @@ BOOL gObjMonsterRegen(LPOBJ lpObj)
 		gObjViewportListProtocolCreate(lpObj);
 		return FALSE;
 	}
-	else if ( gMSetBase.GetPosition(lpObj->m_PosNum, lpObj->MapNumber, lpObj->X, lpObj->Y) == FALSE )
+	else if (gMSetBase.GetPosition(lpObj->m_PosNum, lpObj->MapNumber, lpObj->X, lpObj->Y) == FALSE)
+	{
+		if (lpObj->m_Attribute == 62)
+		{
+			BYTE cX = lpObj->X;
+			BYTE cY = lpObj->Y;
+
+			if (gObjGetRandomFreeLocation(lpObj->MapNumber, (BYTE&)cX, (BYTE&)cY, 5, 5, 30) == FALSE)
+			{
+				return FALSE;
+			}
+			else
+			{
+				lpObj->X = cX;
+				lpObj->Y = cY;
+			}
+		}
+		else
+		{
+			lpObj->Live = FALSE;
+			lpObj->m_State = 4;
+			lpObj->RegenTime = GetTickCount();
+			lpObj->DieRegen = TRUE;
+			return FALSE;
+		}
+	}
+	else
+	{
+
+		lpObj->MTX = lpObj->X;
+		lpObj->MTY = lpObj->Y;
+		lpObj->TX = lpObj->X;
+		lpObj->TY = lpObj->Y;
+		lpObj->StartX = lpObj->X;
+		lpObj->StartY = lpObj->Y;
+	}
+
+
+	/*else if ( gMSetBase.GetPosition(lpObj->m_PosNum, lpObj->MapNumber, lpObj->X, lpObj->Y) == FALSE )
 	{
 		if(lpObj->m_Attribute == 62)
 		{
@@ -110,7 +148,7 @@ EndLabel:
 		lpObj->TY = lpObj->Y;
 		lpObj->StartX = lpObj->X;
 		lpObj->StartY = lpObj->Y;
-	}
+	}*/
 
 
 	gObjMonsterHitDamageInit(lpObj);
@@ -652,21 +690,41 @@ int gObjGuardSearchEnemy(LPOBJ lpObj)
 
 		if ( tObjNum >= 0 )
 		{
-			if ( gObj[tObjNum].Type == OBJ_USER && gObj[tObjNum].m_PK_Level > 4 )
+			BOOL bEnableAttack = FALSE; //Season 2.5 add-on
+
+			if (gObj[tObjNum].PartyNumber >= 0) //Season 2.5 add-on
 			{
-				attr = MapC[gObj[tObjNum].MapNumber].GetAttr(gObj[tObjNum].X, gObj[tObjNum].Y);
-
-				if ( (attr&1) != 1 )
+				if (gParty.GetPkLevel(gObj[tObjNum].PartyNumber) > 4)
 				{
-					tx = lpObj->X - gObj[tObjNum].X;
-					ty = lpObj->Y - gObj[tObjNum].Y;
-					dis = sqrt((double)tx * tx + ty * ty);
-					lpObj->VpPlayer2[n].dis = dis;
+					bEnableAttack = TRUE;
+				}
 
-					if ( dis < mindis )
+			}
+			else if (gObj[tObjNum].m_PK_Level > 4)
+			{
+				bEnableAttack = TRUE;
+			}
+
+
+
+			if ( gObj[tObjNum].Type == OBJ_USER )
+			{
+				if (bEnableAttack == TRUE) //Season 2.5 add-on
+				{
+					attr = MapC[gObj[tObjNum].MapNumber].GetAttr(gObj[tObjNum].X, gObj[tObjNum].Y);
+
+					if ((attr & 1) != 1)
 					{
-						searchtarget = tObjNum;
-						mindis = dis;
+						tx = lpObj->X - gObj[tObjNum].X;
+						ty = lpObj->Y - gObj[tObjNum].Y;
+						dis = sqrt((double)tx * tx + ty * ty);
+						lpObj->VpPlayer2[n].dis = dis;
+
+						if (dis < mindis)
+						{
+							searchtarget = tObjNum;
+							mindis = dis;
+						}
 					}
 				}
 			}
@@ -3302,7 +3360,8 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 	int Option1=0;
 	int Option2=0;
 	int Option3=0;
-		if ( lpTargetObj->MapNumber == 41 && lpTargetObj->m_Quest[1] == 0xF6 ) //Third Quest Huge Anti-Hack
+
+	if ( lpTargetObj->MapNumber == 41 && lpTargetObj->m_Quest[1] == 0xF6 ) //Third Quest Huge Anti-Hack
 	{
 		return FALSE;
 	}
@@ -4207,6 +4266,159 @@ BOOL gEventMonsterItemDrop(LPOBJ lpObj, LPOBJ lpTargetObj)
 
 				return TRUE;
 			}
+		}
+	}
+
+	if (Configs.g_iSantaPolymorphRingDropOn) //season 2.5 add-on
+	{
+		bool bIsBossMonster = false;
+
+		if (lpObj->m_Index == 349 || lpObj->m_Index == 364 || lpObj->m_Index == 361 ||
+			lpObj->m_Index == 362 || lpObj->m_Index == 363)
+			bIsBossMonster = true;
+
+		if (!bIsBossMonster)
+		{
+			if ((rand() % 10000) < Configs.g_iSantaPolymorphRingDropRate)
+			{
+				type = ItemGetNumberMake(13, 41);
+				level = 0;
+				dur = 100.0f;
+				x = lpObj->X;
+				y = lpObj->Y;
+				int iMaxHitUser = gObjMonsterTopHitDamageUser(lpObj);
+
+				ItemSerialCreateSend(lpTargetObj->m_Index, lpObj->MapNumber, x, y, type, level, dur, Option1, Option2, Option3, iMaxHitUser, 0, 0);
+
+				//return TRUE; //no return wtf??
+			}
+		}
+	}
+
+	if (g_iIllusionTempleEvent) //Season 2.5 add-on
+	{
+		if (!IT_MAP_RANGE(lpObj->MapNumber))
+		{
+			Option1 = 0;
+			Option2 = 0;
+			Option3 = 0;
+
+			if ((rand() % 10000) < g_iOldScrollDropRate)
+			{
+				dur = 0;
+				x = lpObj->X;
+				y = lpObj->Y;
+
+				if (lpObj->Level >= 66)
+				{
+					if (lpObj->Level < 72)
+					{
+						level = 1;
+					}
+					else if (lpObj->Level < 78)
+					{
+						level = 2;
+					}
+					else if (lpObj->Level < 84)
+					{
+						level = 3;
+					}
+					else if (lpObj->Level < 90)
+					{
+						level = 4;
+					}
+					else if (lpObj->Level < 96)
+					{
+						level = 5;
+					}
+					else if (g_iUseMaxLevelIllusionTemple)
+					{
+						level = 6;
+					}
+					else
+					{
+						level = 5;
+					}
+
+					if (level != 6)
+					{
+						type = ItemGetNumberMake(13, 49);
+
+						int MaxHitUser = gObjMonsterTopHitDamageUser(lpObj);
+
+						ItemSerialCreateSend(lpObj->m_Index, lpObj->MapNumber, x, y, type, level, dur, Option1, Option2, Option3, MaxHitUser, 0, 0);
+
+						return TRUE;
+					}
+				}
+			}
+
+			if ((rand() % 10000) < g_iCovenantOfIllusionDropRate)
+			{
+				dur = 0;
+				x = lpObj->X;
+				y = lpObj->Y;
+
+				if (lpObj->Level >= 70)
+				{
+					if (lpObj->Level < 76)
+					{
+						level = 1;
+					}
+					else if (lpObj->Level < 82)
+					{
+						level = 2;
+					}
+					else if (lpObj->Level < 88)
+					{
+						level = 3;
+					}
+					else if (lpObj->Level < 94)
+					{
+						level = 4;
+					}
+					else if (lpObj->Level < 100)
+					{
+						level = 5;
+					}
+					else if (g_iUseMaxLevelIllusionTemple)
+					{
+						level = 6;
+					}
+					else
+					{
+						level = 5;
+					}
+
+					if (level != 6)
+					{
+						type = ItemGetNumberMake(13, 50);
+
+						int MaxHitUser = gObjMonsterTopHitDamageUser(lpObj);
+
+						ItemSerialCreateSend(lpObj->m_Index, lpObj->MapNumber, x, y, type, level, dur, Option1, Option2, Option3, MaxHitUser, 0, 0);
+
+						return TRUE;
+					}
+				}
+			}
+		}
+	}
+
+
+	if (lpObj->MapNumber == MAP_INDEX_BALGASS_BARRACKS) //season 2.5 add-on (S4.5 pos changed)
+	{
+		if ((rand() % 10000)< Configs.g_iCondorFlameDropRate)
+		{
+			type = ItemGetNumberMake(13, 52);
+			level = 0;
+			x = lpObj->X;
+			y = lpObj->Y;
+			int MaxHitUser = gObjMonsterTopHitDamageUser(lpObj);
+
+			ItemSerialCreateSend(lpObj->m_Index, lpObj->MapNumber, x, y, type, level, dur, Option1, Option2, Option3, MaxHitUser, 0, 0);
+
+			return TRUE;
 		}
 	}
 

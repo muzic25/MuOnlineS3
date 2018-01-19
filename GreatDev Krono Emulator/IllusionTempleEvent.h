@@ -25,6 +25,7 @@ extern int m_i_IT_OpenTime;
 extern int m_i_IT_CloseTime;
 extern int m_i_IT_RestTime;
 extern int m_i_IT_WaitTime;
+extern int m_i_IT_MinPlayer;
 
 struct PMSG_SEND_ILLUSION_ENTER_RESULT
 {

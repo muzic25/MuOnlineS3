@@ -2037,17 +2037,28 @@ void DGGetWarehouseList(SDHP_GETWAREHOUSEDB_SAVE * lpMsg)
 			item.m_Option2 = DBI_GET_LUCK(OptionData);
 			item.m_Option3 = DBI_GET_OPTION(OptionData);
 
-			if ( dbsize >= 10 )
+			if (dbsize >= 10)
 			{
-				if ( _type == ITEMGET(13,3) ) // Dino
+				if (Configs.IsLifePlus28Option)
 				{
-					item.m_Option3 |= DBI_GET_DINO_OPTION(lpMsg->dbItems[n*dbsize+7]);
+					if (dbsize >= 10)
+					{
+						item.m_Option3 |= DBI_GET_DINO_OPTION(lpMsg->dbItems[n*dbsize + 7]);
+					}
 				}
 				else
 				{
-					if ( DBI_GET_OPTION16(lpMsg->dbItems[n*dbsize+7]) == 0x40 )
+
+					if (_type == ITEMGET(13, 3)) // Dino
 					{
-						item.m_Option3 = 4;	// Set +16
+						item.m_Option3 |= DBI_GET_DINO_OPTION(lpMsg->dbItems[n*dbsize + 7]);
+					}
+					else
+					{
+						if (DBI_GET_OPTION16(lpMsg->dbItems[n*dbsize + 7]) == 0x40)
+						{
+							item.m_Option3 = 4;	// Set +16
+						}
 					}
 				}
 			}
@@ -2100,9 +2111,9 @@ void DGGetWarehouseList(SDHP_GETWAREHOUSEDB_SAVE * lpMsg)
 					item.m_Durability = 1.0f;
 				}
 
-				if ( item.m_Durability > 255.0f )	
+				if (item.m_Durability > 3.0f && Configs.RemovePotionLimit == FALSE)
 				{
-					item.m_Durability = 255.0f;
+					item.m_Durability = 3.0f;
 				}
 			}
 			else if ( _type != ITEMGET(13,10) && _type != ITEMGET(14,29) && _type != ITEMGET(14,21) && item.m_Level == 3 )

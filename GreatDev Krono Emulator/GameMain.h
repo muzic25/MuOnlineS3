@@ -346,6 +346,9 @@ public:
  int g_iSkillDiatanceKickCheckTime;
  int g_iPCBangCouponEvent;
  int g_bNewYearLuckyBagMonsterEventOn;
+ int g_iCondorFlameDropRate;
+ int g_iSantaPolymorphRingDropOn;
+ int g_iSantaPolymorphRingDropRate;
  BOOL g_bKanturuMayaHandItemDrop;
  int g_iKanturuMayaHandItemDropRate;
  int g_iKanturuMayaHandDropZenRate;
@@ -508,6 +511,15 @@ public:
  int g_iJewelOfMystID;
  int g_iJewelOfMystType;
  int g_CharMaxStat;
+
+ BOOL EnableChecksum;
+ BOOL RemovePersonalID;
+ BOOL NumOfLoginAttemps;
+ BOOL RemovePotionLimit;
+ BOOL FixMarlonQuestRemove;
+ BOOL FixPStoreLevel5Remove;
+ BOOL EnablePKPlayersInEvents;
+ BOOL IsLifePlus28Option;
 
 
  //Commands

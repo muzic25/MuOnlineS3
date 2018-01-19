@@ -367,7 +367,21 @@ BOOL NpcFasi(LPOBJ lpNpc, LPOBJ lpObj)
 		}
 	}
 
-	if ( lpObj->m_PK_Level > 4 )
+	BOOL bPlayerKiller = FALSE; //Season 2.5 add-on
+
+	if (lpObj->PartyNumber >= 0) //Season 2.5 add-on
+	{
+		if (gParty.GetPkLevel(lpObj->PartyNumber) > 4)
+		{
+			bPlayerKiller = TRUE;
+		}
+	}
+	else if (lpObj->m_PK_Level > 4)
+	{
+		bPlayerKiller = TRUE;
+	}
+
+	if (bPlayerKiller == TRUE)
 	{
 		int hour = 0;
 		int min = 0;

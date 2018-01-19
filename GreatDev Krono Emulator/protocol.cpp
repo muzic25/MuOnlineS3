@@ -534,6 +534,28 @@ void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOO
 	/*	case ILLUSION_TEMPLE_PROTOCOL_ID: //0xBF:
 			ILPROTO_ProtocolCore(aIndex, aRecv, aLen);
 			break;	*/
+
+			//illusion temple
+		case 0xBF:
+		{
+			PMSG_DEFAULT2 * lpDef = (PMSG_DEFAULT2 *)aRecv;
+
+			switch (lpDef->subcode)
+			{
+
+			LogAdd("C1 BF %x packet!",lpDef->subcode);
+			case 0x00:
+				CGReqEnterIllusionTemple((PMSG_ANS_ILLUSIONTEMPLE_ENTER *)aRecv, aIndex);
+				break;
+			case 0x02:
+				CGReqUseIllusionTempleKillCntSkill((PMSG_USE_ILLUSIONTEMPLE_KILLCOUNT_SKILL *)aRecv, aIndex);
+				break;
+			case 0x05:
+				CGReqIllusionTempleDropReward((PMSG_ILLUSIONTEMPLE_DROP_REWARD *)aRecv, aIndex);
+				break;
+			}
+		}
+		break;
 		case GUILD_ASIGN_TYPE: //0xE2:
 			CGGuildAssignType((PMSG_GUILD_ASSIGN_TYPE_REQ *)aRecv, aIndex);
 			break;
@@ -888,32 +910,37 @@ WORD EncryptCheckSumKey(WORD wSource)
 
 void CGCheckMainRecv(PMSG_CHECK_MAINEXE_RESULT *lpMsg, int aIndex)
 {
-	gObj[aIndex].CheckSumTime = 0;
-	gObj[aIndex].m_InWebzen = true;
-
-	/* if (strcmp(gObj[aIndex].Ip_addr, "218.234.76.254") == 0)	// #warning To Prevent HAckrs
+	if (Configs.EnableChecksum == 0)
 	{
 		gObj[aIndex].CheckSumTime = 0;
 		gObj[aIndex].m_InWebzen = true;
-		return;
-	} */
 
-	/* if (gObj[aIndex].CheckSumTableNum < 0 || gObj[aIndex].CheckSumTableNum > MAX_CHECKSUM_KEY-1)
+		if (strcmp(gObj[aIndex].Ip_addr, "127.0.0.1") == 0)	// #warning To Prevent HAckrs
+		{
+			gObj[aIndex].CheckSumTime = 0;
+			gObj[aIndex].m_InWebzen = true;
+			return;
+		}
+	}
+	else
 	{
-		LogAdd("error-L1 : [%s][%s] CheckSum-Exe error ", gObj[aIndex].AccountID, gObj[aIndex].Name);
-		CloseClient(aIndex);
-		return;
-	} */
+		if (gObj[aIndex].CheckSumTableNum < 0 || gObj[aIndex].CheckSumTableNum > MAX_CHECKSUM_KEY - 1)
+		{
+			LogAdd("error-L1 : [%s][%s] CheckSum-Exe error ", gObj[aIndex].AccountID, gObj[aIndex].Name);
+			CloseClient(aIndex);
+			return;
+		}
 
-	/* if (dwgCheckSum[gObj[aIndex].CheckSumTableNum] != lpMsg->m_dwKey)
-	{
-		LogAddTD("error-L1 : CheckSum-Exe error %d %d %d [%s]", dwgCheckSum[gObj[aIndex].CheckSumTableNum],
-			lpMsg->m_dwKey, gObj[aIndex].CheckSumTableNum, gObj[aIndex].AccountID);
-		CloseClient(aIndex);
-		return;
-	} */
+		if (dwgCheckSum[gObj[aIndex].CheckSumTableNum] != lpMsg->m_dwKey)
+		{
+			LogAddTD("error-L1 : CheckSum-Exe error %d %d %d [%s]", dwgCheckSum[gObj[aIndex].CheckSumTableNum],
+				lpMsg->m_dwKey, gObj[aIndex].CheckSumTableNum, gObj[aIndex].AccountID);
+			CloseClient(aIndex);
+			return;
+		}
 
-	//gObj[aIndex].CheckSumTime = 0;
+		gObj[aIndex].CheckSumTime = 0;
+	}
 }
 
 void PEchoProc(unsigned char * aMsg, int aLen, short aIndex)
@@ -4131,9 +4158,26 @@ void CGTalkRequestRecv(PMSG_TALKREQUEST * lpMsg, int aIndex)
 
 		if (Configs.gPkLimitFree == FALSE)
 		{
-			if ( lpObj->m_PK_Level > 4 )
+			BOOL bPlayerKiller = FALSE; //season 2.5 add-on
+
+			if (lpObj->PartyNumber >= 0) //season 2.5 add-on
 			{
-				if ( (rand()%2) != 0 )
+				if ((gParty.GetPkLevel(lpObj->PartyNumber)) > 4)
+				{
+					bPlayerKiller = TRUE;
+				}
+			}
+			else
+			{
+				if (lpObj->m_PK_Level > 4)
+				{
+					bPlayerKiller = TRUE;
+				}
+			}
+
+			if (bPlayerKiller == TRUE) //season 2.5 changed
+			{
+				if ((rand() % 2) != 0)
 					ChatTargetSend(&gObj[DealerNumber], lMsg.Get(MSGGET(4, 121)), aIndex);
 				else
 					ChatTargetSend(&gObj[DealerNumber], lMsg.Get(MSGGET(4, 122)), aIndex);
@@ -6909,8 +6953,8 @@ void CGPartyDelUser(PMSG_PARTYDELUSER * lpMsg, int aIndex)
 				gObj[usernumber].PartyNumber = -1;
 				gObj[usernumber].PartyTargetUser = -1;
 
-				//gParty.SetPkCount(pnumber);
-				//gParty.ResetPkLevel(pnumber);
+				gParty.SetPkCount(pnumber);
+				gParty.ResetPkLevel(pnumber);
 				GCPartyDelUserSend(usernumber);
 				CGPartyListAll(pnumber);
 
@@ -6931,13 +6975,13 @@ void CGPartyDelUser(PMSG_PARTYDELUSER * lpMsg, int aIndex)
 				gObj[usernumber].PartyNumber = -1;
 				gObj[usernumber].PartyTargetUser = -1;
 
-				/*gParty.SetPkCount(pnumber);
+				gParty.SetPkCount(pnumber);
 
 				if (lpMsg == NULL)
 				{
 					gParty.ResetPkLevel(pnumber);
 				}
-					  */
+					  
 				GCPartyDelUserSend(usernumber);
 				CGPartyListAll(pnumber);
 				return;
@@ -6964,6 +7008,7 @@ void CGPartyDelUser(PMSG_PARTYDELUSER * lpMsg, int aIndex)
 		count = gParty.GetCount(gObj[aIndex].PartyNumber);
 		gObj[usernumber].PartyNumber = -1;
 		gObj[usernumber].PartyTargetUser = -1;
+		gParty.SetPkCount(pnumber); //season 2.5 add-on
 		GCPartyDelUserSend(usernumber);
 		CGPartyListAll(pnumber);
 	}		
@@ -10129,6 +10174,15 @@ void CGTargetTeleportRecv(PMSG_TARGET_TELEPORT * lpMsg, int aIndex)
 		return;
 	}
 
+	if (IT_MAP_RANGE(gObj[iTargetIndex].MapNumber) != FALSE) //season 2.5 add-on
+	{
+		if (g_IllusionTempleEvent.CheckTeleport(gObj[iTargetIndex].m_Index) != FALSE)
+		{
+			return;
+		}
+	}
+
+
 	if ( gObj[aIndex].PartyNumber != gObj[iTargetIndex].PartyNumber ||
 		 gObj[aIndex].PartyNumber == -1 ||
 		 gObj[iTargetIndex].PartyNumber == -1)
@@ -10143,15 +10197,6 @@ void CGTargetTeleportRecv(PMSG_TARGET_TELEPORT * lpMsg, int aIndex)
 
 		return;
 	}
-
-	if (IT_MAP_RANGE(gObj[iTargetIndex].MapNumber) != FALSE) //season 2.5 add-on
-	{
-		if (g_IllusionTempleEvent.CheckTeleport(gObj[iTargetIndex].m_Index) != FALSE)
-		{
-			return;
-		}
-	}
-
 
 	if ( lpMagic )
 	{
@@ -11326,6 +11371,11 @@ void CGUseItemRecv(PMSG_USEITEM* lpMsg, int aIndex)
 				}
 			}
 
+			if (IT_MAP_RANGE(gObj[aIndex].MapNumber)) //Season2.5 add-on
+			{
+				g_IllusionTempleEvent.SearchUserDropQuestItem(gObj[aIndex].MapNumber, aIndex);
+			}
+
 			if ( gObj[aIndex].m_IfState.use && gObj[aIndex].m_IfState.type == 3 )
 			{
 				gObj[aIndex].TargetShopNumber = -1;
@@ -11809,12 +11859,33 @@ void GCReqmoveDevilSquare(PMSG_REQ_MOVEDEVILSQUARE* lpMsg, int aIndex)
 	LogAddTD("[DevilSquare] [%s][%s] Request Move DevilSquare [%d][%d][%d]",
 		lpObj->AccountID, lpObj->Name, lpObj->Class, lpObj->Level, cSquareNumber+1);
 
-	if ( gObj[aIndex].m_PK_Level >= 4 )
+	BOOL bPlayerKiller = FALSE; //Season 2.5 add-on
+
+	if (lpObj->PartyNumber >= 0) //Season 2.5 add-on
+	{
+		if (gParty.GetPkLevel(lpObj->PartyNumber) >= 5)
+		{
+			bPlayerKiller = TRUE;
+		}
+	}
+	else if (lpObj->m_PK_Level >= 4 && Configs.EnablePKPlayersInEvents == FALSE)
+	{
+		bPlayerKiller = TRUE;
+	}
+
+	if (bPlayerKiller == TRUE)
 	{
 		pResult.Result = 6;
 		DataSend(aIndex, (LPBYTE)&pResult, pResult.h.size);
 		return;
 	}
+
+	/*if ( gObj[aIndex].m_PK_Level >= 4 && Configs.EnablePKPlayersInEvents == FALSE)
+	{
+		pResult.Result = 6;
+		DataSend(aIndex, (LPBYTE)&pResult, pResult.h.size);
+		return;
+	}*/
 
 	if ( MAIN_INVENTORY_RANGE(cInvitationItemPos) == FALSE )
 	{
@@ -12002,7 +12073,7 @@ void GCReqDevilSquareRemainTime(PMSG_REQ_DEVILSQUARE_REMAINTIME* lpMsg, int aInd
 	switch ( lpMsg->hEventType )
 	{
 		case 1:
-			if ( gObj[aIndex].m_PK_Level >= 4 )
+			if ( gObj[aIndex].m_PK_Level >= 4 && Configs.EnablePKPlayersInEvents == FALSE)
 			{
 				GCServerCmd(aIndex, 0x37, 0, 0);
 
@@ -12029,7 +12100,7 @@ void GCReqDevilSquareRemainTime(PMSG_REQ_DEVILSQUARE_REMAINTIME* lpMsg, int aInd
 			break;
 
 		case 2:
-			if ( gObj[aIndex].m_PK_Level >= 4 )
+			if ( gObj[aIndex].m_PK_Level >= 4 && Configs.EnablePKPlayersInEvents == FALSE)
 			{
 				GCServerCmd(aIndex, 0x38, 0, 0);
 
@@ -12059,7 +12130,8 @@ void GCReqDevilSquareRemainTime(PMSG_REQ_DEVILSQUARE_REMAINTIME* lpMsg, int aInd
 			break;
 
 		case 4:
-			if ( gObj[aIndex].m_PK_Level >= 4 )
+		{
+			if (gObj[aIndex].m_PK_Level >= 4 && Configs.EnablePKPlayersInEvents == FALSE)
 			{
 				GCServerCmd(aIndex, 0x39, 0, 0);
 
@@ -12069,16 +12141,16 @@ void GCReqDevilSquareRemainTime(PMSG_REQ_DEVILSQUARE_REMAINTIME* lpMsg, int aInd
 				return;
 			}
 
-			int iENTER_LEVEL =  g_ChaosCastle.GetUserLevelToEnter(aIndex);
+			int iENTER_LEVEL = g_ChaosCastle.GetUserLevelToEnter(aIndex);
 
-			if ( iENTER_LEVEL == -1 )
+			if (iENTER_LEVEL == -1)
 				return;
 
 			pResult.hEventType = 4;
 
-			if ( g_ChaosCastle.GetCurrentState(iENTER_LEVEL) == 1 )
+			if (g_ChaosCastle.GetCurrentState(iENTER_LEVEL) == 1)
 			{
-				if ( g_ChaosCastle.CheckCanEnter(iENTER_LEVEL) != false )
+				if (g_ChaosCastle.CheckCanEnter(iENTER_LEVEL) != false)
 				{
 					pResult.RemainTime = 0;
 					pResult.RemainTime_LOW = 0;
@@ -12099,6 +12171,13 @@ void GCReqDevilSquareRemainTime(PMSG_REQ_DEVILSQUARE_REMAINTIME* lpMsg, int aInd
 				pResult.RemainTime_LOW = SET_NUMBERL(wREMAIN_TIME);
 				pResult.EnteredUser = g_ChaosCastle.GetCurEnteredUser(iENTER_LEVEL);
 			}
+		}
+			break;
+		case 5:
+			pResult.hEventType = 5;
+			pResult.RemainTime = g_IllusionTempleEvent.GetRemainTime();
+			pResult.EnteredUser = 0;
+			pResult.RemainTime_LOW = 0;
 			break;
 	}
 
@@ -12623,7 +12702,21 @@ void CGRequestEnterBloodCastle(PMSG_REQ_MOVEBLOODCASTLE* lpMsg, int iIndex)
 	if ( gObj[iIndex].m_IfState.use && gObj[iIndex].m_IfState.type != 12 )
 		return;
 
-	if ( gObj[iIndex].m_PK_Level >= 4 )
+	BOOL bPlayerKiller = FALSE; //Season 2.5 add-on
+
+	if (gObj[iIndex].PartyNumber >= 0) //Season 2.5 add-on
+	{
+		if (gParty.GetPkLevel(gObj[iIndex].PartyNumber) >= 5)
+		{
+			bPlayerKiller = TRUE;
+		}
+	}
+	else if (gObj[iIndex].m_PK_Level >= 4 && Configs.EnablePKPlayersInEvents == 0)
+	{
+		bPlayerKiller = TRUE;
+	}
+
+	if (bPlayerKiller == TRUE)
 	{
 		pResult.Result = 7;
 		DataSend(iIndex, (LPBYTE)&pResult, pResult.h.size);
@@ -12821,7 +12914,21 @@ void CGRequestEnterChaosCastle(PMSG_REQ_MOVECHAOSCASTLE* lpMsg, int iIndex)
 
 	if (Configs.gPkLimitFree == FALSE)
 	{
-		if ( gObj[iIndex].m_PK_Level >= 6 )
+		BOOL bPlayerKiller = FALSE; //Season 2.5 add-on
+
+		if (gObj[iIndex].PartyNumber >= 0) //Season 2.5 add-on
+		{
+			if (gParty.GetPkLevel(gObj[iIndex].PartyNumber) >= 6)
+			{
+				bPlayerKiller = TRUE;
+			}
+		}
+		else if (gObj[iIndex].m_PK_Level >= 6 && Configs.EnablePKPlayersInEvents == 0)
+		{
+			bPlayerKiller = TRUE;
+		}
+
+		if (bPlayerKiller == TRUE)
 		{
 			PMSG_NOTICE pNotice;
 			TNotice::MakeNoticeMsgEx(&pNotice, 1, lMsg.Get(MSGGET(4, 201)));
@@ -12859,7 +12966,21 @@ void CGRequestEnterChaosCastle(PMSG_REQ_MOVECHAOSCASTLE* lpMsg, int iIndex)
 		return;
 	}
 
-	if ( gObj[iIndex].m_PK_Level >= 4 )
+	BOOL bPlayerKiller = FALSE; //Season 2.5 add-on
+
+	if (gObj[iIndex].PartyNumber >= 0) //Season 2.5 add-on
+	{
+		if (gParty.GetPkLevel(gObj[iIndex].PartyNumber) >= 5)
+		{
+			bPlayerKiller = TRUE;
+		}
+	}
+	else if (gObj[iIndex].m_PK_Level >= 4 && Configs.EnablePKPlayersInEvents == 0)
+	{
+		bPlayerKiller = TRUE;
+	}
+
+	if (bPlayerKiller == TRUE)
 	{
 		pResult.Result = 8;
 		DataSend(iIndex, (LPBYTE)&pResult, pResult.h.size);
@@ -13037,6 +13158,9 @@ void CGRequestEventEnterCount(PMSG_REQ_CL_ENTERCOUNT* lpMsg, int aIndex)
 	{
 		case 0x02:
 			EGReqBloodCastleEnterCount(aIndex);
+			break;
+		case 0x03: //Illusion Temple
+			g_IllusionTempleEvent.EGReqIllusionTempleEnterCount(aIndex);
 			break;
 	}
 }
@@ -13225,7 +13349,21 @@ void CGDuelStartRequestRecv(PMSG_REQ_START_DUEL * lpMsg, int aIndex)
 
 	if (!Configs.gPkLimitFree)
 	{
-		if ( gObj[aIndex].m_PK_Level >= 6 )
+		BOOL bPlayerKiller = FALSE; //Season 2.5 add-on
+
+		if (gObj[aIndex].PartyNumber >= 0) //Season 2.5 add-on
+		{
+			if (gParty.GetPkLevel(gObj[aIndex].PartyNumber) >= 6)
+			{
+				bPlayerKiller = TRUE;
+			}
+		}
+		else if (gObj[aIndex].m_PK_Level >= 6)
+		{
+			bPlayerKiller = TRUE;
+		}
+
+		if (bPlayerKiller == TRUE) //? gObj[aIndex].m_PK_Level >= 6
 		{
 			GCServerMsgStringSend(lMsg.Get(MSGGET(4, 175)), aIndex, 1);
 			return;
@@ -13270,7 +13408,21 @@ void CGDuelStartRequestRecv(PMSG_REQ_START_DUEL * lpMsg, int aIndex)
 
 	if (!Configs.gPkLimitFree)
 	{
-		if ( gObj[iDuelIndex].m_PK_Level >= 6 )
+		BOOL bPlayerKiller = FALSE; //Season 2.5 add-on
+
+		if (gObj[aIndex].PartyNumber >= 0) //Season 2.5 add-on
+		{
+			if (gParty.GetPkLevel(gObj[aIndex].PartyNumber) >= 6)
+			{
+				bPlayerKiller = TRUE;
+			}
+		}
+		else if (gObj[aIndex].m_PK_Level >= 6)
+		{
+			bPlayerKiller = TRUE;
+		}
+
+		if (bPlayerKiller == TRUE)
 		{
 			GCServerMsgStringSend(lMsg.Get(MSGGET(4, 176)), aIndex, 1);
 			return;
@@ -16607,9 +16759,9 @@ void CGReqUseIllusionTempleKillCntSkill(PMSG_USE_ILLUSIONTEMPLE_KILLCOUNT_SKILL*
 		return;
 	}
 
-	WORD TargetIndex = MAKE_NUMBERW(lpMsg->btTargetH, lpMsg->btTargetL);
-
-	g_IllusionTempleEvent.RunningSkill(iIndex, MAKE_NUMBERW(lpMsg->btSkillIdH, lpMsg->btSkillIdL), TargetIndex, lpMsg->btDis);
+//	WORD TargetIndex =  sizeof(PMSG_USE_ILLUSIONTEMPLE_KILLCOUNT_SKILL)// MAKE_NUMBERW(lpMsg->btTargetH, lpMsg->btTargetL);
+	//	MAKE_NUMBERW(lpMsg->btSkillIdH, lpMsg->btSkillIdL),
+	g_IllusionTempleEvent.RunningSkill(iIndex, lpMsg->SkillId, lpMsg->aRecvrIndex, lpMsg->useTime);
 }
 
 void CGReqIllusionTempleDropReward(PMSG_ILLUSIONTEMPLE_DROP_REWARD* lpMsg, int iIndex) //case 5 

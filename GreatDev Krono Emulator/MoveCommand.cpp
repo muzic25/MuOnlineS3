@@ -188,6 +188,15 @@ BOOL CMoveCommand::CheckMainToMove(LPOBJ lpObj)
 	{
 		return FALSE;
 	} 
+
+	if (IT_MAP_RANGE(lpObj->MapNumber) != FALSE)
+	{
+		if (g_IllusionTempleEvent.CheckTeleport(lpObj->m_Index) != FALSE)
+		{
+			return FALSE;
+		}
+	}
+
 	return TRUE;
 }
 

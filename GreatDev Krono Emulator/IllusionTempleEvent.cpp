@@ -26,6 +26,7 @@ int m_i_IT_PlayTime;
 int m_i_IT_OpenTime;
 int m_i_IT_CloseTime;
 int m_i_IT_RestTime;
+int m_i_IT_MinPlayer;
 int m_i_IT_WaitTime;
 
 static const int g_iIT_ChoasMixSuccessRate[MAX_FLOOR_DATA + 1] = { Configs.IllusionTempleMixSuccess[0], Configs.IllusionTempleMixSuccess[1], Configs.IllusionTempleMixSuccess[2], Configs.IllusionTempleMixSuccess[3], Configs.IllusionTempleMixSuccess[4], Configs.IllusionTempleMixSuccess[5] };
@@ -112,6 +113,9 @@ BOOL CIllusionTempleEvent::Load(LPSTR lpszFileName)
 
 				Token = GetToken();
 				m_i_IT_RestTime = TokenNumber;
+
+				Token = GetToken();
+				m_i_IT_MinPlayer = TokenNumber;
 			}
 			else if ( type == 1 )
 			{
@@ -192,9 +196,7 @@ BOOL CIllusionTempleEvent::IllusionTempleAddUser(int aIndex, BYTE FloorIndex, BY
 		return FALSE;
 	}
 
-	LPOBJ lpObj;
 	PMSG_SEND_ILLUSION_ENTER_RESULT pResult;
-	BOOL bPlayerKiller;
 	int loc6;
 	int loc7;
 	int loc8;
@@ -206,7 +208,7 @@ BOOL CIllusionTempleEvent::IllusionTempleAddUser(int aIndex, BYTE FloorIndex, BY
 		return FALSE;
 	}
 
-	lpObj = &gObj[aIndex];
+	LPOBJ lpObj = &gObj[aIndex];
 	PHeadSubSetB((LPBYTE)&pResult, 0xBF, 0x00, sizeof(pResult));
 	pResult.btResult = 0;
 
@@ -225,14 +227,14 @@ BOOL CIllusionTempleEvent::IllusionTempleAddUser(int aIndex, BYTE FloorIndex, BY
 		::CGPShopReqClose(lpObj->m_Index);
 	}
 
-	bPlayerKiller = FALSE;
-#pragma message ("Need Check PKLEVEL")
+	BOOL bPlayerKiller = FALSE;
+
 	if(lpObj->PartyNumber >= 0)
 	{
-		/*if( (gParty.GetPkLevel(lpObj->PartyNumber)) >= 5)
+		if( (gParty.GetPkLevel(lpObj->PartyNumber)) >= 5)
 		{
 			bPlayerKiller = TRUE;
-		}	*/
+		}
 	}
 	else if( lpObj->m_PK_Level >= 4 )
 	{
@@ -300,10 +302,11 @@ BOOL CIllusionTempleEvent::IllusionTempleAddUser(int aIndex, BYTE FloorIndex, BY
 		return FALSE;
 	}
 	
-	if(this->EGReqIllusionTempleEnter(aIndex, FloorIndex, TicketPos, loc6) != FALSE)
+#pragma message ("Here's the bug!")
+	/*if(this->EGReqIllusionTempleEnter(aIndex, FloorIndex, TicketPos, loc6) != FALSE)
 	{
 		return TRUE;
-	}
+	}*/
 
 	if(this->CheckEnterLevel(aIndex, loc6) == FALSE)
 	{
@@ -311,7 +314,7 @@ BOOL CIllusionTempleEvent::IllusionTempleAddUser(int aIndex, BYTE FloorIndex, BY
 		DataSend(aIndex,(LPBYTE)&pResult,pResult.h.size);
 		return FALSE;
 	}
-
+	
 	this->m_IllusionTempleProcess[loc6-1].RemoveInvalid();
 
 	loc8 = this->m_IllusionTempleProcess[loc6-1].AddBattleUser(aIndex, FloorIndex, TicketPos);
@@ -383,6 +386,7 @@ BOOL CIllusionTempleEvent::EGReqIllusionTempleEnter(int aIndex, BYTE FloorIndex,
 
 void CIllusionTempleEvent::EGAnsIllusionTempleEnter(PMSG_ANS_ILLUSIONTEMPLE_ENTER_RESULT * lpMsg)
 {
+
 	if( CHECK_LIMIT( (lpMsg->FloorIndex), MAX_FLOOR_DATA+1) == FALSE )
 	{
 		return;
@@ -588,14 +592,7 @@ BOOL CIllusionTempleEvent::CheckEnterLevel(int aIndex, int TicketLevel)
 	}
 	else if( gObj[aIndex].Level == 400 && gObj[aIndex].ChangeUP3rd != 0)
 	{
-		if(g_iUseMaxLevelIllusionTemple != 0)
-		{
-			loc2 = 5;
-		}
-		else
-		{
-			loc2 = 4;
-		}
+		loc2 = 4;
 	}
 	else
 	{
@@ -646,7 +643,7 @@ void CIllusionTempleEvent::SetNpcMirageUser(LPOBJ lpObj, LPOBJ lpTargetObj)
 		return;
 	}
 
-	if(lpTargetObj->m_PK_Level >= 4)
+	if(lpTargetObj->m_PK_Level >= 4 && Configs.EnablePKPlayersInEvents == FALSE)
 	{
 		GCServerMsgStringSend(lMsg.Get(3400), lpTargetObj->m_Index, 1); //Player Killer are not allowed to enter Illusion Temple Event
 		return;
@@ -1412,7 +1409,6 @@ BOOL CIllusionTempleEvent::GetRestrictionSpellStatus(int aIndex, BYTE MapNumber)
 
 int CIllusionTempleEvent::GetEnterLevel(int aIndex)
 {
-	int loc2 = 0; //?? weird
 
 	LPOBJ lpObj = &gObj[aIndex];
 
@@ -1428,8 +1424,19 @@ int CIllusionTempleEvent::GetEnterLevel(int aIndex)
 	if( lpObj->Level < 351 ) return 3;
 	if( lpObj->Level < 381 ) return 4;
 	if( lpObj->Level < 400 ) return 5;
-	if( lpObj->Level == 400 && lpObj->ChangeUP3rd == 0 ) return 5;
-	if( lpObj->Level == 400 && lpObj->ChangeUP3rd != 0 ){ if( g_iUseMaxLevelIllusionTemple != 0 ){ return 6;}else{ return 5;}}
+	if( lpObj->Level == 400 && lpObj->ChangeUP3rd == 0 ) 
+		return 5;
+	if( lpObj->Level == 400 && lpObj->ChangeUP3rd != 0 )
+	{ 
+		if( g_iUseMaxLevelIllusionTemple != 0 )
+		{ 
+			return 5;
+		}
+		else
+		{ 
+		return 5;
+		}
+	}
 
 	return -1;
 }

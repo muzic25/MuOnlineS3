@@ -1146,7 +1146,21 @@ BOOL CDarkSpirit::Attack(LPOBJ lpObj, LPOBJ lpTargetObj, CMagicInf * lpMagic, in
 	{
 		if ( !gObjTargetGuildWarCheck(lpObj, lpCallObj) )
 		{
-			gObjCheckSelfDefense(lpObj, lpCallObj->m_Index);
+			if (lpCallObj->PartyNumber >= 0) //Season 2.5 add-on
+			{
+				//season3 removed party for LOL
+				int number = 0;
+				int partynum = lpCallObj->PartyNumber;
+
+				if ((gParty.GetPkLevel(partynum)) < 5)
+				{
+					gObjCheckSelfDefense(lpObj, lpCallObj->m_Index);
+				}
+			}
+			else
+			{
+				gObjCheckSelfDefense(lpObj, lpCallObj->m_Index);
+			}
 		}
 	}
 

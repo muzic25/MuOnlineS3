@@ -1542,5 +1542,8 @@
     <None Include="bitmap.bmp">
       <Filter>Source Files\Resource Files</Filter>
     </None>
+    <None Include="MuServer\Data\Events\IllusionTemple.dat">
+      <Filter>MuServer\Data\Events</Filter>
+    </None>
   </ItemGroup>
 </Project>

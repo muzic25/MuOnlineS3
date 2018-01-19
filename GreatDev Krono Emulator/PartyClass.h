@@ -19,6 +19,10 @@ struct PARTY_STRUCT
 	short m_MaxLevel;	// 2C
 	short m_MinLevel;	// 2E
 
+	BYTE m_PkLevel[MAX_USER_IN_PARTY]; //38
+	BYTE m_PartyPkLevel; //3D
+
+	int m_PkCount; //40
 };
 
 
@@ -45,6 +49,15 @@ public:
 	BOOL Isleader(int party_number, int usernumber, int dbnumber);
 	void Paint(int party_number);
 	void PartyMemberLifeSend(int party_number);
+
+	BYTE GetPkLevel(int party_number);
+
+	void SetPkLevel(int party_number, int usernumber, int dbnumber, BYTE pklevel);
+
+	void SetPkCount(int party_number);
+
+	void ResetPkLevel(int party_number);
+
 
 public:
 

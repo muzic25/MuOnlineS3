@@ -203,7 +203,7 @@ void JGPAccountRequest(SDHP_IDPASSRESULT * lpMsg)
 	
 	gObj[aIndex].LoginMsgSnd = 0;
 
-	if (gObj[aIndex].LoginMsgCount >= 3 )
+	if (gObj[aIndex].LoginMsgCount >= Configs.NumOfLoginAttemps)
 	{
 		lpMsg->result = 8;
 	}
@@ -212,7 +212,7 @@ void JGPAccountRequest(SDHP_IDPASSRESULT * lpMsg)
 
 	if ( lpMsg->result  != 1 )
 	{
-		if ( gObj[aIndex].LoginMsgCount > 3 )
+		if ( gObj[aIndex].LoginMsgCount > Configs.NumOfLoginAttemps)
 		{
 			CloseClient(aIndex);
 		}

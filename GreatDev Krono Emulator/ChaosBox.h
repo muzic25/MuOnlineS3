@@ -113,6 +113,7 @@ BOOL PlusItemLevelChaosMix(LPOBJ lpObj, int mixType);
 BOOL PegasiaChaosMix(LPOBJ lpObj);
 BOOL CircleChaosMix(LPOBJ lpObj);
 BOOL WingChaosMix(LPOBJ lpObj);
+BOOL IsCondorItemCheck(int iItemCode);
 BOOL CheckLevel2WingItem(int iItemCode);
 BOOL CheckLevel3WingItem(int iItemCode);
 BOOL CheckItemCondition(CItem * lpItem, short Level, BYTE Op1, BYTE Op2, BYTE Op3, BYTE SetOption, BYTE NewOption);

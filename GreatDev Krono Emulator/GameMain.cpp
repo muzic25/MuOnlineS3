@@ -337,7 +337,6 @@ void GameMainInit(HWND hWnd)
 		"\\terrains\\terrain46.att",	// Illusion Temple 3
 		"\\terrains\\terrain46.att",	// Illusion Temple 4
 		"\\terrains\\terrain46.att",	// Illusion Temple 5
-		"\\terrains\\terrain46.att",	// Illusion Temple 6 = 50
 	};
 
 	for (n = 0; n < MAX_NUMBER_MAP; n++)
@@ -1452,6 +1451,11 @@ void ReadCommonServerInfo()
 	Configs.g_iPCBangCouponEvent = GetPrivateProfileInt("GameServerInfo", "PCBangCouponEvent", 1, gDirPath.GetNewPath("commonserver.cfg"));
 	Configs.g_bNewYearLuckyBagMonsterEventOn = GetPrivateProfileInt("GameServerInfo", "NewYearLuckyBagMonsterEventOn", 0, gDirPath.GetNewPath("commonserver.cfg"));
 
+	Configs.g_iCondorFlameDropRate = GetPrivateProfileInt("GameServerInfo", "CondorFlameDropRate", 10, gDirPath.GetNewPath("commonserver.cfg"));
+
+	Configs.g_iSantaPolymorphRingDropOn = GetPrivateProfileInt("GameServerInfo", "SantaPolymorphRingDropOn", 0, gDirPath.GetNewPath("commonserver.cfg"));
+	Configs.g_iSantaPolymorphRingDropRate = GetPrivateProfileInt("GameServerInfo", "SantaPolymorphRingDropRate", 10, gDirPath.GetNewPath("commonserver.cfg"));
+
 	g_CashShop.CashShopOptioNReload();
 	g_CashItemPeriodSystem.Initialize();
 	g_CashLotterySystem.Load(gDirPath.GetNewPath("ChaosCardProbability.txt"));
@@ -1463,11 +1467,16 @@ void ReadCommonServerInfo()
 	LoadChaosBox(gDirPath.GetNewPath("ChaosMix.ini"));
 
 	LoadCommands(gDirPath.GetNewPath("Commands.ini"));
-
-
 	Configs.VaultFloodTime = GetPrivateProfileInt("GameServerInfo", "VaultAntiFloodTime", 1, gDirPath.GetNewPath("commonserver.cfg"));
 	Configs.g_CharMaxStat = GetPrivateProfileInt("GameServerInfo", "CharacterMaxStats", 65000, gDirPath.GetNewPath("commonserver.cfg"));
-
+	Configs.EnableChecksum = GetPrivateProfileInt("GameServerInfo", "ChecksumEnable", 0, gDirPath.GetNewPath("commonserver.cfg"));
+	Configs.NumOfLoginAttemps = GetPrivateProfileInt("GameServerInfo", "NumOfLoginAttemps", 3, gDirPath.GetNewPath("commonserver.cfg"));
+	Configs.RemovePotionLimit = GetPrivateProfileInt("GameServerInfo", "RemovePotionLimit", 0, gDirPath.GetNewPath("commonserver.cfg"));
+	Configs.RemovePersonalID = GetPrivateProfileInt("GameServerInfo", "RemovePersonalID", 0, gDirPath.GetNewPath("commonserver.cfg"));
+	Configs.FixMarlonQuestRemove = GetPrivateProfileInt("GameServerInfo", "RemoveMarlonQuestReset", 0, gDirPath.GetNewPath("commonserver.cfg"));
+	Configs.FixPStoreLevel5Remove = GetPrivateProfileInt("GameServerInfo", "RemovePShopItemsCheckLevel5", 0, gDirPath.GetNewPath("commonserver.cfg"));
+	Configs.EnablePKPlayersInEvents = GetPrivateProfileInt("GameServerInfo", "RemovePKEventsCheck", 0, gDirPath.GetNewPath("commonserver.cfg"));
+	Configs.IsLifePlus28Option = GetPrivateProfileInt("GameServerInfo", "IsLifePlus28Option", 0, gDirPath.GetNewPath("commonserver.cfg"));
 }
 
 void LoadChaosBox(char* filename)
@@ -2884,7 +2893,6 @@ void ReadEventInfo(MU_EVENT_TYPE eEventType)
 				Configs.g_iDeepBlueCandyBoxDropZen = GetPrivateProfileInt("GameServerInfo","DeepBlueCandyBoxDropZen",0, gDirPath.GetNewPath("commonserver.cfg"));
 				break;
 		case 17:
-
 			g_IllusionTempleEvent.ReadCommonServerInfo();
 			break;
 

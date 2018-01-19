@@ -966,12 +966,6 @@ void gObjClearViewport(LPOBJ lpObj)
 	lpObj->VPCount2 = 0;
 }
 
-
-
-
-
-
-
 void gObjCloseSet(int aIndex, int Flag)
 {
 	if ( aIndex < 0 || aIndex > OBJMAX-1 )
@@ -999,7 +993,6 @@ void gObjCloseSet(int aIndex, int Flag)
 			g_IllusionTempleEvent.SearchUserDropQuestItem(lpObj->MapNumber, lpObj->m_Index);
 			g_IllusionTempleEvent.BattleDeleteUser(lpObj->m_Index, lpObj->MapNumber);
 		}
-
 
 		if ( (GetTickCount() - lpObj->MySelfDefenseTime )< 30000)
 		{
@@ -1792,20 +1785,17 @@ void DbItemSetInByte(LPOBJ lpObj, struct SDHP_DBCHAR_INFORESULT* lpMsg, int Item
 
 void DbItemSetInByte(LPOBJ lpObj, struct SDHP_DBCHAR_INFORESULT* lpMsg, int ItemDbByte, bool* bAllItemExist)
 {
-	int n;
-	int itype;
 	int _type;
 	CItem item;
 	BYTE OptionData;
 	WORD hiWord;
 	WORD loWord;
-	bool bIsItemExist = true;
 
-	for(n = 0; n < INVENTORY_SIZE;n++)
+	for(int n = 0; n < INVENTORY_SIZE;n++)
 	{
-		bIsItemExist = true;
+		bool bIsItemExist = true;
 		lpObj->pInventory[n].Clear();
-		itype = lpMsg->dbInventory[n*ItemDbByte];
+		int itype = lpMsg->dbInventory[n*ItemDbByte];
 
 		if(ItemDbByte >= 16)
 		{
@@ -1928,15 +1918,22 @@ void DbItemSetInByte(LPOBJ lpObj, struct SDHP_DBCHAR_INFORESULT* lpMsg, int Item
 
 			if(ItemDbByte >= 10)
 			{
-				if(_type == ITEMGET(13,3))
+				if (Configs.IsLifePlus28Option)
 				{
-					item.m_Option3 |= DBI_GET_OPTION16(lpMsg->dbInventory[n*ItemDbByte+DBI_NOPTION_DATA]) >> 4;
+					item.m_Option3 |= DBI_GET_OPTION16(lpMsg->dbInventory[n*ItemDbByte + DBI_NOPTION_DATA]) >> 4;
 				}
 				else
 				{
-					if((lpMsg->dbInventory[n*ItemDbByte+DBI_NOPTION_DATA] & 0x40)== 0x40)
+					if (_type == ITEMGET(13, 3))
 					{
-						item.m_Option3 = 4;
+						item.m_Option3 |= DBI_GET_OPTION16(lpMsg->dbInventory[n*ItemDbByte + DBI_NOPTION_DATA]) >> 4;
+					}
+					else
+					{
+						if ((lpMsg->dbInventory[n*ItemDbByte + DBI_NOPTION_DATA] & 0x40) == 0x40)
+						{
+							item.m_Option3 = 4;
+						}
 					}
 				}
 			}
@@ -1992,9 +1989,19 @@ void DbItemSetInByte(LPOBJ lpObj, struct SDHP_DBCHAR_INFORESULT* lpMsg, int Item
 						item.m_Durability = 1.0f;
 					}
 
-					if(item.m_Durability > 3.0f)
+					if (Configs.RemovePotionLimit == TRUE)
 					{
-						item.m_Durability = 3.0f;
+						if (item.m_Durability > 255.0f)
+						{
+							item.m_Durability = 255.0f;
+						}
+					}
+					else
+					{
+						if (item.m_Durability > 3.0f)
+						{
+							item.m_Durability = 3.0f;
+						}
 					}
 				}
 				else if(_type >= ITEMGET(14,46) && _type <= ITEMGET(14,50))
@@ -2187,7 +2194,7 @@ BOOL gObjSetCharacter(LPBYTE lpdata, int aIndex)
 		MapC[lpObj->MapNumber].GetMapPos(lpObj->MapNumber, lpObj->X, lpObj->Y);
 	}
 
-if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNumber == MAP_INDEX_SANTATOWN )
+if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE)
 	{
 		if ( lpObj->Class == 2 )
 		{
@@ -2230,12 +2237,6 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 	lpObj->m_iChaosCastleBlowTime = 0;
 	lpObj->m_cKillUserCount = 0;
 	lpObj->m_cKillMonsterCount = 0;
-
-	if ((lpMsg->CtlCode & 32) != 32 && lpObj->MapNumber == MAP_INDEX_GM_SUMMONZONE) //Season 2.5 add-on
-	{
-		lpObj->MapNumber = MAP_INDEX_DEVIAS;
-		MapC[lpObj->MapNumber].GetMapPos(lpObj->MapNumber, lpObj->X, lpObj->Y);
-	}
 
 	if ( lpObj->MapNumber == MAP_INDEX_CASTLESIEGE &&
 		 g_CastleSiege.GetCastleState() == CASTLESIEGE_STATE_STARTSIEGE )
@@ -2327,7 +2328,6 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 		lpObj->MapNumber = MAP_INDEX_DEVIAS;
 		MapC[lpObj->MapNumber].GetMapPos(lpObj->MapNumber, lpObj->X, lpObj->Y);
 	}
-
 	else if (IT_MAP_RANGE(lpObj->MapNumber)) //season2.5 add-on
 	{
 		lpObj->MapNumber = MAP_INDEX_DEVIAS; //season3 changed
@@ -2542,7 +2542,7 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 		memset(lpObj->m_Quest, (BYTE)-1, sizeof(lpObj->m_Quest));
 	}
 
-	if ( ::g_QuestInfo.GetQuestState(lpObj, 2) == 2 )	// Ring of Honor
+	if ( ::g_QuestInfo.GetQuestState(lpObj, 2) == 2 && Configs.FixMarlonQuestRemove == 0)	// Ring of Honor
 	{
 		if ( lpObj->Level < QUEST_MINLEVEL_PLUSSTAT )	// Repair Bug of Marlon Before
 		{
@@ -2556,7 +2556,7 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 		}
 	}
 
-	if ( ::g_QuestInfo.GetQuestState(lpObj, 3) == 2 )	// Dark Stone
+	if ( ::g_QuestInfo.GetQuestState(lpObj, 3) == 2 && Configs.FixMarlonQuestRemove == 0)	// Dark Stone
 	{
 		if ( lpObj->Level < QUEST_MINLEVEL_PLUSSTAT )	// Repair Bug of Marlon After
 		{
@@ -2711,63 +2711,66 @@ if ( lpObj->Level < 6 || DS_MAP_RANGE(lpObj->MapNumber) != FALSE || lpObj->MapNu
 		::DbItemSetInByte(lpObj, lpMsg, 16, &bAllItemExist);
 	}
 
-/*	if ( lpObj->Level <=5 )
+	if (Configs.FixPStoreLevel5Remove == FALSE)
 	{
-		for ( int i=MAIN_INVENTORY_SIZE;i<INVENTORY_SIZE;i++)
+		if (lpObj->Level <= 5)
 		{
-			BYTE NewOption[MAX_EXOPTION_SIZE];
-
-			if ( lpObj->Inventory1[i].IsItem() == TRUE )
+			for (int i = MAIN_INVENTORY_SIZE; i < INVENTORY_SIZE; i++)
 			{
-				for ( int j=0;j<MAX_EXOPTION_SIZE;j++)
+				BYTE NewOption[MAX_EXOPTION_SIZE];
+
+				if (lpObj->Inventory1[i].IsItem() == TRUE)
 				{
-					NewOption[j] = 0;
+					for (int j = 0; j < MAX_EXOPTION_SIZE; j++)
+					{
+						NewOption[j] = 0;
+					}
+
+					if ((lpObj->Inventory1[i].m_NewOption & 0x20) != 0)
+					{
+						NewOption[0] = TRUE;
+					}
+
+					if ((lpObj->Inventory1[i].m_NewOption & 0x10) != 0)
+					{
+						NewOption[1] = TRUE;
+					}
+
+					if ((lpObj->Inventory1[i].m_NewOption & 0x08) != 0)
+					{
+						NewOption[2] = TRUE;
+					}
+
+					if ((lpObj->Inventory1[i].m_NewOption & 0x04) != 0)
+					{
+						NewOption[3] = TRUE;
+					}
+
+					if ((lpObj->Inventory1[i].m_NewOption & 0x02) != 0)
+					{
+						NewOption[4] = TRUE;
+					}
+
+					if ((lpObj->Inventory1[i].m_NewOption & 0x01) != 0)
+					{
+						NewOption[5] = TRUE;
+					}
+
+					LogAddTD("[PShop] PShop Item Delete LV <= 5 [%s][%s] [LV:%d] : serial:%d [%s][%d][%d][%d][%d] Ex:[%d,%d,%d,%d,%d,%d,%d] Set:[%d]",
+						lpObj->AccountID, lpObj->Name, lpObj->Level, lpObj->Inventory1[i].m_Number,
+						ItemAttribute[lpObj->Inventory1[i].m_Type].Name, lpObj->Inventory1[i].m_Level,
+						lpObj->Inventory1[i].m_Option1, lpObj->Inventory1[i].m_Option2,
+						lpObj->Inventory1[i].m_Option3, NewOption[0], NewOption[1], NewOption[2], NewOption[3],
+						NewOption[4], NewOption[5], NewOption[6], lpObj->Inventory1[i].m_SetOption);
 				}
 
-				if ( ( lpObj->Inventory1[i].m_NewOption & 0x20 ) != 0 )
-				{
-					NewOption[0] = TRUE;
-				}
-
-				if ( ( lpObj->Inventory1[i].m_NewOption & 0x10 ) != 0 )
-				{
-					NewOption[1] = TRUE;
-				}
-
-				if ( ( lpObj->Inventory1[i].m_NewOption & 0x08 ) != 0 )
-				{
-					NewOption[2] = TRUE;
-				}
-
-				if ( ( lpObj->Inventory1[i].m_NewOption & 0x04 ) != 0 )
-				{
-					NewOption[3] = TRUE;
-				}
-
-				if ( ( lpObj->Inventory1[i].m_NewOption & 0x02 ) != 0 )
-				{
-					NewOption[4] = TRUE;
-				}
-
-				if ( ( lpObj->Inventory1[i].m_NewOption & 0x01 ) != 0 )
-				{
-					NewOption[5] = TRUE;
-				}
-
-				LogAddTD("[PShop] PShop Item Delete LV <= 5 [%s][%s] [LV:%d] : serial:%d [%s][%d][%d][%d][%d] Ex:[%d,%d,%d,%d,%d,%d,%d] Set:[%d]",
-					lpObj->AccountID, lpObj->Name, lpObj->Level, lpObj->Inventory1[i].m_Number, 
-					ItemAttribute[lpObj->Inventory1[i].m_Type].Name, lpObj->Inventory1[i].m_Level,
-					lpObj->Inventory1[i].m_Option1, lpObj->Inventory1[i].m_Option2,
-					lpObj->Inventory1[i].m_Option3, NewOption[0], NewOption[1], NewOption[2], NewOption[3],
-					NewOption[4], NewOption[5], NewOption[6], lpObj->Inventory1[i].m_SetOption);
+				lpObj->Inventory1[i].Clear();
 			}
 
-			lpObj->Inventory1[i].Clear();
+			memset(lpObj->InventoryMap1 + 64, (BYTE)-1, PSHOP_MAP_SIZE);
 		}
-									 
-		memset(lpObj->InventoryMap1+64, (BYTE)-1, PSHOP_MAP_SIZE);
 	}
-		 */
+
 	lpObj->Live = TRUE;
 	lpObj->Type = OBJ_USER;
 	lpObj->TargetNumber = -1;
@@ -3791,6 +3794,12 @@ short gObjMemFree(int index)
 					g_BloodCastle.SearchUserDropQuestItem(lpObj->m_Index);
 				}
 
+				if (IT_MAP_RANGE(lpObj->MapNumber))
+				{
+					g_IllusionTempleEvent.SearchUserDropQuestItem(lpObj->MapNumber, lpObj->m_Index);
+					g_IllusionTempleEvent.BattleDeleteUser(lpObj->m_Index, lpObj->MapNumber);
+				}
+
 				GJSetCharacterInfo(lpObj, index, 0);
 			}
 			
@@ -3911,10 +3920,18 @@ BOOL gObjGameClose(int aIndex)
 		GDSetWarehouseList(lpObj->m_Index);
 	}
 
-	if ( (lpObj->MapNumber<11)?FALSE:(lpObj->MapNumber>17)?FALSE:TRUE )
+	
+	if (BC_MAP_RANGE(lpObj->MapNumber))
 	{
 		g_BloodCastle.SearchUserDropQuestItem(lpObj->m_Index);
 	}
+
+	if (IT_MAP_RANGE(lpObj->MapNumber))
+	{
+		g_IllusionTempleEvent.SearchUserDropQuestItem(lpObj->MapNumber, lpObj->m_Index);
+		g_IllusionTempleEvent.BattleDeleteUser(lpObj->m_Index, lpObj->MapNumber);
+	}
+
 
 	gObjSaveChaosBoxItemList(lpObj);
 
@@ -4191,6 +4208,11 @@ BOOL gObjJoominCheck(int aIndex, char* szInJN)
 {
 	LPOBJ lpObj = &gObj[aIndex];
 	
+	if (Configs.RemovePersonalID == TRUE)
+	{
+		return TRUE;
+	}
+
 	switch (Configs.gLanguage)
 	{
 		case 1:
@@ -4342,6 +4364,40 @@ BOOL gObjCheckXYMapTile(LPOBJ lpObj, int iDbgName)
 		if ( attr2 > 1 && attr3 > 1 && attr4 > 1 && attr5 > 1 )
 		{
 			LogAddTD("[ CHECK POSITION ] DbgName[%d] [%s][%s] Map[%d]-(%d,%d) Invalid location causes to force to move",iDbgName,lpObj->AccountID, lpObj->Name, lpObj->MapNumber, lpObj->X, lpObj->Y);
+			
+			if (IT_MAP_RANGE(lpObj->MapNumber) != 0)
+			{
+				if (g_IllusionTempleEvent.GetState(lpObj->MapNumber) == 2)
+				{
+					BYTE loc14 = g_IllusionTempleEvent.GetUserJoinSide(lpObj->MapNumber, lpObj->m_Index);
+
+					PMSG_TELEPORT pMsg;
+
+					if (loc14 == (BYTE)-1)
+					{
+						pMsg.MoveNumber = 17;
+					}
+					else
+					{
+						if (loc14 == 0)
+						{
+							pMsg.MoveNumber = lpObj->MapNumber + 103;
+						}
+						else if (loc14 == 1)
+						{
+							pMsg.MoveNumber = lpObj->MapNumber + 109;
+						}
+						else
+						{
+							pMsg.MoveNumber = 17;
+						}
+					}
+					gObjMoveGate(lpObj->m_Index, pMsg.MoveNumber);
+					return TRUE;
+				}
+			}
+			
+			
 			PMSG_TELEPORT pMsg;
 			pMsg.MoveNumber = 17;
 			gObjMoveGate(lpObj->m_Index, pMsg.MoveNumber);
@@ -5798,13 +5854,29 @@ void gObjPlayerKiller(LPOBJ lpObj, LPOBJ lpTargetObj)
 		return;
 	}
 
-	for ( int n=0;n<MAX_SELF_DEFENSE;n++)
+	if (IT_MAP_RANGE(lpObj->MapNumber) || IT_MAP_RANGE(lpTargetObj->MapNumber))
 	{
-		if ( lpTargetObj->SelfDefense[n] >= 0 )
+		return;
+	}
+
+	int iPartyNumber = lpObj->PartyNumber;
+	int loc2 = -1;
+
+	for (int n = 0; n<MAX_SELF_DEFENSE; n++)
+	{
+		if (lpTargetObj->SelfDefense[n] >= 0)
 		{
-			if ( lpTargetObj->SelfDefense[n] == lpObj->m_Index )
+			if (lpTargetObj->SelfDefense[n] == lpObj->m_Index)
 			{
 				return;
+			}
+
+			if (iPartyNumber >= 0)
+			{
+				if (gObj[lpTargetObj->SelfDefense[n]].PartyNumber == iPartyNumber)
+				{
+					return;
+				}
 			}
 		}
 	}
@@ -5817,27 +5889,45 @@ void gObjPlayerKiller(LPOBJ lpObj, LPOBJ lpTargetObj)
 		return;
 	}
 
-	if ( lpObj->m_PK_Level == 3 )
+	BYTE btDefaultPartyPkLevel = 3; //Season 2.5 add-on
+
+	if (lpTargetObj->PartyNumber >= 0) //Season 2.5 add-on
 	{
-		if(lpTargetObj->m_PK_Level == 3)
+		if (gParty.GetPkLevel(lpTargetObj->PartyNumber) >= 5)
+		{
+			btDefaultPartyPkLevel = gParty.GetPkLevel(lpTargetObj->PartyNumber);
+		}
+		else
+		{
+			btDefaultPartyPkLevel = lpTargetObj->m_PK_Level;
+		}
+	}
+	else
+	{
+		btDefaultPartyPkLevel = lpTargetObj->m_PK_Level;
+	}
+
+	if (lpObj->m_PK_Level == 3)
+	{
+		if (((char)btDefaultPartyPkLevel) == 3) //Season 2.5 changed
 		{
 			lpObj->m_PK_Count = 1;
 		}
-		else if(lpTargetObj->m_PK_Level < 3)
+		else if (((char)btDefaultPartyPkLevel) < 3) //Season 2.5 changed
 		{
 			lpObj->m_PK_Count = 1;
 		}
-		else if(lpTargetObj->m_PK_Level == 4)
+		else if (((char)btDefaultPartyPkLevel) == 4) //Season 2.5 changed
 		{
 			lpObj->m_PK_Count = 1;
 		}
 		else
 		{
-			if(lpTargetObj->m_PK_Level >= 6 && lpTargetObj->Level > 20)
+			if (((char)btDefaultPartyPkLevel) >= 6 && lpTargetObj->Level > 20) //Season 2.5 changed
 			{
 				lpObj->m_PK_Count--;
 
-				if(lpObj->m_PK_Count < -3)
+				if (lpObj->m_PK_Count < -3)
 				{
 					lpObj->m_PK_Count = (BYTE)-3;
 					return;
@@ -5849,12 +5939,12 @@ void gObjPlayerKiller(LPOBJ lpObj, LPOBJ lpTargetObj)
 			}
 		}
 	}
-	else if( lpObj->m_PK_Level > 3)
+	else if (lpObj->m_PK_Level > 3)
 	{
-		if(lpTargetObj->m_PK_Level <= 4)
+		if (((char)btDefaultPartyPkLevel) <= 4) //Season 2.5 changed
 		{
 			lpObj->m_PK_Count++;
-			if(lpObj->m_PK_Count > 100)
+			if (lpObj->m_PK_Count > 100)
 			{
 				lpObj->m_PK_Count = 100;
 			}
@@ -5864,27 +5954,27 @@ void gObjPlayerKiller(LPOBJ lpObj, LPOBJ lpTargetObj)
 			return;
 		}
 	}
-	else if( lpObj->m_PK_Level < 3)
+	else if (lpObj->m_PK_Level < 3)
 	{
-		if(lpTargetObj->m_PK_Level == 3)
+		if (((char)btDefaultPartyPkLevel) == 3) //Season 2.5 changed
 		{
 			lpObj->m_PK_Count = 1;
 		}
-		else if(lpTargetObj->m_PK_Level < 3)
+		else if (((char)btDefaultPartyPkLevel) < 3) //Season 2.5 changed
 		{
 			lpObj->m_PK_Count = 1;
 		}
-		else if(lpTargetObj->m_PK_Level == 4)
+		else if (((char)btDefaultPartyPkLevel) == 4) //Season 2.5 changed
 		{
 			lpObj->m_PK_Count = 1;
 		}
 		else
 		{
-			if(lpTargetObj->m_PK_Level >= 6 && lpTargetObj->Level > 20)
+			if (((char)btDefaultPartyPkLevel) >= 6 && lpTargetObj->Level > 20) //Season 2.5 changed
 			{
 				lpObj->m_PK_Count--;
 
-				if(lpObj->m_PK_Count < -3)
+				if (lpObj->m_PK_Count < -3)
 				{
 					lpObj->m_PK_Count = (BYTE)-3;
 				}
@@ -6007,6 +6097,11 @@ void gObjUserDie(LPOBJ lpObj, LPOBJ lpTargetObj)
 			LogAddTD("[Blood Castle] (%d) Dead In Blood Castle, Killed by Other User [%s][%s][%s]",lpObj->MapNumber - (MAP_INDEX_BLOODCASTLE1-1),lpObj->AccountID,lpObj->Name,lpTargetObj->Name);
 			g_BloodCastle.SearchUserDropQuestItem(lpObj->m_Index);
 		}
+		return;
+	}
+	else if (IT_MAP_RANGE(lpObj->MapNumber)) //season2.5 add-on
+	{
+		g_IllusionTempleEvent.ResetAndClearSkills(lpObj);
 		return;
 	}
 	else if(CC_MAP_RANGE(lpObj->MapNumber))
@@ -6204,89 +6299,108 @@ void gObjUserDie(LPOBJ lpObj, LPOBJ lpTargetObj)
 	DWORD decexp = 0;
 	DWORD decexprate = 0;
 
-	if(lpObj->Level <= 10)
+	BYTE btDefaultPartyPkLevel = 3; //Season 2.5 add-on
+
+	if (lpObj->PartyNumber >= 0) //Season 2.5 add-on
 	{
-		decexprate = 0;
-	}
-	else if(lpObj->Level <= 150)
-	{
-		if(lpObj->m_PK_Level == 2)
+		if ((gParty.GetPkLevel(lpObj->PartyNumber)) >= 5)
 		{
-			decexprate = 2;
-		}
-		else if(lpObj->m_PK_Level == 3)
-		{
-			decexprate = 3;
-		}
-		else if(lpObj->m_PK_Level == 4)
-		{
-			decexprate = 5;
-		}
-		else if(lpObj->m_PK_Level == 5)
-		{
-			decexprate = 6;
-		}
-		else if(lpObj->m_PK_Level >= 6)
-		{
-			decexprate = 7;
+			btDefaultPartyPkLevel = gParty.GetPkLevel(lpObj->PartyNumber);
 		}
 		else
 		{
-			decexprate = 2;
-		}
-	}
-	else if(lpObj->Level <= 220)
-	{
-		if(lpObj->m_PK_Level == 2)
-		{
-			decexprate = 1;
-		}
-		else if(lpObj->m_PK_Level == 3)
-		{
-			decexprate = 2;
-		}
-		else if(lpObj->m_PK_Level == 4)
-		{
-			decexprate = 4;
-		}
-		else if(lpObj->m_PK_Level == 5)
-		{
-			decexprate = 5;
-		}
-		else if(lpObj->m_PK_Level >= 6)
-		{
-			decexprate = 6;
-		}
-		else
-		{
-			decexprate = 1;
+			btDefaultPartyPkLevel = lpObj->m_PK_Level;
 		}
 	}
 	else
 	{
-		if(lpObj->m_PK_Level == 2)
+		btDefaultPartyPkLevel = lpObj->m_PK_Level;
+	}
+
+
+	if(lpObj->Level <= 10)
+	{
+		decexprate = 0;
+	}
+	else if (lpObj->Level <= 150)
+	{
+		if (((char)btDefaultPartyPkLevel) == 2) //Season 2.5 changed
 		{
-			decexprate = 1;
+			decexprate = 20;
 		}
-		else if(lpObj->m_PK_Level == 3)
+		else if (((char)btDefaultPartyPkLevel) == 3) //Season 2.5 changed
 		{
-			decexprate = 1;
+			decexprate = 10; //Season 2.5 changed
 		}
-		else if(lpObj->m_PK_Level == 4)
+		else if (((char)btDefaultPartyPkLevel) == 4) //Season 2.5 changed
 		{
-			decexprate = 3;
+			decexprate = 50;
 		}
-		else if(lpObj->m_PK_Level == 5)
+		else if (((char)btDefaultPartyPkLevel) == 5) //Season 2.5 changed
 		{
-			decexprate = 4;
+			decexprate = 60;
 		}
-		else if(lpObj->m_PK_Level >= 6)
+		else if (((char)btDefaultPartyPkLevel) >= 6) //Season 2.5 changed
 		{
-			decexprate = 5;
+			decexprate = 70;
 		}
 		else
 		{
-			decexprate = 1;
+			decexprate = 20;
+		}
+	}
+	else if (lpObj->Level <= 220)
+	{
+		if (((char)btDefaultPartyPkLevel) == 2) //Season 2.5 changed
+		{
+			decexprate = 10;
+		}
+		else if (((char)btDefaultPartyPkLevel) == 3) //Season 2.5 changed
+		{
+			decexprate = 10; //Season 2.5 changed
+		}
+		else if (((char)btDefaultPartyPkLevel) == 4) //Season 2.5 changed
+		{
+			decexprate = 40;
+		}
+		else if (((char)btDefaultPartyPkLevel) == 5) //Season 2.5 changed
+		{
+			decexprate = 50;
+		}
+		else if (((char)btDefaultPartyPkLevel) >= 6) //Season 2.5 changed
+		{
+			decexprate = 60;
+		}
+		else
+		{
+			decexprate = 10;
+		}
+	}
+	else
+	{
+		if (lpObj->m_PK_Level == 2)
+		{
+			decexprate = 10;
+		}
+		else if (((char)btDefaultPartyPkLevel) == 3) //Season 2.5 changed
+		{
+			decexprate = 10; //Season 2.5 changed
+		}
+		else if (((char)btDefaultPartyPkLevel) == 4) //Season 2.5 changed
+		{
+			decexprate = 30;
+		}
+		else if (((char)btDefaultPartyPkLevel) == 5) //Season 2.5 changed
+		{
+			decexprate = 40;
+		}
+		else if (((char)btDefaultPartyPkLevel) >= 6) //Season 2.5 changed
+		{
+			decexprate = 50;
+		}
+		else
+		{
+			decexprate = 10;
 		}
 	}
 
@@ -7832,9 +7946,14 @@ void gObjExpParty(LPOBJ lpObj , LPOBJ lpTargetObj, int AttackDamage, int MSBFlag
 		{
 			lpPartyObj = &gObj[number];
 
-			if(lpPartyObj->Level > toplevel)
+			int dis = gObjCalDistance(lpTargetObj, lpPartyObj); //Season 2.5 add-on
+
+			if (dis < 10) //Season 2.5 add-on
 			{
-				toplevel = lpPartyObj->Level;
+				if (lpPartyObj->Level > toplevel)
+				{
+					toplevel = lpPartyObj->Level;
+				}
 			}
 		}
 	}
@@ -8136,10 +8255,32 @@ void gObjLifeCheck(LPOBJ lpTargetObj, LPOBJ lpObj, int AttackDamage, int DamageS
 		if(lpObj->Type == OBJ_USER && lpTargetObj->Type == OBJ_USER)
 		{
 			gObjSetKillCount(lpObj->m_Index,1);
+
+			if (IT_MAP_RANGE(lpObj->MapNumber))
+			{
+				if (g_IllusionTempleEvent.GetState(lpObj->MapNumber) == 2)
+				{
+					BYTE loc2 = g_IllusionTempleEvent.SetKillCount(lpObj->m_Index, lpObj->MapNumber, 1);
+					GCSendIllusionTempleKillCount(lpObj->m_Index, loc2);
+					LogAddTD("[Illusion Temple] (%d) (%s)(%s) Character Killed, (point: %d)", lpObj->MapNumber - 44, lpObj->AccountID, lpObj->Name, loc2);
+				}
+			}
 		}
 
 		if(lpTargetObj->Type == OBJ_MONSTER)
 		{
+
+			if (IT_MAP_RANGE(lpObj->MapNumber))
+			{
+				if (g_IllusionTempleEvent.GetState(lpObj->MapNumber) == 2)
+				{
+					BYTE loc3 = g_IllusionTempleEvent.SetKillCount(lpObj->m_Index, lpObj->MapNumber, 2);
+					GCSendIllusionTempleKillCount(lpObj->m_Index, loc3);
+					lpTargetObj->m_PosNum = -1;
+					LogAddTD("[Illusion Temple] (%d) (%s)(%s) Monster Killed, (point: %d)", lpObj->MapNumber - 44, lpObj->AccountID, lpObj->Name, loc3);
+				}
+			}
+
 			if(lpTargetObj->Class == 275 || lpTargetObj->Class == 295 || lpTargetObj->MapNumber == MAP_INDEX_CRYWOLF_FIRSTZONE)
 			{
 				gObjAddMsgSendDelayInSpecificQPos(lpTargetObj,1,lpObj->m_Index,800,0,0);
@@ -8331,6 +8472,12 @@ void gObjLifeCheck(LPOBJ lpTargetObj, LPOBJ lpObj, int AttackDamage, int DamageS
 				g_BloodCastle.SetUserState(lpTargetObj->m_Index,1);
 				g_BloodCastle.SearchUserDropQuestItem(lpTargetObj->m_Index);
 			}
+
+			if (IT_MAP_RANGE(lpTargetObj->MapNumber))
+			{
+				g_IllusionTempleEvent.SearchUserDropQuestItem(lpTargetObj->MapNumber, lpTargetObj->m_Index);
+			}
+
 
 			if(CC_MAP_RANGE(lpTargetObj->MapNumber))
 			{
@@ -9122,6 +9269,7 @@ BYTE gObjShopBuyInventoryInsertItem(LPOBJ lpObj, int type, int index, int level,
 	int item_type = ItemGetNumberMake(type,index);
 	item.m_Level = level;
 	item.m_Durability = iDur;
+	item.m_serial = iSerial;
 
 	item.Convert(item_type,0,0,0,0,0,0,CURRENT_DB_VERSION);
 
@@ -9173,6 +9321,7 @@ BYTE gObjInventoryInsertItemTemp(LPOBJ lpObj, CMapItem * Item)
 	CItem item;
 	int w,h,iwidth,iheight;
 	BYTE blank = 0;
+
 
 	if(Item->GetSize((int &)iwidth,(int &)iheight)==0)
 	{
@@ -9261,6 +9410,7 @@ BYTE gObjInventoryInsertItem(LPOBJ lpObj, int type, int index, int level, int iS
 	int item_type = ItemGetNumberMake(type,index);
 	item.m_Level = level;
 	item.m_Durability = iDur;
+	item.m_serial = iSerial;
 
 	item.Convert(item_type,0,0,0,0,0,0,CURRENT_DB_VERSION);
 
@@ -9641,6 +9791,14 @@ BOOL gObjIsItemPut(LPOBJ lpObj, CItem * lpItem, int pos )
 			{
 				return false;
 			}
+		}
+	}
+
+	if (IT_MAP_RANGE(lpObj->MapNumber))
+	{
+		if (g_IllusionTempleEvent.CheckPolymorphItem(lpItem->m_Type) != FALSE)
+		{
+			return false;
 		}
 	}
 
@@ -10646,6 +10804,10 @@ BYTE gObjInventoryMoveItem(int aIndex, unsigned char source, unsigned char targe
 						{
 
 						}
+						else if (IsCondorItemCheck(sitem->m_Type) == 1) //Season 2.5 add-on
+						{
+
+						}
 						else if(sitem->m_Type == ITEMGET(12,30) || sitem->m_Type == ITEMGET(12,31))
 						{
 
@@ -10975,6 +11137,39 @@ BYTE gObjInventoryMoveItem(int aIndex, unsigned char source, unsigned char targe
 		}
 
 
+		//Season 2.5 add-on
+		switch (tFlag)
+		{
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+		case 8:
+		{
+			if (lpObj->pInventory[source].m_Type == ITEMGET(13, 42))
+			{
+				return -1;
+			}
+			else if (lpObj->pInventory[source].m_Type == ITEMGET(14, 64))
+			{
+				return -1;
+			}
+		}
+		break;
+		case 0:
+		{
+			if (IT_MAP_RANGE(lpObj->MapNumber))
+			{
+				if (lpObj->pInventory[source].m_Type == ITEMGET(14, 64))
+				{
+					g_IllusionTempleEvent.SetRegPedestal(lpObj->MapNumber, aIndex, target);
+				}
+			}
+		}
+		break;
+		}
+		//
 
 		switch(tFlag)
 		{
@@ -14123,6 +14318,17 @@ void gObjSetState()
 					}
 				}
 
+				if (IT_MAP_RANGE(lpObj->MapNumber)) //Season2.5 add-on
+				{
+					if (lpObj->Class == 380 || lpObj->Class >= 386 && lpObj->Class <= 403)
+					{
+						if (lpObj->m_PosNum == -1)
+						{
+							continue;
+						}
+					}
+				}
+
 				if(lpObj->m_Attribute == 60)
 				{
 					gObjDel(lpObj->m_Index);
@@ -14441,6 +14647,54 @@ void gObjSetState()
 								lpObj->Y = y;
 							}
 						}
+						else if (IT_MAP_RANGE(lpObj->MapNumber))
+						{
+							BYTE loc48 = g_IllusionTempleEvent.GetUserJoinSide(lpObj->MapNumber, lpObj->m_Index);
+
+							if (loc48 == (BYTE)-1)
+							{
+								lpObj->MapNumber = MAP_INDEX_DEVIAS;
+								MapC[lpObj->MapNumber].GetMapPos(lpObj->MapNumber, lpObj->X, lpObj->Y);
+							}
+							else if (loc48 == 0)
+							{
+								int mgt = lpObj->MapNumber + 103;
+								short x, y, level;
+								BYTE map = lpObj->MapNumber, dir;
+
+								int result = gGateC.GetGate(mgt, (short &)x, (short &)y, (BYTE &)map, (BYTE &)dir, (short &)level);
+
+								if (result >= 0)
+								{
+									lpObj->MapNumber = map;
+									lpObj->X = x;
+									lpObj->Y = y;
+								}
+
+								g_IllusionTempleEvent.DeathSetShield(lpObj); //Set Shield after Death					
+							}
+							else if (loc48 == 1)
+							{
+								int mgt = lpObj->MapNumber + 109;
+								short x, y, level;
+								BYTE map = lpObj->MapNumber, dir;
+
+								int result = gGateC.GetGate(mgt, (short &)x, (short &)y, (BYTE &)map, (BYTE &)dir, (short &)level);
+
+								if (result >= 0)
+								{
+									lpObj->MapNumber = map;
+									lpObj->X = x;
+									lpObj->Y = y;
+								}
+								g_IllusionTempleEvent.DeathSetShield(lpObj); //Set Shield after Death
+							}
+							else
+							{
+								lpObj->MapNumber = MAP_INDEX_DEVIAS;
+								MapC[lpObj->MapNumber].GetMapPos(lpObj->MapNumber, (short &)lpObj->X, (short &)lpObj->Y);
+							}
+						}
 						else
 						{
 							MapC[lpObj->MapNumber].GetMapPos(lpObj->MapNumber,(short &)lpObj->X,(short &)lpObj->Y);
@@ -14531,13 +14785,13 @@ void gObjSetState()
 							continue;
 						}
 						CreateFrustrum(lpObj->X,lpObj->Y,n);
-					}
 
-					if (IT_MAP_RANGE(lpObj->MapNumber)) //season 2.5 add-on
-					{
-						if (lpObj->Class == 380)
+						if (IT_MAP_RANGE(lpObj->MapNumber)) //season 2.5 add-on
 						{
-							LogAddTD("[Illusion Temple] (%d) Status Regen OK (%d: %d/%d)", lpObj->MapNumber - 44, lpObj->MapNumber, lpObj->X, lpObj->Y);
+							if (lpObj->Class == 380)
+							{
+								LogAddTD("[Illusion Temple] (%d) Status Regen OK (%d: %d/%d)", lpObj->MapNumber - 44, lpObj->MapNumber, lpObj->X, lpObj->Y);
+							}
 						}
 					}
 
@@ -16889,6 +17143,15 @@ BOOL gObjMoveGate(int aIndex, int gt)
 		}
 	}
 
+	if (IT_MAP_RANGE(lpObj->MapNumber))
+	{
+		if (mapNumber != lpObj->MapNumber)
+		{
+			g_IllusionTempleEvent.SearchUserDropQuestItem(lpObj->MapNumber, lpObj->m_Index);
+			g_IllusionTempleEvent.BattleDeleteUser(lpObj->m_Index, lpObj->MapNumber);
+		}
+	}
+
 	if ( result == 97 )
 	{
 		if ( g_CastleSiege.GetCastleState() == CASTLESIEGE_STATE_STARTSIEGE )
@@ -18204,22 +18467,22 @@ BOOL gObjItemRandomLevelUp(LPOBJ lpObj, int source, int target)
 
 BOOL gObjItemRandomOption3Up(LPOBJ lpObj, int source, int target)
 {
-	if(source < 0 || source > MAIN_INVENTORY_SIZE -1)
+	if (source < 0 || source > MAIN_INVENTORY_SIZE - 1)
 	{
 		return false;
 	}
 
-	if(target < 0 || target > MAIN_INVENTORY_SIZE -1)
+	if (target < 0 || target > MAIN_INVENTORY_SIZE - 1)
 	{
 		return false;
 	}
 
-	if(lpObj->pInventory[source].IsItem() == 0)
+	if (lpObj->pInventory[source].IsItem() == 0)
 	{
 		return false;
 	}
 
-	if(lpObj->pInventory[target].IsItem() == 0)
+	if (lpObj->pInventory[target].IsItem() == 0)
 	{
 		return false;
 	}
@@ -18234,29 +18497,40 @@ BOOL gObjItemRandomOption3Up(LPOBJ lpObj, int source, int target)
 
 
 	LogAddTD(lMsg.Get(576),
-		lpObj->AccountID,lpObj->Name,
+		lpObj->AccountID, lpObj->Name,
 		lpObj->pInventory[target].GetName(),
 		lpObj->pInventory[target].m_Number,
 		lpObj->pInventory[target].m_Option3);
 
-	int _r = rand()%100;
+	int _r = rand() % 100;
 	int loc2;
 	int loc3;
 
-	if(lpObj->pInventory[target].m_Option3 == 0)
+	if (lpObj->pInventory[target].m_Option3 == 0)
 	{
-		if(lpObj->pInventory[target].m_Type >= ITEMGET(12,3) && lpObj->pInventory[target].m_Type <= ITEMGET(12,6))
+		if (lpObj->pInventory[target].m_Type >= ITEMGET(12, 3) && lpObj->pInventory[target].m_Type <= ITEMGET(12, 6))
 		{
 			lpObj->pInventory[target].m_NewOption &= 0xDF;
 
-			if(rand()%2)
+			if (rand() % 2)
 			{
 				lpObj->pInventory[target].m_NewOption |= 0x20;
 			}
 		}
 	}
 
-	if(lpObj->pInventory[target].m_Option3 < 4)
+	int lifeOpt;
+
+	if (Configs.IsLifePlus28Option)
+	{
+		lifeOpt = 7;
+	}
+	else
+	{
+		lifeOpt = 4;
+	}
+
+	if(lpObj->pInventory[target].m_Option3 < lifeOpt)
 	{
 		if(_r < 50)
 		{
@@ -19079,6 +19353,7 @@ int  gObjCheckAttackArea(int aIndex, int TarObjIndex)
 	{
 		return 5;
 	} 
+
 	attr = MapC[mapnumber].GetAttr(gObj[aIndex].X,gObj[aIndex].Y);
 
 	if(attr && !(attr&2))

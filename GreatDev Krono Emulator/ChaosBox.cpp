@@ -1572,6 +1572,16 @@ BOOL WingChaosMix(LPOBJ lpObj)
 	}
 }
 
+
+BOOL IsCondorItemCheck(int iItemCode) //identical gs-cs 56
+{
+	if (iItemCode == iCondorFeather || iItemCode == iCondorFlame)
+	{
+		return TRUE;
+	}
+	return FALSE;
+}
+
 //Identical gs-cs 56
 BOOL CheckLevel2WingItem(int iItemCode) //func_5d83b0
 {

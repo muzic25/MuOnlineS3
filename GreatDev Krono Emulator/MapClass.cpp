@@ -639,6 +639,11 @@ void MapClass::StateSetDestroy()
 				{
 					LogAddTD(lMsg.Get(MSGGET(4, 76)), this->m_cItem[n].GetName(), this->m_cItem[n].m_Type, this->m_cItem[n].m_Level, this->m_cItem[n].m_Special[0] , this->m_cItem[n].m_Number);
 					this->m_cItem[n].m_State = 8;
+
+					if (this->m_cItem[n].m_Type == ITEMGET(14, 64)) //season 2.5 add-on
+					{
+						g_IllusionTempleEvent.SetNpcStatueRegen(this->thisMapNumber);
+					}
 				}
 			}
 		}

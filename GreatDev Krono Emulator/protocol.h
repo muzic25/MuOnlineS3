@@ -1420,11 +1420,15 @@ struct PMSG_ANS_ILLUSIONTEMPLE_ENTER
 struct PMSG_USE_ILLUSIONTEMPLE_KILLCOUNT_SKILL
 {
 	PBMSG_HEAD2 h;
-	BYTE	btSkillIdH;
+	unsigned char	useTime;
+	unsigned char	SkillId;
+	unsigned short	aOwnerIndex;
+	unsigned short	aRecvrIndex;
+/*	BYTE	btSkillIdH;
 	BYTE	btSkillIdL;
 	BYTE	btTargetH;
 	BYTE	btTargetL;
-	BYTE	btDis;
+	BYTE	btDis;*/
 };
 
 struct PMSG_ILLUSIONTEMPLE_DROP_REWARD

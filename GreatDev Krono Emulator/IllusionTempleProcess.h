@@ -6,7 +6,7 @@
 #endif // _MSC_VER > 1000
 
 #define MAX_FLOOR_DATA 5
-#define MAX_FLOOR_USER 10
+#define MAX_FLOOR_USER 5
 #define MAX_STATUE_MONSTER 2
 #define MAX_FLOOR_MONSTER 40
 #define ILLUSIONTEMPLE_INVALID_INDEX -1
@@ -134,9 +134,11 @@ struct _ILLUSIONTEMPLE_RANKING_DATA
 struct _ILLUSIONTEMPLE_PLAYER_RANK_DATA
 {
 	char szCharacterName[10];
-	BYTE m_btMapNumber;
+	BYTE ChangeUP;
 	BYTE m_btTeamJoinSide;
 	BYTE m_btClass;
+	//BYTE m_btMapNumber;
+	BYTE unknown[3];
 	DWORD m_dwExpReward;
 };
 
@@ -308,13 +310,13 @@ public:
 
 	BOOL				m_bOpenStatus;
 
-	int					m_iStatueRegenTickCount; //should be DWORD
+	DWORD					m_iStatueRegenTickCount; //should be DWORD
 
 	int					m_iLeftMinutesBeforeOpen;
 	int					m_iEventBattleTimer;
 
-	int					m_iCloseTickCount; //should be DWORD
-	int					m_iOpenTickCount; //should be DWORD
+	DWORD					m_iCloseTickCount; //should be DWORD
+	DWORD					m_iOpenTickCount; //should be DWORD
 
 	int					m_iLeftMinutesBeforeEnd;
 

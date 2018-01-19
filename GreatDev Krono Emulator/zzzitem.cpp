@@ -1777,6 +1777,16 @@ void CItem::Value()
 						case 4:
 							Gold += (__int64)(Gold * 56.0 / 10.0);
 							break;
+
+						case 5:
+							Gold += (__int64)(Gold * 84.0 / 10.0);
+							break;
+						case 6:
+							Gold += (__int64)(Gold * 112.0 / 10.0);
+							break;
+						case 7:
+							Gold += (__int64)(Gold * 140.0 / 10.0);
+							break;
 					}
 					break;
 
@@ -1798,6 +1808,16 @@ void CItem::Value()
 
 						case 4:
 							Gold += (__int64)(Gold * 56.0 / 10.0);
+							break;
+
+						case 5:
+							Gold += (__int64)(Gold * 84.0 / 10.0);
+							break;
+						case 6:
+							Gold += (__int64)(Gold * 112.0 / 10.0);
+							break;
+						case 7:
+							Gold += (__int64)(Gold * 140.0 / 10.0);
 							break;
 					}
 					break;
@@ -3181,15 +3201,22 @@ void BufferItemtoConvert3(unsigned char* buf, int& type, BYTE& level, BYTE& op1,
 	op3 = (buf[1] & 3 );
 	dur = buf[2];
 
-	if ( type == ITEMGET(13, 3) ) // Dinorant
+	if (Configs.IsLifePlus28Option)
 	{
 		op3 |= (buf[3] & 0x40) >> 4;
 	}
 	else
 	{
-		if ( (buf[3] & 0x40) == 0x40 )
+		if (type == ITEMGET(13, 3)) // Dinorant
 		{
-			op3 = 4;
+			op3 |= (buf[3] & 0x40) >> 4;
+		}
+		else
+		{
+			if ((buf[3] & 0x40) == 0x40)
+			{
+				op3 = 4;
+			}
 		}
 	}
 }

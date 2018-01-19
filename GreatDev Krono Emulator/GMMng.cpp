@@ -623,6 +623,27 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 				return 0;
 			}
 
+
+			BOOL bPlayerKiller = FALSE; //Season 2.5 add-on
+
+			if (gObj[aIndex].PartyNumber >= 0) //Season 2.5 add-on
+			{
+				if (gParty.GetPkLevel(gObj[aIndex].PartyNumber) >= 5)
+				{
+					bPlayerKiller = TRUE;
+				}
+			}
+			else if (gObj[aIndex].m_PK_Level >= 5)
+			{
+				bPlayerKiller = TRUE;
+			}
+
+			if (bPlayerKiller == TRUE)
+			{
+				GCServerMsgStringSend(lMsg.Get(MSGGET(4, 101)), lpObj->m_Index, 1);
+				return 0;
+			}
+
 			gMoveCommand.Move(lpObj, pId);
 		}
 	}
@@ -1731,6 +1752,7 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 				}
 				else
 				{
+
 					if (lpObj->Level < Configs.SkinLevelReq)
 					{
 						char levelmsg[100];
@@ -1747,8 +1769,18 @@ int CGMMng::ManagementProc(LPOBJ lpObj, char* szCmd, int aIndex)
 
 					int NumSkin = 0;
 					NumSkin = GetTokenNumber();
-					lpObj->m_Change = NumSkin;
-					gObjViewportListProtocolCreate(lpObj);
+
+					if (NumSkin == 0)
+					{
+						lpObj->m_Change = -1;
+						gObjViewportListProtocolCreate(lpObj);
+					}
+					else
+					{
+						lpObj->m_Change = NumSkin;
+						gObjViewportListProtocolCreate(lpObj);
+					}
+
 					lpObj->Money -= Configs.SkinPriceZen;
 					GCMoneySend(lpObj->m_Index, lpObj->Money);
 
