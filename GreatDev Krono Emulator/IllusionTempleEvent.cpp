@@ -1,17 +1,5 @@
 //GameServer 1.00.90 JPN - Completed
 #include "stdafx.h"
-#include "IllusionTempleEvent.h"
-#include "IllusionTempleProcess.h"
-#include "GameMain.h"
-#include "logproc.h"
-#include "readscript.h"
-#include "winutil.h"
-#include "GameServer.h"
-#include "CastleSiegeSync.h"
-#include "CrywolfSync.h"
-#include "DSProtocol.h"
-#include "Event.h"
-#include "DevilSquare.h"
 
 int g_iIllusionTempleEvent = 1;
 int g_iOldScrollDropRate = 0;
@@ -29,8 +17,8 @@ int m_i_IT_RestTime;
 int m_i_IT_MinPlayer;
 int m_i_IT_WaitTime;
 
-static const int g_iIT_ChoasMixSuccessRate[MAX_FLOOR_DATA + 1] = { Configs.IllusionTempleMixSuccess[0], Configs.IllusionTempleMixSuccess[1], Configs.IllusionTempleMixSuccess[2], Configs.IllusionTempleMixSuccess[3], Configs.IllusionTempleMixSuccess[4], Configs.IllusionTempleMixSuccess[5] };
-static const int g_iIT_ChoasMixMoney[MAX_FLOOR_DATA + 1] = { Configs.IllusionTempleMixMoney[0] , Configs.IllusionTempleMixMoney[1] , Configs.IllusionTempleMixMoney[2], Configs.IllusionTempleMixMoney[3], Configs.IllusionTempleMixMoney[4], Configs.IllusionTempleMixMoney[5] };
+static const int g_iIT_ChoasMixSuccessRate[MAX_FLOOR_DATA] = { Configs.IllusionTempleMixSuccess[0], Configs.IllusionTempleMixSuccess[1], Configs.IllusionTempleMixSuccess[2], Configs.IllusionTempleMixSuccess[3] };
+static const int g_iIT_ChoasMixMoney[MAX_FLOOR_DATA] = { Configs.IllusionTempleMixMoney[0] , Configs.IllusionTempleMixMoney[1] , Configs.IllusionTempleMixMoney[2], Configs.IllusionTempleMixMoney[3]  };
 
 
 CIllusionTempleEvent g_IllusionTempleEvent;
@@ -173,7 +161,7 @@ void CIllusionTempleEvent::Run()
 
 void CIllusionTempleEvent::SetRegPedestal(BYTE btMapNumber, int aIndex, BYTE pos)
 {
-	if( CHECK_LIMIT( (btMapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA+1) == FALSE )
+	if( CHECK_LIMIT( (btMapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA) == FALSE )
 	{
 		return;
 	}
@@ -182,7 +170,7 @@ void CIllusionTempleEvent::SetRegPedestal(BYTE btMapNumber, int aIndex, BYTE pos
 
 void CIllusionTempleEvent::SetRelicsCarrierViewState(LPOBJ lpObj)
 {
-	if( CHECK_LIMIT( (lpObj->MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA+1) == FALSE )
+	if( CHECK_LIMIT( (lpObj->MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA) == FALSE )
 	{
 		return;
 	}
@@ -203,7 +191,7 @@ BOOL CIllusionTempleEvent::IllusionTempleAddUser(int aIndex, BYTE FloorIndex, BY
 	PMSG_PARTYDELUSER pMsg;
 	int loc10;
 
-	if(CHECK_LIMIT( (FloorIndex), MAX_FLOOR_DATA+1) == FALSE)
+	if(CHECK_LIMIT( (FloorIndex), MAX_FLOOR_DATA) == FALSE)
 	{
 		return FALSE;
 	}
@@ -269,7 +257,7 @@ BOOL CIllusionTempleEvent::IllusionTempleAddUser(int aIndex, BYTE FloorIndex, BY
 			loc6 = gObj[aIndex].pInventory[TicketPos].m_Level;
 			loc7 = gObj[aIndex].pInventory[TicketPos].m_Number;
 
-			if(CHECK_LIMIT( loc6-1, MAX_FLOOR_DATA+1 ) == 0 && gObj[aIndex].pInventory[TicketPos].m_Durability != 1.0f)
+			if(CHECK_LIMIT( loc6-1, MAX_FLOOR_DATA ) == 0 && gObj[aIndex].pInventory[TicketPos].m_Durability != 1.0f)
 			{
 				pResult.btResult = 1;
 				DataSend(aIndex,(LPBYTE)&pResult,pResult.h.size);
@@ -387,7 +375,7 @@ BOOL CIllusionTempleEvent::EGReqIllusionTempleEnter(int aIndex, BYTE FloorIndex,
 void CIllusionTempleEvent::EGAnsIllusionTempleEnter(PMSG_ANS_ILLUSIONTEMPLE_ENTER_RESULT * lpMsg)
 {
 
-	if( CHECK_LIMIT( (lpMsg->FloorIndex), MAX_FLOOR_DATA+1) == FALSE )
+	if( CHECK_LIMIT( (lpMsg->FloorIndex), MAX_FLOOR_DATA) == FALSE )
 	{
 		return;
 	}
@@ -397,7 +385,7 @@ void CIllusionTempleEvent::EGAnsIllusionTempleEnter(PMSG_ANS_ILLUSIONTEMPLE_ENTE
 		return;
 	}
 
-	if( CHECK_LIMIT( (lpMsg->iPos), 75+1) == FALSE )
+	if( CHECK_LIMIT( (lpMsg->iPos), 75) == FALSE )
 	{
 		return;
 	}
@@ -435,7 +423,7 @@ void CIllusionTempleEvent::EGAnsIllusionTempleEnter(PMSG_ANS_ILLUSIONTEMPLE_ENTE
 			loc6 = lpObj->pInventory[lpMsg->iPos].m_Level;
 			loc7 = lpObj->pInventory[lpMsg->iPos].m_Number;
 
-			if(CHECK_LIMIT( loc6-1, MAX_FLOOR_DATA+1 ) == 0 && lpObj->pInventory[lpMsg->iPos].m_Durability != 1.0f)
+			if(CHECK_LIMIT( loc6-1, MAX_FLOOR_DATA ) == 0 && lpObj->pInventory[lpMsg->iPos].m_Durability != 1.0f)
 			{
 				pMsg.btResult = 1;
 				DataSend(lpMsg->Index, (LPBYTE)&pMsg, pMsg.h.size);
@@ -547,7 +535,7 @@ void CIllusionTempleEvent::EGSetIllusionTempleEnterCount(LPOBJ lpObj)
 
 BOOL CIllusionTempleEvent::BattleDeleteUser(int aIndex, BYTE MapNumber)
 {
-	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA+1) == FALSE )
+	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA) == FALSE )
 	{
 		return FALSE;
 	}
@@ -608,7 +596,7 @@ BOOL CIllusionTempleEvent::CheckEnterLevel(int aIndex, int TicketLevel)
 
 void CIllusionTempleEvent::SetNpcStatueUser(BYTE MapNumber, LPOBJ lpObj, LPOBJ lpTargetObj)
 {
-	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA+1) == FALSE )
+	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA) == FALSE )
 	{
 		return;
 	}
@@ -618,7 +606,7 @@ void CIllusionTempleEvent::SetNpcStatueUser(BYTE MapNumber, LPOBJ lpObj, LPOBJ l
 
 void CIllusionTempleEvent::SetNpcAlliedUser(BYTE MapNumber, LPOBJ lpObj, LPOBJ lpTargetObj)
 {
-	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA+1) == FALSE )
+	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA) == FALSE )
 	{
 		return;
 	}
@@ -628,7 +616,7 @@ void CIllusionTempleEvent::SetNpcAlliedUser(BYTE MapNumber, LPOBJ lpObj, LPOBJ l
 
 void CIllusionTempleEvent::SetNpcRelicsUser(BYTE MapNumber, LPOBJ lpObj, LPOBJ lpTargetObj)
 {
-	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA+1) == FALSE )
+	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA) == FALSE )
 	{
 		return;
 	}
@@ -736,7 +724,7 @@ void CIllusionTempleEvent::SetNpcMirageUser(LPOBJ lpObj, LPOBJ lpTargetObj)
 
 void CIllusionTempleEvent::SetDeleteRelicsItem(BYTE MapNumber, LPOBJ lpObj) // -> Unused
 {
-	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA+1) == FALSE )
+	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA) == FALSE )
 	{
 		return;
 	}
@@ -746,7 +734,7 @@ void CIllusionTempleEvent::SetDeleteRelicsItem(BYTE MapNumber, LPOBJ lpObj) // -
 
 void CIllusionTempleEvent::SearchUserDropQuestItem(BYTE btMapNumber, int aIndex)
 {
-	if( CHECK_LIMIT( (btMapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA+1) == FALSE )
+	if( CHECK_LIMIT( (btMapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA) == FALSE )
 	{
 		return;
 	}
@@ -789,7 +777,7 @@ BYTE CIllusionTempleEvent::GetState(BYTE btMapNumber)
 
 void CIllusionTempleEvent::CreateNPCPosition(BYTE MapNumber, int Class, int Position)
 {
-	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA+1) == FALSE )
+	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA) == FALSE )
 	{
 		return;
 	}
@@ -799,7 +787,7 @@ void CIllusionTempleEvent::CreateNPCPosition(BYTE MapNumber, int Class, int Posi
 
 void CIllusionTempleEvent::CreateMonsterPosition(BYTE MapNumber, int Class, int Position)
 {
-	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA+1) == FALSE )
+	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA) == FALSE )
 	{
 		return;
 	}
@@ -817,7 +805,7 @@ void CIllusionTempleEvent::AllObjReset()
 
 BYTE CIllusionTempleEvent::GetUserJoinSide(BYTE MapNumber, int aIndex)
 {
-	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA+1) == FALSE )
+	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA) == FALSE )
 	{
 		return -1;
 	}
@@ -826,7 +814,7 @@ BYTE CIllusionTempleEvent::GetUserJoinSide(BYTE MapNumber, int aIndex)
 
 void CIllusionTempleEvent::SetNpcStatueRegen(BYTE MapNumber)
 {
-	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA+1) == FALSE )
+	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA) == FALSE )
 	{
 		return;
 	}
@@ -1119,7 +1107,7 @@ BYTE CIllusionTempleEvent::SetKillCount(int aIndex, BYTE btMapNumber, BYTE btObj
 		return FALSE;
 	}
 
-	if( CHECK_LIMIT( (btMapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA+1) == FALSE )
+	if( CHECK_LIMIT( (btMapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA) == FALSE )
 	{
 		return FALSE;
 	}
@@ -1147,7 +1135,7 @@ BYTE CIllusionTempleEvent::RemoveKillPointFromUser(int aIndex, BYTE MapNumber, B
 		return FALSE;
 	}
 
-	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA+1) == FALSE )
+	if( CHECK_LIMIT( (MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN), MAX_FLOOR_DATA) == FALSE )
 	{
 		return FALSE;
 	}
@@ -1155,7 +1143,7 @@ BYTE CIllusionTempleEvent::RemoveKillPointFromUser(int aIndex, BYTE MapNumber, B
 	return this->m_IllusionTempleProcess[MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN].RemoveKillPointFromUser(aIndex, KillPoint);
 }
 
-void CIllusionTempleEvent::RunningSkill(int aIndex, WORD skill, int aTargetIndex, BYTE dis)
+void CIllusionTempleEvent::RunningSkill(int aIndex, int aTargetIndex,WORD skill)
 {
 	if( OBJMAX_RANGE(aIndex) == FALSE )
 	{
@@ -1167,7 +1155,7 @@ void CIllusionTempleEvent::RunningSkill(int aIndex, WORD skill, int aTargetIndex
 		return;
 	}
 
-	this->m_IllusionTempleProcess[gObj[aIndex].MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN].RunningSkill(aIndex, skill, aTargetIndex, dis);
+	this->m_IllusionTempleProcess[gObj[aIndex].MapNumber - MAP_INDEX_ILLUSIONTEMPLE_MIN].RunningSkill(aIndex, aTargetIndex,skill);
 }
 
 void CIllusionTempleEvent::SkillProc(LPOBJ lpObj)

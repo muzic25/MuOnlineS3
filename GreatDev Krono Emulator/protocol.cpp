@@ -531,24 +531,22 @@ void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOO
 		case GUILD_ASIGN_STATUS: //0xBE:
 			CGGuildAssignStatus((PMSG_GUILD_ASSIGN_STATUS_REQ *)aRecv, aIndex);
 			break;
-	/*	case ILLUSION_TEMPLE_PROTOCOL_ID: //0xBF:
-			ILPROTO_ProtocolCore(aIndex, aRecv, aLen);
-			break;	*/
 
 			//illusion temple
 		case 0xBF:
 		{
 			PMSG_DEFAULT2 * lpDef = (PMSG_DEFAULT2 *)aRecv;
+			LogAdd("%x %x %x %x %x %x packet!", aRecv[0], aRecv[1], aRecv[2], aRecv[3], aRecv[4], aRecv[5], aRecv[6] );
 
 			switch (lpDef->subcode)
 			{
-
-			LogAdd("C1 BF %x packet!",lpDef->subcode);
 			case 0x00:
 				CGReqEnterIllusionTemple((PMSG_ANS_ILLUSIONTEMPLE_ENTER *)aRecv, aIndex);
 				break;
 			case 0x02:
-				CGReqUseIllusionTempleKillCntSkill((PMSG_USE_ILLUSIONTEMPLE_KILLCOUNT_SKILL *)aRecv, aIndex);
+				LogAdd("lpMsg->SkillId: %d  lpMsg->Target: %d ", (aRecv[5] * 256) + aRecv[6], aRecv[4]);
+				g_IllusionTempleEvent.RunningSkill(aIndex, (aRecv[5] * 256) + aRecv[6], aRecv[4]);
+				//CGReqUseIllusionTempleKillCntSkill((PMSG_USE_ILLUSIONTEMPLE_KILLCOUNT_SKILL *)aRecv, aIndex);
 				break;
 			case 0x05:
 				CGReqIllusionTempleDropReward((PMSG_ILLUSIONTEMPLE_DROP_REWARD *)aRecv, aIndex);
@@ -3038,13 +3036,13 @@ BOOL CGItemDropRequest(PMSG_ITEMTHROW * lpMsg, int aIndex, BOOL drop_type)
 		pResult.Result = false;
 	}
 
-	if (IT_MAP_RANGE(lpObj->MapNumber) != FALSE) //Season 2.5 add-on
+	/*if (IT_MAP_RANGE(lpObj->MapNumber) != FALSE) //Season 2.5 add-on
 	{
 		if (lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(13, 51))
 		{
 			pResult.Result = false;
 		}
-	}
+	}*/
 
 	if (lpObj->pInventory[lpMsg->Ipos].m_Type == ITEMGET(14, 64))
 	{
@@ -4113,6 +4111,7 @@ void CGTalkRequestRecv(PMSG_TALKREQUEST * lpMsg, int aIndex)
 	} 
 	//
 	int ShopNum = gObj[DealerNumber].ShopNumber;
+
 
 	if ( gObj[DealerNumber].Type == OBJ_NPC )
 	{
@@ -10587,6 +10586,13 @@ void CGDurationMagicRecv(PMSG_DURATION_MAGIC_RECV* lpMsg, int aIndex)
 		return;
 	}
 
+
+	if (gObj[aIndex].pInventory[0].m_Type == -1 && gObj[aIndex].pInventory[1].m_Type == -1 && lpMsg->MagicNumber == 41)
+	{
+		return;// fix twisting slash without weapon
+	}
+
+
 	if ( gObj[aIndex].Type == OBJ_USER )
 	{
 		lpMagic = gObjGetMagicSearch(lpObj, lpMsg->MagicNumber);
@@ -16753,15 +16759,11 @@ void CGReqEnterIllusionTemple(PMSG_ANS_ILLUSIONTEMPLE_ENTER* lpMsg, int iIndex) 
 
 void CGReqUseIllusionTempleKillCntSkill(PMSG_USE_ILLUSIONTEMPLE_KILLCOUNT_SKILL* lpMsg, int iIndex) //case 2 
 {
-	if (OBJMAX_RANGE(iIndex) == FALSE)
-	{
-		LogAdd("return %s %d", __FILE__, __LINE__);
-		return;
-	}
 
 //	WORD TargetIndex =  sizeof(PMSG_USE_ILLUSIONTEMPLE_KILLCOUNT_SKILL)// MAKE_NUMBERW(lpMsg->btTargetH, lpMsg->btTargetL);
 	//	MAKE_NUMBERW(lpMsg->btSkillIdH, lpMsg->btSkillIdL),
-	g_IllusionTempleEvent.RunningSkill(iIndex, lpMsg->SkillId, lpMsg->aRecvrIndex, lpMsg->useTime);
+
+	//LogAdd("lpMsg->SkillId: %d  lpMsg->Target: %d lpMsg->btDis: %d", (lpMsg[5] * 256) + lpMsg[6], lpMsg[4]);
 }
 
 void CGReqIllusionTempleDropReward(PMSG_ILLUSIONTEMPLE_DROP_REWARD* lpMsg, int iIndex) //case 5 

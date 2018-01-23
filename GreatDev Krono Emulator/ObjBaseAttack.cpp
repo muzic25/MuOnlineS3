@@ -495,7 +495,7 @@ BOOL CObjBaseAttack::MissCheck(LPOBJ lpObj, LPOBJ lpTargetObj, int skill, int sk
 				}
 			}
 		}
-
+		
 
 		if ( lpObj->Type == OBJ_USER )	// Miss for Uses
 		{
@@ -587,7 +587,7 @@ BOOL CObjBaseAttack::MissCheckPvP(LPOBJ lpObj , LPOBJ lpTargetObj, int skill, in
 			}
 		}
 	}
-
+	
 
 	if ( lpObj->Class == CLASS_KNIGHT )
 	{

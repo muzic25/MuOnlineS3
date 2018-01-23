@@ -257,6 +257,8 @@ void GameMainInit(HWND hWnd)
 	gObjInit();
 	InitBattleSoccer();
 
+
+
 	gMAttr.LoadAttr("..\\Data\\Monsters\\Monster.txt");
 
 	gMSetBase.LoadSetBase("..\\Data\\Monsters\\MonsterSetBase.txt");
@@ -337,6 +339,7 @@ void GameMainInit(HWND hWnd)
 		"\\terrains\\terrain46.att",	// Illusion Temple 3
 		"\\terrains\\terrain46.att",	// Illusion Temple 4
 		"\\terrains\\terrain46.att",	// Illusion Temple 5
+		"\\terrains\\terrain46.att"		// Illusion Temple 5
 	};
 
 	for (n = 0; n < MAX_NUMBER_MAP; n++)
@@ -366,7 +369,7 @@ void GameMainInit(HWND hWnd)
 	
 }
 
-unsigned int TickCount = GetTickCount();
+
 
 int GetWarehouseUsedHowMuch(int UserLevel, BOOL IsLock)
 {

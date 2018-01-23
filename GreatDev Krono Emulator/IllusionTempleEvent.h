@@ -17,7 +17,7 @@ extern int g_iIllusionTempleRewardPercent;
 extern int g_iIllusionTempleMinUseSkillCnt;
 extern int g_iIllusionTempleRewardPercentMaster;
 
-#define IT_MAP_RANGE(mapnumber) ( ((mapnumber) < MAP_INDEX_ILLUSION_TEMPLE1)?FALSE:((mapnumber) > MAP_INDEX_ILLUSION_TEMPLE5 )?FALSE:TRUE )
+#define IT_MAP_RANGE(mapnumber) ( ((mapnumber) < MAP_INDEX_ILLUSION_TEMPLE1)?FALSE:((mapnumber) > MAP_INDEX_ILLUSION_TEMPLE6 )?FALSE:TRUE )
 #define IT_TICKET_RANGE(x) ( ((x)<0)?FALSE:((x)>MAX_FLOOR_DATA)?FALSE:TRUE  )
 
 extern int m_i_IT_PlayTime;
@@ -129,7 +129,7 @@ public:
 	BOOL CheckChoasMixItem(int arg1);
 	BYTE SetKillCount(int aIndex, BYTE btMapNumber, BYTE btObjType);
 	BYTE RemoveKillPointFromUser(int aIndex, BYTE MapNumber, BYTE KillPoint);
-	void RunningSkill(int aIndex, WORD skill, int aTargetIndex, BYTE dis);
+	void RunningSkill(int aIndex, int aTargetIndex, WORD skill);
 	void SkillProc(LPOBJ lpObj);
 	void ResetAndClearSkills(LPOBJ lpObj);
 	void DeathSetShield(LPOBJ lpObj);

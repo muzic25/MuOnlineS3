@@ -15,7 +15,7 @@
 
 
 
-#define MAX_NUMBER_MAP 50 //S2 44	S3 51
+#define MAX_NUMBER_MAP 51 //S2 44	S3 51
 #define MAX_MAPITEM	300
 
 #define MAX_MAP_RANGE(x) (((x)<0)?FALSE:((x)>MAX_NUMBER_MAP-1)?FALSE:TRUE)

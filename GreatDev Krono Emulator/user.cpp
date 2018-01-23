@@ -4396,13 +4396,15 @@ BOOL gObjCheckXYMapTile(LPOBJ lpObj, int iDbgName)
 					return TRUE;
 				}
 			}
-			
-			
-			PMSG_TELEPORT pMsg;
-			pMsg.MoveNumber = 17;
-			gObjMoveGate(lpObj->m_Index, pMsg.MoveNumber);
+			else
+			{
 
-			return TRUE;
+				PMSG_TELEPORT pMsg;
+				pMsg.MoveNumber = 17;
+				gObjMoveGate(lpObj->m_Index, pMsg.MoveNumber);
+
+				return TRUE;
+			}
 		}
 	}
 
@@ -11030,6 +11032,14 @@ BYTE gObjInventoryMoveItem(int aIndex, unsigned char source, unsigned char targe
 				}
 			}
 
+			if (sitem->m_Type == ITEMGET(14, 63) || sitem->m_Type == ITEMGET(14, 64)) //GS 19
+			{
+				if (titem->m_Durability < 100.0f)
+				{
+					max_count = 100;
+				}
+			}
+
 			if(sitem->m_Type >= ITEMGET(14,46) && sitem->m_Type <= ITEMGET(14,50))
 			{
 				if(titem->m_Durability < 3.0f)
@@ -11136,10 +11146,10 @@ BYTE gObjInventoryMoveItem(int aIndex, unsigned char source, unsigned char targe
 			return -1;
 		}
 
-
 		//Season 2.5 add-on
 		switch (tFlag)
 		{
+		case 2:
 		case 3:
 		case 4:
 		case 5:
@@ -11149,11 +11159,11 @@ BYTE gObjInventoryMoveItem(int aIndex, unsigned char source, unsigned char targe
 		{
 			if (lpObj->pInventory[source].m_Type == ITEMGET(13, 42))
 			{
-				return -1;
+			return -1;
 			}
 			else if (lpObj->pInventory[source].m_Type == ITEMGET(14, 64))
 			{
-				return -1;
+			return -1;
 			}
 		}
 		break;
@@ -11170,6 +11180,7 @@ BYTE gObjInventoryMoveItem(int aIndex, unsigned char source, unsigned char targe
 		break;
 		}
 		//
+
 
 		switch(tFlag)
 		{
@@ -17130,7 +17141,8 @@ BOOL gObjMoveGate(int aIndex, int gt)
 
 	if(BC_MAP_RANGE(mapNumber)
 		|| CC_MAP_RANGE(mapNumber)
-		|| DS_MAP_RANGE(mapNumber))
+		|| DS_MAP_RANGE(mapNumber)
+		|| IT_MAP_RANGE(mapNumber))
 	{
 		if(lpObj->m_iSkillNPCHelpTime > 0)
 		{

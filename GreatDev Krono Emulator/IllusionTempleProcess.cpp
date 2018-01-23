@@ -36,8 +36,7 @@ void CIllusionTempleProcess::Init(int FloorIndex)
 		this->m_btFloorIndex = FloorIndex;
 	}
 	
-	int i;
-	for(i = 0; i < MAX_FLOOR_USER; i++ )
+	for(int i = 0; i < MAX_FLOOR_USER; i++ )
 	{
 		this->InitFloorData(i);
 	}
@@ -65,7 +64,7 @@ void CIllusionTempleProcess::Init(int FloorIndex)
 
 	this->m_bTimeCheckSync = FALSE;
 
-	for( i = 0; i < MAX_TYPE_PLAYER; i++ )
+	for(int i = 0; i < MAX_TYPE_PLAYER; i++ )
 	{
 		this->m_btYellowTeamClassCount[i] = 0;
 		this->m_btBlueTeamClassCount[i] = 0;
@@ -519,11 +518,11 @@ void CIllusionTempleProcess::ProcState_Closed(int iTick)
 
 			this->SetState(1);
 
-			LogAddTD("[Illusion Temple] (%d) Allied Team 법사(%d),기사(%d), 요정(%d), 마검사(%d), 다크로드(%d)", this->m_btFloorIndex+1, this->m_btYellowTeamClassCount[0], this->m_btYellowTeamClassCount[1], this->m_btYellowTeamClassCount[2], this->m_btYellowTeamClassCount[3], this->m_btYellowTeamClassCount[4]);
+			LogAddTD("[Illusion Temple] (%d) Allied Team (%d), Knights (%d), Fairy (%d), Test(%d)", this->m_btFloorIndex+1, this->m_btYellowTeamClassCount[0], this->m_btYellowTeamClassCount[1], this->m_btYellowTeamClassCount[2], this->m_btYellowTeamClassCount[3], this->m_btYellowTeamClassCount[4]);
 
 			LogAddTD(szTemp0);
 
-			LogAddTD("[Illusion Temple] (%d) Illusion Team 법사(%d),기사(%d), 요정(%d), 마검사(%d), 다크로드(%d)", this->m_btFloorIndex+1, this->m_btBlueTeamClassCount[0], this->m_btBlueTeamClassCount[1], this->m_btBlueTeamClassCount[2], this->m_btBlueTeamClassCount[3], this->m_btBlueTeamClassCount[4]);
+			LogAddTD("[Illusion Temple] (%d) Illusion Team (%d), Knights (%d), Fairy (%d), Test(%d)", this->m_btFloorIndex+1, this->m_btBlueTeamClassCount[0], this->m_btBlueTeamClassCount[1], this->m_btBlueTeamClassCount[2], this->m_btBlueTeamClassCount[3], this->m_btBlueTeamClassCount[4]);
 
 			LogAddTD(szTemp1);
 		}
@@ -1312,7 +1311,7 @@ void CIllusionTempleProcess::DropRelicsItem(int iIndex)
 	BYTE ItemEffectEx = gObj[iIndex].pInventory[iItemPos].m_ItemOptionEx; //loc23
 	int item_number = gObj[iIndex].pInventory[iItemPos].m_Number; //loc24
 
-	char szItemName[50] = "저주받은성물";
+	char szItemName[50] = "Cursed Relic";
 
 	int aAntiLootIndex = -1; //loc38
 	short cX = 0; //loc39
@@ -1754,10 +1753,10 @@ void CIllusionTempleProcess::NotifyTempleInfo(BYTE btState, int aIndex)
 
 	PHeadSubSetB((LPBYTE)&pMsg, 0xBF, 0x09, sizeof(pMsg));
 
-	pMsg.m_btFloorIndex = 0;
+	pMsg.m_btFloorIndex = this->m_btFloorIndex;
 	pMsg.m_btState = btState;
 
-	//LogAddTD("pMsg.m_btFloorIndex: %d pMsg.m_btState: %d aIndex: %d ",pMsg.m_btFloorIndex, pMsg.m_btState, aIndex);
+	LogAddTD("pMsg.m_btFloorIndex: %d pMsg.m_btState: %d aIndex: %d ",pMsg.m_btFloorIndex, pMsg.m_btState, aIndex);
 
 	if(aIndex != -1)
 	{
@@ -1998,7 +1997,7 @@ void CIllusionTempleProcess::ResetUserUsedKillCount()
 	}
 }
 
-void CIllusionTempleProcess::RunningSkill(int aIndex, WORD skill, int aTargetIndex, BYTE btDir)
+void CIllusionTempleProcess::RunningSkill(int aIndex, int aTargetIndex, BYTE skill)
 {
 	if( OBJMAX_RANGE(aIndex) == FALSE )
 	{
@@ -2006,17 +2005,15 @@ void CIllusionTempleProcess::RunningSkill(int aIndex, WORD skill, int aTargetInd
 		return;
 	}
 
-	LPOBJ lpObj;
-	LPOBJ lpTargetObj;
-	
 	if( OBJMAX_RANGE(aTargetIndex) == FALSE )
 	{
 		LogAdd("return %s %d", __FILE__, __LINE__);
 		return;
 	}
 
-	lpObj = &gObj[aIndex]; //ebp-8
-	lpTargetObj = &gObj[aTargetIndex];
+	//LogAdd("Index %d Skill: %d Target: %d", aIndex, skill, aTargetIndex);
+	LPOBJ lpObj = &gObj[aIndex]; //ebp-8
+	LPOBJ lpTargetObj = &gObj[aTargetIndex];
 
 	if(this->GetState() != 2)
 	{
@@ -2157,20 +2154,6 @@ void CIllusionTempleProcess::SkillSecondProc(LPOBJ lpObj)
 	}
 }
 
-void CIllusionTempleProcess::GCIllusionTempleSkillCancel(LPOBJ lpObj, WORD skill)
-{
-	PMSG_CANCEL_SKILL_STATE pMsg;
-
-	PHeadSubSetB((LPBYTE)&pMsg, 0xBF, 0x07, sizeof(pMsg));
-
-	pMsg.m_btSkillIDH = SET_NUMBERH(skill);
-	pMsg.m_btSkillIDL = SET_NUMBERL(skill);
-
-	pMsg.m_wTargetIndex = lpObj->m_Index;
-
-	DataSend(lpObj->m_Index,(LPBYTE)&pMsg,pMsg.h.size);
-	MsgSendV2(lpObj, (LPBYTE)&pMsg, pMsg.h.size);
-}
 
 BOOL CIllusionTempleProcess::ShieldSpell(LPOBJ lpObj) 
 {
@@ -2243,7 +2226,7 @@ BOOL CIllusionTempleProcess::PursuitSpell(LPOBJ lpObj)
 
 BOOL CIllusionTempleProcess::ShieldClashSpell(LPOBJ lpObj, LPOBJ lpTargetObj) 
 {
-	int loc2;
+
 	if(gCheckSkillDistance(lpObj->m_Index, lpTargetObj->m_Index, 213) == FALSE)
 	{
 		return FALSE;
@@ -2257,7 +2240,7 @@ BOOL CIllusionTempleProcess::ShieldClashSpell(LPOBJ lpObj, LPOBJ lpTargetObj)
 		return TRUE;
 	}
 
-	loc2 = lpTargetObj->iShield / 2;
+	int loc2 = lpTargetObj->iShield / 2;
 
 	lpTargetObj->iShield = loc2;
 
@@ -2265,15 +2248,15 @@ BOOL CIllusionTempleProcess::ShieldClashSpell(LPOBJ lpObj, LPOBJ lpTargetObj)
 	return TRUE;
 }
 
-void CIllusionTempleProcess::GCIllusionTempleSkillApply(int aIndex, int aTargetIndex, WORD skill, BYTE btUseType)
+void CIllusionTempleProcess::GCIllusionTempleSkillApply(int aIndex, int aTargetIndex, BYTE skill, BYTE btUseType)
 {
-	PMSG_APPLY_SKILL_STATE pMsg;
+	/*PMSG_APPLY_SKILL_STATE pMsg;
 
 	PHeadSubSetB((LPBYTE)&pMsg, 0xBF, 0x02, sizeof(pMsg));
 
 	pMsg.m_btType = btUseType;
-	pMsg.m_btSkillIDH = SET_NUMBERH(skill);
-	pMsg.m_btSkillIDL = SET_NUMBERL(skill);
+	pMsg.m_btSkillIDH = skill;
+	//pMsg.m_btSkillIDL = SET_NUMBERL(skill);
 	pMsg.m_wIndex = aIndex;
 	pMsg.m_wTargetIndex = aTargetIndex;
 
@@ -2282,8 +2265,52 @@ void CIllusionTempleProcess::GCIllusionTempleSkillApply(int aIndex, int aTargetI
 	if(btUseType == 1)
 	{
 		MsgSendV2(&gObj[aIndex], (LPBYTE)&pMsg, pMsg.h.size);
+	}*/
+
+	//LogAddTD("[Illusion Temple] (%d) Use Skill (%d) UseType:(%d)", this->m_btFloorIndex + 1, skill, btUseType);
+	PMSG_ILLUSION_ACTIVESKILL pMsg;
+	pMsg.head.headcode = 0xc1;
+	pMsg.head.size = 0x0a;
+	pMsg.head.c = 0xbf;
+	pMsg.subtype = 0x02;
+	pMsg.SkillId = skill;
+	pMsg.useTime = btUseType;
+	pMsg.aOwnerIndex = (short)aIndex;
+	pMsg.aRecvrIndex = (short)aTargetIndex;
+
+	DataSend(aIndex, (LPBYTE)&pMsg, 10);
+
+	if (btUseType == 1)
+	{
+		MsgSendV2(&gObj[aIndex], (LPBYTE)&pMsg, 10);
 	}
 }
+
+void CIllusionTempleProcess::GCIllusionTempleSkillCancel(LPOBJ lpObj, BYTE skill)
+{
+	/*	PMSG_CANCEL_SKILL_STATE pMsg;
+
+	PHeadSubSetB((LPBYTE)&pMsg, 0xBF, 0x07, sizeof(pMsg));
+
+	pMsg.m_btSkillIDH = skill;
+	//	pMsg.m_btSkillIDL = SET_NUMBERL(skill);
+	pMsg.m_wTargetIndex = lpObj->m_Index;
+
+	DataSend(lpObj->m_Index,(LPBYTE)&pMsg,pMsg.h.size);
+	MsgSendV2(lpObj, (LPBYTE)&pMsg, pMsg.h.size);
+	*/
+
+	PMSG_ILLUSION_DEACTIVESKILL pMsg;
+	pMsg.head.headcode = 0xc1;
+	pMsg.head.size = 0x08;
+	pMsg.head.c = 0xbf;
+	pMsg.subtype = 0x07;
+	pMsg.aOwnerIndex = lpObj->m_Index;
+	pMsg.SkillId = skill;
+	DataSend(lpObj->m_Index, (LPBYTE)&pMsg, 10);
+	MsgSendV2(lpObj, (LPBYTE)&pMsg, 10);
+}
+
 
 void CIllusionTempleProcess::ResetAndClearSkills(LPOBJ lpObj) 
 {
@@ -2374,9 +2401,7 @@ void CIllusionTempleProcess::CalcSendRewardEXP()
 
 	LogAddTD("[Illusion Temple] (%d) Result (WinTeam: %d)(Score:[%d][%d])", this->m_btFloorIndex+1, this->m_btWinnerTeam, this->m_btYellowTeamScore, this->m_btBlueTeamScore);
 
-	int i; //loc4
-
-	for(i = 0;i < MAX_FLOOR_USER;i++)
+	for(int i = 0;i < MAX_FLOOR_USER;i++)
 	{
 		if(this->m_FloorData[i].m_btTeamJoinSide == (BYTE)-1)
 		{
@@ -2435,7 +2460,7 @@ void CIllusionTempleProcess::CalcSendRewardEXP()
 
 	if(g_iSaveIllusionTempleRankingPoint != FALSE)
 	{
-		for(i = 0;i < MAX_FLOOR_USER;i++)
+		for(int i = 0;i < MAX_FLOOR_USER;i++)
 		{
 			if(this->m_FloorData[i].m_iTeamPlayerIndex != -1 && gObj[this->m_FloorData[i].m_iTeamPlayerIndex].Connected > PLAYER_LOGGED)
 			{
@@ -2745,7 +2770,7 @@ BYTE CIllusionTempleProcess::GetRemainTime()
 
 BOOL CIllusionTempleProcess::CheckShieldSpellTime(int aIndex)
 {
-	if(CHECK_LIMIT( (aIndex), MAX_FLOOR_USER) == FALSE)
+	if(CHECK_LIMIT( (aIndex), MAX_FLOOR_USER - 1) == FALSE)
 	{
 		return FALSE;
 	}
@@ -2763,7 +2788,7 @@ BOOL CIllusionTempleProcess::CheckShieldSpellTime(int aIndex)
 
 BOOL CIllusionTempleProcess::CheckRestrictionSpellTime(int aIndex)
 {
-	if(CHECK_LIMIT( (aIndex), MAX_FLOOR_USER) == FALSE)
+	if(CHECK_LIMIT( (aIndex), MAX_FLOOR_USER - 1) == FALSE)
 	{
 		return FALSE;
 	}
@@ -2799,12 +2824,12 @@ void CIllusionTempleProcess::SendRewardScore()
 		if(this->m_FloorData[i].m_iTeamPlayerIndex != -1 && gObj[this->m_FloorData[i].m_iTeamPlayerIndex].Connected > PLAYER_LOGGED)
 		{
 			
+			memcpy(TempMsg.szCharacterName, gObj[this->m_FloorData[i].m_iTeamPlayerIndex].Name, 10);
 		//	TempMsg.m_btMapNumber = this->m_btFloorIndex + MAP_INDEX_ILLUSIONTEMPLE_MIN;
 			TempMsg.ChangeUP = gObj[this->m_FloorData[i].m_iTeamPlayerIndex].ChangeUP;
 			TempMsg.m_btClass = gObj[this->m_FloorData[i].m_iTeamPlayerIndex].Class;
 			TempMsg.m_btTeamJoinSide = this->m_FloorData[i].m_btTeamJoinSide;
 			//TempMsg.m_dwExpReward = this->m_FloorData[i].m_i64ExpReward;
-			memcpy(TempMsg.szCharacterName, gObj[this->m_FloorData[i].m_iTeamPlayerIndex].Name, 10);
 			memcpy(&cTEMP_BUF[loc2],&TempMsg,sizeof(_ILLUSIONTEMPLE_PLAYER_RANK_DATA));
 
 			loc2 += sizeof(_ILLUSIONTEMPLE_PLAYER_RANK_DATA);

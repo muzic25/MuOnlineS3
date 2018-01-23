@@ -3459,6 +3459,28 @@ void ItemByteConvert16(LPBYTE buf, CItem * const item , int maxitem)
 			}
 		}
 
+		if (item[index].m_Type == ITEMGET(14, 64)) //Season 2.5 Illusion Torch add-on
+		{
+			buf[n] = -1;
+			buf[n + 1] = -1;
+			buf[n + 2] = -1;
+			buf[n + 3] = -1;
+			buf[n + 4] = -1;
+			buf[n + 5] = -1;
+			buf[n + 6] = -1;
+			buf[n + 7] = -1;
+			buf[n + 8] = -1;
+			buf[n + 9] = -1;
+			buf[n + 10] = -1;
+			buf[n + 11] = -1;
+			buf[n + 12] = -1;
+			buf[n + 13] = -1;
+			buf[n + 14] = -1;
+			buf[n + 15] = -1;
+			n += 16;
+			continue;
+		}
+
 		if ( item[index].m_Type < ITEMGET(0,0) )
 		{
 			buf[n+0]=-1;

@@ -1082,12 +1082,12 @@ BOOL CObjUseSkill::SkillChangeUse(int aIndex)
 	{
 		if (g_IllusionTempleEvent.GetState(lpObj->MapNumber) != 0)
 		{
-			int ebp10 = g_IllusionTempleEvent.GetUserJoinSide(lpObj->MapNumber, lpObj->m_Index);
-			if (ebp10 == 0)
+			int iTeam = g_IllusionTempleEvent.GetUserJoinSide(lpObj->MapNumber, lpObj->m_Index);
+			if (iTeam == 0)
 			{
 				skill_level = 404;
 			}
-			else if (ebp10 == 1)
+			else if (iTeam == 1)
 			{
 				skill_level = 405;
 			}

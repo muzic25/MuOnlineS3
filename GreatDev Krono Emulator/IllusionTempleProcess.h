@@ -5,8 +5,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#define MAX_FLOOR_DATA 5
-#define MAX_FLOOR_USER 5
+#define MAX_FLOOR_DATA 4
+#define MAX_FLOOR_USER 10
 #define MAX_STATUE_MONSTER 2
 #define MAX_FLOOR_MONSTER 40
 #define ILLUSIONTEMPLE_INVALID_INDEX -1
@@ -26,8 +26,8 @@ static const int g_IllusionTemple_Default_Exp[MAX_FLOOR_DATA+1] =
 	340000,//IllusionTemple2
 	380000,//IllusionTemple3
 	420000,//IllusionTemple4
-	460000,//IllusionTemple5
-	500000 //IllusionTemple6
+	460000//,//IllusionTemple5
+	//500000 //IllusionTemple6
 };
 
 static const int g_IllusionTemple_unk0[MAX_FLOOR_DATA+1] =
@@ -36,8 +36,8 @@ static const int g_IllusionTemple_unk0[MAX_FLOOR_DATA+1] =
 	60000,//IllusionTemple2
 	70000,//IllusionTemple3
 	80000,//IllusionTemple4
-	90000,//IllusionTemple5
-	100000 //IllusionTemple6
+	90000//,//IllusionTemple5
+	//100000 //IllusionTemple6
 };
 
 static const int g_IllusionTemple_unk1[MAX_FLOOR_DATA+1] =
@@ -46,8 +46,8 @@ static const int g_IllusionTemple_unk1[MAX_FLOOR_DATA+1] =
 	1200,//IllusionTemple2
 	1800,//IllusionTemple3
 	2400,//IllusionTemple4
-	3000,//IllusionTemple5
-	3500 //IllusionTemple6
+	3000//,//IllusionTemple5
+	//3500 //IllusionTemple6
 };
 
 static const int g_IllusionTemple_unk2[MAX_FLOOR_DATA+1] =
@@ -57,10 +57,10 @@ static const int g_IllusionTemple_unk2[MAX_FLOOR_DATA+1] =
 	3600,//IllusionTemple3
 	4800,//IllusionTemple4
 	6000,//IllusionTemple5
-	7200 //IllusionTemple6
+	//7200 //IllusionTemple6
 };
 
-static const int g_IllusionTemple_Team_Players[MAX_FLOOR_DATA] =
+static const int g_IllusionTemple_Team_Players[MAX_FLOOR_DATA+1] =
 {
 	10,//1 Player
 	20,//2 Players
@@ -139,7 +139,7 @@ struct _ILLUSIONTEMPLE_PLAYER_RANK_DATA
 	BYTE m_btClass;
 	//BYTE m_btMapNumber;
 	BYTE unknown[3];
-	DWORD m_dwExpReward;
+	int m_dwExpReward;
 };
 
 struct PMSG_APPLY_SKILL_STATE
@@ -149,10 +149,28 @@ struct PMSG_APPLY_SKILL_STATE
 	BYTE m_btType;
 
 	BYTE m_btSkillIDH;
-	BYTE m_btSkillIDL;
+	//BYTE m_btSkillIDL;
 
 	WORD m_wIndex;
 	WORD m_wTargetIndex;
+
+};
+
+struct PMSG_ILLUSION_DEACTIVESKILL {
+	PBMSG_HEAD	head;
+	unsigned char	subtype;
+	unsigned char	SkillId;
+	unsigned char	unk1;
+	unsigned short	aOwnerIndex;
+};
+
+struct PMSG_ILLUSION_ACTIVESKILL {
+	PBMSG_HEAD	head;
+	unsigned char	subtype;
+	unsigned char	useTime;
+	unsigned char	SkillId;
+	unsigned short	aOwnerIndex;
+	unsigned short	aRecvrIndex;
 };
 
 struct PMSG_CANCEL_SKILL_STATE
@@ -160,8 +178,7 @@ struct PMSG_CANCEL_SKILL_STATE
 	PBMSG_HEAD2 h;
 	
 	BYTE m_btSkillIDH;
-	BYTE m_btSkillIDL;
-
+	//BYTE m_btSkillIDL;
 	WORD m_wTargetIndex;
 };
 
@@ -261,14 +278,14 @@ public:
 	void ResetPlayerReward();
 	void IncreaseUsedKillCount(int aIndex);
 	void ResetUserUsedKillCount();
-	void RunningSkill(int aIndex, WORD skill, int aTargetIndex, BYTE btDir);
+	void RunningSkill(int aIndex, int aTargetIndex, BYTE skill);
 	void SkillSecondProc(LPOBJ lpObj);
-	void GCIllusionTempleSkillCancel(LPOBJ lpObj, WORD skill);
+	void GCIllusionTempleSkillCancel(LPOBJ lpObj, BYTE skill);
 	BOOL ShieldSpell(LPOBJ lpObj);
 	BOOL RestrictionSpell(LPOBJ lpObj, LPOBJ lpTargetObj);
 	BOOL PursuitSpell(LPOBJ lpObj);
 	BOOL ShieldClashSpell(LPOBJ lpObj, LPOBJ lpTargetObj);
-	void GCIllusionTempleSkillApply(int aIndex, int aTargetIndex, WORD skill, BYTE btUseType);
+	void GCIllusionTempleSkillApply(int aIndex, int aTargetIndex, BYTE skill, BYTE btUseType);
 	void ResetAndClearSkills(LPOBJ lpObj);
 	void CalcSendRewardEXP();
 	void DropRewardItem(int aIndex);
