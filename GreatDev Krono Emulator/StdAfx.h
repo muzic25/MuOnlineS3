@@ -35,7 +35,8 @@
 
 
 // Windows Header Files:
-#include <afx.h>
+//#include <afx.h>
+#include <atltime.h>
 #include <windows.h>
 #include <winbase.h>
 #include <winsock2.h>

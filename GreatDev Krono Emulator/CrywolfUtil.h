@@ -16,7 +16,7 @@ class CCrywolfScoreSort	// Completed
 
 public:
 
-	bool operator()(struct OBJECTSTRUCT * const lpObj1, struct OBJECTSTRUCT * const lpObj2)
+	bool operator()(struct OBJECTSTRUCT * const lpObj1, struct OBJECTSTRUCT * const lpObj2) const
 	{
 		bool bResult = ( lpObj1->m_iCrywolfMVPScore >= lpObj2->m_iCrywolfMVPScore ) ? TRUE : FALSE;
 

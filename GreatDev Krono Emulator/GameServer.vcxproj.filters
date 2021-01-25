@@ -1119,11 +1119,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="SimpleModulus.lib">
-      <Filter>Source Files\EncryptDecrypt</Filter>
-    </Library>
-  </ItemGroup>
-  <ItemGroup>
     <CustomBuild Include="GameServer.ico">
       <Filter>Source Files\Resource Files</Filter>
     </CustomBuild>
