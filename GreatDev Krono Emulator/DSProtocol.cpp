@@ -262,7 +262,7 @@ typedef struct
 //Identical
 void DGSummonerStateUpdatedSend(LPPMSG_ANS_SUMMONER_CREATE lpMsg)
 {
-	char szId[MAX_ACCOUNT_LEN];
+	char szId[MAX_ACCOUNT_LEN + 1];
 
 	szId[MAX_ACCOUNT_LEN] = 0;
 
