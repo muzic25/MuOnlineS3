@@ -1,4 +1,4 @@
-// WzUdp.cpp: implementation of the WzUdp class.
+﻿// WzUdp.cpp: implementation of the WzUdp class.
 // GS-N 1.00.90 - finished
 //////////////////////////////////////////////////////////////////////
 
@@ -167,25 +167,25 @@ BOOL WzUdp::MuProtocolParse(LPBYTE RecvData, int & nRecvDataLen)
 			size		|= (WORD)(*(RecvData+lOfs+2));
 			headcode	 = *(RecvData+lOfs+3);
 		}
-		else  // ????�? ???? ??????..
+		else  // 如果头部不合适。
 		{
 			m_dwRecvOfs = 0;
 			return FALSE;
 		}
-		if( size <= 0 )	// size �? 0??��?? ??�?..
+		if( size <= 0 )	// size是0的时候是错误的
 		{
 			return FALSE;
 		}		
-		else if( size <= nRecvDataLen )	// ?????? ???�?? ??????????..
+		else if( size <= nRecvDataLen )	// 如果一个包完全的话。
 		{
 			(*ProtocolCore)(headcode, RecvData+lOfs, size);
 			lOfs		 += size;
 			m_dwRecvOfs  -= size;
 			if( m_dwRecvOfs <= 0 ) break;
 		}		
-		else												// �?????�? ?? ????????
+		else // 如果还有更多的数据
 		{	
-			if( lOfs > 0 )									// ??????�? �??????� ???�?? ?? �???..
+			if( lOfs > 0 ) // 如果处理了一个以上的数据
 			{
 				if( m_dwRecvOfs < 1 )
 				{
@@ -193,7 +193,7 @@ BOOL WzUdp::MuProtocolParse(LPBYTE RecvData, int & nRecvDataLen)
 				}
 				else 
 				{
-					memcpy(RecvData, (RecvData+lOfs), m_dwRecvOfs); // ???????� ??�?????.
+					memcpy(RecvData, (RecvData+lOfs), m_dwRecvOfs); // 复制
 					return TRUE;
 				}
 			}

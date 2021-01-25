@@ -72,7 +72,7 @@ extern int g_ServerPort;
 extern HANDLE g_IocpThreadHandle;
 extern HANDLE g_ThreadHandles[MAX_IO_THREAD_HANDLES];
 extern CRITICAL_SECTION criti;
-extern enum SOCKET_FLAG;
+enum SOCKET_FLAG;
 extern DWORD g_dwThreadCount;
 extern HANDLE g_CompletionPort;	
 extern SOCKET g_Listen;

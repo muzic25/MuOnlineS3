@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "GameMain.h"
 
 BOOL JoinServerConnected;
@@ -219,7 +219,7 @@ void GameMainInit(HWND hWnd)
 
 	if (Configs.gEnableServerDivision != 0)
 	{
-		MessageBox(NULL, "¼­¹öºÐÇÒÀÌ °¡´ÉÇÑ ¼­¹öÀÔ´Ï´Ù.", "Warning", MB_OK);
+		MessageBox(NULL, "ì„œë²„ë¶„í• ì´ ê°€ëŠ¥í•œ ì„œë²„ìž…ë‹ˆë‹¤.", "Warning", MB_OK);
 	}
 
 	if ( gUdpSoc.CreateSocket() == 0)
@@ -235,7 +235,7 @@ void GameMainInit(HWND hWnd)
 	}
 
 	Configs.GameServerUpdPort = GetPrivateProfileInt("GameServerConnect", "UpdatePort", 60006, ".\\GameServer.ini");
-	gUdpSocCER.RecvSet( Configs.GameServerUpdPort ); // Same as MuManager to JS ¿
+	gUdpSocCER.RecvSet( Configs.GameServerUpdPort ); // Same as MuManager to JS ?
 	gUdpSocCER.Run();
 
 	if ( gUdpSocCE.CreateSocket() == 0)
@@ -1006,7 +1006,7 @@ void ReadCommonServerInfo()
 	if(iMaxUser >= 0 && iMaxUser <= OBJMAXUSER)
 	{
 		gServerMaxUser = iMaxUser;
-		LogAddTD("[Option Reload] ¡Ú¡Ú¡Ú MaxUser ¡Ù¡Ù¡Ù  : %d", gServerMaxUser);
+		LogAddTD("[Option Reload] â˜…â˜…â˜… MaxUser â˜†â˜†â˜†  : %d", gServerMaxUser);
 	}
 
 	// Guild Settingss
