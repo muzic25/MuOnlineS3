@@ -38,10 +38,59 @@ BYTE RecvProtocolJPN(BYTE Type)
 	case 0xD6: return 0xDF;        //Skills Use Fix 100%
 	case 0xDC: return 0xD7;        //Attack Protocol 100%
 	case 0x07: return 0x10;		   //BeAttack Protocol 100%
-}
+	}
 	return Type;
 }
 
+BYTE RecvProtocolCHS(BYTE Type)
+{
+	switch (Type)
+	{
+	case 0xD7: return 0xD3;        //Walk Protocol 100%
+	case 0xD2: return 0xDF;        //Skills Use Fix 100%
+	case 0xD9: return 0xD7;        //Attack Protocol 100%
+	case 0x1D: return 0x10;        //BeAttack Protocol 100%
+	default: return Type;
+	}
+}
+
+BYTE SendProtocolCHS(BYTE Type)
+{
+	switch (Type)
+	{
+	case 0xD3: return 0xD7;        //Walk Protocol 100%
+	case 0xDF: return 0xD2;        //Skills Use Fix 100%
+	case 0xD7: return 0xD9;        //Attack Protocol 100%
+	case 0x10: return 0x1D;        //BeAttack Protocol 100%
+	default: return Type;
+	}
+}
+
+// 根据语言设置转换协议头
+BYTE RecvProtocolConv(BYTE t)
+{
+	switch (Configs.gLanguage) {
+	case 2:
+		return RecvProtocolJPN(t);
+	case 3:
+		return RecvProtocolCHS(t);
+	default:
+		return t;
+	}
+}
+
+// 根据语言设置转换协议头
+BYTE SendProtocolConv(BYTE t)
+{
+	switch (Configs.gLanguage) {
+	//case 2:
+	//	return SendProtocolJPN(t);
+	case 3:
+		return SendProtocolCHS(t);
+	default:
+		return t;
+	}
+}
 
 void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOOL Encrypt, int serial)
 {
@@ -76,10 +125,11 @@ void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOO
 		}
 	}	
 
-	if (Configs.gLanguage == 2)
+	// 如果不是韩语 0:Korean
+	if (Configs.gLanguage)
 	{
-		protoNum = RecvProtocolJPN(protoNum);
-		if (aRecv[0] == 0xC1 ||	aRecv[0] == 0xC3)
+		protoNum = RecvProtocolConv(protoNum);
+		if (aRecv[0] == 0xC1 || aRecv[0] == 0xC3)
 		{
 			aRecv[2] = protoNum;
 		}
@@ -9197,8 +9247,7 @@ void PMoveProc(PMSG_MOVE* lpMove, int aIndex)
 	}	
 
 
-
-	PHeadSetB((LPBYTE)&pMove, 0xD3, sizeof(pMove));
+	PHeadSetB((LPBYTE)&pMove, SendProtocolConv(0xD3), sizeof(pMove));
 	pMove.NumberH = SET_NUMBERH(aIndex);
 	pMove.NumberL = SET_NUMBERL(aIndex);
 	pMove.X = ax;
@@ -9322,7 +9371,7 @@ void RecvPositionSetProc(PMSG_POSISTION_SET * lpMove, int aIndex)
 	PMSG_RECV_POSISTION_SET pMove;
 
 
-	PHeadSetB((LPBYTE)&pMove, 0xDF, sizeof(pMove));
+	PHeadSetB((LPBYTE)&pMove, SendProtocolConv(0xDF), sizeof(pMove));
 
 	pMove.NumberH = SET_NUMBERH(aIndex);
 	pMove.NumberL = SET_NUMBERL(aIndex);
@@ -9468,7 +9517,7 @@ void GCDamageSend(int aIndex, int TargetIndex, int AttackDamage, int MSBFlag, in
 	PMSG_ATTACKRESULT pResult;
 
 
-	PHeadSetB((LPBYTE)&pResult, 0xD7, sizeof(pResult));
+	PHeadSetB((LPBYTE)&pResult, SendProtocolConv(0xD7), sizeof(pResult));
 
 	pResult.NumberH = SET_NUMBERH(TargetIndex);
 	pResult.NumberL = SET_NUMBERL(TargetIndex);
