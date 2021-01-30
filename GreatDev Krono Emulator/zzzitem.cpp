@@ -1889,7 +1889,8 @@ void CItem::Value()
 	
 	this->m_SellMoney = this->m_SellMoney/3;
 
-	if ( (this->m_Type < ITEMGET(14,0) || this->m_Type >  ITEMGET(14,8)) &&
+	if (this->m_BaseDurability > 0 &&
+		(this->m_Type < ITEMGET(14,0) || this->m_Type >  ITEMGET(14,8)) &&
 		  this->m_Type != ITEMGET(13,20) &&
 		  this->m_Type != ITEMGET(14,28) &&
 		  this->m_Type != ITEMGET(14,29) &&
