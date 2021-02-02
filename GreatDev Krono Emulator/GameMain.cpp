@@ -219,7 +219,8 @@ void GameMainInit(HWND hWnd)
 
 	if (Configs.gEnableServerDivision != 0)
 	{
-		MessageBox(NULL, "서버분할이 가능한 서버입니다.", "Warning", MB_OK);
+		//MessageBox(NULL, "서버분할이 가능한 서버입니다.", "Warning", MB_OK);
+		MessageBox(NULL, "A server that can split servers.", "Warning", MB_OK);
 	}
 
 	if ( gUdpSoc.CreateSocket() == 0)
@@ -901,11 +902,21 @@ void ReadCommonServerInfo()
 	strcpy(Configs.szKorItemTextFileName, gDirPath.GetNewPath("\\Items\\item.txt"));
 	strcpy(Configs.szKorSkillTextFileName, gDirPath.GetNewPath("\\Skills\\skill.txt"));
 	strcpy(szCommonlocIniFileName, gDirPath.GetNewPath("commonloc.cfg"));
-	strcpy(szlMsgName, gDirPath.GetNewPath("Messages.ini"));
 	strcpy(Configs.szItemTextFileName, gDirPath.GetNewPath("\\Items\\item.txt"));
 	strcpy(Configs.szSkillTextFileName, gDirPath.GetNewPath("\\Skills\\skill.txt"));
 	strcpy(Configs.szQuestTextFileName, gDirPath.GetNewPath("\\Quests\\Quest.txt"));
-	strcpy(Configs.szMoveReqFileName, gDirPath.GetNewPath("\\move\\movereq.txt"));
+
+	switch (Configs.gLanguage)
+	{
+	case 3:
+		strcpy(szlMsgName, gDirPath.GetNewPath("message_chs.txt"));
+		strcpy(Configs.szMoveReqFileName, gDirPath.GetNewPath("\\move\\MoveReq_chs.txt"));
+		break;
+	default:
+		strcpy(szlMsgName, gDirPath.GetNewPath("Messages.ini"));
+		strcpy(Configs.szMoveReqFileName, gDirPath.GetNewPath("\\move\\MoveReq.txt"));
+		break;
+	}
 
 	//strcpy(szCheckSum, gDirPath.GetNewPath("lang\\kor\\CheckSum.dat"));  
 	Configs.gNonPK = GetPrivateProfileInt("GameServerInfo", "NonPK", 0, ".\\GameServer.ini");
@@ -974,7 +985,7 @@ void ReadCommonServerInfo()
 	g_ItemAddOption.Load(gDirPath.GetNewPath("\\Items\\ItemAddOption.txt"));
 
 
-	gMoveCommand.Load(gDirPath.GetNewPath("Move\\MoveReq.txt"));
+	gMoveCommand.Load(Configs.szMoveReqFileName);
 
 	gMoveCommand.LoadMoveLevel(gDirPath.GetNewPath("Move\\MoveLevel.txt"));
 

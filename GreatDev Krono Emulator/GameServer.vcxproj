@@ -68,7 +68,7 @@
     <GenerateManifest>true</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>.\MuServer\GameServer</OutDir>
+    <OutDir>.\MuServer\GameServer\</OutDir>
     <IntDir>.\Debug\Temp\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
