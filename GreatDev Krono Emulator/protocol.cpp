@@ -1937,7 +1937,7 @@ void CGPCharacterCreate( PMSG_CHARCREATE * lpMsg, int aIndex)
 
 	if ( lpMsg->ClassSkin == 0x30 ) // MG
 	{
-		if ( gObj[aIndex].Magumsa == 0 )
+		if ( gObj[aIndex].Magumsa < 2 )
 		{
 			LogAddC(2, "error-L1: Magumsa Character create error [%s]", gObj[aIndex].AccountID);
 			JGCharacterCreateFailSend(aIndex, lpMsg->Name);
@@ -1947,7 +1947,7 @@ void CGPCharacterCreate( PMSG_CHARCREATE * lpMsg, int aIndex)
 
 	if ( lpMsg->ClassSkin == 0x40 ) // DL
 	{
-		if ( gObj[aIndex].Magumsa != 2 )
+		if ( gObj[aIndex].Magumsa < 3 )
 		{
 			LogAddC(2, "error-L1: Darklord Character create error [%s]", gObj[aIndex].AccountID);
 			JGCharacterCreateFailSend(aIndex, lpMsg->Name);
