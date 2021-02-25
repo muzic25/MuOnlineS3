@@ -213,7 +213,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	hInst = hInstance;
 	DWORD       dwStyle;                // Window Style
 
-	dwStyle = (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX);
+	dwStyle = WS_OVERLAPPEDWINDOW;	// (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX);
 	
 	hWnd = CreateWindowEx(0, szWindowClass, szTitle, dwStyle,
 		CW_USEDEFAULT, 0, CW_USEDEFAULT,0, NULL, NULL, hInstance, NULL);

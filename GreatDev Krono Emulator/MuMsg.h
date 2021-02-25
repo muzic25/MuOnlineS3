@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #define MSGGET(cat, id) ( (cat) * 256 + (id) )
 
@@ -10,12 +10,12 @@ public:
 	CMsg();
 	virtual ~CMsg();
 
-	void LoadMSG(LPSTR filename);		// Считать сообщения из Messages.ini и запомнить
-	LPSTR Get(int idx);					// Получить сообщение, тут в качестве аргумента всегда MSGGET(x, y)
+	void LoadMSG(LPSTR filename);		// РЎС‡РёС‚Р°С‚СЊ СЃРѕРѕР±С‰РµРЅРёСЏ РёР· Messages.ini Рё Р·Р°РїРѕРјРЅРёС‚СЊ
+	LPSTR Get(int idx);					// РџРѕР»СѓС‡РёС‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ, С‚СѓС‚ РІ РєР°С‡РµСЃС‚РІРµ Р°СЂРіСѓРјРµРЅС‚Р° РІСЃРµРіРґР° MSGGET(x, y)
 
 private:
 
-	char szDefaultMsg[50];				// Сообщение по дефаулту (если то что просим не найдено)
-	std::map<int, std::string> MsgById;	// Индекс строки = CAT * 256 + ID
-	void lMsgFree();					// Удалить все сообщения (освободить память)
+	char szDefaultMsg[50];				// РЎРѕРѕР±С‰РµРЅРёРµ РїРѕ РґРµС„Р°СѓР»С‚Сѓ (РµСЃР»Рё С‚Рѕ С‡С‚Рѕ РїСЂРѕСЃРёРј РЅРµ РЅР°Р№РґРµРЅРѕ)
+	std::map<int, std::string> MsgById;	// РРЅРґРµРєСЃ СЃС‚СЂРѕРєРё = CAT * 256 + ID
+	void lMsgFree();					// РЈРґР°Р»РёС‚СЊ РІСЃРµ СЃРѕРѕР±С‰РµРЅРёСЏ (РѕСЃРІРѕР±РѕРґРёС‚СЊ РїР°РјСЏС‚СЊ)
 };

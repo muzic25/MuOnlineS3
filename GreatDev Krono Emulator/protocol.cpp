@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "protocol.h"
 
 int ltesttime;
@@ -38,10 +38,59 @@ BYTE RecvProtocolJPN(BYTE Type)
 	case 0xD6: return 0xDF;        //Skills Use Fix 100%
 	case 0xDC: return 0xD7;        //Attack Protocol 100%
 	case 0x07: return 0x10;		   //BeAttack Protocol 100%
-}
+	}
 	return Type;
 }
 
+BYTE RecvProtocolCHS(BYTE Type)
+{
+	switch (Type)
+	{
+	case 0xD7: return 0xD3;        //Walk Protocol 100%
+	case 0xD2: return 0xDF;        //Skills Use Fix 100%
+	case 0xD9: return 0xD7;        //Attack Protocol 100%
+	case 0x1D: return 0x10;        //BeAttack Protocol 100%
+	default: return Type;
+	}
+}
+
+BYTE SendProtocolCHS(BYTE Type)
+{
+	switch (Type)
+	{
+	case 0xD3: return 0xD7;        //Walk Protocol 100%
+	case 0xDF: return 0xD2;        //Skills Use Fix 100%
+	case 0xD7: return 0xD9;        //Attack Protocol 100%
+	case 0x10: return 0x1D;        //BeAttack Protocol 100%
+	default: return Type;
+	}
+}
+
+// æ ¹æ®è¯­è¨€è®¾ç½®è½¬æ¢åè®®å¤´
+BYTE RecvProtocolConv(BYTE t)
+{
+	switch (Configs.gLanguage) {
+	case 2:
+		return RecvProtocolJPN(t);
+	case 3:
+		return RecvProtocolCHS(t);
+	default:
+		return t;
+	}
+}
+
+// æ ¹æ®è¯­è¨€è®¾ç½®è½¬æ¢åè®®å¤´
+BYTE SendProtocolConv(BYTE t)
+{
+	switch (Configs.gLanguage) {
+	//case 2:
+	//	return SendProtocolJPN(t);
+	case 3:
+		return SendProtocolCHS(t);
+	default:
+		return t;
+	}
+}
 
 void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOOL Encrypt, int serial)
 {
@@ -76,10 +125,11 @@ void ProtocolCore(BYTE protoNum, unsigned char *aRecv, int aLen, int aIndex, BOO
 		}
 	}	
 
-	if (Configs.gLanguage == 2)
+	// å¦‚æžœä¸æ˜¯éŸ©è¯­ 0:Korean
+	if (Configs.gLanguage)
 	{
-		protoNum = RecvProtocolJPN(protoNum);
-		if (aRecv[0] == 0xC1 ||	aRecv[0] == 0xC3)
+		protoNum = RecvProtocolConv(protoNum);
+		if (aRecv[0] == 0xC1 || aRecv[0] == 0xC3)
 		{
 			aRecv[2] = protoNum;
 		}
@@ -1705,7 +1755,7 @@ void CSPJoinIdPassRequestTEST(PMSG_IDPASS * lpMsg, int aIndex)
 
 	PHeadSetB((LPBYTE)&spMsg, 0x11, sizeof(spMsg));
 	spMsg.Number = aIndex;
-	wsprintf(szId, "½¸µ¹ÀÌ%d", logincounttest);
+	wsprintf(szId, "ìŠ›ëŒì´%d", logincounttest);
 	wsprintf(szPass, "m321", rand()%9);
 	LogAdd("login send : %s %s", szId, szPass);
 	
@@ -1868,7 +1918,7 @@ void CGPCharacterCreate( PMSG_CHARCREATE * lpMsg, int aIndex)
 
 	if (!Configs.gCreateCharacter)
 	{
-		GCServerMsgStringSend("¼­¹öºÐÇÒ ±â°£¿¡´Â Ä³¸¯ÅÍ¸¦ »ý¼ºÇÒ¼ö ¾ø½À´Ï´Ù", aIndex, 1);
+		GCServerMsgStringSend("ì„œë²„ë¶„í•  ê¸°ê°„ì—ëŠ” ìºë¦­í„°ë¥¼ ìƒì„±í• ìˆ˜ ì—†ìŠµë‹ˆë‹¤", aIndex, 1);
 		JGCharacterCreateFailSend(aIndex, lpMsg->Name);
 
 		return;
@@ -1887,7 +1937,7 @@ void CGPCharacterCreate( PMSG_CHARCREATE * lpMsg, int aIndex)
 
 	if ( lpMsg->ClassSkin == 0x30 ) // MG
 	{
-		if ( gObj[aIndex].Magumsa == 0 )
+		if ( gObj[aIndex].Magumsa < 2 )
 		{
 			LogAddC(2, "error-L1: Magumsa Character create error [%s]", gObj[aIndex].AccountID);
 			JGCharacterCreateFailSend(aIndex, lpMsg->Name);
@@ -1897,7 +1947,7 @@ void CGPCharacterCreate( PMSG_CHARCREATE * lpMsg, int aIndex)
 
 	if ( lpMsg->ClassSkin == 0x40 ) // DL
 	{
-		if ( gObj[aIndex].Magumsa != 2 )
+		if ( gObj[aIndex].Magumsa < 3 )
 		{
 			LogAddC(2, "error-L1: Darklord Character create error [%s]", gObj[aIndex].AccountID);
 			JGCharacterCreateFailSend(aIndex, lpMsg->Name);
@@ -4092,7 +4142,7 @@ void CGTalkRequestRecv(PMSG_TALKREQUEST * lpMsg, int aIndex)
 		return;
 	}
 	 
-	//#TODO ïðîâåðèòü óñëîâèå
+	//#TODO Ð¿Ñ€Ð¾Ð²ÐµÑ€Ð¸Ñ‚?ÑƒÑÐ»Ð¾Ð²Ð¸?
 	if ( gObj[DealerNumber].Class == 367 )
 	{
 		if ( (lpObj->X < (gObj[DealerNumber].X-5) )|| (lpObj->X> (gObj[DealerNumber].X+5) )||(lpObj->Y < (gObj[DealerNumber].Y-10)) ||(lpObj->Y > (gObj[DealerNumber].Y+5)))
@@ -8739,7 +8789,7 @@ void CGChaosBoxItemMixButtonClick(PMSG_CHAOSMIX* aRecv, int aIndex)
 		break;
 
 
-	Òóò íå÷å íå ïåðåïèñàíî*
+	â€œÑƒ?Ð½ÐµÑ‡Ðµ Ð½Ðµ Ð¿ÐµÑ€ÐµÐ¿Ð¸ÑÐ°Ð½Ð¾*
 	case CHAOS_TYPE_CASTLE_ITEM:
 		ChaosBox.CastleItemMix(lpObj);
 		break; 
@@ -9197,8 +9247,7 @@ void PMoveProc(PMSG_MOVE* lpMove, int aIndex)
 	}	
 
 
-
-	PHeadSetB((LPBYTE)&pMove, 0xD3, sizeof(pMove));
+	PHeadSetB((LPBYTE)&pMove, SendProtocolConv(0xD3), sizeof(pMove));
 	pMove.NumberH = SET_NUMBERH(aIndex);
 	pMove.NumberL = SET_NUMBERL(aIndex);
 	pMove.X = ax;
@@ -9322,7 +9371,7 @@ void RecvPositionSetProc(PMSG_POSISTION_SET * lpMove, int aIndex)
 	PMSG_RECV_POSISTION_SET pMove;
 
 
-	PHeadSetB((LPBYTE)&pMove, 0xDF, sizeof(pMove));
+	PHeadSetB((LPBYTE)&pMove, SendProtocolConv(0xDF), sizeof(pMove));
 
 	pMove.NumberH = SET_NUMBERH(aIndex);
 	pMove.NumberL = SET_NUMBERL(aIndex);
@@ -9468,7 +9517,7 @@ void GCDamageSend(int aIndex, int TargetIndex, int AttackDamage, int MSBFlag, in
 	PMSG_ATTACKRESULT pResult;
 
 
-	PHeadSetB((LPBYTE)&pResult, 0xD7, sizeof(pResult));
+	PHeadSetB((LPBYTE)&pResult, SendProtocolConv(0xD7), sizeof(pResult));
 
 	pResult.NumberH = SET_NUMBERH(TargetIndex);
 	pResult.NumberL = SET_NUMBERL(TargetIndex);
@@ -10490,7 +10539,7 @@ void CGBeattackRecv(unsigned char* lpRecv, int aIndex, int magic_send)
 		{
 			if ( lpObj->DurMagicKeyChecker.IsValidDurationTime(lpMsg->MagicKey) == FALSE )
 			{
-				LogAddC(0, "¡Ú¡Ú¡Ú¡Ú InValid DurationTime Key = %d ( Time : %d) [%d][%d]",	// #error BIG_ERROR Deathway Change tp %s %s
+				LogAddC(0, "â˜…â˜…â˜…â˜… InValid DurationTime Key = %d ( Time : %d) [%d][%d]",	// #error BIG_ERROR Deathway Change tp %s %s
 					lpMsg->MagicKey, lpObj->DurMagicKeyChecker.GetValidDurationTime(lpMsg->MagicKey),
 					lpObj->AccountID, lpObj->Name); 
 				lOfs += sizeof(PMSG_BEATTACK);
@@ -10500,7 +10549,7 @@ void CGBeattackRecv(unsigned char* lpRecv, int aIndex, int magic_send)
 			
 			if ( lpObj->DurMagicKeyChecker.IsValidCount(lpMsg->MagicKey) == FALSE )
 			{
-				LogAddC(0, "¡Ú¡Ú¡Ú¡Ú InValid VailidCount = %d ( Count : %d) [%d][%d]",	// #error BIG_ERROR Deathway Change tp %s %s
+				LogAddC(0, "â˜…â˜…â˜…â˜… InValid VailidCount = %d ( Count : %d) [%d][%d]",	// #error BIG_ERROR Deathway Change tp %s %s
 					lpMsg->MagicKey, lpObj->DurMagicKeyChecker.GetValidCount(lpMsg->MagicKey),
 					lpObj->AccountID, lpObj->Name); 
 				lOfs += sizeof(PMSG_BEATTACK);
@@ -12419,7 +12468,7 @@ void GCGetMutoNumRecv(PMSG_GETMUTONUMBER* lpMsg, int aIndex)
 	if ( gObj[aIndex].MutoNumber != 0 )
 	{
 		char msg[255];
-		wsprintf(msg, "ÀÌ¹Ì ·ç°¡µåÀÇ ¼ýÀÚ°¡ ÀÖ½À´Ï´Ù");
+		wsprintf(msg, "ì´ë¯¸ ë£¨ê°€ë“œì˜ ìˆ«ìžê°€ ìžˆìŠµë‹ˆë‹¤");
 		GCServerMsgStringSend(msg, aIndex, 1);
 		return;
 	}
@@ -14176,7 +14225,7 @@ void GCGuildViewportInfo(PMSG_REQ_GUILDVIEWPORT * aRecv, int aIndex)
 	}
 	else
 	{
-		LogAddTD("¡Ú¡Ú¡Ù ±æµå Á¤º¸ Ã£À»¼ö ¾øÀ½. ÀÌ¸§ : [%s] ¹øÈ£ : %d",
+		LogAddTD("â˜…â˜…â˜† ê¸¸ë“œ ì •ë³´ ì°¾ì„ìˆ˜ ì—†ìŒ. ì´ë¦„ : [%s] ë²ˆí˜¸ : %d",
 			lpObj->Name, dwGuildNumber);
 	}
 }
@@ -14656,14 +14705,14 @@ void CGRelationShipReqKickOutUnionMember(PMSG_KICKOUT_UNIONMEMBER_REQ* aRecv, in
 	if ( gObjIsConnected(&gObj[aIndex]) == FALSE )
 	{
 		GCResultSend(aIndex, 0x51, 3);
-		MsgOutput(aIndex, "¡Ú Terminated User.");
+		MsgOutput(aIndex, "â˜… Terminated User.");
 		return;
 	}
 
 	if ( lpObj->lpGuild == NULL )
 	{
 		GCResultSend(aIndex, 0x51, 3);
-		MsgOutput(aIndex, "¡Ù Terminated Guild.");
+		MsgOutput(aIndex, "â˜† Terminated Guild.");
 		return;
 	}
 

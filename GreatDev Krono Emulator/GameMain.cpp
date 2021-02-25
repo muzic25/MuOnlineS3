@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "GameMain.h"
 
 BOOL JoinServerConnected;
@@ -219,7 +219,8 @@ void GameMainInit(HWND hWnd)
 
 	if (Configs.gEnableServerDivision != 0)
 	{
-		MessageBox(NULL, "¼­¹öºÐÇÒÀÌ °¡´ÉÇÑ ¼­¹öÀÔ´Ï´Ù.", "Warning", MB_OK);
+		//MessageBox(NULL, "ì„œë²„ë¶„í• ì´ ê°€ëŠ¥í•œ ì„œë²„ìž…ë‹ˆë‹¤.", "Warning", MB_OK);
+		MessageBox(NULL, "A server that can split servers.", "Warning", MB_OK);
 	}
 
 	if ( gUdpSoc.CreateSocket() == 0)
@@ -235,7 +236,7 @@ void GameMainInit(HWND hWnd)
 	}
 
 	Configs.GameServerUpdPort = GetPrivateProfileInt("GameServerConnect", "UpdatePort", 60006, ".\\GameServer.ini");
-	gUdpSocCER.RecvSet( Configs.GameServerUpdPort ); // Same as MuManager to JS ¿
+	gUdpSocCER.RecvSet( Configs.GameServerUpdPort ); // Same as MuManager to JS ?
 	gUdpSocCER.Run();
 
 	if ( gUdpSocCE.CreateSocket() == 0)
@@ -901,11 +902,21 @@ void ReadCommonServerInfo()
 	strcpy(Configs.szKorItemTextFileName, gDirPath.GetNewPath("\\Items\\item.txt"));
 	strcpy(Configs.szKorSkillTextFileName, gDirPath.GetNewPath("\\Skills\\skill.txt"));
 	strcpy(szCommonlocIniFileName, gDirPath.GetNewPath("commonloc.cfg"));
-	strcpy(szlMsgName, gDirPath.GetNewPath("Messages.ini"));
 	strcpy(Configs.szItemTextFileName, gDirPath.GetNewPath("\\Items\\item.txt"));
 	strcpy(Configs.szSkillTextFileName, gDirPath.GetNewPath("\\Skills\\skill.txt"));
 	strcpy(Configs.szQuestTextFileName, gDirPath.GetNewPath("\\Quests\\Quest.txt"));
-	strcpy(Configs.szMoveReqFileName, gDirPath.GetNewPath("\\move\\movereq.txt"));
+
+	switch (Configs.gLanguage)
+	{
+	case 3:
+		strcpy(szlMsgName, gDirPath.GetNewPath("message_chs.txt"));
+		strcpy(Configs.szMoveReqFileName, gDirPath.GetNewPath("\\move\\MoveReq_chs.txt"));
+		break;
+	default:
+		strcpy(szlMsgName, gDirPath.GetNewPath("Messages.ini"));
+		strcpy(Configs.szMoveReqFileName, gDirPath.GetNewPath("\\move\\MoveReq.txt"));
+		break;
+	}
 
 	//strcpy(szCheckSum, gDirPath.GetNewPath("lang\\kor\\CheckSum.dat"));  
 	Configs.gNonPK = GetPrivateProfileInt("GameServerInfo", "NonPK", 0, ".\\GameServer.ini");
@@ -974,7 +985,7 @@ void ReadCommonServerInfo()
 	g_ItemAddOption.Load(gDirPath.GetNewPath("\\Items\\ItemAddOption.txt"));
 
 
-	gMoveCommand.Load(gDirPath.GetNewPath("Move\\MoveReq.txt"));
+	gMoveCommand.Load(Configs.szMoveReqFileName);
 
 	gMoveCommand.LoadMoveLevel(gDirPath.GetNewPath("Move\\MoveLevel.txt"));
 
@@ -1006,7 +1017,7 @@ void ReadCommonServerInfo()
 	if(iMaxUser >= 0 && iMaxUser <= OBJMAXUSER)
 	{
 		gServerMaxUser = iMaxUser;
-		LogAddTD("[Option Reload] ¡Ú¡Ú¡Ú MaxUser ¡Ù¡Ù¡Ù  : %d", gServerMaxUser);
+		LogAddTD("[Option Reload] â˜…â˜…â˜… MaxUser â˜†â˜†â˜†  : %d", gServerMaxUser);
 	}
 
 	// Guild Settingss

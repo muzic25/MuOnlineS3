@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "zzzitem.h"
 
 ITEM_ATTRIBUTE ItemAttribute[MAX_ITEMS];
@@ -90,6 +90,8 @@ int CItem::IsSetItem() // Good
 	}
 }	
 
+// 기본속성을 기반으로 아이템을 만든다.
+// 以基本属性为基础制作道具。
 void CItem::Convert(int type, BYTE Option1, BYTE Option2, BYTE Option3,  BYTE Attribute2, BYTE SetOption, BYTE ItemEffectEx,  BYTE DbVersion)
 {
 	int _type;
@@ -366,7 +368,7 @@ if ( ((_type >= ITEMGET(12,3) ) && (_type <= ITEMGET(12,6) ) ) || ( _type >= ITE
 		}
 		else
 		{
-			this->m_RequireLevel = p->RequireLevel + this->m_Level * 4;
+			this->m_RequireLevel = p->RequireLevel + this->m_Level * 4;	// 戒指，项链；
 		}
 	}
 	else
@@ -609,6 +611,7 @@ if ( ((_type >= ITEMGET(12,3) ) && (_type <= ITEMGET(12,6) ) ) || ( _type >= ITE
 	this->m_Option3 = 0;
 	this->m_SkillChange = FALSE;
 
+	// 选项1（技能）
 	if ( Option1	!= 0 )
 	{
 		if ( p->SkillType != 0 )
@@ -647,6 +650,7 @@ if ( ((_type >= ITEMGET(12,3) ) && (_type <= ITEMGET(12,6) ) ) || ( _type >= ITE
 
 	this->m_SpecialNum++;
 
+	// 选项2（幸运）
 	if ( Option2 != 0 )
 	{
 		if ( _type >= ITEMGET(0,0) && _type < ITEMGET(12,0) )
@@ -677,6 +681,7 @@ if ( ((_type >= ITEMGET(12,3) ) && (_type <= ITEMGET(12,6) ) ) || ( _type >= ITE
 
 	this->m_SpecialNum++;
 
+	// 选项3（附加点数）
 	if ( Option3 != 0 )
 	{
 		if ( _type >= ITEMGET(0,0) && _type < ITEMGET(5,0) )
@@ -707,6 +712,7 @@ if ( ((_type >= ITEMGET(12,3) ) && (_type <= ITEMGET(12,6) ) ) || ( _type >= ITE
 			this->m_RequireStrength +=  Option3 * 4;
 		}
 
+		// 戒指，项链
 		if ( (_type >= ITEMGET(13,8) && _type < ITEMGET(13,14)) || (_type >= ITEMGET(13,20) && _type <= ITEMGET(13,28)) )
 		{
 			if ( _type == ITEMGET(13,24) ) // Ring of MAgic
@@ -921,38 +927,40 @@ if ( ((_type >= ITEMGET(12,3) ) && (_type <= ITEMGET(12,6) ) ) || ( _type >= ITE
 
 	this->m_SpecialNum++;
 
+	// 防具 戒指
 	if ( (_type >=ITEMGET(6,0) && _type <ITEMGET(12,0) ) || ( _type >=ITEMGET(13,8) && _type <= ITEMGET(13,9)) || (_type>=ITEMGET(13,21) && _type <= ITEMGET(13,24) ) )
 	{
+		// 生命增加
 		if ( ((this->m_NewOption>>5)&1) != 0 )
 		{
 			this->m_Special[this->m_SpecialNum] = 0x56;
 			this->m_SpecialNum++;
 		}
-
+		// 增加魔力
 		if ( ((this->m_NewOption>>4)&1) != 0 )
 		{
 			this->m_Special[this->m_SpecialNum] = 0x57;
 			this->m_SpecialNum++;
 		}
-
+		// 伤害减少
 		if ( ((this->m_NewOption>>3)&1) != 0 )
 		{
 			this->m_Special[this->m_SpecialNum] = 0x58;
 			this->m_SpecialNum++;
 		}
-
+		// 反伤?
 		if ( ((this->m_NewOption>>2)&1) != 0 )
 		{
 			this->m_Special[this->m_SpecialNum] = 0x59;
 			this->m_SpecialNum++;
 		}
-
+		// 防御成功率
 		if ( ((this->m_NewOption>>1)&1) != 0 )
 		{
 			this->m_Special[this->m_SpecialNum] = 0x5A;
 			this->m_SpecialNum++;
 		}
-
+		// 加钱?
 		if ( ((this->m_NewOption)&1) != 0 )
 		{
 			this->m_Special[this->m_SpecialNum] = 0x5B;
@@ -960,21 +968,25 @@ if ( ((_type >= ITEMGET(12,3) ) && (_type <= ITEMGET(12,6) ) ) || ( _type >= ITE
 		}
 	}
 
+	// 武器 项链
 	if ( (_type >=ITEMGET(0,0) && _type <ITEMGET(6,0) ) || ( _type >=ITEMGET(13,12) && _type <= ITEMGET(13,13)) || (_type>=ITEMGET(13,25) && _type <= ITEMGET(13,28) ) )
 	{
+		// 卓越一击?
 		if ( ((this->m_NewOption>>5)&1) != 0 )
 		{
 			this->m_Special[this->m_SpecialNum] = 0x5C;
 			this->m_SpecialNum++;
 		}
-
+		// 法杖 雷之项链 冰之项链 水之项链
 		if ( (_type >=ITEMGET(5,0) && _type <ITEMGET(6,0) ) || (_type ==ITEMGET(13,12) ) || (_type == ITEMGET(13,25)) || (_type == ITEMGET(13,27) ) )
 		{
+			// 增加魔力（等级）
 			if ( ((this->m_NewOption>>4)&1) != 0 )
 			{
 				this->m_Special[this->m_SpecialNum] = 0x5F;
 				this->m_SpecialNum++;
 			}
+			// 增加魔力（%）
 			if ( ((this->m_NewOption>>3)&1) != 0 )
 			{
 				this->m_Special[this->m_SpecialNum] = 0x60;
@@ -983,31 +995,33 @@ if ( ((_type >= ITEMGET(12,3) ) && (_type <= ITEMGET(12,6) ) ) || ( _type >= ITE
 		}
 		else
 		{
+			// 攻击力增加（等级）
 			if ( ((this->m_NewOption>>4)&1) != 0 )
 			{
 				this->m_Special[this->m_SpecialNum] = 0x5D;
 				this->m_SpecialNum++;
 			}
+			// 攻击力增加（%）
 			if ( ((this->m_NewOption>>3)&1) != 0 )
 			{
 				this->m_Special[this->m_SpecialNum] = 0x5E;
 				this->m_SpecialNum++;
 			}
 		}
-
+		// 攻击速度
 		if ( ((this->m_NewOption>>2)&1) != 0 )
 		{
 			this->m_Special[this->m_SpecialNum] = 0x61;
 			this->m_SpecialNum++;
 			this->m_AttackSpeed += 7;
 		}
-
+		// 回生
 		if ( ((this->m_NewOption>>1)&1) != 0 )
 		{
 			this->m_Special[this->m_SpecialNum] = 0x62;
 			this->m_SpecialNum++;
 		}
-
+		// 回魔
 		if ( ((this->m_NewOption)&1) != 0 )
 		{
 			this->m_Special[this->m_SpecialNum] = 0x63;
@@ -1875,7 +1889,8 @@ void CItem::Value()
 	
 	this->m_SellMoney = this->m_SellMoney/3;
 
-	if ( (this->m_Type < ITEMGET(14,0) || this->m_Type >  ITEMGET(14,8)) &&
+	if (this->m_BaseDurability > 0 &&
+		(this->m_Type < ITEMGET(14,0) || this->m_Type >  ITEMGET(14,8)) &&
 		  this->m_Type != ITEMGET(13,20) &&
 		  this->m_Type != ITEMGET(14,28) &&
 		  this->m_Type != ITEMGET(14,29) &&
@@ -1986,6 +2001,7 @@ void CItem::OldValue()
 	}
 }
 
+// 获得物品的横竖大小。
 BOOL CItem::GetSize(int & w, int & h)
 {
 	w=ItemAttribute[this->m_Type].Width  ;
@@ -2039,12 +2055,12 @@ int CItem::ItemDefense()
 
 
 
-
+// 可以使用物品的职业
 BOOL CItem::IsClass(char aClass, int ChangeUP, int ChangeUP3rd)
 {
  if ((aClass < 0) || (aClass >= MAX_TYPE_PLAYER ))
  {
-  LogAdd("?��??? ??�? : %d (%s %d)", aClass, __FILE__, __LINE__);
+  LogAdd("IsClass error : %d (%s %d)", aClass, __FILE__, __LINE__);
   return 0;
  }
  
@@ -2934,7 +2950,7 @@ int CItem::NormalWeaponDurabilityDown(int defense, int aIndex)
 
 	if ( damagemin == 0 )
 	{
-		LogAdd("damagemin�� 0�̴�");
+		LogAdd("damagemin = 0");
 		return 0;
 	}
 
@@ -3074,7 +3090,7 @@ int CItem::ArmorDurabilityDown(int damagemin, int aIndex)
 
 	if ( def == 0 )
 	{
-		LogAdd("def�� 0�̴�");
+		LogAdd("def = 0");
 		return 0;
 	}
 
@@ -3559,7 +3575,9 @@ void ItemByteConvert16(LPBYTE buf, CItem * const item , int maxitem)
 // ItemAttribute Begin:9439368 END 9446B68 Array[512]
 
 
-
+// 用type，index获取物品信息。
+// 最终生成实际索引…
+// 也可以知道物品是否存在。
 int ItemGetNumberMake(int type, int index)
 {
 	int make;
@@ -4112,7 +4130,7 @@ BOOL OpenItemNameScript(char* FileName)	// To Change Name of Kor To Language Sel
 }
 
 
-
+// 获得物品等级
 int zzzItemLevel(int type, int index, int level)
 {
 	int item_num = (type*MAX_SUBTYPE_ITEMS)+index ;
@@ -4160,7 +4178,7 @@ int GetLevelItem(int type, int index, int level)
 	{
 		return -1;
 	}
-
+	// 等级不存在
 	if ( ItemAttribute[item_num].Level == 0xFF )
 	{
 		return -1;
@@ -4170,11 +4188,12 @@ int GetLevelItem(int type, int index, int level)
 	{
 		return -1;
 	}
-
+	// 苹果和药水系列
 	if ( type == 14 )
 	{
 		itemlevel = ItemAttribute[item_num].Level;
 
+		// 金
 		if ( index == 15 )
 		{
 			return -1;
@@ -4190,7 +4209,7 @@ int GetLevelItem(int type, int index, int level)
 
 		return -1;
 	}
-
+	// 变身戒指
 	if ( type == 13 && index == 10  )
 	{
 		int ilevel;
@@ -4221,7 +4240,7 @@ int GetLevelItem(int type, int index, int level)
 
 		return -1;
 	}
-
+	// 召唤石
 	if ( type == 12 && index ==  11 )
 	{
 		int ilevel;
@@ -4257,6 +4276,7 @@ int GetLevelItem(int type, int index, int level)
 	
 	if ( itemlevel >= level - 18 && itemlevel <= level)
 	{
+		// 魔法书的话+等级是没有的.
 		if ( type == 15 )
 		{
 			return 0;
@@ -4286,6 +4306,7 @@ int GetSerialItem(int type)
 {
 	int item_num = type;
 
+	// 等级不存在的话。
 	if ( ItemAttribute[item_num].Level == 0xFF )
 	{
 		return -1;
